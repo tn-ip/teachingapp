@@ -29,9 +29,10 @@ export function DotFigure({ dots, compact = false, label }: DotFigureProps) {
   const maxX = Math.max(...xs)
   const minY = Math.min(...ys)
   const maxY = Math.max(...ys)
-  const gap = compact ? 16 : 28
-  const r = compact ? 4.4 : 9
-  const pad = compact ? 10 : 22
+  const span = Math.max(maxX - minX, maxY - minY, 1)
+  const gap = compact ? 16 : Math.min(26, Math.max(14, 240 / span))
+  const r = compact ? 4.4 : Math.max(4.8, gap * 0.32)
+  const pad = compact ? 10 : Math.max(12, gap * 0.7)
   const width = (maxX - minX) * gap + pad * 2
   const height = (maxY - minY) * gap + pad * 2
 
@@ -39,6 +40,9 @@ export function DotFigure({ dots, compact = false, label }: DotFigureProps) {
     <svg
       className={compact ? 'dot-svg compact' : 'dot-svg'}
       viewBox={`0 0 ${width} ${height}`}
+      width={width}
+      height={height}
+      preserveAspectRatio="xMidYMid meet"
       role="img"
       aria-label={label}
     >
@@ -56,7 +60,7 @@ export function DotFigure({ dots, compact = false, label }: DotFigureProps) {
             r={r}
             fill={fill}
             stroke={stroke}
-            strokeWidth={d.role === 'ghost' ? 1.6 : compact ? 1 : 1.8}
+            strokeWidth={d.role === 'ghost' ? 1.6 : compact ? 1 : 1.6}
             strokeDasharray={d.role === 'ghost' ? '3 3' : undefined}
             opacity={d.role === 'ghost' ? 0.7 : 1}
           />

@@ -359,6 +359,10 @@ a:focus-visible {
   overflow: hidden;
 }
 
+.seq-viz {
+  overflow: visible;
+}
+
 .side-card {
   display: flex;
   flex-direction: column;
@@ -780,16 +784,17 @@ a:focus-visible {
 }
 
 .dot-svg {
-  width: 100%;
-  height: auto;
-  max-height: min(44vh, 400px);
   display: block;
   margin: 0 auto;
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  max-height: min(42vh, 380px);
 }
 
 @media (min-width: 980px) and (orientation: landscape) {
   .dot-svg {
-    max-height: min(38vh, 340px);
+    max-height: min(46vh, 420px);
   }
 }
 

@@ -103,7 +103,7 @@ export function SequenceQuestionPage({ id }: SequenceQuestionPageProps) {
         </span>
       }
     >
-      <VizCard title={`Live figure · pattern ${n}`}>
+      <VizCard title={`Live figure · pattern ${n}`} className="seq-viz">
         <p className="caption">{q.geometry}</p>
         <div className="dot-stage">
           <DotFigure dots={dots} label={`Pattern ${n} with ${count} dots`} />

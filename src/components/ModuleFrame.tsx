@@ -60,12 +60,14 @@ export function ModuleFrame({
 export function VizCard({
   children,
   title,
+  className,
 }: {
   children: ReactNode
   title?: string
+  className?: string
 }) {
   return (
-    <section className="card viz-card">
+    <section className={`card viz-card${className ? ` ${className}` : ''}`}>
       {title ? <p className="panel-title">{title}</p> : null}
       {children}
     </section>
