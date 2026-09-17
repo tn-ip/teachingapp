@@ -24,7 +24,7 @@ function layoutTokens(
   rest.forEach((t, i) => {
     const n = Math.max(rest.length, 1)
     const ang = -Math.PI / 2 + (i * 2 * Math.PI) / n
-    pos[t.id] = { x: cx + Math.cos(ang) * 108, y: cy + Math.sin(ang) * 86 }
+    pos[t.id] = { x: cx + Math.cos(ang) * 118, y: cy + Math.sin(ang) * 96 }
   })
   selected.forEach((t, i) => {
     const n = selected.length
@@ -106,8 +106,8 @@ export function Combinations() {
               <ellipse
                 cx={W / 2}
                 cy={H / 2 + 4}
-                rx="86"
-                ry="78"
+                rx="74"
+                ry="66"
                 fill="rgba(15,110,103,0.12)"
                 stroke="#0f6e67"
                 strokeWidth="3"
