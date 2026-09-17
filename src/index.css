@@ -304,6 +304,9 @@ a:focus-visible {
   color: #f7f1e6;
   border-radius: var(--radius);
   margin-bottom: 14px;
+  position: sticky;
+  top: 0;
+  z-index: 4;
 }
 
 .live-banner > div:first-child {
@@ -779,9 +782,15 @@ a:focus-visible {
 .dot-svg {
   width: 100%;
   height: auto;
-  max-height: min(52vh, 460px);
+  max-height: min(44vh, 400px);
   display: block;
   margin: 0 auto;
+}
+
+@media (min-width: 980px) and (orientation: landscape) {
+  .dot-svg {
+    max-height: min(38vh, 340px);
+  }
 }
 
 .dot-svg.compact {

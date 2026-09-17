@@ -129,8 +129,8 @@ export function dotsQ1(n: number, opts: DotOptions = {}): SeqDot[] {
       }
     }
   }
-  const prev = n <= 1 ? new Set<string>() : solidKeys(dotsQ1(n - 1))
-  return markNew(dots, prev, n)
+  // Frames are concentric in count only — do not paint a false “new U”.
+  return dots.map((d) => ({ ...d, isNew: false }))
 }
 
 /**
