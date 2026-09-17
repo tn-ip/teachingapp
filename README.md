@@ -11,13 +11,16 @@ An iPad-friendly visual lab for Hong Kong S4–S5 (DSE) mathematics: **permutati
 
 ## Classroom link (GitHub Pages)
 
-After this is merged to `main` and the **Deploy GitHub Pages** workflow succeeds, open the app on an iPad in Safari:
+iPad Safari URL (public HTTPS, no classroom laptop on the LAN):
 
 **https://tn-ip.github.io/teachingapp/**
 
-Pages source is already **GitHub Actions** in the repo settings. No extra Pages setup is required. The first deploy after merge publishes the HTTPS link above; later pushes to `main` update it.
+1. Enable Pages (already done on this repo; listed for forks or a reset): **Settings → Pages → Source: GitHub Actions**.
+2. Merge this branch to `main`.
+3. Wait for the **Deploy GitHub Pages** workflow to succeed (Actions tab).
+4. On the iPad, open the link above in Safari. Later pushes to `main` refresh the same URL.
 
-Hash routes (`#/counting`, `#/permutations`, …) work under that subpath, so a reload on a module URL does not 404.
+Routing is hash-based (`#/counting`, `#/permutations`, …), so modules work under the `/teachingapp/` subpath and a reload does not 404.
 
 ## Run locally
 
