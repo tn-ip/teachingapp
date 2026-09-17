@@ -9,6 +9,16 @@ An iPad-friendly visual lab for Hong Kong S4–S5 (DSE) mathematics: **permutati
 3. **Combinations (nCr)** — select *r* from *n*; the dashed “bag” is unordered; live nCr vs nPr.
 4. **Probability P(A)** — equally likely sample space; shade favourable outcomes; optional relative-frequency trials toward theoretical P.
 
+## Classroom link (GitHub Pages)
+
+After this is merged to `main` and the **Deploy GitHub Pages** workflow succeeds, open the app on an iPad in Safari:
+
+**https://tn-ip.github.io/teachingapp/**
+
+Pages source is already **GitHub Actions** in the repo settings. No extra Pages setup is required. The first deploy after merge publishes the HTTPS link above; later pushes to `main` update it.
+
+Hash routes (`#/counting`, `#/permutations`, …) work under that subpath, so a reload on a module URL does not 404.
+
 ## Run locally
 
 ```bash
@@ -16,19 +26,24 @@ npm install
 npm run dev
 ```
 
-Then open the printed URL (typically `http://localhost:5173`) in a browser.
+Because the production site lives at `/teachingapp/`, the dev server uses the same base. Open:
 
-Production build:
+`http://localhost:5173/teachingapp/`
+
+(not the site root). Production build:
 
 ```bash
 npm run build
 npm run preview
 ```
 
+Preview is at `http://localhost:4173/teachingapp/`.
+
 ## iPad / classroom notes
 
 - **Safari on iPad** is the target. Large tap targets (48px+), no hover-only controls, portrait and landscape layouts.
-- On a classroom network, `npm run dev` already binds `--host` so other devices can open `http://<teacher-laptop-ip>:5173`.
+- Prefer the public Pages URL on school Wi‑Fi so the classroom computer does not need to stay on the LAN.
+- For a local demo, `npm run dev` binds `--host`; open `http://<teacher-laptop-ip>:5173/teachingapp/`.
 - Add to Home Screen (Share → Add to Home Screen) for a full-tab teaching view.
 - Landscape gives a side-by-side visualisation + formula panel; portrait stacks the same content.
 - Keep *n* small on purpose so every arrangement or outcome can be drawn, not just counted.

@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react'
 
+/** Hash routes work on GitHub Pages at /teachingapp/ without a server rewrite. */
+
 export type RouteId =
   | 'home'
   | 'counting'
