@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react'
-import { navigate } from '../lib/routes'
+import { navigate, type RouteId } from '../lib/routes'
+import type { QuestionId } from '../lib/sequence'
 
 type ModuleFrameProps = {
   title: string
@@ -7,6 +8,9 @@ type ModuleFrameProps = {
   liveLabel: string
   liveValue: ReactNode
   liveSub?: ReactNode
+  backLabel?: string
+  backTo?: RouteId
+  backQuestion?: QuestionId
   children: ReactNode
 }
 
@@ -16,13 +20,20 @@ export function ModuleFrame({
   liveLabel,
   liveValue,
   liveSub,
+  backLabel = '← Home',
+  backTo = 'home',
+  backQuestion,
   children,
 }: ModuleFrameProps) {
   return (
     <>
       <header className="topbar">
-        <button type="button" className="back-btn" onClick={() => navigate('home')}>
-          ← Home
+        <button
+          type="button"
+          className="back-btn"
+          onClick={() => navigate(backTo, backQuestion)}
+        >
+          {backLabel}
         </button>
         <div className="brand">
           <span className="brand-kicker">S4–S5 · DSE</span>

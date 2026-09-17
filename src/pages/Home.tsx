@@ -40,6 +40,15 @@ const MODULES: {
     blurb: 'Shade favourable outcomes in a sample space, then watch relative frequency drift toward P(A).',
     tip: 'Count first. P(A) = n(A) / n(S) only when every outcome is equally likely.',
   },
+  {
+    id: 'sequence',
+    index: '05 · Growing patterns',
+    title: 'Sequence',
+    bilingual: '數列 · Tₙ',
+    blurb:
+      'Step through four DSE-style dot patterns. Live count, recurrence, then the general term.',
+    tip: 'Write T₁ and Tₙ₊₁ = Tₙ + … first. Only then hunt for a closed form.',
+  },
 ]
 
 export function Home() {
@@ -52,10 +61,11 @@ export function Home() {
         </div>
       </header>
       <section className="home-hero">
-        <h2>See counting, arrangements, and chance.</h2>
+        <h2>See counting, arrangements, chance, and growing patterns.</h2>
         <p className="lede">
-          Classroom lab for permutation 排列, combination 組合, and probability 概率.
-          iPad Safari: large targets, portrait or landscape, no hover-only controls.
+          Classroom lab for permutation 排列, combination 組合, probability 概率, and
+          sequence 數列. iPad Safari: large targets, portrait or landscape, no
+          hover-only controls.
         </p>
       </section>
       <div className="module-cards">
@@ -80,7 +90,7 @@ export function Home() {
         ))}
       </div>
       <p className="home-foot">
-        Notation: nPr, nCr, P(A). Limits stay small so every outcome can be drawn.
+        Notation: nPr, nCr, P(A), Tₙ. Limits stay small so every outcome can be drawn.
       </p>
     </>
   )
