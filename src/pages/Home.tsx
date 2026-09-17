@@ -52,11 +52,10 @@ export function Home() {
         </div>
       </header>
       <section className="home-hero">
-        <h2>See counting, arrangements, and chance — not only the formulae.</h2>
+        <h2>See counting, arrangements, and chance.</h2>
         <p className="lede">
-          A classroom demo and student exploration lab for permutation 排列, combination
-          組合, and probability 概率. Built for iPad Safari: large targets, portrait or
-          landscape, no hover-only controls.
+          Classroom lab for permutation 排列, combination 組合, and probability 概率.
+          iPad Safari: large targets, portrait or landscape, no hover-only controls.
         </p>
       </section>
       <div className="module-cards">

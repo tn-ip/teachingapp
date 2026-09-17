@@ -44,14 +44,15 @@ type TreeNode = {
 
 function buildTree(stages: Stage[]): TreeNode {
   const grow = (depth: number, prefix: string): TreeNode => {
+    const last = prefix.split('/').filter(Boolean).pop() || prefix
     if (depth >= stages.length) {
-      return { id: prefix || 'leaf', label: prefix, depth, children: [], x: 0, y: 0 }
+      return { id: prefix || 'leaf', label: last, depth, children: [], x: 0, y: 0 }
     }
     const labels = optionLabels(stages[depth].count, stages[depth].kind)
     const id = prefix || 'root'
     return {
       id,
-      label: depth === 0 ? 'Start' : prefix.split('/').pop() || prefix,
+      label: depth === 0 ? 'Start' : last,
       depth,
       children: labels.map((lab) => grow(depth + 1, prefix ? `${prefix}/${lab}` : lab)),
       x: 0,
@@ -141,14 +142,14 @@ export function CountingTree() {
   const highlight = selectedId ? ancestorPath(tree, selectedId) : []
   const highlightSet = new Set(highlight)
 
+  const leafCount = Math.max(leaves.length, 1)
   const width = 920
-  const height = 360
+  const height = leafCount > 8 ? 400 : 360
   const padX = 36
   const padY = 36
-  const leafCount = Math.max(leaves.length, 1)
   const maxD = Math.max(1, ...nodes.map((n) => n.depth))
   const xScale = (x: number) => padX + (x / Math.max(leafCount - 1, 1)) * (width - padX * 2)
-  const yScale = (y: number) => padY + (y / maxD) * (height - padY * 2)
+  const yScale = (y: number) => padY + (y / maxD) * (height - padY * 2 - (leafCount > 8 ? 18 : 0))
   const nodeR = leafCount > 24 ? 10 : leafCount > 12 ? 13 : 16
 
   const selectedLeaf = selectedId ? nodes.find((n) => n.id === selectedId) : undefined
@@ -216,6 +217,7 @@ export function CountingTree() {
               const color =
                 node.depth === 0 ? '#1a2330' : STAGE_COLORS[node.depth - 1] || '#1a2330'
               const isLeaf = node.children.length === 0
+              const labelOutside = isLeaf && leafCount > 8
               return (
                 <g
                   key={node.id}
@@ -224,17 +226,17 @@ export function CountingTree() {
                   style={{ cursor: isLeaf ? 'pointer' : 'default' }}
                 >
                   <circle
-                    r={nodeR}
+                    r={labelOutside ? Math.max(7, nodeR - 3) : nodeR}
                     fill={on || node.depth === 0 ? color : '#fffaf2'}
                     stroke={color}
                     strokeWidth="2.5"
                   />
                   <text
                     textAnchor="middle"
-                    dy="0.35em"
-                    fontSize={nodeR > 12 ? 11 : 9}
+                    dy={labelOutside ? nodeR + 8 : '0.35em'}
+                    fontSize={labelOutside ? 10 : nodeR > 12 ? 12 : 10}
                     fontWeight={700}
-                    fill={on || node.depth === 0 ? '#fffaf2' : '#1a2330'}
+                    fill={labelOutside ? '#1a2330' : on || node.depth === 0 ? '#fffaf2' : '#1a2330'}
                     style={{ pointerEvents: 'none' }}
                   >
                     {node.depth === 0 ? 'S' : node.label}

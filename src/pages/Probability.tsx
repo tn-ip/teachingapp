@@ -176,8 +176,8 @@ export function Probability() {
     >
       <VizCard title="Sample space S 樣本空間 — tap to shade favourable A">
         <div
-          className="outcome-grid"
-          style={{ gridTemplateColumns: `repeat(${preset.columns}, minmax(52px, 1fr))` }}
+          className={`outcome-grid${preset.outcomes.length > 12 ? ' dense' : ''}`}
+          style={{ gridTemplateColumns: `repeat(${preset.columns}, minmax(44px, 1fr))` }}
         >
           {preset.outcomes.map((o) => (
             <button

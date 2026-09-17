@@ -3,56 +3,40 @@ import { ModuleFrame, SideCard, VizCard } from '../components/ModuleFrame'
 import { Stepper } from '../components/Stepper'
 import { combinationsOf, formatInt, nCr, nPr, tokens, type Token } from '../lib/math'
 
-function hullPath(points: { x: number; y: number }[], pad: number): string {
-  if (points.length === 0) return ''
-  if (points.length === 1) {
-    const p = points[0]
-    return `M ${p.x - pad} ${p.y} A ${pad} ${pad} 0 1 0 ${p.x + pad} ${p.y} A ${pad} ${pad} 0 1 0 ${p.x - pad} ${p.y}`
-  }
-  const sorted = [...points].sort((a, b) => a.x - b.x || a.y - b.y)
-  const cross = (
-    o: { x: number; y: number },
-    a: { x: number; y: number },
-    b: { x: number; y: number },
-  ) => (a.x - o.x) * (b.y - o.y) - (a.y - o.y) * (b.x - o.x)
-  const lower: typeof points = []
-  for (const p of sorted) {
-    while (lower.length >= 2 && cross(lower[lower.length - 2], lower[lower.length - 1], p) <= 0) {
-      lower.pop()
-    }
-    lower.push(p)
-  }
-  const upper: typeof points = []
-  for (let i = sorted.length - 1; i >= 0; i -= 1) {
-    const p = sorted[i]
-    while (upper.length >= 2 && cross(upper[upper.length - 2], upper[upper.length - 1], p) <= 0) {
-      upper.pop()
-    }
-    upper.push(p)
-  }
-  const hull = lower.slice(0, -1).concat(upper.slice(0, -1))
-  if (hull.length === 2) {
-    const [a, b] = hull
-    return `M ${a.x} ${a.y} L ${b.x} ${b.y}`
-  }
-  const cx = hull.reduce((s, p) => s + p.x, 0) / hull.length
-  const cy = hull.reduce((s, p) => s + p.y, 0) / hull.length
-  const expanded = hull.map((p) => {
-    const dx = p.x - cx
-    const dy = p.y - cy
-    const len = Math.hypot(dx, dy) || 1
-    return { x: p.x + (dx / len) * pad, y: p.y + (dy / len) * pad }
-  })
-  return expanded
-    .map((p, i) => `${i === 0 ? 'M' : 'L'} ${p.x.toFixed(1)} ${p.y.toFixed(1)}`)
-    .join(' ') + ' Z'
-}
-
 function sameSet(a: Token[], b: string[]): boolean {
   if (a.length !== b.length) return false
   const sa = [...a.map((t) => t.id)].sort().join('')
   const sb = [...b].sort().join('')
   return sa === sb
+}
+
+function layoutTokens(
+  items: Token[],
+  picked: string[],
+  W: number,
+  H: number,
+): Record<string, { x: number; y: number }> {
+  const cx = W / 2
+  const cy = H / 2
+  const selected = items.filter((t) => picked.includes(t.id))
+  const rest = items.filter((t) => !picked.includes(t.id))
+  const pos: Record<string, { x: number; y: number }> = {}
+  rest.forEach((t, i) => {
+    const n = Math.max(rest.length, 1)
+    const ang = -Math.PI / 2 + (i * 2 * Math.PI) / n
+    pos[t.id] = { x: cx + Math.cos(ang) * 108, y: cy + Math.sin(ang) * 86 }
+  })
+  selected.forEach((t, i) => {
+    const n = selected.length
+    if (n <= 1) {
+      pos[t.id] = { x: cx, y: cy + 4 }
+      return
+    }
+    const ang = -Math.PI / 2 + (i * 2 * Math.PI) / n
+    const r = n === 2 ? 28 : n === 3 ? 34 : 40
+    pos[t.id] = { x: cx + Math.cos(ang) * r, y: cy + 4 + Math.sin(ang) * r }
+  })
+  return pos
 }
 
 export function Combinations() {
@@ -89,18 +73,7 @@ export function Combinations() {
 
   const W = 420
   const H = 240
-  const cx = W / 2
-  const cy = H / 2
-  const radius = 86
-  const positions = items.map((t, i) => {
-    const ang = -Math.PI / 2 + (i * 2 * Math.PI) / items.length
-    return { id: t.id, x: cx + Math.cos(ang) * radius, y: cy + Math.sin(ang) * radius, token: t }
-  })
-  const selectedPts = positions.filter((p) => picked.includes(p.id))
-  const path = hullPath(
-    selectedPts.map((p) => ({ x: p.x, y: p.y })),
-    38,
-  )
+  const positions = layoutTokens(items, picked, W, H)
 
   const displayOrder = useMemo(() => {
     const selected = items.filter((t) => picked.includes(t.id))
@@ -126,36 +99,42 @@ export function Combinations() {
       }
     >
       <VizCard title="One group, not a line-up">
-        <p className="caption">Tap tokens to choose a set of {safeR}. The dashed bag is unordered.</p>
+        <p className="caption">Tap tokens into the dashed bag. Inside the bag, order does not matter.</p>
         <div className="combo-stage">
           <svg className="hull-svg" viewBox={`0 0 ${W} ${H}`} aria-hidden="true">
-            {path ? (
-              <path
-                d={path}
+            {picked.length > 0 ? (
+              <ellipse
+                cx={W / 2}
+                cy={H / 2 + 4}
+                rx="86"
+                ry="78"
                 fill="rgba(15,110,103,0.12)"
                 stroke="#0f6e67"
                 strokeWidth="3"
                 strokeDasharray="8 7"
-                strokeLinejoin="round"
               />
             ) : null}
           </svg>
           <div className="token-circle">
-            {positions.map((p) => (
-              <button
-                key={p.id}
-                type="button"
-                className={`token${picked.includes(p.id) ? ' selected' : ''}`}
-                style={{
-                  background: p.token.color,
-                  left: `${(p.x / W) * 100}%`,
-                  top: `${(p.y / H) * 100}%`,
-                }}
-                onClick={() => toggle(p.id)}
-              >
-                {p.id}
-              </button>
-            ))}
+            {items.map((t) => {
+              const p = positions[t.id]
+              return (
+                <button
+                  key={t.id}
+                  type="button"
+                  className={`token${picked.includes(t.id) ? ' selected' : ''}`}
+                  style={{
+                    background: t.color,
+                    left: `${(p.x / W) * 100}%`,
+                    top: `${(p.y / H) * 100}%`,
+                    transition: 'left 240ms ease, top 240ms ease',
+                  }}
+                  onClick={() => toggle(t.id)}
+                >
+                  {t.id}
+                </button>
+              )
+            })}
           </div>
         </div>
         <p className="caption">
