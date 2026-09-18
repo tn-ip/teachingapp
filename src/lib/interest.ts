@@ -163,12 +163,125 @@ export function formatPct(R: number): string {
   return `${R}%`
 }
 
-export function superscript(n: number): string {
-  const map = '⁰¹²³⁴⁵⁶⁷⁸⁹'
-  return String(n).replace(/\d/g, (d) => map[Number(d)])
+/** KaTeX dollars: \$10{,}000.00 */
+export function texMoney(n: number, digits = 2): string {
+  const sign = n < 0 ? '-' : ''
+  const body = Math.abs(n).toLocaleString('en-US', {
+    minimumFractionDigits: digits,
+    maximumFractionDigits: digits,
+  })
+  return `${sign}\\$${body.replace(/,/g, '{,}')}`
 }
 
-export type PracticeOption = { letter: string; label: string }
+export function texPercent(R: number): string {
+  if (Number.isInteger(R)) return `${R}\\%`
+  const rounded = Math.round(R * 10000) / 10000
+  return `${rounded}\\%`
+}
+
+export function texPeriodRate(R: number, m: number): string {
+  if (m !== 0 && R % m === 0) return `${R / m}\\%`
+  return `\\dfrac{${R}\\%}{${m}}`
+}
+
+export function simpleRevisionTex(): string {
+  return 'I = P \\times R\\% \\times n,\\quad A = P(1 + R\\% \\times n)'
+}
+
+export function compoundRevisionTex(): string {
+  return 'A = P(1 + R\\%)^{n},\\quad I = P(1 + R\\%)^{n} - P'
+}
+
+export function compoundFrequencyRevisionTex(): string {
+  return 'A = P\\left(1 + \\dfrac{R\\%}{m}\\right)^{n \\times m}'
+}
+
+export function simpleLiveTex(
+  P: number,
+  R: number,
+  n: number,
+  I: number,
+  A: number,
+): { tex: string; aria: string } {
+  const p = texMoney(P, 0)
+  const r = texPercent(R)
+  const i = texMoney(I)
+  const a = texMoney(A)
+  return {
+    tex: `\\begin{aligned}
+I &= P \\times R\\% \\times n = ${p} \\times ${r} \\times ${n} = ${i} \\\\
+A &= P(1 + R\\% \\times n) = ${p}(1 + ${r} \\times ${n}) = ${a}
+\\end{aligned}`,
+    aria: `I equals P times R percent times n, which is ${formatMoney(P, 0)} times ${formatPct(R)} times ${n} equals ${formatMoney(I)}. A equals P times 1 plus R percent times n, which is ${formatMoney(A)}.`,
+  }
+}
+
+export function compoundLiveTex(
+  P: number,
+  R: number,
+  n: number,
+  m: number,
+  A: number,
+  I: number,
+): { tex: string; aria: string } {
+  const p = texMoney(P, 0)
+  const a = texMoney(A)
+  const i = texMoney(I)
+  if (m === 1) {
+    return {
+      tex: `\\begin{aligned}
+A &= P(1 + R\\%)^{n} = ${p}(1 + ${texPercent(R)})^{${n}} = ${a} \\\\
+I &= A - P = ${a} - ${p} = ${i}
+\\end{aligned}`,
+      aria: `A equals P times 1 plus R percent to the n, which is ${formatMoney(P, 0)} times 1 plus ${formatPct(R)} to the power ${n} equals ${formatMoney(A)}. I equals A minus P equals ${formatMoney(I)}.`,
+    }
+  }
+  const periods = n * m
+  const per = texPeriodRate(R, m)
+  return {
+    tex: `\\begin{aligned}
+\\text{rate per period} &= \\dfrac{R\\%}{m} = \\dfrac{${texPercent(R)}}{${m}} = ${per} \\\\
+\\text{periods} &= n \\times m = ${n} \\times ${m} = ${periods} \\\\
+A &= P\\left(1 + \\dfrac{R\\%}{m}\\right)^{n \\times m} = ${p}\\left(1 + ${per}\\right)^{${periods}} = ${a} \\\\
+I &= A - P = ${a} - ${p} = ${i}
+\\end{aligned}`,
+    aria: `Rate per period is R percent over m, ${formatPct(R)} over ${m} equals ${R % m === 0 ? formatPct(R / m) : `${formatPct(R)} over ${m}`}. Periods are n times m equals ${periods}. A equals P times 1 plus R percent over m, to the power n times m, equals ${formatMoney(A)}. I equals A minus P equals ${formatMoney(I)}.`,
+  }
+}
+
+export function compareLiveTex(
+  P: number,
+  R: number,
+  n: number,
+  m: number,
+  simpleA: number,
+  compoundA: number,
+): { tex: string; aria: string } {
+  const p = texMoney(P, 0)
+  const siA = texMoney(simpleA)
+  const ciA = texMoney(compoundA)
+  const gap = texMoney(compoundA - simpleA)
+  const ciLine =
+    m === 1
+      ? `A_{\\mathrm{CI}} &= P(1 + R\\%)^{n} = ${p}(1 + ${texPercent(R)})^{${n}} = ${ciA}`
+      : `A_{\\mathrm{CI}} &= P\\left(1 + \\dfrac{R\\%}{m}\\right)^{n \\times m} = ${p}\\left(1 + ${texPeriodRate(R, m)}\\right)^{${n * m}} = ${ciA}`
+  return {
+    tex: `\\begin{aligned}
+A_{\\mathrm{SI}} &= P(1 + R\\% \\times n) = ${p}(1 + ${texPercent(R)} \\times ${n}) = ${siA} \\\\
+${ciLine} \\\\
+A_{\\mathrm{CI}} - A_{\\mathrm{SI}} &= ${gap}
+\\end{aligned}`,
+    aria: `Simple amount is ${formatMoney(simpleA)}. Compound amount is ${formatMoney(compoundA)}. The difference is ${formatMoney(compoundA - simpleA)}.`,
+  }
+}
+
+export type PracticeOption = {
+  letter: string
+  label: string
+  /** Algebraic options render with KaTeX. */
+  tex?: string
+  ariaLabel?: string
+}
 
 export type PracticeQuestion = {
   id: string
@@ -177,6 +290,8 @@ export type PracticeQuestion = {
   options: PracticeOption[]
   correct: string
   explain: string
+  workingTex?: string
+  workingAria?: string
   lab: {
     P: number
     R: number
@@ -193,15 +308,44 @@ export const PRACTICE: PracticeQuestion[] = [
       'What will $P amount to in 3 years’ time, if interest is compounded monthly at 12% per annum?',
     bilingual: '每月複利 · 代入公式',
     options: [
-      { letter: 'A', label: `P(1 + 1%)` },
-      { letter: 'B', label: `P(1 + 1%)${superscript(36)}` },
-      { letter: 'C', label: `P(1 + 12%)${superscript(36)}` },
-      { letter: 'D', label: `P(1 + 12%)${superscript(3)}` },
-      { letter: 'E', label: `P(1 + 1%)${superscript(3)}` },
+      {
+        letter: 'A',
+        label: 'P(1 + 1%)',
+        tex: 'P(1 + 1\\%)',
+        ariaLabel: 'P times open parenthesis 1 plus 1 percent close parenthesis',
+      },
+      {
+        letter: 'B',
+        label: 'P(1 + 1%)^36',
+        tex: 'P(1 + 1\\%)^{36}',
+        ariaLabel: 'P times 1 plus 1 percent, to the power 36',
+      },
+      {
+        letter: 'C',
+        label: 'P(1 + 12%)^36',
+        tex: 'P(1 + 12\\%)^{36}',
+        ariaLabel: 'P times 1 plus 12 percent, to the power 36',
+      },
+      {
+        letter: 'D',
+        label: 'P(1 + 12%)^3',
+        tex: 'P(1 + 12\\%)^{3}',
+        ariaLabel: 'P times 1 plus 12 percent, to the power 3',
+      },
+      {
+        letter: 'E',
+        label: 'P(1 + 1%)^3',
+        tex: 'P(1 + 1\\%)^{3}',
+        ariaLabel: 'P times 1 plus 1 percent, to the power 3',
+      },
     ],
     correct: 'B',
+    workingTex:
+      'A = P\\left(1 + \\dfrac{12\\%}{12}\\right)^{3 \\times 12} = P(1 + 1\\%)^{36}',
+    workingAria:
+      'A equals P times 1 plus 12 percent over 12, to the power 3 times 12, which is P times 1 plus 1 percent to the 36.',
     explain:
-      'Period rate = 12% / 12 = 1%. Number of periods = 3 × 12 = 36. So A = P(1 + 1%)³⁶. Trap D uses the annual rate with years; trap E uses the period rate but only 3 periods.',
+      'Trap D uses the annual rate with years; trap E uses the period rate but only 3 periods.',
     lab: { P: 10000, R: 12, n: 3, m: 12, mode: 'compound' },
   },
   {
@@ -217,8 +361,10 @@ export const PRACTICE: PracticeQuestion[] = [
       { letter: 'E', label: hkDollars(151786) },
     ],
     correct: 'D',
-    explain:
-      'A = 10 000(1 + 12%/12)²⁴ = 10 000(1.01)²⁴ = $12,697.35… → $12 697. B is simple interest ($12 400). C is yearly compounding ($12 544).',
+    workingTex: `A = 10{,}000\\left(1 + \\dfrac{12\\%}{12}\\right)^{24} = 10{,}000(1.01)^{24} = ${texMoney(12697.35)}`,
+    workingAria:
+      'A equals 10,000 times 1 plus 12 percent over 12 to the 24, which is 10,000 times 1.01 to the 24 equals $12,697.35, nearest dollar $12,697.',
+    explain: 'Nearest dollar: $12 697. B is simple interest ($12 400). C is yearly compounding ($12 544).',
     lab: { P: 10000, R: 12, n: 2, m: 12, mode: 'compound' },
   },
   {
@@ -234,8 +380,12 @@ export const PRACTICE: PracticeQuestion[] = [
       { letter: 'E', label: hkDollars(816) },
     ],
     correct: 'C',
+    workingTex:
+      'I_{2} = 10{,}000(1 + 4\\%) \\times 4\\% = 10{,}400 \\times 4\\% = \\$416',
+    workingAria:
+      'Interest in year 2 equals 10,000 times 1 plus 4 percent, times 4 percent, which is 10,400 times 4 percent equals $416.',
     explain:
-      'Year 1 interest = 10 000 × 4% = $400, so A₁ = $10 400. Year 2 interest = 10 400 × 4% = $416. B is the first year only; D is two years of simple interest; E is two years of compound interest in total.',
+      'Year 1 interest is $400, so A1 = $10 400. B is the first year only; D is two years of simple interest; E is two years of compound interest in total.',
     lab: { P: 10000, R: 4, n: 2, m: 1, mode: 'compound' },
   },
   {
@@ -251,8 +401,14 @@ export const PRACTICE: PracticeQuestion[] = [
       { letter: 'E', label: hkDollars(1022) },
     ],
     correct: 'A',
-    explain:
-      'SI = 1000 × 6% × 4 = $240. CI = 1000(1.06)⁴ − 1000 = $262.48… Difference = $22.48… → $22. The gap is interest-on-interest, not the whole CI.',
+    workingTex: `\\begin{aligned}
+I_{\\mathrm{SI}} &= 1000 \\times 6\\% \\times 4 = \\$240 \\\\
+I_{\\mathrm{CI}} &= 1000(1.06)^{4} - 1000 = ${texMoney(262.48)} \\\\
+I_{\\mathrm{CI}} - I_{\\mathrm{SI}} &= ${texMoney(22.48)} \\rightarrow \\$22
+\\end{aligned}`,
+    workingAria:
+      'Simple interest is $240. Compound interest is $262.48. The difference is $22.48, nearest dollar $22.',
+    explain: 'The gap is interest-on-interest, not the whole compound interest.',
     lab: { P: 1000, R: 6, n: 4, m: 1, mode: 'compare' },
   },
   {
@@ -267,8 +423,11 @@ export const PRACTICE: PracticeQuestion[] = [
       { letter: 'D', label: hkDollars(45073) },
     ],
     correct: 'D',
-    explain:
-      'Period rate = 4%/4 = 1%. Periods = 3 × 4 = 12. A = 40 000(1.01)¹² = $45,073.00… → $45 073. A is simple interest.',
+    workingTex: `A = 40{,}000\\left(1 + \\dfrac{4\\%}{4}\\right)^{12} = 40{,}000(1.01)^{12} = ${texMoney(45073.0, 2)}`,
+    workingAria:
+      'A equals 40,000 times 1 plus 4 percent over 4 to the 12, which is 40,000 times 1.01 to the 12 equals $45,073.',
+    explain: 'Nearest dollar: $45 073. A is simple interest.',
     lab: { P: 40000, R: 4, n: 3, m: 4, mode: 'compound' },
   },
 ]
+

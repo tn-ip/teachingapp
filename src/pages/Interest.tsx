@@ -1,18 +1,26 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { InterestChart } from '../components/InterestChart'
+import { MathTex } from '../components/MathTex'
 import { ModuleFrame, SideCard, VizCard } from '../components/ModuleFrame'
 import { Stepper } from '../components/Stepper'
 import {
   FREQUENCIES,
   INTEREST_MODES,
   PRACTICE,
+  compareLiveTex,
+  compoundFrequencyRevisionTex,
   compoundInterest,
+  compoundLiveTex,
   compoundPeriodPoints,
+  compoundRevisionTex,
   formatMoney,
   formatPct,
   frequencyById,
   simpleInterest,
+  simpleLiveTex,
   simplePeriodPoints,
+  simpleRevisionTex,
+  texMoney,
   yearlySnapshots,
   type FrequencyId,
   type InterestMode,
@@ -87,6 +95,7 @@ export function Interest({ mode }: InterestPageProps) {
   const practice = PRACTICE.find((q) => q.id === practiceId) ?? PRACTICE[0]
   const answered = choice !== null || revealed
   const picked = practice.options.find((o) => o.letter === choice)
+  const pickedCorrect = practice.options.find((o) => o.letter === practice.correct)
   const isCorrect = choice === practice.correct
 
   const applyLab = (q: PracticeQuestion) => {
@@ -99,7 +108,6 @@ export function Interest({ mode }: InterestPageProps) {
 
   const setMode = (next: InterestMode) => navigate('interest', next)
 
-  const periodRatePct = R / m
   const periods = n * m
   const yearI = mode === 'simple' ? snap.simpleYearI : snap.compoundYearI
   const yearA = mode === 'simple' ? snap.simpleA : snap.compoundA
@@ -115,22 +123,85 @@ export function Interest({ mode }: InterestPageProps) {
   const liveSub =
     mode === 'compare' ? (
       <span>
-        CI − SI after {n} years · A<sub>CI</sub> = {formatMoney(ci.A)} · A<sub>SI</sub> ={' '}
-        {formatMoney(si.A)}
+        after {n} years ·{' '}
+        <MathTex
+          tex={`A_{\\mathrm{CI}} = ${texMoney(ci.A)}`}
+          ariaLabel={`compound amount equals ${formatMoney(ci.A)}`}
+        />
+        {' · '}
+        <MathTex
+          tex={`A_{\\mathrm{SI}} = ${texMoney(si.A)}`}
+          ariaLabel={`simple amount equals ${formatMoney(si.A)}`}
+        />
       </span>
     ) : (
       <span>
-        I = {formatMoney(liveI)} · P = {formatMoney(P, 0)} · after {n} year{n === 1 ? '' : 's'}
+        <MathTex
+          tex={`I = ${texMoney(liveI)}`}
+          ariaLabel={`interest equals ${formatMoney(liveI)}`}
+        />
+        {' · '}
+        <MathTex
+          tex={`P = ${texMoney(P, 0)}`}
+          ariaLabel={`principal equals ${formatMoney(P, 0)}`}
+        />
+        {' · after '}
+        {n} year{n === 1 ? '' : 's'}
         {mode === 'compound' && m > 1 ? ` · ${periods} ${freq.periodName}s` : ''}
       </span>
     )
 
-  const tip =
+  const liveFormula =
     mode === 'simple'
-      ? 'Simple interest is the same every year: each year adds P × R%. Time n is in years; the graph is equal steps.'
+      ? simpleLiveTex(P, R, n, si.I, si.A)
+      : mode === 'compound'
+        ? compoundLiveTex(P, R, n, m, ci.A, ci.I)
+        : compareLiveTex(P, R, n, m, si.A, ci.A)
+
+  const revision =
+    mode === 'simple'
+      ? {
+          tex: simpleRevisionTex(),
+          aria: 'I equals P times R percent times n. A equals P times 1 plus R percent times n.',
+        }
       : m === 1
-        ? 'Yearly compounding: the formula uses the annual rate R% and n years. Next year’s interest is charged on A, not only on P.'
-        : `Compounded ${freq.label.toLowerCase()}: rate per period is R%/m = ${formatPct(R)}/${m} = ${formatPct(periodRatePct)}, and the number of periods is n×m = ${n}×${m} = ${periods}. Do not put the annual rate into the formula with monthly periods.`
+        ? {
+            tex: compoundRevisionTex(),
+            aria: 'A equals P times 1 plus R percent to the n. I equals that amount minus P.',
+          }
+        : {
+            tex: `${compoundRevisionTex()}\\quad ${compoundFrequencyRevisionTex()}`,
+            aria: 'A equals P times 1 plus R percent to the n, with R percent and n per period. With frequency m, A equals P times 1 plus R percent over m, to the power n times m.',
+          }
+
+  const tip =
+    mode === 'simple' ? (
+      <>
+        Simple interest is the same every year: each year adds{' '}
+        <MathTex tex="P \times R\%" ariaLabel="P times R percent" />. Time n is in years; the
+        graph is equal steps.
+      </>
+    ) : m === 1 ? (
+      <>
+        Yearly compounding: the formula uses the annual rate{' '}
+        <MathTex tex="R\%" ariaLabel="R percent" /> and n years. Next year’s interest is charged
+        on A, not only on P.
+      </>
+    ) : (
+      <>
+        Compounded {freq.label.toLowerCase()}: rate per period is{' '}
+        <MathTex
+          tex={`\\dfrac{R\\%}{m} = \\dfrac{${R}\\%}{${m}} = ${R % m === 0 ? `${R / m}\\%` : `\\dfrac{${R}\\%}{${m}}`}`}
+          ariaLabel={`R percent over m equals ${formatPct(R)} over ${m}`}
+        />
+        , and the number of periods is{' '}
+        <MathTex
+          tex={`n \\times m = ${n} \\times ${m} = ${periods}`}
+          ariaLabel={`n times m equals ${n} times ${m} equals ${periods}`}
+        />
+        . Do not put the annual rate into the formula with monthly periods.
+      </>
+    )
 
   return (
     <ModuleFrame
@@ -179,16 +250,50 @@ export function Interest({ mode }: InterestPageProps) {
         </div>
         <p className="seq-asked">
           After {snap.year} year{snap.year === 1 ? '' : 's'}
-          {snap.year === 0
-            ? `: still P = ${formatMoney(P)}.`
-            : `: A = ${formatMoney(mode === 'simple' ? snap.simpleA : mode === 'compound' ? snap.compoundA : snap.compoundA)}, I = ${formatMoney(mode === 'simple' ? snap.simpleI : snap.compoundI)}${
-                snap.year >= 1
-                  ? ` · this year +${formatMoney(yearI)} (on ${formatMoney(prevA)})`
-                  : ''
-              }.`}
-          {mode === 'compare' && snap.year > 0
-            ? ` Gap = ${formatMoney(snap.compoundA - snap.simpleA)}.`
-            : ''}
+          {snap.year === 0 ? (
+            <>
+              : still{' '}
+              <MathTex
+                tex={`P = ${texMoney(P)}`}
+                ariaLabel={`P equals ${formatMoney(P)}`}
+              />
+              .
+            </>
+          ) : (
+            <>
+              :{' '}
+              <MathTex
+                tex={`A = ${texMoney(mode === 'simple' ? snap.simpleA : snap.compoundA)}`}
+                ariaLabel={`A equals ${formatMoney(mode === 'simple' ? snap.simpleA : snap.compoundA)}`}
+              />
+              {', '}
+              <MathTex
+                tex={`I = ${texMoney(mode === 'simple' ? snap.simpleI : snap.compoundI)}`}
+                ariaLabel={`I equals ${formatMoney(mode === 'simple' ? snap.simpleI : snap.compoundI)}`}
+              />
+              {snap.year >= 1 ? (
+                <>
+                  {' · this year '}
+                  <MathTex
+                    tex={`+${texMoney(yearI)}`}
+                    ariaLabel={`this year plus ${formatMoney(yearI)}`}
+                  />
+                  {' (on '}
+                  <MathTex tex={texMoney(prevA)} ariaLabel={formatMoney(prevA)} />)
+                </>
+              ) : null}
+              {mode === 'compare' && snap.year > 0 ? (
+                <>
+                  {' · '}
+                  <MathTex
+                    tex={`A_{\\mathrm{CI}} - A_{\\mathrm{SI}} = ${texMoney(snap.compoundA - snap.simpleA)}`}
+                    ariaLabel={`gap equals ${formatMoney(snap.compoundA - snap.simpleA)}`}
+                  />
+                </>
+              ) : null}
+              .
+            </>
+          )}
         </p>
         <div className="seq-controls">
           <Stepper label="Years n" value={n} min={N_MIN} max={N_MAX} onChange={setN} />
@@ -327,63 +432,18 @@ export function Interest({ mode }: InterestPageProps) {
         </div>
 
         <div className="formula">
-          {mode === 'simple' ? (
-            <>
-              I = P × R% × n = {formatMoney(P, 0)} × {formatPct(R)} × {n} = {formatMoney(si.I)}
-              <br />
-              A = P(1 + R% × n) = {formatMoney(P, 0)}(1 + {formatPct(R)} × {n}) = {formatMoney(si.A)}
-              <span className="muted">Revision: I = P × R% × n · A = P(1 + R% × n)</span>
-            </>
-          ) : null}
-          {mode === 'compound' ? (
-            <>
-              {m === 1 ? (
-                <>
-                  A = P(1 + R%)<sup>n</sup> = {formatMoney(P, 0)}(1 + {formatPct(R)})<sup>{n}</sup> ={' '}
-                  {formatMoney(ci.A)}
-                  <br />
-                  I = A − P = {formatMoney(ci.A)} − {formatMoney(P, 0)} = {formatMoney(ci.I)}
-                </>
-              ) : (
-                <>
-                  Rate per period = R%/m = {formatPct(R)}/{m} = {formatPct(periodRatePct)}
-                  <br />
-                  Periods = n × m = {n} × {m} = {periods}
-                  <br />
-                  A = P(1 + R%/m)<sup>n×m</sup> = {formatMoney(P, 0)}(1 + {formatPct(periodRatePct)}
-                  )<sup>{periods}</sup> = {formatMoney(ci.A)}
-                  <br />
-                  I = A − P = {formatMoney(ci.I)}
-                </>
-              )}
-              <span className="muted">
-                Revision: A = P(1 + R%)<sup>n</sup> · I = P(1 + R%)<sup>n</sup> − P, with R% and n
-                per compounding period.
-              </span>
-            </>
-          ) : null}
-          {mode === 'compare' ? (
-            <>
-              SI: A = {formatMoney(P, 0)}(1 + {formatPct(R)} × {n}) = {formatMoney(si.A)}
-              <br />
-              {m === 1 ? (
-                <>
-                  CI: A = {formatMoney(P, 0)}(1 + {formatPct(R)})<sup>{n}</sup> = {formatMoney(ci.A)}
-                </>
-              ) : (
-                <>
-                  CI: A = {formatMoney(P, 0)}(1 + {formatPct(periodRatePct)})<sup>{periods}</sup> ={' '}
-                  {formatMoney(ci.A)}
-                </>
-              )}
-              <br />
-              CI − SI = {formatMoney(gap)}
-              <span className="muted">
-                Same P, R%, and years. Compounding {freq.label.toLowerCase()}
-                {m > 1 ? ` uses ${formatPct(periodRatePct)} per ${freq.periodName}.` : '.'}
-              </span>
-            </>
-          ) : null}
+          <MathTex mode="display" tex={liveFormula.tex} ariaLabel={liveFormula.aria} />
+          <span className="muted">
+            Revision{' '}
+            <MathTex mode="inline" tex={revision.tex} ariaLabel={revision.aria} />
+            {mode === 'compound' && m === 1
+              ? ', with R% and n per compounding period.'
+              : mode === 'compare'
+                ? `. Same P, R%, and years. Compounding ${freq.label.toLowerCase()}${
+                    m > 1 ? ` uses period rate R%/m.` : '.'
+                  }`
+                : ''}
+          </span>
         </div>
 
         <div className="contrast">
@@ -431,7 +491,16 @@ export function Interest({ mode }: InterestPageProps) {
                 onClick={() => setChoice(opt.letter)}
               >
                 <span className="mcq-letter">{opt.letter}</span>
-                <span className="mcq-label">{opt.label}</span>
+                <span className="mcq-label">
+                  {opt.tex ? (
+                    <MathTex
+                      tex={opt.tex}
+                      ariaLabel={opt.ariaLabel ?? opt.label}
+                    />
+                  ) : (
+                    opt.label
+                  )}
+                </span>
               </button>
             )
           })}
@@ -452,21 +521,43 @@ export function Interest({ mode }: InterestPageProps) {
         {answered ? (
           <div className={isCorrect && !revealed ? 'seq-feedback ok' : 'seq-feedback'}>
             {revealed && picked == null ? (
-              <p>
-                <strong>
-                  {practice.correct}. {practice.options.find((o) => o.letter === practice.correct)?.label}
-                </strong>
-                {' — '}
-                {practice.explain}
-              </p>
-            ) : isCorrect ? (
-              <p>
-                <strong>Correct.</strong> {practice.explain}
-              </p>
+              <div>
+                <p>
+                  <strong>
+                    {practice.correct}.{' '}
+                    {pickedCorrect?.tex ? (
+                      <MathTex
+                        tex={pickedCorrect.tex}
+                        ariaLabel={pickedCorrect.ariaLabel ?? pickedCorrect.label}
+                      />
+                    ) : (
+                      pickedCorrect?.label
+                    )}
+                  </strong>
+                </p>
+                {practice.workingTex ? (
+                  <MathTex
+                    mode="display"
+                    tex={practice.workingTex}
+                    ariaLabel={practice.workingAria ?? practice.explain}
+                  />
+                ) : null}
+                <p>{practice.explain}</p>
+              </div>
             ) : (
-              <p>
-                <strong>Not yet.</strong> {practice.explain}
-              </p>
+              <div>
+                <p>
+                  <strong>{isCorrect ? 'Correct.' : 'Not yet.'}</strong>
+                </p>
+                {practice.workingTex ? (
+                  <MathTex
+                    mode="display"
+                    tex={practice.workingTex}
+                    ariaLabel={practice.workingAria ?? practice.explain}
+                  />
+                ) : null}
+                <p>{practice.explain}</p>
+              </div>
             )}
           </div>
         ) : (

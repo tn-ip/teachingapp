@@ -17,7 +17,7 @@ An iPad-friendly visual lab for Hong Kong S4–S5 (DSE) mathematics: **permutati
    | Q3 | T₁ = 3, Tₙ₊₁ = Tₙ + (2n+3) | (n+1)×(n+1) square minus one corner | T₆ |
    | Q4 | T₁ = 10, Tₙ₊₁ = Tₙ + (2n+5) | (n+2)×(n+2) square plus a tail dot | T₇ |
 
-6. **Interest (P, I, A, R%)** — simple vs compound lab (`#/interest`, `#/interest/simple`, `#/interest/compound`, `#/interest/compare`). Sliders for principal, annual rate, and years; compound frequency yearly / half-yearly / quarterly / monthly. Stacked bars and a stepped timeline split principal from interest. Live substitution of the revision formulae; a short MCQ strip (MC16 J4 flavour, not the full paper).
+6. **Interest (P, I, A, R%)** — simple vs compound lab (`#/interest`, `#/interest/simple`, `#/interest/compound`, `#/interest/compare`). Sliders for principal, annual rate, and years; compound frequency yearly / half-yearly / quarterly / monthly. Stacked bars and a stepped timeline split principal from interest. Live substitution of the revision formulae; a short MCQ strip (MC16 J4 flavour, not the full paper). **Interest equations render with bundled [KaTeX](https://katex.org/) (CSS + fonts in the Vite build, no CDN)** via a shared `MathTex` helper (`inline` / `display`, with an `aria-label`). Other modules still use Unicode/HTML and can migrate later.
 
    - Simple: \(I = P \times R\% \times n\), \(A = P(1 + R\% \times n)\)
    - Compound: \(A = P(1 + R\%)^n\), \(I = P(1 + R\%)^n - P\)
@@ -68,7 +68,7 @@ Preview is at `http://localhost:4173/teachingapp/`.
 
 ## Stack
 
-Vite + React + TypeScript. Visuals are SVG/DOM — no charting library.
+Vite + React + TypeScript. Visuals are SVG/DOM — no charting library. Interest formulas use KaTeX, bundled with the static build.
 
 ## Notation
 

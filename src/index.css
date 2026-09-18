@@ -398,6 +398,53 @@ a:focus-visible {
   margin-top: 4px;
 }
 
+.math-tex {
+  max-width: 100%;
+}
+
+.math-tex-display {
+  display: block;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.math-tex .katex-display {
+  margin: 0.35em 0;
+  text-align: left;
+  max-width: 100%;
+}
+
+.math-tex .katex-display > .katex {
+  text-align: left;
+  white-space: nowrap;
+}
+
+.formula .math-tex .katex {
+  font-size: 1.05em;
+}
+
+.live-banner .math-tex,
+.live-banner .katex {
+  color: inherit;
+}
+
+.seq-asked .math-tex {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.seq-asked .katex {
+  font-size: 1em;
+}
+
+.mcq-btn .math-tex .katex {
+  font-size: 1.05em;
+}
+
+.seq-feedback .math-tex-display {
+  margin: 8px 0;
+}
+
 .stepper-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));

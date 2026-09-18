@@ -1,3 +1,5 @@
+import type { ReactNode } from 'react'
+import { MathTex } from '../components/MathTex'
 import { navigate, type RouteId } from '../lib/routes'
 
 const MODULES: {
@@ -6,7 +8,7 @@ const MODULES: {
   title: string
   bilingual: string
   blurb: string
-  tip: string
+  tip: ReactNode
 }[] = [
   {
     id: 'counting',
@@ -56,7 +58,14 @@ const MODULES: {
     bilingual: '利息 · 單利 / 複利',
     blurb:
       'Slide P, R% and n. Watch simple vs compound amount split into principal and interest.',
-    tip: 'When compounding more often than yearly, R% in the formula is the period rate R%/m, and n is the number of periods.',
+    tip: (
+      <>
+        When compounding more often than yearly,{' '}
+        <MathTex tex="R\%" ariaLabel="R percent" /> in the formula is the period
+        rate <MathTex tex="R\%/m" ariaLabel="R percent over m" />, and n is the
+        number of periods.
+      </>
+    ),
   },
 ]
 
