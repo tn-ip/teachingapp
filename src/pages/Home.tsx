@@ -49,6 +49,15 @@ const MODULES: {
       'Step through four DSE-style dot patterns. Live count, recurrence, then the general term.',
     tip: 'Write T₁ and Tₙ₊₁ = Tₙ + … first. Only then hunt for a closed form.',
   },
+  {
+    id: 'interest',
+    index: '06 · Principal grows',
+    title: 'Interest',
+    bilingual: '利息 · 單利 / 複利',
+    blurb:
+      'Slide P, R% and n. Watch simple vs compound amount split into principal and interest.',
+    tip: 'When compounding more often than yearly, R% in the formula is the period rate R%/m, and n is the number of periods.',
+  },
 ]
 
 export function Home() {
@@ -57,15 +66,15 @@ export function Home() {
       <header className="topbar">
         <div className="brand">
           <span className="brand-kicker">Hong Kong S4–S5 · DSE</span>
-          <h1>Count · Arrange · Chance</h1>
+          <h1>Count · Arrange · Chance · Interest</h1>
         </div>
       </header>
       <section className="home-hero">
-        <h2>See counting, arrangements, chance, and growing patterns.</h2>
+        <h2>See counting, arrangements, chance, patterns, and interest.</h2>
         <p className="lede">
-          Classroom lab for permutation 排列, combination 組合, probability 概率, and
-          sequence 數列. iPad Safari: large targets, portrait or landscape, no
-          hover-only controls.
+          Classroom lab for permutation 排列, combination 組合, probability 概率,
+          sequence 數列, and interest 利息. iPad Safari: large targets, portrait or
+          landscape, no hover-only controls.
         </p>
       </section>
       <div className="module-cards">
@@ -90,7 +99,8 @@ export function Home() {
         ))}
       </div>
       <p className="home-foot">
-        Notation: nPr, nCr, P(A), Tₙ. Limits stay small so every outcome can be drawn.
+        Notation: nPr, nCr, P(A), Tₙ, I = P × R% × n. Counting labs stay small so every
+        outcome can be drawn.
       </p>
     </>
   )
