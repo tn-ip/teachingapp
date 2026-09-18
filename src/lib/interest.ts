@@ -237,12 +237,17 @@ I &= A - P = ${a} - ${p} = ${i}
     }
   }
   const periods = n * m
-  const per = texPeriodRate(R, m)
+  const rateLine =
+    R % m === 0
+      ? `\\text{rate per period} &= \\dfrac{R\\%}{m} = \\dfrac{${texPercent(R)}}{${m}} = ${texPeriodRate(R, m)}`
+      : `\\text{rate per period} &= \\dfrac{R\\%}{m} = \\dfrac{${texPercent(R)}}{${m}}`
   return {
     tex: `\\begin{aligned}
-\\text{rate per period} &= \\dfrac{R\\%}{m} = \\dfrac{${texPercent(R)}}{${m}} = ${per} \\\\
+${rateLine} \\\\
 \\text{periods} &= n \\times m = ${n} \\times ${m} = ${periods} \\\\
-A &= P\\left(1 + \\dfrac{R\\%}{m}\\right)^{n \\times m} = ${p}\\left(1 + ${per}\\right)^{${periods}} = ${a} \\\\
+A &= P\\left(1 + \\dfrac{R\\%}{m}\\right)^{n \\times m} \\\\
+&= ${p}\\left(1 + \\dfrac{${texPercent(R)}}{${m}}\\right)^{${periods}} \\\\
+&= ${a} \\\\
 I &= A - P = ${a} - ${p} = ${i}
 \\end{aligned}`,
     aria: `Rate per period is R percent over m, ${formatPct(R)} over ${m} equals ${R % m === 0 ? formatPct(R / m) : `${formatPct(R)} over ${m}`}. Periods are n times m equals ${periods}. A equals P times 1 plus R percent over m, to the power n times m, equals ${formatMoney(A)}. I equals A minus P equals ${formatMoney(I)}.`,
@@ -264,7 +269,9 @@ export function compareLiveTex(
   const ciLine =
     m === 1
       ? `A_{\\mathrm{CI}} &= P(1 + R\\%)^{n} = ${p}(1 + ${texPercent(R)})^{${n}} = ${ciA}`
-      : `A_{\\mathrm{CI}} &= P\\left(1 + \\dfrac{R\\%}{m}\\right)^{n \\times m} = ${p}\\left(1 + ${texPeriodRate(R, m)}\\right)^{${n * m}} = ${ciA}`
+      : `A_{\\mathrm{CI}} &= P\\left(1 + \\dfrac{R\\%}{m}\\right)^{n \\times m} \\\\
+&= ${p}\\left(1 + \\dfrac{${texPercent(R)}}{${m}}\\right)^{${n * m}} \\\\
+&= ${ciA}`
   return {
     tex: `\\begin{aligned}
 A_{\\mathrm{SI}} &= P(1 + R\\% \\times n) = ${p}(1 + ${texPercent(R)} \\times ${n}) = ${siA} \\\\

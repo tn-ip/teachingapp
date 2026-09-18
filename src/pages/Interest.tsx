@@ -191,7 +191,11 @@ export function Interest({ mode }: InterestPageProps) {
       <>
         Compounded {freq.label.toLowerCase()}: rate per period is{' '}
         <MathTex
-          tex={`\\dfrac{R\\%}{m} = \\dfrac{${R}\\%}{${m}} = ${R % m === 0 ? `${R / m}\\%` : `\\dfrac{${R}\\%}{${m}}`}`}
+          tex={
+            R % m === 0
+              ? `\\dfrac{R\\%}{m} = \\dfrac{${R}\\%}{${m}} = ${R / m}\\%`
+              : `\\dfrac{R\\%}{m} = \\dfrac{${R}\\%}{${m}}`
+          }
           ariaLabel={`R percent over m equals ${formatPct(R)} over ${m}`}
         />
         , and the number of periods is{' '}

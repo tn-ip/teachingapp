@@ -420,7 +420,11 @@ a:focus-visible {
 }
 
 .formula .math-tex .katex {
-  font-size: 1.05em;
+  font-size: 0.98em;
+}
+
+.formula .math-tex-display {
+  padding-bottom: 4px;
 }
 
 .live-banner .math-tex,
