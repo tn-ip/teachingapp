@@ -127,7 +127,7 @@ export function Interest({ mode }: InterestPageProps) {
 
   const tip =
     mode === 'simple'
-      ? 'Simple interest is the same every year: I_year = P × R%. Time n is in years; the graph is equal steps.'
+      ? 'Simple interest is the same every year: each year adds P × R%. Time n is in years; the graph is equal steps.'
       : m === 1
         ? 'Yearly compounding: the formula uses the annual rate R% and n years. Next year’s interest is charged on A, not only on P.'
         : `Compounded ${freq.label.toLowerCase()}: rate per period is R%/m = ${formatPct(R)}/${m} = ${formatPct(periodRatePct)}, and the number of periods is n×m = ${n}×${m} = ${periods}. Do not put the annual rate into the formula with monthly periods.`
@@ -143,7 +143,7 @@ export function Interest({ mode }: InterestPageProps) {
       <VizCard title="Growth over time · tap a year">
         <p className="caption">
           {mode === 'compare'
-            ? 'Gold = simple. Teal = compound. The shaded gap is extra interest from compounding.'
+            ? 'Gold = simple. Coral = compound. Teal is principal. The shaded gap is extra interest from compounding.'
             : 'Teal base is principal P. The upper block is cumulative interest I. The stepped line jumps when interest is credited.'}
         </p>
         <div className="interest-stage">
