@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import type { InterestMode } from './interest'
 import type { QuestionId } from './sequence'
 
 /** Hash routes work on GitHub Pages at /teachingapp/ without a server rewrite. */
@@ -10,12 +11,14 @@ export type RouteId =
   | 'combinations'
   | 'probability'
   | 'sequence'
+  | 'interest'
 
 export type AppRoute =
-  | { id: Exclude<RouteId, 'sequence'> }
+  | { id: Exclude<RouteId, 'sequence' | 'interest'> }
   | { id: 'sequence'; question: QuestionId | null }
+  | { id: 'interest'; mode: InterestMode }
 
-const SIMPLE: Exclude<RouteId, 'sequence'>[] = [
+const SIMPLE: Exclude<RouteId, 'sequence' | 'interest'>[] = [
   'home',
   'counting',
   'permutations',
@@ -23,11 +26,20 @@ const SIMPLE: Exclude<RouteId, 'sequence'>[] = [
   'probability',
 ]
 
+const INTEREST_MODES: InterestMode[] = ['simple', 'compound', 'compare']
+
 function asQuestionId(value: string | undefined): QuestionId | null {
   if (value === '1' || value === '2' || value === '3' || value === '4') {
     return Number(value) as QuestionId
   }
   return null
+}
+
+function asInterestMode(value: string | undefined): InterestMode {
+  if (value && (INTEREST_MODES as string[]).includes(value)) {
+    return value as InterestMode
+  }
+  return 'simple'
 }
 
 function parseHash(): AppRoute {
@@ -38,19 +50,29 @@ function parseHash(): AppRoute {
   if (head === 'sequence') {
     return { id: 'sequence', question: asQuestionId(parts[1]) }
   }
+  if (head === 'interest') {
+    return { id: 'interest', mode: asInterestMode(parts[1]) }
+  }
   if (parts.length === 1 && (SIMPLE as string[]).includes(head)) {
-    return { id: head as Exclude<RouteId, 'sequence'> }
+    return { id: head as Exclude<RouteId, 'sequence' | 'interest'> }
   }
   return { id: 'home' }
 }
 
-export function navigate(route: RouteId, question?: QuestionId) {
+export function navigate(route: RouteId, detail?: QuestionId | InterestMode) {
   if (route === 'home') {
     window.location.hash = '#/'
     return
   }
   if (route === 'sequence') {
-    window.location.hash = question ? `#/sequence/${question}` : '#/sequence'
+    const q = detail === 1 || detail === 2 || detail === 3 || detail === 4 ? detail : undefined
+    window.location.hash = q ? `#/sequence/${q}` : '#/sequence'
+    return
+  }
+  if (route === 'interest') {
+    const mode =
+      detail === 'simple' || detail === 'compound' || detail === 'compare' ? detail : undefined
+    window.location.hash = mode ? `#/interest/${mode}` : '#/interest'
     return
   }
   window.location.hash = `#/${route}`

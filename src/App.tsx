@@ -5,6 +5,7 @@ import { Combinations } from './pages/Combinations'
 import { Probability } from './pages/Probability'
 import { SequenceHub } from './pages/SequenceHub'
 import { SequenceQuestionPage } from './pages/SequenceQuestion'
+import { Interest } from './pages/Interest'
 import { useHashRoute } from './lib/routes'
 
 export default function App() {
@@ -19,6 +20,7 @@ export default function App() {
       {route.id === 'probability' && <Probability />}
       {route.id === 'sequence' &&
         (route.question ? <SequenceQuestionPage id={route.question} /> : <SequenceHub />)}
+      {route.id === 'interest' && <Interest mode={route.mode} />}
     </div>
   )
 }
