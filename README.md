@@ -7,7 +7,12 @@ An iPad-friendly visual lab for Hong Kong S4–S5 (DSE) mathematics: **permutati
 1. **Counting tree** — independent choices grow a tree diagram; live product of stage sizes.
 2. **Permutations (nPr)** — arrange *n* distinct items taking *r*; animate ordered slots; contrast with unordered groups.
 3. **Combinations (nCr)** — select *r* from *n*; the dashed “bag” is unordered; live nCr vs nPr.
-4. **Probability P(A)** — equally likely sample space; shade favourable outcomes; optional relative-frequency trials toward theoretical P.
+4. **Probability** — three labs (`#/probability`, `#/probability/sample`, `#/probability/exclusive`, `#/probability/independent`).
+
+   - **Sample space 樣本空間** — equally likely outcomes; shade favourable A; relative-frequency trials toward theoretical P(A).
+   - **Mutually exclusive 互斥** — eight-sector spinner. Shade A, B, and A ∩ B. When the events cannot happen together, P(A ∩ B) = 0 and P(A ∪ B) = P(A) + P(B). Turn on **Allow overlap 可重疊** to see why P(A) + P(B) double-counts the intersection.
+   - **Independent 獨立** — two draws from a bag of 2 red and 2 blue, **with replacement 有放回** or **without replacement 不放回**, plus a coin-then-die check. P(A ∩ B) equals P(A) × P(B) only when the stages are independent. The tree and the equally likely grid stay in step.
+
 5. **Sequence (Tₙ)** — four interactive pattern-growth labs (`#/sequence`, `#/sequence/1` … `#/sequence/4`). Step the figure with a slider, live-count the dots, read the recurrence, then MCQ. Closed-form reasoning stays behind a teacher toggle.
 
    | Lab | Recurrence | Geometry | Asked term |
@@ -34,7 +39,7 @@ iPad Safari URL (public HTTPS, no classroom laptop on the LAN):
 3. Wait for the **Deploy GitHub Pages** workflow to succeed (Actions tab).
 4. On the iPad, open the link above in Safari. Later pushes to `main` refresh the same URL.
 
-Routing is hash-based (`#/counting`, `#/permutations`, `#/sequence`, `#/sequence/1`, `#/interest`, `#/interest/compound`, …), so modules work under the `/teachingapp/` subpath and a reload does not 404. Sequence and Interest ship in the same static build as the P&C/probability labs — no extra workflow. Later pushes to `main` refresh **https://tn-ip.github.io/teachingapp/** via the existing **Deploy GitHub Pages** action.
+Routing is hash-based (`#/counting`, `#/permutations`, `#/probability`, `#/probability/exclusive`, `#/probability/independent`, `#/sequence`, `#/sequence/1`, `#/interest`, `#/interest/compound`, …), so modules work under the `/teachingapp/` subpath and a reload does not 404. Sequence, Interest, and the probability event labs ship in the same static build — no extra workflow. Later pushes to `main` refresh **https://tn-ip.github.io/teachingapp/** via the existing **Deploy GitHub Pages** action.
 
 ## Run locally
 
@@ -68,7 +73,7 @@ Preview is at `http://localhost:4173/teachingapp/`.
 
 ## Stack
 
-Vite + React + TypeScript. Visuals are SVG/DOM — no charting library.
+Vite + React + TypeScript. Visuals are SVG/DOM — no charting library. Probability formulae use KaTeX.
 
 ## Notation
 
@@ -76,6 +81,9 @@ Vite + React + TypeScript. Visuals are SVG/DOM — no charting library.
 - \(nPr = n! / (n-r)!\)
 - \(nCr = n! / (r!(n-r)!) = nPr / r!\)
 - \(P(A) = n(A)/n(S)\) when outcomes are equally likely
+- Mutually exclusive 互斥: \(P(A \cap B) = 0\) and \(P(A \cup B) = P(A) + P(B)\)
+- In general: \(P(A \cup B) = P(A) + P(B) - P(A \cap B)\)
+- Independent 獨立: \(P(A \cap B) = P(A) \times P(B)\). Without replacement the product rule fails.
 - Sequences: \(T_1\) given, \(T_{n+1} = T_n + d(n)\); arithmetic when \(d\) is constant
 - Simple interest: \(I = P \times R\% \times n\), \(A = P(1 + R\% \times n)\)
 - Compound interest: \(A = P(1 + R\%)^n\), \(I = A - P\); period rate \(R\%/m\) when compounded \(m\) times a year
