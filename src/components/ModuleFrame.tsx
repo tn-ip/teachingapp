@@ -11,6 +11,7 @@ type ModuleFrameProps = {
   backLabel?: string
   backTo?: RouteId
   backQuestion?: QuestionId
+  nav?: ReactNode
   children: ReactNode
 }
 
@@ -23,6 +24,7 @@ export function ModuleFrame({
   backLabel = '← Home',
   backTo = 'home',
   backQuestion,
+  nav,
   children,
 }: ModuleFrameProps) {
   return (
@@ -52,6 +54,7 @@ export function ModuleFrame({
         </div>
         {liveSub ? <div className="sub">{liveSub}</div> : null}
       </section>
+      {nav ? <div className="module-nav">{nav}</div> : null}
       <div className="module-grid">{children}</div>
     </>
   )

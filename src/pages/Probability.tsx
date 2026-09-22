@@ -1,5 +1,8 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
+import { MathTex } from '../components/MathTex'
 import { ModuleFrame, SideCard, VizCard } from '../components/ModuleFrame'
+import { ProbabilityNav } from '../components/ProbabilityNav'
+import { countFracTex } from '../lib/probability'
 import { formatInt, simplifyFraction } from '../lib/math'
 
 type Outcome = { id: string; label: string }
@@ -161,6 +164,9 @@ export function Probability() {
     <ModuleFrame
       title="Probability"
       bilingual="Equally likely outcomes 等可能結果 · sample space 樣本空間"
+      backLabel="← Probability"
+      backTo="probability"
+      nav={<ProbabilityNav current="sample" />}
       liveLabel="P(A)"
       liveValue={
         <span>
@@ -253,16 +259,14 @@ export function Probability() {
         <p className="explain">
           When every outcome in S is equally likely, probability is a counting ratio.
           Shade A, read P(A), then sample to see the relative frequency approach that
-          value as trials grow.
+          value as trials grow. The chips above open mutually exclusive 互斥 and
+          independent 獨立 events.
         </p>
         <div className="formula">
-          P(A) = n(A) / n(S) = {nA}/{nS}
-          {simplified.den !== nS ? ` = ${simplified.num}/${simplified.den}` : ''}
+          <MathTex display tex={`P(A) = \\dfrac{n(A)}{n(S)} = ${countFracTex(nA, nS)}`} />
           <span className="muted">
-            Complement 補事件: P(A′) = 1 − P(A) = {nS - nA}/{nS}
-            {simplifyFraction(nS - nA, nS).den !== nS
-              ? ` = ${simplifyFraction(nS - nA, nS).num}/${simplifyFraction(nS - nA, nS).den}`
-              : ''}
+            Complement 補事件{' '}
+            <MathTex tex={`P(A') = 1 - P(A) = ${countFracTex(nS - nA, nS)}`} />
           </span>
         </div>
         <div className="contrast">

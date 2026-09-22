@@ -34,11 +34,12 @@ const MODULES: {
   },
   {
     id: 'probability',
-    index: '04 · Equally likely',
+    index: '04 · Events',
     title: 'Probability',
-    bilingual: '概率 P(A)',
-    blurb: 'Shade favourable outcomes in a sample space, then watch relative frequency drift toward P(A).',
-    tip: 'Count first. P(A) = n(A) / n(S) only when every outcome is equally likely.',
+    bilingual: '概率 · 互斥 / 獨立',
+    blurb:
+      'Shade a sample space, then compare mutually exclusive events 互斥 with independent events 獨立.',
+    tip: 'Exclusive: add. If they overlap, subtract the intersection. Independent: multiply.',
   },
   {
     id: 'sequence',
@@ -99,8 +100,8 @@ export function Home() {
         ))}
       </div>
       <p className="home-foot">
-        Notation: nPr, nCr, P(A), Tₙ, I = P × R% × n. Counting labs stay small so every
-        outcome can be drawn.
+        Notation: nPr, nCr, P(A), mutually exclusive, independent, Tₙ, I = P × R% × n.
+        Counting labs stay small so every outcome can be drawn.
       </p>
     </>
   )
