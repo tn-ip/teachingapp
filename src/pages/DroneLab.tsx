@@ -29,7 +29,7 @@ const REFLECTIONS = [
   },
   {
     q: 'When is manual control better?',
-    zh: '臨場飛行',
+    zh: '手動更好',
     a: 'When the path changes, something unexpected is in the way, or students are still learning how throttle, yaw, pitch, and roll feel.',
   },
 ]
