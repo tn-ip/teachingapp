@@ -59,6 +59,15 @@ const MODULES: {
       'Slide P, R% and n. Watch simple vs compound amount split into principal and interest.',
     tip: 'When compounding more often than yearly, R% in the formula is the period rate R%/m, and n is the number of periods.',
   },
+  {
+    id: 'drone',
+    index: '07 · Manual and program',
+    title: 'Drone / HuLA',
+    bilingual: '手動飛行 · 程式飛行',
+    blurb:
+      'HuLA-style indoor drone simulator. Fly a marked path by hand, then with Scratch-like blocks.',
+    tip: '手動飛行 · 程式飛行. Manual is continuous decisions. Program is plan, then run.',
+  },
 ]
 
 export function Home() {
@@ -74,8 +83,8 @@ export function Home() {
         <h2>See counting, arrangements, chance, patterns, and interest.</h2>
         <p className="lede">
           Classroom lab for permutation 排列, combination 組合, probability 概率,
-          sequence 數列, and interest 利息. iPad Safari: large targets, portrait or
-          landscape, no hover-only controls.
+          sequence 數列, and interest 利息, plus a HuLA drone simulator 手動飛行 · 程式飛行.
+          iPad Safari: large targets, portrait or landscape, no hover-only controls.
         </p>
       </section>
       <div className="module-cards">
@@ -83,7 +92,7 @@ export function Home() {
           <button
             key={m.id}
             type="button"
-            className="card module-card"
+            className={`card module-card${m.id === 'drone' ? ' drone-home' : ''}`}
             onClick={() => navigate(m.id)}
           >
             <span className="module-index">{m.index}</span>
@@ -101,7 +110,8 @@ export function Home() {
       </div>
       <p className="home-foot">
         Notation: nPr, nCr, P(A), mutually exclusive, independent, Tₙ, I = P × R% × n.
-        Counting labs stay small so every outcome can be drawn.
+        Counting labs stay small so every outcome can be drawn. The drone lab is a simulator —
+        it does not fly a real aircraft.
       </p>
     </>
   )

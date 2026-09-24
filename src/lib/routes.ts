@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import type { DroneView } from './drone'
 import type { InterestMode } from './interest'
 import type { ProbabilityView } from './probability'
 import type { QuestionId } from './sequence'
@@ -13,22 +14,20 @@ export type RouteId =
   | 'probability'
   | 'sequence'
   | 'interest'
+  | 'drone'
 
 export type AppRoute =
-  | { id: Exclude<RouteId, 'sequence' | 'interest' | 'probability'> }
+  | { id: 'home' | 'counting' | 'permutations' | 'combinations' }
   | { id: 'sequence'; question: QuestionId | null }
   | { id: 'interest'; mode: InterestMode }
   | { id: 'probability'; view: ProbabilityView | null }
+  | { id: 'drone'; view: DroneView | null }
 
-const SIMPLE: Exclude<RouteId, 'sequence' | 'interest' | 'probability'>[] = [
-  'home',
-  'counting',
-  'permutations',
-  'combinations',
-]
+const SIMPLE = ['home', 'counting', 'permutations', 'combinations'] as const
 
 const INTEREST_MODES: InterestMode[] = ['simple', 'compound', 'compare']
 const PROBABILITY_VIEWS: ProbabilityView[] = ['sample', 'exclusive', 'independent']
+const DRONE_VIEWS: DroneView[] = ['manual', 'program', 'compare']
 
 function asQuestionId(value: string | undefined): QuestionId | null {
   if (value === '1' || value === '2' || value === '3' || value === '4') {
@@ -51,6 +50,13 @@ function asProbabilityView(value: string | undefined): ProbabilityView | null {
   return null
 }
 
+function asDroneView(value: string | undefined): DroneView | null {
+  if (value && (DRONE_VIEWS as string[]).includes(value)) {
+    return value as DroneView
+  }
+  return null
+}
+
 function parseHash(): AppRoute {
   const raw = window.location.hash.replace(/^#\/?/, '').trim()
   if (!raw) return { id: 'home' }
@@ -65,13 +71,19 @@ function parseHash(): AppRoute {
   if (head === 'probability') {
     return { id: 'probability', view: asProbabilityView(parts[1]) }
   }
-  if (parts.length === 1 && (SIMPLE as string[]).includes(head)) {
-    return { id: head as Exclude<RouteId, 'sequence' | 'interest' | 'probability'> }
+  if (head === 'drone') {
+    return { id: 'drone', view: asDroneView(parts[1]) }
+  }
+  if (parts.length === 1 && (SIMPLE as readonly string[]).includes(head)) {
+    return { id: head as 'home' | 'counting' | 'permutations' | 'combinations' }
   }
   return { id: 'home' }
 }
 
-export function navigate(route: RouteId, detail?: QuestionId | InterestMode | ProbabilityView) {
+export function navigate(
+  route: RouteId,
+  detail?: QuestionId | InterestMode | ProbabilityView | DroneView,
+) {
   if (route === 'home') {
     window.location.hash = '#/'
     return
@@ -91,6 +103,12 @@ export function navigate(route: RouteId, detail?: QuestionId | InterestMode | Pr
     const view =
       detail === 'sample' || detail === 'exclusive' || detail === 'independent' ? detail : undefined
     window.location.hash = view ? `#/probability/${view}` : '#/probability'
+    return
+  }
+  if (route === 'drone') {
+    const view =
+      detail === 'manual' || detail === 'program' || detail === 'compare' ? detail : undefined
+    window.location.hash = view ? `#/drone/${view}` : '#/drone'
     return
   }
   window.location.hash = `#/${route}`

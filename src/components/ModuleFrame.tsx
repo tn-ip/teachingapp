@@ -11,6 +11,7 @@ type ModuleFrameProps = {
   backLabel?: string
   backTo?: RouteId
   backQuestion?: QuestionId
+  kicker?: string
   nav?: ReactNode
   children: ReactNode
 }
@@ -24,6 +25,7 @@ export function ModuleFrame({
   backLabel = '← Home',
   backTo = 'home',
   backQuestion,
+  kicker = 'S4–S5 · DSE',
   nav,
   children,
 }: ModuleFrameProps) {
@@ -38,7 +40,7 @@ export function ModuleFrame({
           {backLabel}
         </button>
         <div className="brand">
-          <span className="brand-kicker">S4–S5 · DSE</span>
+          <span className="brand-kicker">{kicker}</span>
           <h1>{title}</h1>
         </div>
       </header>
