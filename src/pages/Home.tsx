@@ -68,6 +68,15 @@ const MODULES: {
       'HuLA-style indoor drone simulator. Fly a marked path by hand, then with Scratch-like blocks.',
     tip: '手動飛行 · 程式飛行. Manual is continuous decisions. Program is plan, then run.',
   },
+  {
+    id: 'print3d',
+    index: '08 · Before the printer',
+    title: '3D Print / Tinkercad',
+    bilingual: '雙面文字 · 實用設計 · AI',
+    blurb:
+      'Three iPad labs before Tinkercad: a two-view text block, a measured school gadget, and an AI mesh you learn to judge.',
+    tip: '雙面文字 · 實用設計 · AI. Practise the idea here, then build it in Tinkercad and slice on the Bambu Lab H2D.',
+  },
 ]
 
 export function Home() {
@@ -83,7 +92,8 @@ export function Home() {
         <h2>See counting, arrangements, chance, patterns, and interest.</h2>
         <p className="lede">
           Classroom lab for permutation 排列, combination 組合, probability 概率,
-          sequence 數列, and interest 利息, plus a HuLA drone simulator 手動飛行 · 程式飛行.
+          sequence 數列, and interest 利息, plus a HuLA drone simulator 手動飛行 · 程式飛行
+          and 3D-print labs 雙面文字 · 實用設計 · AI.
           iPad Safari: large targets, portrait or landscape, no hover-only controls.
         </p>
       </section>
@@ -92,7 +102,9 @@ export function Home() {
           <button
             key={m.id}
             type="button"
-            className={`card module-card${m.id === 'drone' ? ' drone-home' : ''}`}
+            className={`card module-card${m.id === 'drone' ? ' drone-home' : ''}${
+              m.id === 'print3d' ? ' print-home' : ''
+            }`}
             onClick={() => navigate(m.id)}
           >
             <span className="module-index">{m.index}</span>
@@ -111,7 +123,7 @@ export function Home() {
       <p className="home-foot">
         Notation: nPr, nCr, P(A), mutually exclusive, independent, Tₙ, I = P × R% × n.
         Counting labs stay small so every outcome can be drawn. The drone lab is a simulator —
-        it does not fly a real aircraft.
+        it does not fly a real aircraft. The 3D-print labs do not slice or send a file to the H2D.
       </p>
     </>
   )
