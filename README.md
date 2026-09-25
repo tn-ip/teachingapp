@@ -1,6 +1,6 @@
 # Count · Arrange · Chance · Interest
 
-An iPad-friendly visual lab for Hong Kong S4–S5 (DSE) mathematics: **permutation 排列**, **combination 組合**, **probability 概率**, **sequence 數列**, and **interest 利息**, plus a **HuLA / educational drone** simulator. English UI with bilingual labels on key terms. No backend — a static SPA.
+An iPad-friendly visual lab for Hong Kong S4–S5 (DSE) mathematics: **permutation 排列**, **combination 組合**, **probability 概率**, **sequence 數列**, and **interest 利息**, plus a **HuLA / educational drone** simulator and **3D-print / Tinkercad** classroom labs for a Bambu Lab H2D. English UI with bilingual labels on key terms. No backend — a static SPA.
 
 ## Modules
 
@@ -36,6 +36,15 @@ An iPad-friendly visual lab for Hong Kong S4–S5 (DSE) mathematics: **permutati
 
    This lab teaches manual control versus program control. It does not replace the HuLA APP, and it does not connect to a real HuLA EDU drone. Real flights need a clear indoor space and adult supervision.
 
+8. **3D Print / Tinkercad** — browser sims before the real printer (`#/print3d`, also accepts `#/tinkercad`). Home card bilingual: 雙面文字 · 實用設計 · AI. These labs do not slice, do not call Meshy or Tripo3D, and do not send a file to the Bambu Lab H2D. Students rebuild the idea in Tinkercad, then an adult slices PLA in Bambu Studio (one object on the plate for a first print).
+
+   | Lab | Route | What students do |
+   | --- | --- | --- |
+   | Hub | `#/print3d` | Three cycles. Safety note: the hotend stays in the real room, not in the browser. |
+   | Cycle 7 · Dual text illusion 雙面文字 | `#/print3d/dual-text` | Short words for view A and view B (HI/BYE, YES/NO, 愛/心, school initials TN/IP). Orbit plus locked Front / Side / Top. Construction toggle shows extrude directions and the mirror plane. Stroke ≥ 3 mm, flat base, plate fit, then a simulated Export .stl that celebrates “ready for Tinkercad / Bambu Studio”. Real Tinkercad path: Text → Extrude → Mirror → Align. |
+   | Cycle 8 · Functional design 實用設計 | `#/print3d/gadget` | Cable organizer 理線夾, bookmark 書籤, earphone holder 耳機座, or desk name stand 姓名座. Millimetre worksheet, live box-and-cylinder preview, group roles Measurer / Designer / Checker. Fit checks: hole ≥ 3 mm, wall ≥ 2–3 mm, flat base, overhang, H2D plate. Readiness score. Rebuild the numbers in Tinkercad — no browser STL. |
+   | AI → Tinkercad | `#/print3d/ai` | Prompt coach (symmetry, flat base, solid, no thin spikes, simple silhouette) → simulated good/bad mesh gallery → evaluate → bounding-box size check (Tinkercad comfort about 200 mm, grid up to 1000 mm, H2D single nozzle 325 × 320 × 325 mm) → edit toggles (cut, hollow with walls, flat pad, thicken) → print check → Delightex checklist (cleaned, named, sized, flat). |
+
 ## Classroom link (GitHub Pages)
 
 iPad Safari URL (public HTTPS, no classroom laptop on the LAN):
@@ -47,7 +56,7 @@ iPad Safari URL (public HTTPS, no classroom laptop on the LAN):
 3. Wait for the **Deploy GitHub Pages** workflow to succeed (Actions tab).
 4. On the iPad, open the link above in Safari. Later pushes to `main` refresh the same URL.
 
-Routing is hash-based (`#/counting`, `#/permutations`, `#/probability`, `#/probability/exclusive`, `#/probability/independent`, `#/sequence`, `#/sequence/1`, `#/interest`, `#/interest/compound`, `#/drone`, `#/drone/manual`, `#/drone/program`, `#/drone/compare`, …), so modules work under the `/teachingapp/` subpath and a reload does not 404. Sequence, Interest, probability, and the drone labs ship in the same static build — no extra workflow. Later pushes to `main` refresh **https://tn-ip.github.io/teachingapp/** via the existing **Deploy GitHub Pages** action.
+Routing is hash-based (`#/counting`, `#/permutations`, `#/probability`, `#/probability/exclusive`, `#/probability/independent`, `#/sequence`, `#/sequence/1`, `#/interest`, `#/interest/compound`, `#/drone`, `#/drone/manual`, `#/drone/program`, `#/drone/compare`, `#/print3d`, `#/print3d/dual-text`, `#/print3d/gadget`, `#/print3d/ai`, …), so modules work under the `/teachingapp/` subpath and a reload does not 404. Sequence, Interest, probability, the drone labs, and the 3D-print labs ship in the same static build — no extra workflow. Later pushes to `main` refresh **https://tn-ip.github.io/teachingapp/** via the existing **Deploy GitHub Pages** action.
 
 ## Run locally
 

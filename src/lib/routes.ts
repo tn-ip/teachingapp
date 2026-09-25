@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import type { DroneView } from './drone'
 import type { InterestMode } from './interest'
+import type { PrintView } from './print3d'
 import type { ProbabilityView } from './probability'
 import type { QuestionId } from './sequence'
 
@@ -15,6 +16,7 @@ export type RouteId =
   | 'sequence'
   | 'interest'
   | 'drone'
+  | 'print3d'
 
 export type AppRoute =
   | { id: 'home' | 'counting' | 'permutations' | 'combinations' }
@@ -22,12 +24,14 @@ export type AppRoute =
   | { id: 'interest'; mode: InterestMode }
   | { id: 'probability'; view: ProbabilityView | null }
   | { id: 'drone'; view: DroneView | null }
+  | { id: 'print3d'; view: PrintView | null }
 
 const SIMPLE = ['home', 'counting', 'permutations', 'combinations'] as const
 
 const INTEREST_MODES: InterestMode[] = ['simple', 'compound', 'compare']
 const PROBABILITY_VIEWS: ProbabilityView[] = ['sample', 'exclusive', 'independent']
 const DRONE_VIEWS: DroneView[] = ['manual', 'program', 'compare']
+const PRINT_VIEWS: PrintView[] = ['dual-text', 'gadget', 'ai']
 
 function asQuestionId(value: string | undefined): QuestionId | null {
   if (value === '1' || value === '2' || value === '3' || value === '4') {
@@ -57,6 +61,13 @@ function asDroneView(value: string | undefined): DroneView | null {
   return null
 }
 
+function asPrintView(value: string | undefined): PrintView | null {
+  if (value && (PRINT_VIEWS as string[]).includes(value)) {
+    return value as PrintView
+  }
+  return null
+}
+
 function parseHash(): AppRoute {
   const raw = window.location.hash.replace(/^#\/?/, '').trim()
   if (!raw) return { id: 'home' }
@@ -74,6 +85,9 @@ function parseHash(): AppRoute {
   if (head === 'drone') {
     return { id: 'drone', view: asDroneView(parts[1]) }
   }
+  if (head === 'print3d' || head === 'tinkercad') {
+    return { id: 'print3d', view: asPrintView(parts[1]) }
+  }
   if (parts.length === 1 && (SIMPLE as readonly string[]).includes(head)) {
     return { id: head as 'home' | 'counting' | 'permutations' | 'combinations' }
   }
@@ -82,7 +96,7 @@ function parseHash(): AppRoute {
 
 export function navigate(
   route: RouteId,
-  detail?: QuestionId | InterestMode | ProbabilityView | DroneView,
+  detail?: QuestionId | InterestMode | ProbabilityView | DroneView | PrintView,
 ) {
   if (route === 'home') {
     window.location.hash = '#/'
@@ -109,6 +123,12 @@ export function navigate(
     const view =
       detail === 'manual' || detail === 'program' || detail === 'compare' ? detail : undefined
     window.location.hash = view ? `#/drone/${view}` : '#/drone'
+    return
+  }
+  if (route === 'print3d') {
+    const view =
+      detail === 'dual-text' || detail === 'gadget' || detail === 'ai' ? detail : undefined
+    window.location.hash = view ? `#/print3d/${view}` : '#/print3d'
     return
   }
   window.location.hash = `#/${route}`

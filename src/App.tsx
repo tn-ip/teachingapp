@@ -11,6 +11,10 @@ import { SequenceQuestionPage } from './pages/SequenceQuestion'
 import { Interest } from './pages/Interest'
 import { DroneHub } from './pages/DroneHub'
 import { DroneLab } from './pages/DroneLab'
+import { PrintHub } from './pages/PrintHub'
+import { DualTextLab } from './pages/DualTextLab'
+import { GadgetLab } from './pages/GadgetLab'
+import { AiPrintLab } from './pages/AiPrintLab'
 import { useHashRoute } from './lib/routes'
 
 export default function App() {
@@ -31,6 +35,10 @@ export default function App() {
       {route.id === 'interest' && <Interest mode={route.mode} />}
       {route.id === 'drone' && route.view === null && <DroneHub />}
       {route.id === 'drone' && route.view !== null && <DroneLab view={route.view} />}
+      {route.id === 'print3d' && route.view === null && <PrintHub />}
+      {route.id === 'print3d' && route.view === 'dual-text' && <DualTextLab />}
+      {route.id === 'print3d' && route.view === 'gadget' && <GadgetLab />}
+      {route.id === 'print3d' && route.view === 'ai' && <AiPrintLab />}
     </div>
   )
 }
