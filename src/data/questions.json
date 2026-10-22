@@ -1,0 +1,6150 @@
+{
+  "paper": "HKDSE Mathematics Compulsory Part Paper 2",
+  "stageSet": "junior",
+  "stages": [
+    {
+      "id": "J1",
+      "title": "Change of subjects",
+      "questionCount": 13
+    },
+    {
+      "id": "J2",
+      "title": "Significant figure",
+      "questionCount": 12
+    },
+    {
+      "id": "J3",
+      "title": "Estimation, approximation",
+      "questionCount": 6
+    },
+    {
+      "id": "J4",
+      "title": "Percentage",
+      "questionCount": 18
+    },
+    {
+      "id": "J5",
+      "title": "Mensuration",
+      "questionCount": 52
+    },
+    {
+      "id": "J7",
+      "title": "Indices",
+      "questionCount": 16
+    },
+    {
+      "id": "J8",
+      "title": "Identities",
+      "questionCount": 13
+    },
+    {
+      "id": "J9",
+      "title": "Factorization, expansion",
+      "questionCount": 16
+    },
+    {
+      "id": "J10",
+      "title": "Ratio, rate (map scale)",
+      "questionCount": 19
+    },
+    {
+      "id": "J11",
+      "title": "Simultaneous equations",
+      "questionCount": 7
+    },
+    {
+      "id": "J12",
+      "title": "Inequalities",
+      "questionCount": 1
+    },
+    {
+      "id": "J13",
+      "title": "Plane Geometry",
+      "questionCount": 37
+    },
+    {
+      "id": "J14",
+      "title": "Coordinate Geometry",
+      "questionCount": 16
+    },
+    {
+      "id": "J15",
+      "title": "Trigonometry (include bearing)",
+      "questionCount": 20
+    },
+    {
+      "id": "J16",
+      "title": "Statistics",
+      "questionCount": 12
+    },
+    {
+      "id": "J17",
+      "title": "Binary, hexadecimal, decimal numbers",
+      "questionCount": 5
+    },
+    {
+      "id": "J18",
+      "title": "Sequences",
+      "questionCount": 13
+    },
+    {
+      "id": "J19",
+      "title": "S3 Probability",
+      "questionCount": 17
+    }
+  ],
+  "questions": [
+    {
+      "id": "J1-sample-q2",
+      "stage": "J1",
+      "topic": "Change of subjects",
+      "year": "Sample",
+      "paper": "2",
+      "sourceTag": "[HKDSE Maths Sample Paper-P2-Q2]",
+      "stem": "If \\(5-3m=2n\\), then \\(m\\) =",
+      "choices": {
+        "A": "\\(n\\)",
+        "B": "\\(\\frac{ 2n-5 }{ 3 }\\)",
+        "C": "\\(\\frac{ -2n+5 }{ 3 }\\)",
+        "D": "\\(\\frac{ -2n+15 }{ 3 }\\)"
+      },
+      "answer": "C",
+      "correctPercent": null,
+      "hasFigure": false,
+      "figure": null,
+      "figures": []
+    },
+    {
+      "id": "J1-practice-q2",
+      "stage": "J1",
+      "topic": "Change of subjects",
+      "year": "Practice",
+      "paper": "2",
+      "sourceTag": "[HKDSE Maths Practice Paper-P2-Q2]",
+      "stem": "If \\(3a+1=3(b-2)\\), then b =",
+      "choices": {
+        "A": "\\(a+1\\)",
+        "B": "\\(a+3\\)",
+        "C": "\\(a+\\frac{ 7 }{ 3 }\\)",
+        "D": "\\(a-\\frac{ 5 }{ 3 }\\)"
+      },
+      "answer": "C",
+      "correctPercent": null,
+      "hasFigure": false,
+      "figure": null,
+      "figures": []
+    },
+    {
+      "id": "J1-2013-q2",
+      "stage": "J1",
+      "topic": "Change of subjects",
+      "year": "2013",
+      "paper": "2",
+      "sourceTag": "[HKDSE 13-P2-Q2]",
+      "stem": "If \\(\\frac{ y-1 }{ c }=\\frac{ y+1 }{ d }\\), then y =",
+      "choices": {
+        "A": "\\(\\frac{ c-d }{ c+d }\\)",
+        "B": "\\(\\frac{ d-c }{ c+d }\\)",
+        "C": "\\(\\frac{ c+d }{ c-d }\\)",
+        "D": "\\(\\frac{ c+d }{ d-c }\\)"
+      },
+      "answer": "D",
+      "correctPercent": 81,
+      "hasFigure": false,
+      "figure": null,
+      "figures": []
+    },
+    {
+      "id": "J1-2016-q2",
+      "stage": "J1",
+      "topic": "Change of subjects",
+      "year": "2016",
+      "paper": "2",
+      "sourceTag": "[HKDSE 16-P2-Q2]",
+      "stem": "If \\(\\frac{ a }{ x }+\\frac{ b }{ y }=3\\), then \\(x\\) =",
+      "choices": {
+        "A": "\\(\\frac{ ay }{ 3y-b }\\)",
+        "B": "\\(\\frac{ ay }{ b-3y }\\)",
+        "C": "\\(\\frac{ by }{ 3y-a }\\)",
+        "D": "\\(\\frac{ by }{ a-3y }\\)"
+      },
+      "answer": "A",
+      "correctPercent": 81,
+      "hasFigure": false,
+      "figure": null,
+      "figures": []
+    },
+    {
+      "id": "J1-2017-q3",
+      "stage": "J1",
+      "topic": "Change of subjects",
+      "year": "2017",
+      "paper": "2",
+      "sourceTag": "[HKDSE 17-P2-Q3]",
+      "stem": "If \\(\\frac{ a+4b }{ 2a }=2+\\frac{ b }{ a }\\) , then \\(a\\) =",
+      "choices": {
+        "A": "\\(\\frac{ 2b }{ 3 }\\)",
+        "B": "\\(\\frac{ 3b }{ 2 }\\)",
+        "C": "\\(\\frac{ 5b }{ 6 }\\)",
+        "D": "\\(\\frac{ 6b }{ 5 }\\)"
+      },
+      "answer": "A",
+      "correctPercent": 73,
+      "hasFigure": false,
+      "figure": null,
+      "figures": []
+    },
+    {
+      "id": "J1-2018-q2",
+      "stage": "J1",
+      "topic": "Change of subjects",
+      "year": "2018",
+      "paper": "2",
+      "sourceTag": "[HKDSE 18-P2-Q2]",
+      "stem": "If \\(\\frac{ \\alpha }{ 1-x }=\\frac{ \\beta }{ x }\\), then \\(x=\\)",
+      "choices": {
+        "A": "\\(\\frac{ \\alpha }{ \\alpha -\\beta }\\)",
+        "B": "\\(\\frac{ \\alpha }{ \\alpha +\\beta }\\)",
+        "C": "\\(\\frac{ \\beta }{ \\alpha -\\beta }\\)",
+        "D": "\\(\\frac{ \\beta }{ \\alpha +\\beta }\\)"
+      },
+      "answer": "D",
+      "correctPercent": 80,
+      "hasFigure": false,
+      "figure": null,
+      "figures": []
+    },
+    {
+      "id": "J1-2019-q5",
+      "stage": "J1",
+      "topic": "Change of subjects",
+      "year": "2019",
+      "paper": "2",
+      "sourceTag": "[HKDSE 19-P2-Q5]",
+      "stem": "If \\(h=3-\\frac{ 5 }{ k+4 }\\), then \\(k\\) =",
+      "choices": {
+        "A": "\\(\\frac{ 4h-7 }{ 3-h }\\)",
+        "B": "\\(\\frac{ 4h-17 }{ 3-h }\\)",
+        "C": "\\(\\frac{ 4h-7 }{ 3+h }\\)",
+        "D": "\\(\\frac{ 4h-17 }{ 3+h }\\)"
+      },
+      "answer": "A",
+      "correctPercent": 75,
+      "hasFigure": false,
+      "figure": null,
+      "figures": []
+    },
+    {
+      "id": "J1-2020-q2",
+      "stage": "J1",
+      "topic": "Change of subjects",
+      "year": "2020",
+      "paper": "2",
+      "sourceTag": "[HKDSE 20-P2-Q2]",
+      "stem": "If \\(a(a+b)=2(b-a)\\), then b =",
+      "choices": {
+        "A": "\\(\\frac{ a^{2}+a }{ 2+a }\\)",
+        "B": "\\(\\frac{ a^{2}-2a }{ 2+a }\\)",
+        "C": "\\(\\frac{ a^{2}+2a }{ 2-a }\\)",
+        "D": "\\(\\frac{ a^{2}-a }{ 2-a }\\)"
+      },
+      "answer": "C",
+      "correctPercent": 85,
+      "hasFigure": false,
+      "figure": null,
+      "figures": []
+    },
+    {
+      "id": "J1-2021-q2",
+      "stage": "J1",
+      "topic": "Change of subjects",
+      "year": "2021",
+      "paper": "2",
+      "sourceTag": "[HKDSE 21-P2-Q2]",
+      "stem": "If \\(m(m-a)=a(1-m)\\), then \\(a\\) =",
+      "choices": {
+        "A": "\\(m\\)",
+        "B": "\\(2m\\)",
+        "C": "\\(m ^ { 2 }\\)",
+        "D": "\\(\\frac { m ^ { 2 } +m } { 2 }\\)"
+      },
+      "answer": "C",
+      "correctPercent": 87,
+      "hasFigure": false,
+      "figure": null,
+      "figures": []
+    },
+    {
+      "id": "J1-2022-q5",
+      "stage": "J1",
+      "topic": "Change of subjects",
+      "year": "2022",
+      "paper": "2",
+      "sourceTag": "[HKDSE 22-P2-Q5]",
+      "stem": "If \\(\\frac { 2 } { u }+\\frac { 3 } { v }=4,\\) then \\(u\\) =",
+      "choices": {
+        "A": "\\(\\frac { 2v } { 4v-3 }.\\)",
+        "B": "\\(\\frac { 2v } { 3-4v }.\\)",
+        "C": "\\(\\frac { 3v } { 4v-2 }.\\)",
+        "D": "\\(\\frac { 3v } { 2-4v }.\\)"
+      },
+      "answer": "A",
+      "correctPercent": 80,
+      "hasFigure": false,
+      "figure": null,
+      "figures": []
+    },
+    {
+      "id": "J1-2023-q1",
+      "stage": "J1",
+      "topic": "Change of subjects",
+      "year": "2023",
+      "paper": "2",
+      "sourceTag": "[HKDSE 23-P2-Q1]",
+      "stem": "If \\(\\frac { a+5b } { 7a+2b }=\\frac { 1 } { b+3 }\\), then \\(a\\) =",
+      "choices": {
+        "A": "\\(\\frac { 4-b } { 5b ^ { 2 } +13b }\\)",
+        "B": "\\(\\frac { 4+b } { 5b ^ { 2 } +13b }\\)",
+        "C": "\\(\\frac { 5b ^ { 2 } +13b } { 4-b }\\)",
+        "D": "\\(\\frac { 5b ^ { 2 } +13b } { 4+b }\\)"
+      },
+      "answer": "C",
+      "correctPercent": 78,
+      "hasFigure": false,
+      "figure": null,
+      "figures": []
+    },
+    {
+      "id": "J1-2024-q3",
+      "stage": "J1",
+      "topic": "Change of subjects",
+      "year": "2024",
+      "paper": "2",
+      "sourceTag": "[HKDSE 24-P2-Q3]",
+      "stem": "If \\(k=\\frac { 5 } { 2m }+n\\), then \\(m\\) =",
+      "choices": {
+        "A": "\\(\\frac { 5 } { 2(k-n) }\\)",
+        "B": "\\(\\frac { 5 } { 2(n-k) }\\)",
+        "C": "\\(\\frac { 2(k-n) } { 5 }\\)",
+        "D": "\\(\\frac { 2(n-k) } { 5 }\\)"
+      },
+      "answer": "A",
+      "correctPercent": 88,
+      "hasFigure": false,
+      "figure": null,
+      "figures": []
+    },
+    {
+      "id": "J1-2025-q4",
+      "stage": "J1",
+      "topic": "Change of subjects",
+      "year": "2025",
+      "paper": "2",
+      "sourceTag": "[HKDSE 25-P2-Q4]",
+      "stem": "If (3\\(c\\) + 1)(\\(d\\) – 4) = 2\\(d\\)(5\\(c\\) – 1), then c =",
+      "choices": {
+        "A": "\\(\\frac { 3d-4 } { 7d+12 }\\)",
+        "B": "\\(\\frac { 3d+4 } { 7d-12 }\\)",
+        "C": "\\(\\frac { 7d-12 } { 3d+4 }\\)",
+        "D": "\\(\\frac { 7d+12 } { 3d-4 }\\)"
+      },
+      "answer": "A",
+      "correctPercent": 80,
+      "hasFigure": false,
+      "figure": null,
+      "figures": []
+    },
+    {
+      "id": "J2-practice-q14",
+      "stage": "J2",
+      "topic": "Significant figure",
+      "year": "Practice",
+      "paper": "2",
+      "sourceTag": "[HKDSE Maths Practice Paper-P2-Q14]",
+      "stem": "0.009049999 =",
+      "choices": {
+        "A": "0.00905 (correct to 3 decimal places)",
+        "B": "0.00905 (correct to 3 significant figures)",
+        "C": "0.00905 (correct to 6 decimal places)",
+        "D": "0.00905 (correct to 6 significant figures)"
+      },
+      "answer": "B",
+      "correctPercent": null,
+      "hasFigure": false,
+      "figure": null,
+      "figures": []
+    },
+    {
+      "id": "J2-2012-q13",
+      "stage": "J2",
+      "topic": "Significant figure",
+      "year": "2012",
+      "paper": "2",
+      "sourceTag": "[HKDSE 12-P2-Q13]",
+      "stem": "0.0322515 =",
+      "choices": {
+        "A": "0.032 (correct to 3 significant figures)",
+        "B": "0.0322 (correct to 4 decimal places)",
+        "C": "0.03225 (correct to 5 significant figures)",
+        "D": "0.032252 (correct to 6 decimal places)"
+      },
+      "answer": "D",
+      "correctPercent": 79,
+      "hasFigure": false,
+      "figure": null,
+      "figures": []
+    },
+    {
+      "id": "J2-2013-q4",
+      "stage": "J2",
+      "topic": "Significant figure",
+      "year": "2013",
+      "paper": "2",
+      "sourceTag": "[HKDSE 13-P2-Q4]",
+      "stem": "0.0504545 =",
+      "choices": {
+        "A": "0.051 (correct to 2 significant figures)",
+        "B": "0.0505 (correct to 3 decimal places)",
+        "C": "0.05045 (correct to 4 significant figures)",
+        "D": "0.05046 (correct to 5 decimal places)"
+      },
+      "answer": "C",
+      "correctPercent": 75,
+      "hasFigure": false,
+      "figure": null,
+      "figures": []
+    },
+    {
+      "id": "J2-2015-q4",
+      "stage": "J2",
+      "topic": "Significant figure",
+      "year": "2015",
+      "paper": "2",
+      "sourceTag": "[HKDSE 15-P2-Q4]",
+      "stem": "0.0023456789 =",
+      "choices": {
+        "A": "0.00235 (correct to 6 decimal places)",
+        "B": "0.002345 (correct to 6 decimal places)",
+        "C": "0.002346 (correct to 6 significant figures)",
+        "D": "0.00234568 (correct to 6 significant figures)"
+      },
+      "answer": "D",
+      "correctPercent": 75,
+      "hasFigure": false,
+      "figure": null,
+      "figures": []
+    },
+    {
+      "id": "J2-2016-q4",
+      "stage": "J2",
+      "topic": "Significant figure",
+      "year": "2016",
+      "paper": "2",
+      "sourceTag": "[HKDSE 16-P2-Q4]",
+      "stem": "0.0765403 =",
+      "choices": {
+        "A": "0.076 (correct to 2 significant figures)",
+        "B": "0.0765 (correct to 3 decimal places)",
+        "C": "0.07654 (correct to 4 significant figures)",
+        "D": "0.076540 (correct to 5 decimal places)"
+      },
+      "answer": "C",
+      "correctPercent": 87,
+      "hasFigure": false,
+      "figure": null,
+      "figures": []
+    },
+    {
+      "id": "J2-2017-q4",
+      "stage": "J2",
+      "topic": "Significant figure",
+      "year": "2017",
+      "paper": "2",
+      "sourceTag": "[HKDSE 17-P2-Q4]",
+      "stem": "\\(\\frac{ 1 }{ \\pi ^{4} }=\\)",
+      "choices": {
+        "A": "0.0102 (correct to 3 significant figures)",
+        "B": "0.01025 (correct to 4 significant figures)",
+        "C": "0.01026 (correct to 5 decimal places)",
+        "D": "0.010266 (correct to 6 decimal places)"
+      },
+      "answer": "D",
+      "correctPercent": 90,
+      "hasFigure": false,
+      "figure": null,
+      "figures": []
+    },
+    {
+      "id": "J2-2019-q6",
+      "stage": "J2",
+      "topic": "Significant figure",
+      "year": "2019",
+      "paper": "2",
+      "sourceTag": "[HKDSE 19-P2-Q6]",
+      "stem": "If 0.06557 < \\(x\\) < 0.06564, which of the following is true?",
+      "choices": {
+        "A": "\\(x\\) = 0.065 (correct to 2 decimal places)",
+        "B": "\\(x\\) = 0.065 (correct to 2 significant figures)",
+        "C": "\\(x\\) = 0.0656 (correct to 3 decimal places)",
+        "D": "\\(x\\) = 0.0656 (correct to 3 significant figures)"
+      },
+      "answer": "D",
+      "correctPercent": 80,
+      "hasFigure": false,
+      "figure": null,
+      "figures": []
+    },
+    {
+      "id": "J2-2021-q5",
+      "stage": "J2",
+      "topic": "Significant figure",
+      "year": "2021",
+      "paper": "2",
+      "sourceTag": "[HKDSE 21-P2-Q5]",
+      "stem": "If \\(x\\) = 6.24 (correct to 2 decimal places), find the range of values of \\(x\\)",
+      "choices": {
+        "A": "6.23 < \\(x\\) ≤ 6.25",
+        "B": "6.23 ≤ \\(x\\) < 6.25",
+        "C": "6.235 < \\(x\\) ≤ 6.245",
+        "D": "6.235 ≤ \\(x\\) < 6.245"
+      },
+      "answer": "D",
+      "correctPercent": 74,
+      "hasFigure": false,
+      "figure": null,
+      "figures": []
+    },
+    {
+      "id": "J2-2022-q6",
+      "stage": "J2",
+      "topic": "Significant figure",
+      "year": "2022",
+      "paper": "2",
+      "sourceTag": "[HKDSE 22-P2-Q6]",
+      "stem": "It is given that x is a real number. If x is rounded down to 3 significant figures, then the result is 345. Find the range of values of \\(x\\)",
+      "choices": {
+        "A": "344 < x ≤ 345",
+        "B": "345 ≤ x < 346",
+        "C": "345 < x ≤ 345.5",
+        "D": "344.5 ≤ x < 345.5"
+      },
+      "answer": "B",
+      "correctPercent": 45,
+      "hasFigure": false,
+      "figure": null,
+      "figures": []
+    },
+    {
+      "id": "J2-2023-q7",
+      "stage": "J2",
+      "topic": "Significant figure",
+      "year": "2023",
+      "paper": "2",
+      "sourceTag": "[HKDSE 23-P2-Q7]",
+      "stem": "If y = 73.8 (correct to 3 significant figures), find the range of values of \\(y\\)",
+      "choices": {
+        "A": "73.7 ≤ \\(y\\) < 73.9",
+        "B": "73.7 < \\(y\\) ≤ 73.9",
+        "C": "73.75 ≤ y < 73.85",
+        "D": "73.75 < y ≤ 73.85"
+      },
+      "answer": "C",
+      "correctPercent": 82,
+      "hasFigure": false,
+      "figure": null,
+      "figures": []
+    },
+    {
+      "id": "J2-2024-q4",
+      "stage": "J2",
+      "topic": "Significant figure",
+      "year": "2024",
+      "paper": "2",
+      "sourceTag": "[HKDSE 24-P2-Q4]",
+      "stem": "\\(\\sqrt[] { 333 }\\)=",
+      "choices": {
+        "A": "18 (correct to the nearest integer)",
+        "B": "18.24 (correct to 2 decimal places)",
+        "C": "18.248 (correct to 3 significant figures)",
+        "D": "18.2482 (correct to 4 decimal places)"
+      },
+      "answer": "A",
+      "correctPercent": 91,
+      "hasFigure": false,
+      "figure": null,
+      "figures": []
+    },
+    {
+      "id": "J2-2025-q6",
+      "stage": "J2",
+      "topic": "Significant figure",
+      "year": "2025",
+      "paper": "2",
+      "sourceTag": "[HKDSE 25-P2-Q6]",
+      "stem": "If x = 5.67 (correct to 2 decimal places), find the range of values of \\(x\\)",
+      "choices": {
+        "A": "\\(5.66 < x\\le 5.68\\)",
+        "B": "\\(5.66\\le x < 5.68\\)",
+        "C": "\\(5.665 < x\\le 5.675\\)",
+        "D": "\\(5.665\\le x < 5.675\\)"
+      },
+      "answer": "D",
+      "correctPercent": 81,
+      "hasFigure": false,
+      "figure": null,
+      "figures": []
+    },
+    {
+      "id": "J3-sample-q15",
+      "stage": "J3",
+      "topic": "Estimation, approximation",
+      "year": "Sample",
+      "paper": "2",
+      "sourceTag": "[HKDSE Maths Sample Paper-P2-Q15]",
+      "stem": "The lengths of the three sides of a triangle are measured as 15 cm , 24 cm and 25 cm respectively. If the three measurements are correct to the nearest cm , find the percentage error in calculating the perimeter of the triangle correct to the nearest 0.1%",
+      "choices": {
+        "A": "0.8%",
+        "B": "2.3%",
+        "C": "4.7%",
+        "D": "6.3%"
+      },
+      "answer": "B",
+      "correctPercent": null,
+      "hasFigure": false,
+      "figure": null,
+      "figures": []
+    },
+    {
+      "id": "J3-2012-q14",
+      "stage": "J3",
+      "topic": "Estimation, approximation",
+      "year": "2012",
+      "paper": "2",
+      "sourceTag": "[HKDSE 12-P2-Q14]",
+      "stem": "The length of a piece of thin string is measured as 25m correct to the nearest m. If the string is cut into \\(n\\) pieces such that the length of each piece is measured as 5 cm correct to the nearest cm, find the greatest possible value of \\(n\\)",
+      "choices": {
+        "A": "445",
+        "B": "566",
+        "C": "567",
+        "D": "650"
+      },
+      "answer": "B",
+      "correctPercent": 49,
+      "hasFigure": false,
+      "figure": null,
+      "figures": []
+    },
+    {
+      "id": "J3-2014-q11",
+      "stage": "J3",
+      "topic": "Estimation, approximation",
+      "year": "2014",
+      "paper": "2",
+      "sourceTag": "[HKDSE 14-P2-Q11]",
+      "stem": "The width and the length of a thin rectangular metal sheet are measured as 8 cm and 10 cm correct to the nearest cm respectively. Let \\(x\\) cm\\(^{2}\\) be the actual area of the metal sheet. Find the range of values of \\(x\\)",
+      "choices": {
+        "A": "71.25 ≤ \\(x\\) < 89.25",
+        "B": "71.25 < \\(x\\) ≤ 89.25",
+        "C": "79.5 ≤ \\(x\\) < 80.5",
+        "D": "79.5 < \\(x\\) ≤ 80.5"
+      },
+      "answer": "A",
+      "correctPercent": 57,
+      "hasFigure": false,
+      "figure": null,
+      "figures": []
+    },
+    {
+      "id": "J3-2015-q14",
+      "stage": "J3",
+      "topic": "Estimation, approximation",
+      "year": "2015",
+      "paper": "2",
+      "sourceTag": "[HKDSE 15-P2-Q14]",
+      "stem": "There is a bag of white sugar. The weight of white sugar in the bag is measured as 5 kg correct to the nearest kg. If the bag of white sugar is packed into \\(n\\) packets such that the weight of white sugar in each packet is measured as 10 g correct to the nearest g, find the greatest possible value of \\(n\\)",
+      "choices": {
+        "A": "429",
+        "B": "500",
+        "C": "578",
+        "D": "579"
+      },
+      "answer": "C",
+      "correctPercent": 57,
+      "hasFigure": false,
+      "figure": null,
+      "figures": []
+    },
+    {
+      "id": "J3-2018-q14",
+      "stage": "J3",
+      "topic": "Estimation, approximation",
+      "year": "2018",
+      "paper": "2",
+      "sourceTag": "[HKDSE 18-P2-Q14]",
+      "stem": "![](figures/j3-2018-q14-1.png)In the figure, ABCDEFGH is an octagon, where all the measurements are correct to the nearest cm. Let \\(x\\) cm\\(^{2}\\) be the actual area of the octagon. Find the range of values of \\(x\\)",
+      "choices": {
+        "A": "13 < \\(x\\) < 23",
+        "B": "13 < \\(x\\) < 27",
+        "C": "17 < \\(x\\) < 23",
+        "D": "17 < \\(x\\) < 27"
+      },
+      "answer": "B",
+      "correctPercent": 42,
+      "hasFigure": true,
+      "figure": "figures/j3-2018-q14-1.png",
+      "figures": [
+        "figures/j3-2018-q14-1.png"
+      ]
+    },
+    {
+      "id": "J3-2020-q14",
+      "stage": "J3",
+      "topic": "Estimation, approximation",
+      "year": "2020",
+      "paper": "2",
+      "sourceTag": "[HKDSE 20-P2-Q14]",
+      "stem": "![](figures/j3-2020-q14-1.png)In the figure, PQRST is a pentagon, where all the measurements are correct to the nearest cm. Let \\(A\\) cm\\(^{2}\\) be the actual area of the pentagon. Find the range of values of \\(A\\)",
+      "choices": {
+        "A": "27.83 ≤ \\(A\\) < 31.83",
+        "B": "44.75 ≤ \\(A\\) < 60.75",
+        "C": "46.75 ≤ \\(A\\) < 63.25",
+        "D": "48.25 ≤ \\(A\\) < 64.75"
+      },
+      "answer": "B",
+      "correctPercent": 41,
+      "hasFigure": true,
+      "figure": "figures/j3-2020-q14-1.png",
+      "figures": [
+        "figures/j3-2020-q14-1.png"
+      ]
+    },
+    {
+      "id": "J4-sample-q10",
+      "stage": "J4",
+      "topic": "Percentage",
+      "year": "Sample",
+      "paper": "2",
+      "sourceTag": "[HKDSE Maths Sample Paper-P2-Q10]",
+      "stem": "Mary sold two bags for $ 240 each. She gained 20% on one and lost 20% on the other. After the two transactions, Mary",
+      "choices": {
+        "A": "lost $ 20",
+        "B": "gained $ 10",
+        "C": "gained $ 60",
+        "D": "had no gain and no loss."
+      },
+      "answer": "A",
+      "correctPercent": null,
+      "hasFigure": false,
+      "figure": null,
+      "figures": []
+    },
+    {
+      "id": "J4-sample-q12",
+      "stage": "J4",
+      "topic": "Percentage",
+      "year": "Sample",
+      "paper": "2",
+      "sourceTag": "[HKDSE Maths Sample Paper-P2-Q12]",
+      "stem": "If the length and the width of a rectangle are increased by 20% and \\(x\\)% respectively so that its area is increased by 50% , then \\(x\\) =",
+      "choices": {
+        "A": "20",
+        "B": "25",
+        "C": "30",
+        "D": "35"
+      },
+      "answer": "B",
+      "correctPercent": null,
+      "hasFigure": false,
+      "figure": null,
+      "figures": []
+    },
+    {
+      "id": "J4-practice-q10",
+      "stage": "J4",
+      "topic": "Percentage",
+      "year": "Practice",
+      "paper": "2",
+      "sourceTag": "[HKDSE Maths Practice Paper-P2-Q10]",
+      "stem": "John buys a vase for $ 1600 . He then sells the vase to Susan at a profit of 20% . At what price should Susan sell the vase in order to have a profit of 20% ?",
+      "choices": {
+        "A": "$ 2240",
+        "B": "$ 2304",
+        "C": "$ 2400",
+        "D": "$ 2500"
+      },
+      "answer": "B",
+      "correctPercent": null,
+      "hasFigure": false,
+      "figure": null,
+      "figures": []
+    },
+    {
+      "id": "J4-2012-q8",
+      "stage": "J4",
+      "topic": "Percentage",
+      "year": "2012",
+      "paper": "2",
+      "sourceTag": "[HKDSE 12-P2-Q8]",
+      "stem": "In a company, 37.5% of the employees are female. If 60% of the male employees and 80% of the female employees are married, then the percentage of married employees in the company is",
+      "choices": {
+        "A": "32.5%.",
+        "B": "45%.",
+        "C": "55%.",
+        "D": "67.5%."
+      },
+      "answer": "D",
+      "correctPercent": 84,
+      "hasFigure": false,
+      "figure": null,
+      "figures": []
+    },
+    {
+      "id": "J4-2013-q10",
+      "stage": "J4",
+      "topic": "Percentage",
+      "year": "2013",
+      "paper": "2",
+      "sourceTag": "[HKDSE 13-P2-Q10]",
+      "stem": "Susan sells two cars for $80 080 each. She gains 30% on one and loses 30% on the other. After the two transactions, Susan",
+      "choices": {
+        "A": "loses $15 840",
+        "B": "gains $5 544",
+        "C": "gains $10 296",
+        "D": "has no gain and no loss."
+      },
+      "answer": "A",
+      "correctPercent": 45,
+      "hasFigure": false,
+      "figure": null,
+      "figures": []
+    },
+    {
+      "id": "J4-2013-q11",
+      "stage": "J4",
+      "topic": "Percentage",
+      "year": "2013",
+      "paper": "2",
+      "sourceTag": "[HKDSE 13-P2-Q11]",
+      "stem": "A sum of $50 000 is deposited at an interest rate of 8% per annum for 1 year, compounded monthly. Find the interest correct to the nearest dollar.",
+      "choices": {
+        "A": "$4 000",
+        "B": "$4 122",
+        "C": "$4 143",
+        "D": "$4 150"
+      },
+      "answer": "D",
+      "correctPercent": 65,
+      "hasFigure": false,
+      "figure": null,
+      "figures": []
+    },
+    {
+      "id": "J4-2015-q9",
+      "stage": "J4",
+      "topic": "Percentage",
+      "year": "2015",
+      "paper": "2",
+      "sourceTag": "[HKDSE 15-P2-Q9]",
+      "stem": "If the price of a souvenir is increased by 70% and then decreased by 60%, find the percentage change in the price of the souvenir.",
+      "choices": {
+        "A": "–58%",
+        "B": "–32%",
+        "C": "2%",
+        "D": "10%"
+      },
+      "answer": "B",
+      "correctPercent": 69,
+      "hasFigure": false,
+      "figure": null,
+      "figures": []
+    },
+    {
+      "id": "J4-2015-q10",
+      "stage": "J4",
+      "topic": "Percentage",
+      "year": "2015",
+      "paper": "2",
+      "sourceTag": "[HKDSE 15-P2-Q10]",
+      "stem": "A sum of $50000 is deposited at an interest rate of 6% per annum for 3 years, compounded quarterly. Find the amount correct to the nearest dollar.",
+      "choices": {
+        "A": "$59000",
+        "B": "$59551",
+        "C": "$59755",
+        "D": "$59781"
+      },
+      "answer": "D",
+      "correctPercent": 58,
+      "hasFigure": false,
+      "figure": null,
+      "figures": []
+    },
+    {
+      "id": "J4-2016-q10",
+      "stage": "J4",
+      "topic": "Percentage",
+      "year": "2016",
+      "paper": "2",
+      "sourceTag": "[HKDSE 16-P2-Q10]",
+      "stem": "The monthly salary of Donald is 25% higher than that of Peter while the monthly salary of Peter is 25% lower than that of Teresa. It is given that the monthly salary of Donald is $33 360. The monthly salary of Teresa is",
+      "choices": {
+        "A": "$31 275.",
+        "B": "$33 360.",
+        "C": "$35 584.",
+        "D": "$52 125."
+      },
+      "answer": "C",
+      "correctPercent": 69,
+      "hasFigure": false,
+      "figure": null,
+      "figures": []
+    },
+    {
+      "id": "J4-2017-q10",
+      "stage": "J4",
+      "topic": "Percentage",
+      "year": "2017",
+      "paper": "2",
+      "sourceTag": "[HKDSE 17-P2-Q10]",
+      "stem": "A sum of $2 000 is deposited at an interest rate of 5% per annum for 4 years, compounded half-yearly. Find the interest correct to the nearest dollar.",
+      "choices": {
+        "A": "$400",
+        "B": "$431",
+        "C": "$437",
+        "D": "$440"
+      },
+      "answer": "C",
+      "correctPercent": 76,
+      "hasFigure": false,
+      "figure": null,
+      "figures": []
+    },
+    {
+      "id": "J4-2018-q9",
+      "stage": "J4",
+      "topic": "Percentage",
+      "year": "2018",
+      "paper": "2",
+      "sourceTag": "[HKDSE 18-P2-Q9]",
+      "stem": "A sum of $100 000 is deposited at an interest rate of 2% per annum for 3 years, compounded monthly. Find the interest correct to the nearest dollar.",
+      "choices": {
+        "A": "$6 000",
+        "B": "$6 121",
+        "C": "$6 176",
+        "D": "$6 178"
+      },
+      "answer": "D",
+      "correctPercent": 73,
+      "hasFigure": false,
+      "figure": null,
+      "figures": []
+    },
+    {
+      "id": "J4-2019-q11",
+      "stage": "J4",
+      "topic": "Percentage",
+      "year": "2019",
+      "paper": "2",
+      "sourceTag": "[HKDSE 19-P2-Q11]",
+      "stem": "A sum of $65 000 is deposited at an interest rate of 7% per annum for 8 years, compounded quarterly. Find the amount correct to the nearest dollar.",
+      "choices": {
+        "A": "$101 400",
+        "B": "$111 682",
+        "C": "$113 244",
+        "D": "$113 609"
+      },
+      "answer": "C",
+      "correctPercent": 79,
+      "hasFigure": false,
+      "figure": null,
+      "figures": []
+    },
+    {
+      "id": "J4-2020-q9",
+      "stage": "J4",
+      "topic": "Percentage",
+      "year": "2020",
+      "paper": "2",
+      "sourceTag": "[HKDSE 20-P2-Q9]",
+      "stem": "The cost of a toy is \\(x\\)% lower than its selling price. After selling the toy, the percentage profit is 25%. Find \\(x\\)",
+      "choices": {
+        "A": "20",
+        "B": "25",
+        "C": "75",
+        "D": "80"
+      },
+      "answer": "A",
+      "correctPercent": 46,
+      "hasFigure": false,
+      "figure": null,
+      "figures": []
+    },
+    {
+      "id": "J4-2021-q9",
+      "stage": "J4",
+      "topic": "Percentage",
+      "year": "2021",
+      "paper": "2",
+      "sourceTag": "[HKDSE 21-P2-Q9]",
+      "stem": "In a school, 33% of students are overweight. It is given that 60% of the students in the school are girls and 45% of the girls are overweight. If \\(x\\)% of the boys in the school are overweight, then \\(x\\) =",
+      "choices": {
+        "A": "15",
+        "B": "18",
+        "C": "25",
+        "D": "55"
+      },
+      "answer": "A",
+      "correctPercent": 62,
+      "hasFigure": false,
+      "figure": null,
+      "figures": []
+    },
+    {
+      "id": "J4-2022-q11",
+      "stage": "J4",
+      "topic": "Percentage",
+      "year": "2022",
+      "paper": "2",
+      "sourceTag": "[HKDSE 22-P2-Q11]",
+      "stem": "A sum of $88 000 is deposited at an interest rate of 6% per annum for 4 years, compounded monthly. Find the interest correct to the nearest dollar.",
+      "choices": {
+        "A": "$21 120",
+        "B": "$23 098",
+        "C": "$23 803",
+        "D": "$23 825"
+      },
+      "answer": "C",
+      "correctPercent": 76,
+      "hasFigure": false,
+      "figure": null,
+      "figures": []
+    },
+    {
+      "id": "J4-2023-q11",
+      "stage": "J4",
+      "topic": "Percentage",
+      "year": "2023",
+      "paper": "2",
+      "sourceTag": "[HKDSE 23-P2-Q11]",
+      "stem": "The marked price of a jacket is 60% above its cost. A profit of $104 is made by selling the jacket at a discount of 25% on its marked price. Find the cost of the jacket.",
+      "choices": {
+        "A": "$416",
+        "B": "$520",
+        "C": "$728",
+        "D": "$832"
+      },
+      "answer": "B",
+      "correctPercent": 81,
+      "hasFigure": false,
+      "figure": null,
+      "figures": []
+    },
+    {
+      "id": "J4-2024-q11",
+      "stage": "J4",
+      "topic": "Percentage",
+      "year": "2024",
+      "paper": "2",
+      "sourceTag": "[HKDSE 24-P2-Q11]",
+      "stem": "In a school, 40% of the students are girls and β% of the girls are foreign students. It is given that 30% of the boys in the school are foreign students. In the school, the number of foreign students and the number of girls are equal. Find β.",
+      "choices": {
+        "A": "20",
+        "B": "45",
+        "C": "55",
+        "D": "80"
+      },
+      "answer": "C",
+      "correctPercent": 58,
+      "hasFigure": false,
+      "figure": null,
+      "figures": []
+    },
+    {
+      "id": "J4-2025-q10",
+      "stage": "J4",
+      "topic": "Percentage",
+      "year": "2025",
+      "paper": "2",
+      "sourceTag": "[HKDSE 25-P2-Q10]",
+      "stem": "A sum of $40 000 is deposited at an interest rate of 3% per annum for 5 years, compounded half-yearly. Find the amount correct to the nearest dollar.",
+      "choices": {
+        "A": "$46 000",
+        "B": "$46 371",
+        "C": "$46 422",
+        "D": "$46 465"
+      },
+      "answer": "C",
+      "correctPercent": 78,
+      "hasFigure": false,
+      "figure": null,
+      "figures": []
+    },
+    {
+      "id": "J5-sample-q17",
+      "stage": "J5",
+      "topic": "Mensuration",
+      "year": "Sample",
+      "paper": "2",
+      "sourceTag": "[HKDSE Maths Sample Paper-P2-Q17]",
+      "stem": "The figure shows a right circular cylinder, a hemisphere and a right circular cone with equal base radii. Their curved surface areas are \\(a\\) cm\\(^{2}\\), \\(b\\) cm\\(^{2}\\) and \\(c\\) cm\\(^{2}\\) respectively.\n![](figures/j5-sample-q17-1.png)![](figures/j5-sample-q17-2.png)![](figures/j5-sample-q17-3.png)\nWhich of the following is true?",
+      "choices": {
+        "A": "\\(a\\) < \\(b\\) < \\(c\\)",
+        "B": "\\(a\\) < \\(c\\) < \\(b\\)",
+        "C": "\\(c\\) < \\(a\\) < \\(b\\)",
+        "D": "\\(c\\) < \\(b\\) < \\(a\\)"
+      },
+      "answer": "A",
+      "correctPercent": null,
+      "hasFigure": true,
+      "figure": "figures/j5-sample-q17-1.png",
+      "figures": [
+        "figures/j5-sample-q17-1.png",
+        "figures/j5-sample-q17-2.png",
+        "figures/j5-sample-q17-3.png"
+      ]
+    },
+    {
+      "id": "J5-sample-q18",
+      "stage": "J5",
+      "topic": "Mensuration",
+      "year": "Sample",
+      "paper": "2",
+      "sourceTag": "[HKDSE Maths Sample Paper-P2-Q18]",
+      "stem": "![](figures/j5-sample-q18-1.png)In the figure, ABCD is a parallelogram. \\(T\\) is a point lying on AB such that DT is perpendicular to AB. It is given that CD = 9 cm and AT : TB = 1 : 2 . If the area of the parallelogram ABCD is 36 cm\\(^{2}\\) , then the perimeter of the parallelogram ABCD is",
+      "choices": {
+        "A": "26 cm",
+        "B": "28 cm.",
+        "C": "30 cm",
+        "D": "32 cm"
+      },
+      "answer": "B",
+      "correctPercent": null,
+      "hasFigure": true,
+      "figure": "figures/j5-sample-q18-1.png",
+      "figures": [
+        "figures/j5-sample-q18-1.png"
+      ]
+    },
+    {
+      "id": "J5-practice-q11",
+      "stage": "J5",
+      "topic": "Mensuration",
+      "year": "Practice",
+      "paper": "2",
+      "sourceTag": "[HKDSE Maths Practice Paper-P2-Q11]",
+      "stem": "If the circumference of a circle is increased by 40% , then the area of the circle is increased by",
+      "choices": {
+        "A": "18%",
+        "B": "20%",
+        "C": "40%",
+        "D": "96%"
+      },
+      "answer": "D",
+      "correctPercent": null,
+      "hasFigure": false,
+      "figure": null,
+      "figures": []
+    },
+    {
+      "id": "J5-practice-q15",
+      "stage": "J5",
+      "topic": "Mensuration",
+      "year": "Practice",
+      "paper": "2",
+      "sourceTag": "[HKDSE Maths Practice Paper-P2-Q15]",
+      "stem": "![](figures/j5-practice-q15-1.png)In the figure, O is the centre of the sector OABC .\nIf the area of ΔOAC is 12 cm\\(^{2}\\) , find the area of the segment ABC",
+      "choices": {
+        "A": "3(π – 2) cm\\(^{2}\\)",
+        "B": "3(π – 1) cm\\(^{2}\\)",
+        "C": "6(π – 2) cm\\(^{2}\\)",
+        "D": "6(π – 1) cm\\(^{2}\\)"
+      },
+      "answer": "C",
+      "correctPercent": null,
+      "hasFigure": true,
+      "figure": "figures/j5-practice-q15-1.png",
+      "figures": [
+        "figures/j5-practice-q15-1.png"
+      ]
+    },
+    {
+      "id": "J5-practice-q16",
+      "stage": "J5",
+      "topic": "Mensuration",
+      "year": "Practice",
+      "paper": "2",
+      "sourceTag": "[HKDSE Maths Practice Paper-P2-Q16]",
+      "stem": "![](figures/j5-practice-q16-1.png)The figure shows a right circular cone of height 8 cm and slant height 17 cm . Find the volume of the circular cone.",
+      "choices": {
+        "A": "255π cm\\(^{3}\\)",
+        "B": "345π cm\\(^{3}\\)",
+        "C": "480π cm\\(^{3}\\)",
+        "D": "600π cm\\(^{3}\\)"
+      },
+      "answer": "D",
+      "correctPercent": null,
+      "hasFigure": true,
+      "figure": "figures/j5-practice-q16-1.png",
+      "figures": [
+        "figures/j5-practice-q16-1.png"
+      ]
+    },
+    {
+      "id": "J5-practice-q17",
+      "stage": "J5",
+      "topic": "Mensuration",
+      "year": "Practice",
+      "paper": "2",
+      "sourceTag": "[HKDSE Maths Practice Paper-P2-Q17]",
+      "stem": "![](figures/j5-practice-q17-1.png)In the figure, ABCD is a rectangle. E is the mid-point of BC . F is a point lying on CD such that DF = 2CF . If the area of ΔCEF\nis 1cm\\(^{2}\\) , then the area of ΔAEF is",
+      "choices": {
+        "A": "2 cm\\(^{2}\\)",
+        "B": "3 cm\\(^{2}\\)",
+        "C": "4 cm\\(^{2}\\)",
+        "D": "6 cm\\(^{2}\\)"
+      },
+      "answer": "C",
+      "correctPercent": null,
+      "hasFigure": true,
+      "figure": "figures/j5-practice-q17-1.png",
+      "figures": [
+        "figures/j5-practice-q17-1.png"
+      ]
+    },
+    {
+      "id": "J5-practice-q18",
+      "stage": "J5",
+      "topic": "Mensuration",
+      "year": "Practice",
+      "paper": "2",
+      "sourceTag": "[HKDSE Maths Practice Paper-P2-Q18]",
+      "stem": "![](figures/j5-practice-q18-1.png)In the figure, AB = 4 cm , BC = CD = DE = 8 cm and FG = 9 cm . Find the perimeter of ΔAEH",
+      "choices": {
+        "A": "60 cm",
+        "B": "74 cm",
+        "C": "150 cm",
+        "D": "164 cm"
+      },
+      "answer": "A",
+      "correctPercent": null,
+      "hasFigure": true,
+      "figure": "figures/j5-practice-q18-1.png",
+      "figures": [
+        "figures/j5-practice-q18-1.png"
+      ]
+    },
+    {
+      "id": "J5-2012-q16",
+      "stage": "J5",
+      "topic": "Mensuration",
+      "year": "2012",
+      "paper": "2",
+      "sourceTag": "[HKDSE 12-P2-Q16]",
+      "stem": "![](figures/j5-2012-q16-1.png)In the figure, OAB and OCD are sectors with centre \\(O\\). If \\(\\lim AB\\)= 12π cm, \\(\\lim CD\\)= 16π cm and OA = 30 cm,\nthen AC =",
+      "choices": {
+        "A": "5 cm.",
+        "B": "10 cm.",
+        "C": "20 cm.",
+        "D": "40 cm."
+      },
+      "answer": "B",
+      "correctPercent": 82,
+      "hasFigure": true,
+      "figure": "figures/j5-2012-q16-1.png",
+      "figures": [
+        "figures/j5-2012-q16-1.png"
+      ]
+    },
+    {
+      "id": "J5-2012-q17",
+      "stage": "J5",
+      "topic": "Mensuration",
+      "year": "2012",
+      "paper": "2",
+      "sourceTag": "[HKDSE 12-P2-Q17]",
+      "stem": "![](figures/j5-2012-q17-1.png)In the figure, ABCD is a parallelogram. \\(E\\) and \\(F\\) are points lying on AB and CD respectively. AD produced and EF produced meet at \\(G\\). It is given that DF : FC = 3 : 4 and AD : DG = 1 : 1 If the area of ΔDFG is 3 cm\\(^{2}\\), then the area of the parallelogram ABCD is",
+      "choices": {
+        "A": "12 cm\\(^{2}\\)",
+        "B": "14 cm\\(^{2}\\)",
+        "C": "18 cm\\(^{2}\\)",
+        "D": "21 cm\\(^{2}\\)"
+      },
+      "answer": "B",
+      "correctPercent": 43,
+      "hasFigure": true,
+      "figure": "figures/j5-2012-q17-1.png",
+      "figures": [
+        "figures/j5-2012-q17-1.png"
+      ]
+    },
+    {
+      "id": "J5-2013-q16",
+      "stage": "J5",
+      "topic": "Mensuration",
+      "year": "2013",
+      "paper": "2",
+      "sourceTag": "[HKDSE 13-P2-Q16]",
+      "stem": "![](figures/j5-2013-q16-1.png)In the figure, the diameter of the semicircle ABC is 3 cm. If \\(AC=2\\)cm, find the area of the shaded region correct to the nearest 0.01 cm\\(^{2}\\)",
+      "choices": {
+        "A": "0.23 cm\\(^{2}\\)",
+        "B": "0.52 cm\\(^{2}\\)",
+        "C": "0.64 cm\\(^{2}\\)",
+        "D": "1.07 cm\\(^{2}\\)"
+      },
+      "answer": "B",
+      "correctPercent": 33,
+      "hasFigure": true,
+      "figure": "figures/j5-2013-q16-1.png",
+      "figures": [
+        "figures/j5-2013-q16-1.png"
+      ]
+    },
+    {
+      "id": "J5-2013-q17",
+      "stage": "J5",
+      "topic": "Mensuration",
+      "year": "2013",
+      "paper": "2",
+      "sourceTag": "[HKDSE 13-P2-Q17]",
+      "stem": "![](figures/j5-2013-q17-1.png)In the figure, the solid consists of a right circular cone and a hemisphere with a common base. The base radius and the height of the circular cone are 3 cm and 4 cm respectively. Find the total surface area of the solid.",
+      "choices": {
+        "A": "30π cm\\(^{2}\\)",
+        "B": "33π cm\\(^{2}\\)",
+        "C": "48π cm\\(^{2}\\)",
+        "D": "51π cm\\(^{2}\\)"
+      },
+      "answer": "B",
+      "correctPercent": 56,
+      "hasFigure": true,
+      "figure": "figures/j5-2013-q17-1.png",
+      "figures": [
+        "figures/j5-2013-q17-1.png"
+      ]
+    },
+    {
+      "id": "J5-2013-q18",
+      "stage": "J5",
+      "topic": "Mensuration",
+      "year": "2013",
+      "paper": "2",
+      "sourceTag": "[HKDSE 13-P2-Q18]",
+      "stem": "![](figures/j5-2013-q18-1.png)In the figure, ABCD is a trapezium with AD // BC and AD : BC = 2 : 3. Let \\(E\\) be the\nmid-point of BC. AC and DE intersect at \\(F\\). If the area of ΔCEF is 36 cm\\(^{2}\\), then the area of the trapezium ABCD is",
+      "choices": {
+        "A": "216 cm\\(^{2}\\)",
+        "B": "264 cm\\(^{2}\\)",
+        "C": "280 cm\\(^{2}\\)",
+        "D": "320 cm\\(^{2}\\)"
+      },
+      "answer": "C",
+      "correctPercent": 37,
+      "hasFigure": true,
+      "figure": "figures/j5-2013-q18-1.png",
+      "figures": [
+        "figures/j5-2013-q18-1.png"
+      ]
+    },
+    {
+      "id": "J5-2013-q40",
+      "stage": "J5",
+      "topic": "Mensuration",
+      "year": "2013",
+      "paper": "2",
+      "sourceTag": "[HKDSE 13-P2-Q40]",
+      "stem": "If the height of a regular tetrahedron is 2 cm, then the volume of the tetrahedron is",
+      "choices": {
+        "A": "2 cm\\(^{3}\\)",
+        "B": "\\(\\sqrt[] { 3 }\\)cm\\(^{3}\\)",
+        "C": "\\(\\sqrt[] { { \\rm{ 6 } } }\\)cm\\(^{3}\\)",
+        "D": "\\(3\\sqrt[] { 3 }\\)cm\\(^{3}\\)"
+      },
+      "answer": "B",
+      "correctPercent": 21,
+      "hasFigure": false,
+      "figure": null,
+      "figures": []
+    },
+    {
+      "id": "J5-2014-q10",
+      "stage": "J5",
+      "topic": "Mensuration",
+      "year": "2014",
+      "paper": "2",
+      "sourceTag": "[HKDSE 14-P2-Q10]",
+      "stem": "If the angle and the radius of a sector are decreased by \\(x\\)% and 50% respectively so that its area is decreased by 90%, then \\(x\\) =",
+      "choices": {
+        "A": "20.",
+        "B": "40.",
+        "C": "60.",
+        "D": "80."
+      },
+      "answer": "C",
+      "correctPercent": 49,
+      "hasFigure": false,
+      "figure": null,
+      "figures": []
+    },
+    {
+      "id": "J5-2014-q15",
+      "stage": "J5",
+      "topic": "Mensuration",
+      "year": "2014",
+      "paper": "2",
+      "sourceTag": "[HKDSE 14-P2-Q15]",
+      "stem": "![](figures/j5-2014-q15-1.png)In the figure, AB = AE and ∠BAE = ∠BCD = ∠CDE = 90°. If BC = CD = DE = 16 cm, then the area of the pentagon ABCDE is",
+      "choices": {
+        "A": "71 cm\\(^{2}\\)",
+        "B": "128 cm\\(^{2}\\)",
+        "C": "192 cm\\(^{2}\\)",
+        "D": "224 cm\\(^{2}\\)"
+      },
+      "answer": "C",
+      "correctPercent": 81,
+      "hasFigure": true,
+      "figure": "figures/j5-2014-q15-1.png",
+      "figures": [
+        "figures/j5-2014-q15-1.png"
+      ]
+    },
+    {
+      "id": "J5-2014-q17",
+      "stage": "J5",
+      "topic": "Mensuration",
+      "year": "2014",
+      "paper": "2",
+      "sourceTag": "[HKDSE 14-P2-Q17]",
+      "stem": "![](figures/j5-2014-q17-1.png)In the figure, \\(B\\) is a point lying on AC such that AB : BC = 3 : 2. It is given that AE//BD. If the area of ΔBCD and the area of ΔCDE are 4 cm\\(^{2}\\) and 8 cm\\(^{2}\\) respectively, then the area of the trapezium ABDE is",
+      "choices": {
+        "A": "18 cm\\(^{2}\\)",
+        "B": "21 cm\\(^{2}\\)",
+        "C": "27 cm\\(^{2}\\)",
+        "D": "33 cm\\(^{2}\\)"
+      },
+      "answer": "D",
+      "correctPercent": 24,
+      "hasFigure": true,
+      "figure": "figures/j5-2014-q17-1.png",
+      "figures": [
+        "figures/j5-2014-q17-1.png"
+      ]
+    },
+    {
+      "id": "J5-2015-q16",
+      "stage": "J5",
+      "topic": "Mensuration",
+      "year": "2015",
+      "paper": "2",
+      "sourceTag": "[HKDSE 15-P2-Q16]",
+      "stem": "![](figures/j5-2015-q16-1.png)The height and the base radius of a right circular cone are 12 cm and 9 cm respectively. The figure shows a frustum which is made by cutting off the upper part of the circular cone. The height of the frustum is 8 cm. Find the volume of the frustum.",
+      "choices": {
+        "A": "210π cm\\(^{3}\\)",
+        "B": "312π cm\\(^{3}\\)",
+        "C": "324π cm\\(^{3}\\)",
+        "D": "936π cm\\(^{3}\\)"
+      },
+      "answer": "B",
+      "correctPercent": 70,
+      "hasFigure": true,
+      "figure": "figures/j5-2015-q16-1.png",
+      "figures": [
+        "figures/j5-2015-q16-1.png"
+      ]
+    },
+    {
+      "id": "J5-2015-q17",
+      "stage": "J5",
+      "topic": "Mensuration",
+      "year": "2015",
+      "paper": "2",
+      "sourceTag": "[HKDSE 15-P2-Q17]",
+      "stem": "![](figures/j5-2015-q17-1.png)In the figure, ABCD is a parallelogram. \\(E\\) is a point lying on CD such that DE : EC = 2 : 3. AD produced and BE produced meet at \\(F\\) while AE produced and BC produced meet at \\(G\\). If the area of ΔDEF is 8 cm\\(^{2}\\), then the area of ΔCEG is",
+      "choices": {
+        "A": "12 cm\\(^{2}\\)",
+        "B": "18 cm\\(^{2}\\)",
+        "C": "20 cm\\(^{2}\\)",
+        "D": "27 cm\\(^{2}\\)"
+      },
+      "answer": "D",
+      "correctPercent": 26,
+      "hasFigure": true,
+      "figure": "figures/j5-2015-q17-1.png",
+      "figures": [
+        "figures/j5-2015-q17-1.png"
+      ]
+    },
+    {
+      "id": "J5-2016-q18",
+      "stage": "J5",
+      "topic": "Mensuration",
+      "year": "2016",
+      "paper": "2",
+      "sourceTag": "[HKDSE 16-P2-Q18]",
+      "stem": "![](figures/j5-2016-q18-1.png)The figure shows a right prism.\nFind the volume of the prism.",
+      "choices": {
+        "A": "216 cm\\(^{3}\\)",
+        "B": "240 cm\\(^{3}\\)",
+        "C": "300 cm\\(^{3}\\)",
+        "D": "328 cm\\(^{3}\\)"
+      },
+      "answer": "C",
+      "correctPercent": 79,
+      "hasFigure": true,
+      "figure": "figures/j5-2016-q18-1.png",
+      "figures": [
+        "figures/j5-2016-q18-1.png"
+      ]
+    },
+    {
+      "id": "J5-2016-q19",
+      "stage": "J5",
+      "topic": "Mensuration",
+      "year": "2016",
+      "paper": "2",
+      "sourceTag": "[HKDSE 16-P2-Q19]",
+      "stem": "![](figures/j5-2016-q19-1.png)In the figure, OAB and OCD are sectors with centre \\(O\\), where OA = 33 cm and\nOC = 39 cm . The area of the shaded region ABDC is 72π cm\\(^{2}\\).\nWhich of the following is/are true?\n\nI. The angle of the sector OAB is 60° .\nII. The area of the sector OAB is 11π cm\\(^{2}\\) .\nIII. The perimeter of the sector OCD is 13π cm",
+      "choices": {
+        "A": "I only",
+        "B": "II only",
+        "C": "I and III only",
+        "D": "II and III only"
+      },
+      "answer": "A",
+      "correctPercent": 59,
+      "hasFigure": true,
+      "figure": "figures/j5-2016-q19-1.png",
+      "figures": [
+        "figures/j5-2016-q19-1.png"
+      ]
+    },
+    {
+      "id": "J5-2016-q20",
+      "stage": "J5",
+      "topic": "Mensuration",
+      "year": "2016",
+      "paper": "2",
+      "sourceTag": "[HKDSE 16-P2-Q20]",
+      "stem": "In the figure, ABCD, CDEF and EFGH are squares. AG cuts CD and EF at \\(P\\) and \\(Q\\) respectively. Find the ratio of the area\nof quadrilateral DEQP to the area of\nquadrilateral ABCP.",
+      "choices": {
+        "A": "1 : 2",
+        "B": "2 : 3",
+        "C": "3 : 5",
+        "D": "4 : 9"
+      },
+      "answer": "C",
+      "correctPercent": 51,
+      "hasFigure": false,
+      "figure": null,
+      "figures": []
+    },
+    {
+      "id": "J5-2017-q14",
+      "stage": "J5",
+      "topic": "Mensuration",
+      "year": "2017",
+      "paper": "2",
+      "sourceTag": "[HKDSE 17-P2-Q14]",
+      "stem": "![](figures/j5-2017-q14-1.png)In the figure, \\(D\\) is a point lying on AC such that BD is perpendicular to AC. It is given that AC = 14 cm and BD = 12 cm. If the area of ΔABD is greater than the area of ΔBCD by 24 cm\\(^{2}\\), then the perimeter of ΔABC is",
+      "choices": {
+        "A": "30 cm.",
+        "B": "42 cm.",
+        "C": "54 cm.",
+        "D": "84 cm."
+      },
+      "answer": "B",
+      "correctPercent": 71,
+      "hasFigure": true,
+      "figure": "figures/j5-2017-q14-1.png",
+      "figures": [
+        "figures/j5-2017-q14-1.png"
+      ]
+    },
+    {
+      "id": "J5-2017-q15",
+      "stage": "J5",
+      "topic": "Mensuration",
+      "year": "2017",
+      "paper": "2",
+      "sourceTag": "[HKDSE 17-P2-Q15]",
+      "stem": "The base radius of a right circular cone is 2 times the base radius of a right circular cylinder while the height of the circular cylinder is 3 times the height of the circular cone. If the volume of the circular cone is 36π cm\\(^{3}\\), then the volume of the circular cylinder is",
+      "choices": {
+        "A": "27π cm\\(^{3}\\)",
+        "B": "48π cm\\(^{3}\\)",
+        "C": "81π cm\\(^{3}\\)",
+        "D": "144π cm\\(^{3}\\)"
+      },
+      "answer": "C",
+      "correctPercent": 53,
+      "hasFigure": false,
+      "figure": null,
+      "figures": []
+    },
+    {
+      "id": "J5-2017-q16",
+      "stage": "J5",
+      "topic": "Mensuration",
+      "year": "2017",
+      "paper": "2",
+      "sourceTag": "[HKDSE 17-P2-Q16]",
+      "stem": "![](figures/j5-2017-q16-1.png)In the figure, ABCD and BEDF are parallelograms, \\(E\\) is a point lying on BC such that BE : EC = 2 : 3. AC cuts BF and DE at \\(G\\) and \\(H\\) respectively. If the area of ΔABG is 135 cm\\(^{2}\\), then the area of the quadrilateral DFGH is",
+      "choices": {
+        "A": "60 cm\\(^{2}\\)",
+        "B": "81 cm\\(^{2}\\)",
+        "C": "90 cm\\(^{2}\\)",
+        "D": "144 cm\\(^{2}\\)"
+      },
+      "answer": "D",
+      "correctPercent": 32,
+      "hasFigure": true,
+      "figure": "figures/j5-2017-q16-1.png",
+      "figures": [
+        "figures/j5-2017-q16-1.png"
+      ]
+    },
+    {
+      "id": "J5-2018-q15",
+      "stage": "J5",
+      "topic": "Mensuration",
+      "year": "2018",
+      "paper": "2",
+      "sourceTag": "[HKDSE 18-P2-Q15]",
+      "stem": "![](figures/j5-2018-q15-1.png)In the figure, the volume of the solid right triangular prism is",
+      "choices": {
+        "A": "544 cm\\(^{3}\\)",
+        "B": "600 cm\\(^{3}\\)",
+        "C": "660 cm\\(^{3}\\)",
+        "D": "720 cm\\(^{3}\\)"
+      },
+      "answer": "D",
+      "correctPercent": 83,
+      "hasFigure": true,
+      "figure": "figures/j5-2018-q15-1.png",
+      "figures": [
+        "figures/j5-2018-q15-1.png"
+      ]
+    },
+    {
+      "id": "J5-2018-q16",
+      "stage": "J5",
+      "topic": "Mensuration",
+      "year": "2018",
+      "paper": "2",
+      "sourceTag": "[HKDSE 18-P2-Q16]",
+      "stem": "![](figures/j5-2018-q16-1.png)In the figure, ABCD is a parallelogram. \\(E\\) is a point lying on BC such that\nBE : EC = 5 : 3. AE and BD intersect at the point \\(F\\). If the area of ΔABF is 120 cm\\(^{2}\\), then the area of the quadrilateral CDFE is",
+      "choices": {
+        "A": "237 cm\\(^{2}\\)",
+        "B": "307 cm\\(^{2}\\)",
+        "C": "312 cm\\(^{2}\\)",
+        "D": "429 cm\\(^{2}\\)"
+      },
+      "answer": "A",
+      "correctPercent": 39,
+      "hasFigure": true,
+      "figure": "figures/j5-2018-q16-1.png",
+      "figures": [
+        "figures/j5-2018-q16-1.png"
+      ]
+    },
+    {
+      "id": "J5-2018-q17",
+      "stage": "J5",
+      "topic": "Mensuration",
+      "year": "2018",
+      "paper": "2",
+      "sourceTag": "[HKDSE 18-P2-Q17]",
+      "stem": "![](figures/j5-2018-q17-1.png)In the figure, \\(O\\) is the centre of the sector OABCD. AD and OC are perpendicular to each other and intersect at the point \\(E\\).\n\\(F\\) is a point lying on AD such that BF is perpendicular to AD. If AF = 9 cm, DF = 39 cm and OE = 18 cm, then the area of the sector OBC is",
+      "choices": {
+        "A": "48π cm\\(^{2}\\)",
+        "B": "75π cm\\(^{2}\\)",
+        "C": "96π cm\\(^{2}\\)",
+        "D": "150π cm\\(^{2}\\)"
+      },
+      "answer": "B",
+      "correctPercent": 28,
+      "hasFigure": true,
+      "figure": "figures/j5-2018-q17-1.png",
+      "figures": [
+        "figures/j5-2018-q17-1.png"
+      ]
+    },
+    {
+      "id": "J5-2019-q15",
+      "stage": "J5",
+      "topic": "Mensuration",
+      "year": "2019",
+      "paper": "2",
+      "sourceTag": "[HKDSE 19-P2-Q15]",
+      "stem": "The base of a solid right pyramid is a square of side 18 cm. If the height of the pyramid is 12 cm, then the total surface area of the pyramid is",
+      "choices": {
+        "A": "432 cm\\(^{2}\\)",
+        "B": "540 cm\\(^{2}\\)",
+        "C": "756 cm\\(^{2}\\)",
+        "D": "864 cm\\(^{2}\\)"
+      },
+      "answer": "D",
+      "correctPercent": 61,
+      "hasFigure": false,
+      "figure": null,
+      "figures": []
+    },
+    {
+      "id": "J5-2019-q16",
+      "stage": "J5",
+      "topic": "Mensuration",
+      "year": "2019",
+      "paper": "2",
+      "sourceTag": "[HKDSE 19-P2-Q16]",
+      "stem": "![](figures/j5-2019-q16-1.png)In the figure, ABCD is a parallelogram and AEFG is a square. It is given that\nBE: EF : FC = 2 : 7: 3. BD cuts AE and FG at the points \\(X\\) and \\(Y\\) respectively. If the area of ΔABX is 24 cm\\(^{2}\\), then the area of the quadrilateral CDYF is",
+      "choices": {
+        "A": "54 cm\\(^{2}\\)",
+        "B": "77 cm\\(^{2}\\)",
+        "C": "81 cm\\(^{2}\\)",
+        "D": "87 cm\\(^{2}\\)"
+      },
+      "answer": "D",
+      "correctPercent": 25,
+      "hasFigure": true,
+      "figure": "figures/j5-2019-q16-1.png",
+      "figures": [
+        "figures/j5-2019-q16-1.png"
+      ]
+    },
+    {
+      "id": "J5-2019-q19",
+      "stage": "J5",
+      "topic": "Mensuration",
+      "year": "2019",
+      "paper": "2",
+      "sourceTag": "[HKDSE 19-P2-Q19]",
+      "stem": "![](figures/j5-2019-q19-1.png)In the figure, ABCD is a trapezium with AB//DC and ∠ABD = 90°. If AB = 18 cm, BC = 26 cm and AD = 30 cm, find the area of the trapezium ABCD.",
+      "choices": {
+        "A": "336 cm\\(^{2}\\)",
+        "B": "400 cm\\(^{2}\\)",
+        "C": "504 cm\\(^{2}\\)",
+        "D": "552 cm\\(^{2}\\)"
+      },
+      "answer": "A",
+      "correctPercent": 85,
+      "hasFigure": true,
+      "figure": "figures/j5-2019-q19-1.png",
+      "figures": [
+        "figures/j5-2019-q19-1.png"
+      ]
+    },
+    {
+      "id": "J5-2020-q15",
+      "stage": "J5",
+      "topic": "Mensuration",
+      "year": "2020",
+      "paper": "2",
+      "sourceTag": "[HKDSE 20-P2-Q15]",
+      "stem": "The angle of a sector is decreased by 60% but its radius is increased by \\(k\\)%. If the arc length of the sector remains unchanged, find the value of \\(k\\)",
+      "choices": {
+        "A": "40",
+        "B": "60",
+        "C": "67",
+        "D": "150"
+      },
+      "answer": "D",
+      "correctPercent": 42,
+      "hasFigure": false,
+      "figure": null,
+      "figures": []
+    },
+    {
+      "id": "J5-2020-q16",
+      "stage": "J5",
+      "topic": "Mensuration",
+      "year": "2020",
+      "paper": "2",
+      "sourceTag": "[HKDSE 20-P2-Q16]",
+      "stem": "If the volume of a right circular cylinder of base radius 5\\(a\\) cm and height 7\\(b\\) cm is\n525 cm\\(^{3}\\) , then the volume of a right circular cone of base radius 7\\(a\\) cm and height\n5\\(b\\) cm is",
+      "choices": {
+        "A": "175 cm\\(^{3}\\)",
+        "B": "245 cm\\(^{3}\\)",
+        "C": "490 cm\\(^{3}\\)",
+        "D": "735 cm\\(^{3}\\)"
+      },
+      "answer": "B",
+      "correctPercent": 39,
+      "hasFigure": false,
+      "figure": null,
+      "figures": []
+    },
+    {
+      "id": "J5-2020-q17",
+      "stage": "J5",
+      "topic": "Mensuration",
+      "year": "2020",
+      "paper": "2",
+      "sourceTag": "[HKDSE 20-P2-Q17]",
+      "stem": "![](figures/j5-2020-q17-1.png)In the figure, \\(P\\) and \\(Q\\) are points lying on OR while U and \\(T\\) are points lying on OS such that \\(OP=PQ=QR\\) and \\(PU//QT//RS\\). The ratio of the area of the trapezium PQTU to the area of the trapezium QRST is",
+      "choices": {
+        "A": "1 : 2",
+        "B": "2 : 3",
+        "C": "3 : 5",
+        "D": "4 : 9"
+      },
+      "answer": "C",
+      "correctPercent": 48,
+      "hasFigure": true,
+      "figure": "figures/j5-2020-q17-1.png",
+      "figures": [
+        "figures/j5-2020-q17-1.png"
+      ]
+    },
+    {
+      "id": "J5-2020-q18",
+      "stage": "J5",
+      "topic": "Mensuration",
+      "year": "2020",
+      "paper": "2",
+      "sourceTag": "[HKDSE 20-P2-Q18]",
+      "stem": "![](figures/j5-2020-q18-1.png)In the figure, ABCD is a parallelogram. Let E be a point lying on AD such that\nAE : ED = 2 : 5. CB is produced to the point \\(F\\) such that BF = DE. Denote the point of intersection of AB and EF by G . It is given that BD and CG intersect at the point \\(H\\). If the area of ∆ AEG is 48 cm\\(^{2}\\) , then the area of ∆CDH is",
+      "choices": {
+        "A": "98 cm\\(^{2}\\)",
+        "B": "343 cm\\(^{2}\\)",
+        "C": "420 cm\\(^{2}\\)",
+        "D": "588 cm\\(^{2}\\)"
+      },
+      "answer": "B",
+      "correctPercent": 43,
+      "hasFigure": true,
+      "figure": "figures/j5-2020-q18-1.png",
+      "figures": [
+        "figures/j5-2020-q18-1.png"
+      ]
+    },
+    {
+      "id": "J5-2020-q21",
+      "stage": "J5",
+      "topic": "Mensuration",
+      "year": "2020",
+      "paper": "2",
+      "sourceTag": "[HKDSE 20-P2-Q21]",
+      "stem": "![](figures/j5-2020-q21-1.png)In the figure, ABCD is a rectangle. Let \\(E\\) be a point lying on AD such that BE = 8 cm and CE = 15 cm. If BC = 17 cm , find the area of the rectangle ABCD",
+      "choices": {
+        "A": "60 cm\\(^{2}\\)",
+        "B": "68 cm\\(^{2}\\)",
+        "C": "120 cm\\(^{2}\\)",
+        "D": "136 cm\\(^{2}\\)"
+      },
+      "answer": "C",
+      "correctPercent": 62,
+      "hasFigure": true,
+      "figure": "figures/j5-2020-q21-1.png",
+      "figures": [
+        "figures/j5-2020-q21-1.png"
+      ]
+    },
+    {
+      "id": "J5-2021-q15",
+      "stage": "J5",
+      "topic": "Mensuration",
+      "year": "2021",
+      "paper": "2",
+      "sourceTag": "[HKDSE 21-P2-Q15]",
+      "stem": "The base of a solid right prism is regular 6-sided polygon of 8 cm. If the volume of the prism is 288 cm\\(^{3}\\), find the total surface area of the prism correct to the nearest cm\\(^{2}\\)",
+      "choices": {
+        "A": "166 cm\\(^{2}\\)",
+        "B": "249 cm\\(^{2}\\)",
+        "C": "416 cm\\(^{2}\\)",
+        "D": "748 cm\\(^{2}\\)"
+      },
+      "answer": "C",
+      "correctPercent": 43,
+      "hasFigure": false,
+      "figure": null,
+      "figures": []
+    },
+    {
+      "id": "J5-2021-q16",
+      "stage": "J5",
+      "topic": "Mensuration",
+      "year": "2021",
+      "paper": "2",
+      "sourceTag": "[HKDSE 21-P2-Q16]",
+      "stem": "The sum of the total surface areas of two solid hemispheres is 351π cm\\(^{2}\\). If the ratio of the radius of the smaller hemisphere to the radius of the larger hemisphere is 2 : 3 , then the difference of the volumes of the two hemispheres is",
+      "choices": {
+        "A": "342π cm\\(^{3}\\)",
+        "B": "630π cm\\(^{3}\\)",
+        "C": "684π cm\\(^{3}\\)",
+        "D": "1260π cm\\(^{3}\\)"
+      },
+      "answer": "A",
+      "correctPercent": 34,
+      "hasFigure": false,
+      "figure": null,
+      "figures": []
+    },
+    {
+      "id": "J5-2021-q17",
+      "stage": "J5",
+      "topic": "Mensuration",
+      "year": "2021",
+      "paper": "2",
+      "sourceTag": "[HKDSE 21-P2-Q17]",
+      "stem": "The area of the sector OAB is π cm\\(^{2}\\) , where \\(O\\) is the centre of the sector OAB .If \\(\\angle AOB=90{}^\\circ\\), which of the following are true?\n\nI. The radius of the sector OAB is 2 cm .\nII. The perimeter of the sector OAB is π cm .\nIII. The area of the circle passing through \\(O\\), \\(A\\) and \\(B\\) is 2π cm\\(^{2}\\)",
+      "choices": {
+        "A": "I and II only",
+        "B": "I and III only",
+        "C": "II and III only",
+        "D": "I, II and III"
+      },
+      "answer": "B",
+      "correctPercent": 50,
+      "hasFigure": false,
+      "figure": null,
+      "figures": []
+    },
+    {
+      "id": "J5-2021-q20",
+      "stage": "J5",
+      "topic": "Mensuration",
+      "year": "2021",
+      "paper": "2",
+      "sourceTag": "[HKDSE 21-P2-Q20]",
+      "stem": "![](figures/j5-2021-q20-1.png)In the figure, ABCD is a square. Let \\(E\\) and \\(F\\) be the points ling on AB and BC respectively such that \\(AE=3BE\\) and \\(\\angle DEF=90{}^\\circ\\). If the area of \\(\\Delta DEF\\) is 25 cm\\(^{2}\\) , then the area of \\(\\Delta CDF\\) is",
+      "choices": {
+        "A": "48 cm\\(^{2}\\)",
+        "B": "50 cm\\(^{2}\\)",
+        "C": "52 cm\\(^{2}\\)",
+        "D": "75 cm\\(^{2}\\)"
+      },
+      "answer": "C",
+      "correctPercent": 34,
+      "hasFigure": true,
+      "figure": "figures/j5-2021-q20-1.png",
+      "figures": [
+        "figures/j5-2021-q20-1.png"
+      ]
+    },
+    {
+      "id": "J5-2022-q15",
+      "stage": "J5",
+      "topic": "Mensuration",
+      "year": "2022",
+      "paper": "2",
+      "sourceTag": "[HKDSE 22-P2-Q15]",
+      "stem": "The radius of a solid hemisphere and the base radius of a solid right circular cylinder are equal. If the height of the circular cylinder is equal to its base diameter, then the ratio of the total surface area of the hemisphere to the total surface area of the circular cylinder is",
+      "choices": {
+        "A": "1 : 2",
+        "B": "1 : 3",
+        "C": "2 : 3",
+        "D": "2 : 5"
+      },
+      "answer": "A",
+      "correctPercent": 43,
+      "hasFigure": false,
+      "figure": null,
+      "figures": []
+    },
+    {
+      "id": "J5-2022-q16",
+      "stage": "J5",
+      "topic": "Mensuration",
+      "year": "2022",
+      "paper": "2",
+      "sourceTag": "[HKDSE 22-P2-Q16]",
+      "stem": "The diameter of a circle is 10 cm. The circle is divided into a major segment and a minor segment by a chord of length 8 cm. Find the area of the major segment correct to the nearest cm\\(^ { 2 }\\)",
+      "choices": {
+        "A": "11 cm\\(^ { 2 }\\)",
+        "B": "23 cm\\(^ { 2 }\\)",
+        "C": "55 cm\\(^ { 2 }\\)",
+        "D": "67 cm\\(^ { 2 }\\)"
+      },
+      "answer": "D",
+      "correctPercent": 32,
+      "hasFigure": false,
+      "figure": null,
+      "figures": []
+    },
+    {
+      "id": "J5-2022-q17",
+      "stage": "J5",
+      "topic": "Mensuration",
+      "year": "2022",
+      "paper": "2",
+      "sourceTag": "[HKDSE 22-P2-Q17]",
+      "stem": "![](figures/j5-2022-q17-1.png)\nIn the figure, \\(M\\) and \\(N\\) are points lying on PQ and QR respectively such that PM : MQ = 5 : 6 and QN : NR = 3 : 4. If the area of the quadrilateral MNRP is 59 cm\\(^{2}\\), then the area of ∆MNQ is",
+      "choices": {
+        "A": "17 cm\\(^{2}\\)",
+        "B": "18 cm\\(^{2}\\)",
+        "C": "19 cm\\(^{2}\\)",
+        "D": "20 cm\\(^{2}\\)"
+      },
+      "answer": "B",
+      "correctPercent": 38,
+      "hasFigure": true,
+      "figure": "figures/j5-2022-q17-1.png",
+      "figures": [
+        "figures/j5-2022-q17-1.png"
+      ]
+    },
+    {
+      "id": "J5-2023-q15",
+      "stage": "J5",
+      "topic": "Mensuration",
+      "year": "2023",
+      "paper": "2",
+      "sourceTag": "[HKDSE 23-P2-Q15]",
+      "stem": "The length of a side of a solid cube is 60 cm . The volume of a solid right circular cylinder is equal to the volume of the cube while the curved surface area of the circular cylinder is equal to the total surface area of the cube. Find the base radius of the circular cylinder.",
+      "choices": {
+        "A": "20 cm",
+        "B": "30 cm",
+        "C": "76 cm",
+        "D": "172 cm"
+      },
+      "answer": "A",
+      "correctPercent": 50,
+      "hasFigure": false,
+      "figure": null,
+      "figures": []
+    },
+    {
+      "id": "J5-2023-q16",
+      "stage": "J5",
+      "topic": "Mensuration",
+      "year": "2023",
+      "paper": "2",
+      "sourceTag": "[HKDSE 23-P2-Q16]",
+      "stem": "![](figures/j5-2023-q16-1.png)In the figure, AC is a diameter of the circle ABCD while BD and EF are diameters of the circle BEDF. It is given that \\(C\\) and \\(E\\) lie on AF. Let \\(G\\) be the point of intersection of AF and BD. If AG = 30 cm and CG = 10 cm, find the area of the shaded region correct to the nearest cm\\(^{2}\\)",
+      "choices": {
+        "A": "209 cm\\(^{2}\\)",
+        "B": "367 cm\\(^{2}\\)",
+        "C": "383 cm\\(^{2}\\)",
+        "D": "540 cm\\(^{2}\\)"
+      },
+      "answer": "D",
+      "correctPercent": 27,
+      "hasFigure": true,
+      "figure": "figures/j5-2023-q16-1.png",
+      "figures": [
+        "figures/j5-2023-q16-1.png"
+      ]
+    },
+    {
+      "id": "J5-2023-q17",
+      "stage": "J5",
+      "topic": "Mensuration",
+      "year": "2023",
+      "paper": "2",
+      "sourceTag": "[HKDSE 23-P2-Q17]",
+      "stem": "In the figure, PQRS is a parallelogram. Let X be a point lying on PQ. Denote the point of intersection of PR and SX by \\(Y\\). If the area of ΔPXY and the area of the quadrilateral QRYX are 32 cm\\(^{2}\\) and 58 cm\\(^{2}\\) respectively, then the area of ΔRSY is\n![](figures/j5-2023-q17-1.png)",
+      "choices": {
+        "A": "40 cm\\(^{2}\\)",
+        "B": "50 cm\\(^{2}\\)",
+        "C": "58 cm\\(^{2}\\)",
+        "D": "72 cm\\(^{2}\\)"
+      },
+      "answer": "B",
+      "correctPercent": 44,
+      "hasFigure": true,
+      "figure": "figures/j5-2023-q17-1.png",
+      "figures": [
+        "figures/j5-2023-q17-1.png"
+      ]
+    },
+    {
+      "id": "J5-2024-q15",
+      "stage": "J5",
+      "topic": "Mensuration",
+      "year": "2024",
+      "paper": "2",
+      "sourceTag": "[HKDSE 24-P2-Q15]",
+      "stem": "If the arc length and the area of a sector are 8π cm and 80π cm\\(^{2}\\) respectively, then the angle of the sector is",
+      "choices": {
+        "A": "36°.",
+        "B": "45°.",
+        "C": "60°.",
+        "D": "72°."
+      },
+      "answer": "D",
+      "correctPercent": 68,
+      "hasFigure": false,
+      "figure": null,
+      "figures": []
+    },
+    {
+      "id": "J5-2024-q16",
+      "stage": "J5",
+      "topic": "Mensuration",
+      "year": "2024",
+      "paper": "2",
+      "sourceTag": "[HKDSE 24-P2-Q16]",
+      "stem": "The ratio of the height of a right circular cylinder to the height of a right circular cone is 32 : 15 while the ratio of the volume of the circular cylinder to the volume of the circular cone is 10 : 9. If the base radius of the circular cylinder is 25 cm, then the base radius of the circular cone is",
+      "choices": {
+        "A": "20 cm.",
+        "B": "24 cm.",
+        "C": "48 cm.",
+        "D": "60 cm."
+      },
+      "answer": "D",
+      "correctPercent": 55,
+      "hasFigure": false,
+      "figure": null,
+      "figures": []
+    },
+    {
+      "id": "J5-2024-q17",
+      "stage": "J5",
+      "topic": "Mensuration",
+      "year": "2024",
+      "paper": "2",
+      "sourceTag": "[HKDSE 24-P2-Q17]",
+      "stem": "In the figure, ABCD is a square. Let \\(M\\) be the mid-point of BC. E is a point lying on AD such that AE : ED = 3 : 1. F is a point lying on BC produced such that EF // AM. CD and EF intersect at the point \\(G\\) while AM and BG intersect at the point \\(H\\). If the area of ΔBMH is 4 cm\\(^{2}\\), then the area of the trapezium AEGH is\n![](figures/j5-2024-q17-1.png)",
+      "choices": {
+        "A": "12 cm\\(^{2}\\)",
+        "B": "33 cm\\(^{2}\\)",
+        "C": "39 cm\\(^{2}\\)",
+        "D": "45 cm\\(^{2}\\)"
+      },
+      "answer": "C",
+      "correctPercent": 36,
+      "hasFigure": true,
+      "figure": "figures/j5-2024-q17-1.png",
+      "figures": [
+        "figures/j5-2024-q17-1.png"
+      ]
+    },
+    {
+      "id": "J5-2024-q18",
+      "stage": "J5",
+      "topic": "Mensuration",
+      "year": "2024",
+      "paper": "2",
+      "sourceTag": "[HKDSE 24-P2-Q18]",
+      "stem": "![](figures/j5-2024-q18-1.png)In the figure, ABC is a straight line. It is given that AD = 37 cm, BC = 5 cm, BD = 12 cm, CD = 13 cm and CE = 9 cm. If ∠ACE = 90°, find the perimeter of the quadrilateral ADCE.",
+      "choices": {
+        "A": "76 cm",
+        "B": "90 cm",
+        "C": "100 cm",
+        "D": "180 cm"
+      },
+      "answer": "C",
+      "correctPercent": 82,
+      "hasFigure": true,
+      "figure": "figures/j5-2024-q18-1.png",
+      "figures": [
+        "figures/j5-2024-q18-1.png"
+      ]
+    },
+    {
+      "id": "J5-2025-q15",
+      "stage": "J5",
+      "topic": "Mensuration",
+      "year": "2025",
+      "paper": "2",
+      "sourceTag": "[HKDSE 25-P2-Q15]",
+      "stem": "The perimeter of the sector OMN is 12π cm, where \\(O\\) is the centre of the sector OMN. If the radius of the sector OMN is 3π cm, which of the following are true?\nI. The area of the sector OMN is 9π\\(^{2}\\) cm\\(^{2}\\).\nII. The perimeter of ΔOMN is less than 35 cm.\nIII. The angle of the sector OMN is greater than 100\\({}^\\circ\\)",
+      "choices": {
+        "A": "I and II only",
+        "B": "I and III only",
+        "C": "II and III only",
+        "D": "I, II and III"
+      },
+      "answer": "D",
+      "correctPercent": 25,
+      "hasFigure": false,
+      "figure": null,
+      "figures": []
+    },
+    {
+      "id": "J5-2025-q16",
+      "stage": "J5",
+      "topic": "Mensuration",
+      "year": "2025",
+      "paper": "2",
+      "sourceTag": "[HKDSE 25-P2-Q16]",
+      "stem": "The height and the total surface area of a solid right circular cylinder are 35 cm and 492π cm\\(^{2}\\) respectively. If the radius of a solid sphere is equal to the base radius of the circular cylinder, then the volume of the sphere is",
+      "choices": {
+        "A": "144π cm\\(^{3}\\)",
+        "B": "288π cm\\(^{3}\\)",
+        "C": "576π cm\\(^{3}\\)",
+        "D": "864π cm\\(^{3}\\)"
+      },
+      "answer": "B",
+      "correctPercent": 66,
+      "hasFigure": false,
+      "figure": null,
+      "figures": []
+    },
+    {
+      "id": "J5-2025-q17",
+      "stage": "J5",
+      "topic": "Mensuration",
+      "year": "2025",
+      "paper": "2",
+      "sourceTag": "[HKDSE 25-P2-Q17]",
+      "stem": "![](figures/j5-2025-q17-1.png)In the figure, ABCD is a parallelogram. Let \\(E\\), \\(F\\) and \\(G\\) be points lying on AB, AD and CD respectively such that BE = 3AE, 2DF = 3AF and DG = 2CG. It is given that BC produced and EG produced meet at the point \\(H\\). If the area of ΔCGH is 16 cm\\(^{2}\\), then the area of the quadrilateral DFEG is",
+      "choices": {
+        "A": "46 cm\\(^{2}\\)",
+        "B": "49 cm\\(^{2}\\)",
+        "C": "105 cm\\(^{2}\\)",
+        "D": "115 cm\\(^{2}\\)"
+      },
+      "answer": "B",
+      "correctPercent": 40,
+      "hasFigure": true,
+      "figure": "figures/j5-2025-q17-1.png",
+      "figures": [
+        "figures/j5-2025-q17-1.png"
+      ]
+    },
+    {
+      "id": "J7-sample-q1",
+      "stage": "J7",
+      "topic": "Indices",
+      "year": "Sample",
+      "paper": "2",
+      "sourceTag": "[HKDSE Maths Sample Paper-P2-Q1]",
+      "stem": "(3\\(a\\))\\(^{2}\\)·\\(a\\)\\(^{3}\\) =",
+      "choices": {
+        "A": "\\(3a ^ { 5 }\\)",
+        "B": "\\(6a ^ { 6 }\\)",
+        "C": "\\(9a ^ { 5 }\\)",
+        "D": "\\(9a ^ { 6 }\\)"
+      },
+      "answer": "C",
+      "correctPercent": null,
+      "hasFigure": false,
+      "figure": null,
+      "figures": []
+    },
+    {
+      "id": "J7-practice-q1",
+      "stage": "J7",
+      "topic": "Indices",
+      "year": "Practice",
+      "paper": "2",
+      "sourceTag": "[HKDSE Maths Practice Paper-P2-Q1]",
+      "stem": "\\(x ^ { 3 } (2x+x)=\\)",
+      "choices": {
+        "A": "\\(3x ^ { 4 }\\)",
+        "B": "\\(2x ^ { 5 }\\)",
+        "C": "\\(3x ^ { 5 }\\)",
+        "D": "\\(2x ^ { 6 }\\)"
+      },
+      "answer": "A",
+      "correctPercent": null,
+      "hasFigure": false,
+      "figure": null,
+      "figures": []
+    },
+    {
+      "id": "J7-2012-q1",
+      "stage": "J7",
+      "topic": "Indices",
+      "year": "2012",
+      "paper": "2",
+      "sourceTag": "[HKDSE 12-P2-Q1]",
+      "stem": "\\(\\frac { (2x ^ { 4 } ) ^ { 3 } } { 2x ^ { 5 } }=\\)",
+      "choices": {
+        "A": "\\(3x ^ { 2 } .\\)",
+        "B": "\\(3x ^ { 7 } .\\)",
+        "C": "\\(4x ^ { 7 } .\\)",
+        "D": "\\(4x ^ { 59 } .\\)"
+      },
+      "answer": "C",
+      "correctPercent": 94,
+      "hasFigure": false,
+      "figure": null,
+      "figures": []
+    },
+    {
+      "id": "J7-2013-q1",
+      "stage": "J7",
+      "topic": "Indices",
+      "year": "2013",
+      "paper": "2",
+      "sourceTag": "[HKDSE 13-P2-Q1]",
+      "stem": "\\((27\\cdot 9 ^ { n+1 } ) ^ { 3 } =\\)",
+      "choices": {
+        "A": "\\(3^{6n+12}\\)",
+        "B": "\\(3^{6n+15}\\)",
+        "C": "\\(3^{9n+12}\\)",
+        "D": "\\(3^{9n+18}\\)"
+      },
+      "answer": "B",
+      "correctPercent": 69,
+      "hasFigure": false,
+      "figure": null,
+      "figures": []
+    },
+    {
+      "id": "J7-2014-q1",
+      "stage": "J7",
+      "topic": "Indices",
+      "year": "2014",
+      "paper": "2",
+      "sourceTag": "[HKDSE 14-P2-Q1]",
+      "stem": "(2\\(n\\)\\(^{3}\\))\\(^{−5}\\) =",
+      "choices": {
+        "A": "\\(\\frac { 1 } { 32n ^ { 2 } }.\\)",
+        "B": "\\(\\frac { 1 } { 32n ^ { 15 } }.\\)",
+        "C": "\\(\\frac { 1 } { 10n ^ { 125 } }.\\)",
+        "D": "\\(\\frac { 1 } { 10n ^ { 243. } }.\\)"
+      },
+      "answer": "B",
+      "correctPercent": 94,
+      "hasFigure": false,
+      "figure": null,
+      "figures": []
+    },
+    {
+      "id": "J7-2015-q2",
+      "stage": "J7",
+      "topic": "Indices",
+      "year": "2015",
+      "paper": "2",
+      "sourceTag": "[HKDSE 15-P2-Q2]",
+      "stem": "\\(\\frac { (3y ^ { 6 } ) ^ { 4 } } { 3y ^ { 2 } }=\\)",
+      "choices": {
+        "A": "4\\(y\\)\\(^{5}\\)",
+        "B": "4\\(y\\)\\(^{8}\\)",
+        "C": "27\\(y\\)\\(^{12}\\)",
+        "D": "27\\(y\\)\\(^{22}\\)"
+      },
+      "answer": "D",
+      "correctPercent": 93,
+      "hasFigure": false,
+      "figure": null,
+      "figures": []
+    },
+    {
+      "id": "J7-2016-q1",
+      "stage": "J7",
+      "topic": "Indices",
+      "year": "2016",
+      "paper": "2",
+      "sourceTag": "[HKDSE 16-P2-Q1]",
+      "stem": "\\(8 ^ { 222 } \\cdot 5 ^ { 666 } =\\)",
+      "choices": {
+        "A": "10\\(^{666}\\)",
+        "B": "10\\(^{888}\\)",
+        "C": "40\\(^{666}\\)",
+        "D": "40\\(^{888}\\)"
+      },
+      "answer": "A",
+      "correctPercent": 47,
+      "hasFigure": false,
+      "figure": null,
+      "figures": []
+    },
+    {
+      "id": "J7-2017-q2",
+      "stage": "J7",
+      "topic": "Indices",
+      "year": "2017",
+      "paper": "2",
+      "sourceTag": "[HKDSE 17-P2-Q2]",
+      "stem": "\\(\\left ( { \\frac { 1 } { 9 ^ { 555 } } } \\right )3 ^ { 444 }\\)",
+      "choices": {
+        "A": "0.",
+        "B": "![](figures/eq-j7-498-0.png)",
+        "C": "![](figures/eq-j7-498-1.png)",
+        "D": "![](figures/eq-j7-498-2.png)"
+      },
+      "answer": "D",
+      "correctPercent": 72,
+      "hasFigure": true,
+      "figure": "figures/eq-j7-498-0.png",
+      "figures": [
+        "figures/eq-j7-498-0.png",
+        "figures/eq-j7-498-1.png",
+        "figures/eq-j7-498-2.png"
+      ]
+    },
+    {
+      "id": "J7-2018-q1",
+      "stage": "J7",
+      "topic": "Indices",
+      "year": "2018",
+      "paper": "2",
+      "sourceTag": "[HKDSE 18-P2-Q1]",
+      "stem": "\\(\\frac { 8 ^ { 2n+1 } } { 4 ^ { 3n+1 } }=\\)",
+      "choices": {
+        "A": "1.",
+        "B": "2.",
+        "C": "2\\(^{n}\\)",
+        "D": "2\\(^{−n}\\)"
+      },
+      "answer": "B",
+      "correctPercent": 71,
+      "hasFigure": false,
+      "figure": null,
+      "figures": []
+    },
+    {
+      "id": "J7-2019-q2",
+      "stage": "J7",
+      "topic": "Indices",
+      "year": "2019",
+      "paper": "2",
+      "sourceTag": "[HKDSE 19-P2-Q2]",
+      "stem": "\\(\\frac { (6x ^ { 7 } ) ^ { 2 } } { 4x ^ { 5 } }\\)=",
+      "choices": {
+        "A": "\\(3x ^ { 4 }\\)",
+        "B": "\\(9x ^ { 4 }\\)",
+        "C": "\\(3x ^ { 9 }\\)",
+        "D": "\\(9x ^ { 9 }\\)"
+      },
+      "answer": "D",
+      "correctPercent": 88,
+      "hasFigure": false,
+      "figure": null,
+      "figures": []
+    },
+    {
+      "id": "J7-2020-q1",
+      "stage": "J7",
+      "topic": "Indices",
+      "year": "2020",
+      "paper": "2",
+      "sourceTag": "[HKDSE 20-P2-Q1]",
+      "stem": "\\(\\frac { { \\rm{ 6 } }x } { (3x ^ { -5 } ) ^ { -2 } }\\)=",
+      "choices": {
+        "A": "\\(54x ^ { 8 }\\)",
+        "B": "\\(\\frac { 2x ^ { 8 } } { 3 }\\)",
+        "C": "\\(\\frac { 54 } { x ^ { 9 } }\\)",
+        "D": "\\(\\frac { 2 } { 3x ^ { 9 } }\\)"
+      },
+      "answer": "C",
+      "correctPercent": 76,
+      "hasFigure": false,
+      "figure": null,
+      "figures": []
+    },
+    {
+      "id": "J7-2021-q1",
+      "stage": "J7",
+      "topic": "Indices",
+      "year": "2021",
+      "paper": "2",
+      "sourceTag": "[HKDSE 21-P2-Q1]",
+      "stem": "\\(\\frac { (2 ^ { n } )(8 ^ { 3n } ) } { 64 ^ { n } }=\\)",
+      "choices": {
+        "A": "\\(4 ^ { n }\\)",
+        "B": "\\(4 ^ { 2n }\\)",
+        "C": "\\(4 ^ { -3n }\\)",
+        "D": "\\(4 ^ { -4n }\\)"
+      },
+      "answer": "B",
+      "correctPercent": 73,
+      "hasFigure": false,
+      "figure": null,
+      "figures": []
+    },
+    {
+      "id": "J7-2022-q2",
+      "stage": "J7",
+      "topic": "Indices",
+      "year": "2022",
+      "paper": "2",
+      "sourceTag": "[HKDSE 22-P2-Q2]",
+      "stem": "\\(\\frac { 81 ^ { 2n+3 } } { (27 ^ { n+1 } ) ^ { 2 } }=\\)",
+      "choices": {
+        "A": "3",
+        "B": "3\\(^ { 2n+6 }\\)",
+        "C": "\\(3 ^ { 4n+8 }\\)",
+        "D": "\\(3 ^ { 10n+14 }\\)"
+      },
+      "answer": "B",
+      "correctPercent": 81,
+      "hasFigure": false,
+      "figure": null,
+      "figures": []
+    },
+    {
+      "id": "J7-2023-q3",
+      "stage": "J7",
+      "topic": "Indices",
+      "year": "2023",
+      "paper": "2",
+      "sourceTag": "[HKDSE 23-P2-Q3]",
+      "stem": "4\\(^{n+2}\\) 3\\(^{2n+4}\\) =",
+      "choices": {
+        "A": "6\\(^{2n+4}\\)",
+        "B": "6\\(^{4n+8}\\)",
+        "C": "12\\(^{2n+4}\\)",
+        "D": "12\\(^{3n+6}\\)"
+      },
+      "answer": "A",
+      "correctPercent": 72,
+      "hasFigure": false,
+      "figure": null,
+      "figures": []
+    },
+    {
+      "id": "J7-2024-q2",
+      "stage": "J7",
+      "topic": "Indices",
+      "year": "2024",
+      "paper": "2",
+      "sourceTag": "[HKDSE 24-P2-Q2]",
+      "stem": "\\(\\frac { (2\\alpha ) ^ { 3 } } { (4\\alpha ^ { -5 } ) ^ { -1 } }\\)=",
+      "choices": {
+        "A": "\\(2\\alpha ^ { 8 }\\)",
+        "B": "\\(32\\alpha ^ { 8 }\\)",
+        "C": "\\(\\frac { 2 } { \\alpha ^ { 2 } }\\)",
+        "D": "\\(\\frac { 32 } { \\alpha ^ { 2 } }\\)"
+      },
+      "answer": "D",
+      "correctPercent": 78,
+      "hasFigure": false,
+      "figure": null,
+      "figures": []
+    },
+    {
+      "id": "J7-2025-q1",
+      "stage": "J7",
+      "topic": "Indices",
+      "year": "2025",
+      "paper": "2",
+      "sourceTag": "[HKDSE 25-P2-Q1]",
+      "stem": "\\(\\frac { (27x) ^ { 5 } } { (3x ^ { -2 } ) ^ { 4 } }\\)=",
+      "choices": {
+        "A": "\\(3 ^ { 2 } x ^ { 3 }\\)",
+        "B": "\\(3 ^ { 4 } x ^ { 3 }\\)",
+        "C": "\\(3 ^ { 11 } x ^ { 13 }\\)",
+        "D": "\\(3 ^ { 14 } x ^ { 13 }\\)"
+      },
+      "answer": "C",
+      "correctPercent": 88,
+      "hasFigure": false,
+      "figure": null,
+      "figures": []
+    },
+    {
+      "id": "J8-sample-q4",
+      "stage": "J8",
+      "topic": "Identities",
+      "year": "Sample",
+      "paper": "2",
+      "sourceTag": "[HKDSE Maths Sample Paper-P2-Q4]",
+      "stem": "Let \\(p\\) and \\(q\\) be constants. If \\(\\,x ^ { 2 } +p(x+5)+q\\equiv (x-2)(x+5)\\), then \\(q\\) =",
+      "choices": {
+        "A": "−25",
+        "B": "−10",
+        "C": "3",
+        "D": "5"
+      },
+      "answer": "A",
+      "correctPercent": null,
+      "hasFigure": false,
+      "figure": null,
+      "figures": []
+    },
+    {
+      "id": "J8-practice-q4",
+      "stage": "J8",
+      "topic": "Identities",
+      "year": "Practice",
+      "paper": "2",
+      "sourceTag": "[HKDSE Maths Practice Paper-P2-Q4]",
+      "stem": "Let \\(m\\) and \\(n\\) be constants. If \\(m(x-3) ^ { 2 } +n(x+1) ^ { 2 } \\equiv x ^ { 2 } -38x+41\\), then \\(m\\) =",
+      "choices": {
+        "A": "–4.",
+        "B": "–1.",
+        "C": "3.",
+        "D": "5."
+      },
+      "answer": "D",
+      "correctPercent": null,
+      "hasFigure": false,
+      "figure": null,
+      "figures": []
+    },
+    {
+      "id": "J8-2012-q3",
+      "stage": "J8",
+      "topic": "Identities",
+      "year": "2012",
+      "paper": "2",
+      "sourceTag": "[HKDSE 12-P2-Q3]",
+      "stem": "If \\(p\\) and q are constants such that \\(x ^ { 2 } +p\\equiv (x+2)(x+q)+10,\\)then \\(p\\) =",
+      "choices": {
+        "A": "–4",
+        "B": "–2.",
+        "C": "6.",
+        "D": "10."
+      },
+      "answer": "C",
+      "correctPercent": 59,
+      "hasFigure": false,
+      "figure": null,
+      "figures": []
+    },
+    {
+      "id": "J8-2013-q8",
+      "stage": "J8",
+      "topic": "Identities",
+      "year": "2013",
+      "paper": "2",
+      "sourceTag": "[HKDSE 13-P2-Q8]",
+      "stem": "If \\(a\\) , \\(b\\) and \\(c\\) are non-zero constants such that \\(x(x+3a)+a\\equiv x ^ { 2 } +2(bx+c)\\), then\n\\(a\\) : \\(b\\) : \\(c\\) =",
+      "choices": {
+        "A": "2 : 3 : 1.",
+        "B": "2 : 3 : 4.",
+        "C": "3 : 2 : 6.",
+        "D": "6 : 4 : 3."
+      },
+      "answer": "A",
+      "correctPercent": 59,
+      "hasFigure": false,
+      "figure": null,
+      "figures": []
+    },
+    {
+      "id": "J8-2014-q3",
+      "stage": "J8",
+      "topic": "Identities",
+      "year": "2014",
+      "paper": "2",
+      "sourceTag": "[HKDSE 14-P2-Q3]",
+      "stem": "If \\(p\\) and \\(q\\) are constants such that px(\\(x\\) – 1) + \\(x\\)\\(^{2}\\) ≡ qx(\\(x\\) – 2) + 4\\(x\\), then p =",
+      "choices": {
+        "A": "1.",
+        "B": "2.",
+        "C": "3.",
+        "D": "4."
+      },
+      "answer": "B",
+      "correctPercent": 63,
+      "hasFigure": false,
+      "figure": null,
+      "figures": []
+    },
+    {
+      "id": "J8-2015-q5",
+      "stage": "J8",
+      "topic": "Identities",
+      "year": "2015",
+      "paper": "2",
+      "sourceTag": "[HKDSE 15-P2-Q5]",
+      "stem": "If \\(m\\) and \\(n\\) are constants such that x\\(^{2}\\) + mx + n ≡ (\\(x\\) + 4)(\\(x\\) – \\(m\\)) + 6, then \\(n\\) =",
+      "choices": {
+        "A": "–8.",
+        "B": "–2.",
+        "C": "2.",
+        "D": "6."
+      },
+      "answer": "B",
+      "correctPercent": 65,
+      "hasFigure": false,
+      "figure": null,
+      "figures": []
+    },
+    {
+      "id": "J8-2017-q8",
+      "stage": "J8",
+      "topic": "Identities",
+      "year": "2017",
+      "paper": "2",
+      "sourceTag": "[HKDSE 17-P2-Q8]",
+      "stem": "If \\(m\\) and \\(n\\) are constants such that 4\\(x\\)\\(^{2}\\)+ \\(m\\)(\\(x\\) + 1) + 28 ≡ mx(\\(x\\) + 3) + \\(n\\)(\\(x\\) – 4), then n =",
+      "choices": {
+        "A": "–8.",
+        "B": "–7.",
+        "C": "4.",
+        "D": "16."
+      },
+      "answer": "A",
+      "correctPercent": 62,
+      "hasFigure": false,
+      "figure": null,
+      "figures": []
+    },
+    {
+      "id": "J8-2019-q4",
+      "stage": "J8",
+      "topic": "Identities",
+      "year": "2019",
+      "paper": "2",
+      "sourceTag": "[HKDSE 19-P2-Q4]",
+      "stem": "If α and β are constants such that \\((x-8)(x+\\alpha )-6\\equiv (x-9) ^ { 2 } +\\beta\\), then β =",
+      "choices": {
+        "A": "−26.",
+        "B": "−10.",
+        "C": "−7.",
+        "D": "−6."
+      },
+      "answer": "C",
+      "correctPercent": 69,
+      "hasFigure": false,
+      "figure": null,
+      "figures": []
+    },
+    {
+      "id": "J8-2020-q7",
+      "stage": "J8",
+      "topic": "Identities",
+      "year": "2020",
+      "paper": "2",
+      "sourceTag": "[HKDSE 20-P2-Q7]",
+      "stem": "If h and \\(k\\) are constants such that \\((x+h)(x+6)\\equiv (x+4) ^ { 2 } +k\\), then \\(k\\) =",
+      "choices": {
+        "A": "–28",
+        "B": "–16",
+        "C": "–4",
+        "D": "2"
+      },
+      "answer": "C",
+      "correctPercent": 79,
+      "hasFigure": false,
+      "figure": null,
+      "figures": []
+    },
+    {
+      "id": "J8-2021-q6",
+      "stage": "J8",
+      "topic": "Identities",
+      "year": "2021",
+      "paper": "2",
+      "sourceTag": "[HKDSE 21-P2-Q6]",
+      "stem": "If \\(a\\), \\(b\\) and \\(c\\) are non-zero constants such that \\(a(x+3)+b(3x+1)\\equiv c(x+2)\\),\nthen \\(a\\) : \\(b\\) =",
+      "choices": {
+        "A": "1 : 3",
+        "B": "1 : 5.",
+        "C": "3 : 1.",
+        "D": "5 : 1."
+      },
+      "answer": "D",
+      "correctPercent": 49,
+      "hasFigure": false,
+      "figure": null,
+      "figures": []
+    },
+    {
+      "id": "J8-2022-q3",
+      "stage": "J8",
+      "topic": "Identities",
+      "year": "2022",
+      "paper": "2",
+      "sourceTag": "[HKDSE 22-P2-Q3]",
+      "stem": "If \\(m\\) and \\(n\\) are constants such that (x + 3)\\(^ { 2 }\\)+mx≡ \\((x-n)(x+1)+2n\\), then \\(m\\) =",
+      "choices": {
+        "A": "– 14",
+        "B": "– 8",
+        "C": "4",
+        "D": "9"
+      },
+      "answer": "A",
+      "correctPercent": 64,
+      "hasFigure": false,
+      "figure": null,
+      "figures": []
+    },
+    {
+      "id": "J8-2023-q5",
+      "stage": "J8",
+      "topic": "Identities",
+      "year": "2023",
+      "paper": "2",
+      "sourceTag": "[HKDSE 23-P2-Q5]",
+      "stem": "If c and d are constants such that (\\(x\\) + 2)(\\(x\\) + \\(c\\)) + 12 ≡ \\(x\\)(x + \\(d\\)) + 6\\(c\\)(x + 1), then d =",
+      "choices": {
+        "A": "−13",
+        "B": "−3",
+        "C": "3",
+        "D": "17"
+      },
+      "answer": "A",
+      "correctPercent": 70,
+      "hasFigure": false,
+      "figure": null,
+      "figures": []
+    },
+    {
+      "id": "J8-2025-q3",
+      "stage": "J8",
+      "topic": "Identities",
+      "year": "2025",
+      "paper": "2",
+      "sourceTag": "[HKDSE 25-P2-Q3]",
+      "stem": "If \\(a\\) and \\(b\\) are constants such that (\\(x\\) + 8)(\\(x\\) + \\(a\\)) + \\(b\\) ≡ \\(x\\)\\(^{2}\\) + 5\\(a\\)(\\(x\\) + 3), then b =",
+      "choices": {
+        "A": "–14.",
+        "B": "–2.",
+        "C": "2.",
+        "D": "14."
+      },
+      "answer": "D",
+      "correctPercent": 79,
+      "hasFigure": false,
+      "figure": null,
+      "figures": []
+    },
+    {
+      "id": "J9-sample-q3",
+      "stage": "J9",
+      "topic": "Factorization, expansion",
+      "year": "Sample",
+      "paper": "2",
+      "sourceTag": "[HKDSE Maths Sample Paper-P2-Q3]",
+      "stem": "\\(a^{2}-b^{2}+2b-1=\\)",
+      "choices": {
+        "A": "\\((a-b-1)(a+b-1)\\)",
+        "B": "\\((a-b-1)(a+b+1)\\)",
+        "C": "\\((a-b+1)(a+b-1)\\)",
+        "D": "\\((a-b+1)(a-b-1)\\)"
+      },
+      "answer": "C",
+      "correctPercent": null,
+      "hasFigure": false,
+      "figure": null,
+      "figures": []
+    },
+    {
+      "id": "J9-practice-q3",
+      "stage": "J9",
+      "topic": "Factorization, expansion",
+      "year": "Practice",
+      "paper": "2",
+      "sourceTag": "[HKDSE Maths Practice Paper-P2-Q3]",
+      "stem": "\\(p^{2}-q^{2}-p-q=\\)",
+      "choices": {
+        "A": "\\((p+q)(p-q-1)\\)",
+        "B": "\\((p+q)(p+q-1)\\)",
+        "C": "\\((p-q)(p-q+1)\\)",
+        "D": "\\((p-q)(p+q-1)\\)"
+      },
+      "answer": "A",
+      "correctPercent": null,
+      "hasFigure": false,
+      "figure": null,
+      "figures": []
+    },
+    {
+      "id": "J9-2012-q2",
+      "stage": "J9",
+      "topic": "Factorization, expansion",
+      "year": "2012",
+      "paper": "2",
+      "sourceTag": "[HKDSE 12-P2-Q2]",
+      "stem": "\\((4x+y)^{2}-(4x-y)^{2}=\\)",
+      "choices": {
+        "A": "0.",
+        "B": "\\(2y^{2}\\)",
+        "C": "\\(8xy\\)",
+        "D": "\\(16xy\\)"
+      },
+      "answer": "D",
+      "correctPercent": 74,
+      "hasFigure": false,
+      "figure": null,
+      "figures": []
+    },
+    {
+      "id": "J9-2013-q3",
+      "stage": "J9",
+      "topic": "Factorization, expansion",
+      "year": "2013",
+      "paper": "2",
+      "sourceTag": "[HKDSE 13-P2-Q3]",
+      "stem": "\\(hℓ-kℓ+hm-km-hn+kn=\\)",
+      "choices": {
+        "A": "\\((h+k)(ℓ-m+n)\\)",
+        "B": "\\((h+k)(ℓ+m-n)\\)",
+        "C": "\\((h-k)(ℓ-m+n)\\)",
+        "D": "\\((h-k)(ℓ+m-n)\\)"
+      },
+      "answer": "D",
+      "correctPercent": 85,
+      "hasFigure": false,
+      "figure": null,
+      "figures": []
+    },
+    {
+      "id": "J9-2014-q2",
+      "stage": "J9",
+      "topic": "Factorization, expansion",
+      "year": "2014",
+      "paper": "2",
+      "sourceTag": "[HKDSE 14-P2-Q2]",
+      "stem": "\\(u\\)\\(^{2}\\) – \\(v\\)\\(^{2}\\) – 5\\(u\\) + 5\\(v\\) =",
+      "choices": {
+        "A": "(\\(u\\) – \\(v\\))(\\(u\\) + \\(v\\) – 5)",
+        "B": "(\\(u\\) – \\(v\\))(\\(u\\) + \\(v\\) + 5)",
+        "C": "(\\(u\\) + \\(v\\))(\\(u\\) – \\(v\\) – 5)",
+        "D": "(\\(u\\) + \\(v\\))(\\(u\\) – \\(v\\) + 5)"
+      },
+      "answer": "A",
+      "correctPercent": 79,
+      "hasFigure": false,
+      "figure": null,
+      "figures": []
+    },
+    {
+      "id": "J9-2015-q1",
+      "stage": "J9",
+      "topic": "Factorization, expansion",
+      "year": "2015",
+      "paper": "2",
+      "sourceTag": "[HKDSE 15-P2-Q1]",
+      "stem": "(\\(x\\) + 1)(\\(x\\)\\(^{2}\\) + \\(x\\) +1) =",
+      "choices": {
+        "A": "\\(x\\)\\(^{3}\\) +1.",
+        "B": "(\\(x\\) + 1)\\(^{3}\\)",
+        "C": "\\(x\\)\\(^{3}\\) + \\(x\\)\\(^{2}\\) + \\(x\\) +1.",
+        "D": "\\(x\\)\\(^{3}\\) + 2\\(x\\)\\(^{2}\\) + 2\\(x\\) +1."
+      },
+      "answer": "D",
+      "correctPercent": 90,
+      "hasFigure": false,
+      "figure": null,
+      "figures": []
+    },
+    {
+      "id": "J9-2016-q3",
+      "stage": "J9",
+      "topic": "Factorization, expansion",
+      "year": "2016",
+      "paper": "2",
+      "sourceTag": "[HKDSE 16-P2-Q3]",
+      "stem": "\\(16-(2x-3y)^{2}=\\)",
+      "choices": {
+        "A": "\\((4-2x-3y)(4+2x+3y)\\)",
+        "B": "\\((4-2x-3y)(4+2x-3y)\\)",
+        "C": "\\((4-2x+3y)(4+2x+3y)\\)",
+        "D": "\\((4-2x+3y)(4+2x-3y)\\)"
+      },
+      "answer": "D",
+      "correctPercent": 65,
+      "hasFigure": false,
+      "figure": null,
+      "figures": []
+    },
+    {
+      "id": "J9-2017-q1",
+      "stage": "J9",
+      "topic": "Factorization, expansion",
+      "year": "2017",
+      "paper": "2",
+      "sourceTag": "[HKDSE 17-P2-Q1]",
+      "stem": "3\\(m\\)\\(^{2}\\) – 5mn + 2\\(n\\)\\(^{2}\\) + \\(m\\) – \\(n\\) =",
+      "choices": {
+        "A": "(\\(m\\) – \\(n\\))(3\\(m\\) – 2\\(n\\) + 1)",
+        "B": "(\\(m\\) – \\(n\\))(3\\(m\\) + 2\\(n\\) + 1)",
+        "C": "(\\(m\\) + \\(n\\))(3\\(m\\) – 2\\(n\\) – 1)",
+        "D": "(\\(m\\) + \\(n\\))(3\\(m\\) + 2\\(n\\) – 1)"
+      },
+      "answer": "A",
+      "correctPercent": 89,
+      "hasFigure": false,
+      "figure": null,
+      "figures": []
+    },
+    {
+      "id": "J9-2018-q3",
+      "stage": "J9",
+      "topic": "Factorization, expansion",
+      "year": "2018",
+      "paper": "2",
+      "sourceTag": "[HKDSE 18-P2-Q3]",
+      "stem": "\\(h^{2}-6h-4k^{2}-12k=\\)",
+      "choices": {
+        "A": "\\((h-2k)(h-2k+6)\\)",
+        "B": "\\((h-2k)(h+2k+6)\\)",
+        "C": "\\((h+2k)(h-2k-6)\\)",
+        "D": "\\((h+2k)(h+2k-6)\\)"
+      },
+      "answer": "C",
+      "correctPercent": 80,
+      "hasFigure": false,
+      "figure": null,
+      "figures": []
+    },
+    {
+      "id": "J9-2019-q1",
+      "stage": "J9",
+      "topic": "Factorization, expansion",
+      "year": "2019",
+      "paper": "2",
+      "sourceTag": "[HKDSE 19-P2-Q1]",
+      "stem": "\\((a-b)(a ^ { 2 } +ab-b ^ { 2 } )\\)=",
+      "choices": {
+        "A": "\\((a-b) ^ { 3 }\\)",
+        "B": "\\(a^{3}-b^{3}\\)",
+        "C": "\\(a^{3}-2ab^{2}+b^{3}\\)",
+        "D": "\\(a^{3}-2a^{2}b+2ab^{2}+b^{3}\\)"
+      },
+      "answer": "C",
+      "correctPercent": 67,
+      "hasFigure": false,
+      "figure": null,
+      "figures": []
+    },
+    {
+      "id": "J9-2020-q4",
+      "stage": "J9",
+      "topic": "Factorization, expansion",
+      "year": "2020",
+      "paper": "2",
+      "sourceTag": "[HKDSE 20-P2-Q4]",
+      "stem": "\\((3a+2b)(4a-5b)-a(6a+4b)=\\)",
+      "choices": {
+        "A": "\\((3a+2b)(2a-5b)\\)",
+        "B": "\\((3a+2b)(6a-5b)\\)",
+        "C": "\\((3a-2b)(2a+5b)\\)",
+        "D": "\\((3a-2b)(6a+5b)\\)"
+      },
+      "answer": "A",
+      "correctPercent": 85,
+      "hasFigure": false,
+      "figure": null,
+      "figures": []
+    },
+    {
+      "id": "J9-2021-q3",
+      "stage": "J9",
+      "topic": "Factorization, expansion",
+      "year": "2021",
+      "paper": "2",
+      "sourceTag": "[HKDSE 21-P2-Q3]",
+      "stem": "\\((u+v)(u-v)(u-1)=\\)",
+      "choices": {
+        "A": "\\(u ^ { 3 } +u ^ { 2 } +uv ^ { 2 } +v ^ { 2 }\\)",
+        "B": "\\(u ^ { 3 } +u ^ { 2 } -uv ^ { 2 } +v ^ { 2 }\\)",
+        "C": "\\(u ^ { 3 } -u ^ { 2 } +uv ^ { 2 } +v ^ { 2 }\\)",
+        "D": "\\(u ^ { 3 } -u ^ { 2 } -uv ^ { 2 } +v ^ { 2 }\\)"
+      },
+      "answer": "D",
+      "correctPercent": 82,
+      "hasFigure": false,
+      "figure": null,
+      "figures": []
+    },
+    {
+      "id": "J9-2022-q1",
+      "stage": "J9",
+      "topic": "Factorization, expansion",
+      "year": "2022",
+      "paper": "2",
+      "sourceTag": "[HKDSE 22-P2-Q1]",
+      "stem": "\\(\\alpha ^ { 2 } -\\alpha -\\beta ^ { 2 } +\\beta =\\)",
+      "choices": {
+        "A": "\\((\\alpha +\\beta )(\\alpha -\\beta +1)\\)",
+        "B": "\\((\\alpha +\\beta )(\\alpha -\\beta -1)\\)",
+        "C": "\\((\\alpha -\\beta )(\\alpha +\\beta +1)\\)",
+        "D": "\\((\\alpha -\\beta )(\\alpha +\\beta -1)\\)"
+      },
+      "answer": "D",
+      "correctPercent": 77,
+      "hasFigure": false,
+      "figure": null,
+      "figures": []
+    },
+    {
+      "id": "J9-2023-q4",
+      "stage": "J9",
+      "topic": "Factorization, expansion",
+      "year": "2023",
+      "paper": "2",
+      "sourceTag": "[HKDSE 23-P2-Q4]",
+      "stem": "2\\(x\\)\\(^{2}\\) + xy − \\(y\\)\\(^{2}\\) + 4\\(x\\) + 4\\(y\\) =",
+      "choices": {
+        "A": "(\\(x\\) + \\(y\\))(2\\(x\\) + \\(y\\) − 4)",
+        "B": "(\\(x\\) + \\(y\\))(2\\(x\\) − \\(y\\) + 4)",
+        "C": "(\\(x\\) − \\(y\\))(2\\(x\\) + \\(y\\) − 4)",
+        "D": "(\\(x\\) − \\(y\\))(2\\(x\\) − \\(y\\) + 4)"
+      },
+      "answer": "B",
+      "correctPercent": 87,
+      "hasFigure": false,
+      "figure": null,
+      "figures": []
+    },
+    {
+      "id": "J9-2024-q1",
+      "stage": "J9",
+      "topic": "Factorization, expansion",
+      "year": "2024",
+      "paper": "2",
+      "sourceTag": "[HKDSE 24-P2-Q1]",
+      "stem": "(\\(x\\) + 3\\(y\\))\\(^{2}\\) – (\\(x\\) – 3\\(y\\))\\(^{2}\\) =",
+      "choices": {
+        "A": "2\\(x\\)\\(^{2}\\)",
+        "B": "6xy.",
+        "C": "12xy.",
+        "D": "2\\(x\\)\\(^{2}\\) + 18\\(y\\)\\(^{2}\\)"
+      },
+      "answer": "C",
+      "correctPercent": 86,
+      "hasFigure": false,
+      "figure": null,
+      "figures": []
+    },
+    {
+      "id": "J9-2025-q2",
+      "stage": "J9",
+      "topic": "Factorization, expansion",
+      "year": "2025",
+      "paper": "2",
+      "sourceTag": "[HKDSE 25-P2-Q2]",
+      "stem": "\\(36-(3m+4n) ^ { 2 } =\\)",
+      "choices": {
+        "A": "\\((6+3m+4n)(6-3m+4n)\\)",
+        "B": "\\((6+3m+4n)(6-3m-4n)\\)",
+        "C": "\\((6+3m-4n)(6-3m+4n)\\)",
+        "D": "\\((6+3m-4n)(6-3m-4n)\\)"
+      },
+      "answer": "B",
+      "correctPercent": 78,
+      "hasFigure": false,
+      "figure": null,
+      "figures": []
+    },
+    {
+      "id": "J10-sample-q13",
+      "stage": "J10",
+      "topic": "Ratio, rate (map scale)",
+      "year": "Sample",
+      "paper": "2",
+      "sourceTag": "[HKDSE Maths Sample Paper-P2-Q13]",
+      "stem": "If \\(x\\) , \\(y\\) and \\(z\\) are non-zero numbers such that 2\\(x\\) = 3\\(y\\) and \\(x\\) = 2\\(z\\) , then (\\(x\\) + \\(z\\)) : (\\(x\\) + \\(y\\)) =",
+      "choices": {
+        "A": "3 : 5",
+        "B": "6 : 7",
+        "C": "9 : 7",
+        "D": "9 :10"
+      },
+      "answer": "D",
+      "correctPercent": null,
+      "hasFigure": false,
+      "figure": null,
+      "figures": []
+    },
+    {
+      "id": "J10-practice-q12",
+      "stage": "J10",
+      "topic": "Ratio, rate (map scale)",
+      "year": "Practice",
+      "paper": "2",
+      "sourceTag": "[HKDSE Maths Practice Paper-P2-Q12]",
+      "stem": "Let α and β be non-zero constants. If \\((\\alpha +\\beta ):(3\\alpha -\\beta )=7:3,\\)then \\(\\alpha :\\beta =\\)",
+      "choices": {
+        "A": "5 : 9",
+        "B": "9 : 5",
+        "C": "19 : 29",
+        "D": "29 :19"
+      },
+      "answer": "A",
+      "correctPercent": null,
+      "hasFigure": false,
+      "figure": null,
+      "figures": []
+    },
+    {
+      "id": "J10-2012-q9",
+      "stage": "J10",
+      "topic": "Ratio, rate (map scale)",
+      "year": "2012",
+      "paper": "2",
+      "sourceTag": "[HKDSE 12-P2-Q9]",
+      "stem": "If \\(x\\) and y are non-zero numbers such that \\(\\frac{ 6x+5y }{ 3y-2x }=7,\\) then x : \\(y\\) =",
+      "choices": {
+        "A": "4 : 5.",
+        "B": "4 : 13.",
+        "C": "5 : 4.",
+        "D": "13 : 4."
+      },
+      "answer": "A",
+      "correctPercent": 75,
+      "hasFigure": false,
+      "figure": null,
+      "figures": []
+    },
+    {
+      "id": "J10-2012-q11",
+      "stage": "J10",
+      "topic": "Ratio, rate (map scale)",
+      "year": "2012",
+      "paper": "2",
+      "sourceTag": "[HKDSE 12-P2-Q11]",
+      "stem": "Mary performs a typing task for 7 hours. Her average typing speeds for the first 3 hours and the last 4 hours are 63 words per minute and 56 words per minute respectively. Find her average typing speed for the 7 hours.",
+      "choices": {
+        "A": "17 words per minute",
+        "B": "35 words per minute",
+        "C": "59 words per minute",
+        "D": "60 words per minute"
+      },
+      "answer": "C",
+      "correctPercent": 79,
+      "hasFigure": false,
+      "figure": null,
+      "figures": []
+    },
+    {
+      "id": "J10-2013-q12",
+      "stage": "J10",
+      "topic": "Ratio, rate (map scale)",
+      "year": "2013",
+      "paper": "2",
+      "sourceTag": "[HKDSE 13-P2-Q12]",
+      "stem": "The actual area of a playground is 900 m\\(^{2}\\). If the area of the playground on a map is 36 cm\\(^{2}\\), then the scale of the map is",
+      "choices": {
+        "A": "1 : 25",
+        "B": "1 : 50",
+        "C": "1 : 500",
+        "D": "1 : 250 000"
+      },
+      "answer": "C",
+      "correctPercent": 31,
+      "hasFigure": false,
+      "figure": null,
+      "figures": []
+    },
+    {
+      "id": "J10-2014-q12",
+      "stage": "J10",
+      "topic": "Ratio, rate (map scale)",
+      "year": "2014",
+      "paper": "2",
+      "sourceTag": "[HKDSE 14-P2-Q12]",
+      "stem": "It is given that \\(\\frac{ 4 }{ 5a }=\\frac{ 5 }{ 7b }=\\frac{ 7 }{ 9c }\\), where \\(a\\), b and \\(c\\) are positive numbers. Which of the following is true?",
+      "choices": {
+        "A": "\\(a\\) < \\(b\\) < \\(c\\)",
+        "B": "\\(a\\) < c < \\(b\\)",
+        "C": "\\(b\\) < \\(a\\) < \\(c\\)",
+        "D": "\\(b\\) < \\(c\\) < \\(a\\)"
+      },
+      "answer": "D",
+      "correctPercent": 59,
+      "hasFigure": false,
+      "figure": null,
+      "figures": []
+    },
+    {
+      "id": "J10-2015-q11",
+      "stage": "J10",
+      "topic": "Ratio, rate (map scale)",
+      "year": "2015",
+      "paper": "2",
+      "sourceTag": "[HKDSE 15-P2-Q11]",
+      "stem": "Let \\(a\\) , \\(b\\) and \\(c\\) be non-zero numbers. If a : \\(c\\) = 5 : 3 and \\(b\\) : \\(c\\) = 3 : 2, then\n(\\(a\\) + \\(c\\)) : (\\(b\\) + \\(c\\)) =",
+      "choices": {
+        "A": "7 : 5.",
+        "B": "8 : 5.",
+        "C": "16 : 15.",
+        "D": "19 : 15."
+      },
+      "answer": "C",
+      "correctPercent": 70,
+      "hasFigure": false,
+      "figure": null,
+      "figures": []
+    },
+    {
+      "id": "J10-2016-q11",
+      "stage": "J10",
+      "topic": "Ratio, rate (map scale)",
+      "year": "2016",
+      "paper": "2",
+      "sourceTag": "[HKDSE 16-P2-Q11]",
+      "stem": "If \\(x\\) and \\(y\\) are non-zero numbers such that (3\\(y\\) – 4\\(x\\)) : (2\\(x\\) + \\(y\\)) = 5 : 6, then \\(x\\) : \\(y\\) =",
+      "choices": {
+        "A": "7 : 8.",
+        "B": "8 : 29.",
+        "C": "9 : 32.",
+        "D": "13 : 34."
+      },
+      "answer": "D",
+      "correctPercent": 81,
+      "hasFigure": false,
+      "figure": null,
+      "figures": []
+    },
+    {
+      "id": "J10-2016-q13",
+      "stage": "J10",
+      "topic": "Ratio, rate (map scale)",
+      "year": "2016",
+      "paper": "2",
+      "sourceTag": "[HKDSE 16-P2-Q13]",
+      "stem": "The cost of flour of brand \\(X\\) is $42/kg . If 3 kg of flour of brand \\(X\\) and 2 kg of flour of brand Y are mixed so that the cost of the mixture is $36/kg, find the cost of flour of brand \\(Y\\)",
+      "choices": {
+        "A": "$27/kg",
+        "B": "$30/kg",
+        "C": "$32/kg",
+        "D": "$39/kg"
+      },
+      "answer": "A",
+      "correctPercent": 81,
+      "hasFigure": false,
+      "figure": null,
+      "figures": []
+    },
+    {
+      "id": "J10-2017-q11",
+      "stage": "J10",
+      "topic": "Ratio, rate (map scale)",
+      "year": "2017",
+      "paper": "2",
+      "sourceTag": "[HKDSE 17-P2-Q11]",
+      "stem": "The scale of a map is 1:20 000. If the area of a zoo on the map is 4 cm\\(^{2}\\), then the actual area of the zoo is",
+      "choices": {
+        "A": "8 × 10\\(^{4}\\) m\\(^{2}\\)",
+        "B": "1.6 × 10\\(^{5}\\) m\\(^{2}\\)",
+        "C": "3.2 × 10\\(^{5}\\) m\\(^{2}\\)",
+        "D": "1 × 10\\(^{6}\\) m\\(^{2}\\)"
+      },
+      "answer": "B",
+      "correctPercent": 56,
+      "hasFigure": false,
+      "figure": null,
+      "figures": []
+    },
+    {
+      "id": "J10-2018-q10",
+      "stage": "J10",
+      "topic": "Ratio, rate (map scale)",
+      "year": "2018",
+      "paper": "2",
+      "sourceTag": "[HKDSE 18-P2-Q10]",
+      "stem": "Let \\(a\\), b and \\(c\\) be non-zero numbers. If 3a = 4b and \\(a\\):\\(c\\) = 2:5, then \\(\\frac{ a+3b }{ b+3c }=\\)",
+      "choices": {
+        "A": "\\(\\frac{ 5 }{ 3 }\\)",
+        "B": "\\(\\frac{ 13 }{ 33 }\\)",
+        "C": "\\(\\frac{ 30 }{ 53 }\\)",
+        "D": "\\(\\frac{ 75 }{ 38 }\\)"
+      },
+      "answer": "B",
+      "correctPercent": 72,
+      "hasFigure": false,
+      "figure": null,
+      "figures": []
+    },
+    {
+      "id": "J10-2019-q12",
+      "stage": "J10",
+      "topic": "Ratio, rate (map scale)",
+      "year": "2019",
+      "paper": "2",
+      "sourceTag": "[HKDSE 19-P2-Q12]",
+      "stem": "The costs of tea of brand A and brand B are $140 / kg and $315 / kg respectively. If \\(x\\) kg of tea of brand \\(A\\) and \\(y\\) kg of tea of brand \\(B\\) are mixed so that the cost of the mixture is $210/kg, then x : y =",
+      "choices": {
+        "A": "2 : 3.",
+        "B": "3 : 2.",
+        "C": "4 : 9.",
+        "D": "9 : 4."
+      },
+      "answer": "B",
+      "correctPercent": 66,
+      "hasFigure": false,
+      "figure": null,
+      "figures": []
+    },
+    {
+      "id": "J10-2020-q10",
+      "stage": "J10",
+      "topic": "Ratio, rate (map scale)",
+      "year": "2020",
+      "paper": "2",
+      "sourceTag": "[HKDSE 20-P2-Q10]",
+      "stem": "The actual area of a golf course is 0.75 km\\(^{2}\\). If the area of the course on a map is 300 cm\\(^{2}\\), then the scale of the map is",
+      "choices": {
+        "A": "1 : 250",
+        "B": "1 : 5 000",
+        "C": "1 : 62 500",
+        "D": "1 : 25 000 000"
+      },
+      "answer": "B",
+      "correctPercent": 33,
+      "hasFigure": false,
+      "figure": null,
+      "figures": []
+    },
+    {
+      "id": "J10-2021-q11",
+      "stage": "J10",
+      "topic": "Ratio, rate (map scale)",
+      "year": "2021",
+      "paper": "2",
+      "sourceTag": "[HKDSE 21-P2-Q11]",
+      "stem": "If α and β are non-zero numbers such that \\(\\frac { 2\\alpha +3\\beta } { 3\\alpha +2\\beta }=\\frac { 7 } { 10 }\\), then \\(\\frac { 2\\alpha +\\beta } { \\alpha +2\\beta }=\\)",
+      "choices": {
+        "A": "1",
+        "B": "\\(\\frac { 3 } { 2 }\\)",
+        "C": "\\(\\frac { 11 } { 6 }\\)",
+        "D": "\\(\\frac { 13 } { 8 }\\)"
+      },
+      "answer": "C",
+      "correctPercent": 73,
+      "hasFigure": false,
+      "figure": null,
+      "figures": []
+    },
+    {
+      "id": "J10-2022-q12",
+      "stage": "J10",
+      "topic": "Ratio, rate (map scale)",
+      "year": "2022",
+      "paper": "2",
+      "sourceTag": "[HKDSE 22-P2-Q12]",
+      "stem": "Let \\(x\\), y and z be non-zero numbers. If x : y = 8 : 5 and \\(2x=4z-3y\\), then y : z =",
+      "choices": {
+        "A": "16 : 17",
+        "B": "17 : 16",
+        "C": "20 : 31",
+        "D": "31 : 20"
+      },
+      "answer": "C",
+      "correctPercent": 66,
+      "hasFigure": false,
+      "figure": null,
+      "figures": []
+    },
+    {
+      "id": "J10-2023-q12",
+      "stage": "J10",
+      "topic": "Ratio, rate (map scale)",
+      "year": "2023",
+      "paper": "2",
+      "sourceTag": "[HKDSE 23-P2-Q12]",
+      "stem": "The scale of a map is 1 : 50 000 . If the actual area of an airport is 10 km\\(^{2}\\), then the area of this airport on the map is",
+      "choices": {
+        "A": "2 cm\\(^{2}\\)",
+        "B": "4 cm\\(^{2}\\)",
+        "C": "20 cm\\(^{2}\\)",
+        "D": "40 cm\\(^{2}\\)"
+      },
+      "answer": "D",
+      "correctPercent": 39,
+      "hasFigure": false,
+      "figure": null,
+      "figures": []
+    },
+    {
+      "id": "J10-2024-q6",
+      "stage": "J10",
+      "topic": "Ratio, rate (map scale)",
+      "year": "2024",
+      "paper": "2",
+      "sourceTag": "[HKDSE 24-P2-Q6]",
+      "stem": "If \\(a\\), \\(b\\) and \\(c\\) are non-zero constants such that \\(4x ^ { 2 } +2ax+3a\\equiv x(4x+b)+2c\\),\nthen \\(a\\) : \\(b\\) : \\(c\\) =",
+      "choices": {
+        "A": "2 : 4 : 3.",
+        "B": "3 : 4 : 2.",
+        "C": "4 : 6 : 3.",
+        "D": "6 : 4 : 3."
+      },
+      "answer": "A",
+      "correctPercent": 77,
+      "hasFigure": false,
+      "figure": null,
+      "figures": []
+    },
+    {
+      "id": "J10-2024-q12",
+      "stage": "J10",
+      "topic": "Ratio, rate (map scale)",
+      "year": "2024",
+      "paper": "2",
+      "sourceTag": "[HKDSE 24-P2-Q12]",
+      "stem": "A car travels at an average speed of 60 km/h for 18 minutes and then the car travels at an average speed of 40 km/h for 27 minutes. The average speed of the car for the whole journey is",
+      "choices": {
+        "A": "48 km/h.",
+        "B": "50 km/h.",
+        "C": "52 km/h.",
+        "D": "54 km/h."
+      },
+      "answer": "A",
+      "correctPercent": 73,
+      "hasFigure": false,
+      "figure": null,
+      "figures": []
+    },
+    {
+      "id": "J10-2025-q11",
+      "stage": "J10",
+      "topic": "Ratio, rate (map scale)",
+      "year": "2025",
+      "paper": "2",
+      "sourceTag": "[HKDSE 25-P2-Q11]",
+      "stem": "If α, β and γ are non-zero constants such that (α + 2β) : (β + 2γ) : (γ + 2α) = 4 : 9 : 5, then α : β =",
+      "choices": {
+        "A": "2 : 5",
+        "B": "5 : 2",
+        "C": "128 : 149",
+        "D": "149 : 128"
+      },
+      "answer": "A",
+      "correctPercent": 52,
+      "hasFigure": false,
+      "figure": null,
+      "figures": []
+    },
+    {
+      "id": "J11-2012-q5",
+      "stage": "J11",
+      "topic": "Simultaneous equations",
+      "year": "2012",
+      "paper": "2",
+      "sourceTag": "[HKDSE 12-P2-Q5]",
+      "stem": "If \\(m+2n+6=2m-n=7\\), then \\(n\\) =",
+      "choices": {
+        "A": "\\(-4.\\)",
+        "B": "\\(-1.\\)",
+        "C": "3.",
+        "D": "11."
+      },
+      "answer": "B",
+      "correctPercent": 78,
+      "hasFigure": false,
+      "figure": null,
+      "figures": []
+    },
+    {
+      "id": "J11-2014-q8",
+      "stage": "J11",
+      "topic": "Simultaneous equations",
+      "year": "2014",
+      "paper": "2",
+      "sourceTag": "[HKDSE 14-P2-Q8]",
+      "stem": "The price of 2 bowls and 3 cups is $506. If the price of 5 bowls and the price of 4 cups are the same, then the price of a bowl is",
+      "choices": {
+        "A": "$88.",
+        "B": "$92.",
+        "C": "$110.",
+        "D": "$115."
+      },
+      "answer": "A",
+      "correctPercent": 84,
+      "hasFigure": false,
+      "figure": null,
+      "figures": []
+    },
+    {
+      "id": "J11-2014-q9",
+      "stage": "J11",
+      "topic": "Simultaneous equations",
+      "year": "2014",
+      "paper": "2",
+      "sourceTag": "[HKDSE 14-P2-Q9]",
+      "stem": "There are 792 workers in a factory. If the number of male workers is 20% less than that of female workers, then the number of male workers is",
+      "choices": {
+        "A": "352.",
+        "B": "360.",
+        "C": "432.",
+        "D": "440."
+      },
+      "answer": "A",
+      "correctPercent": 63,
+      "hasFigure": false,
+      "figure": null,
+      "figures": []
+    },
+    {
+      "id": "J11-2015-q3",
+      "stage": "J11",
+      "topic": "Simultaneous equations",
+      "year": "2015",
+      "paper": "2",
+      "sourceTag": "[HKDSE 15-P2-Q3]",
+      "stem": "If \\(p\\) + 3\\(q\\) = 4 and 5\\(p\\) + 9\\(q\\) = 2, then \\(p\\) =",
+      "choices": {
+        "A": "–5.",
+        "B": "–3.",
+        "C": "3.",
+        "D": "5."
+      },
+      "answer": "A",
+      "correctPercent": 84,
+      "hasFigure": false,
+      "figure": null,
+      "figures": []
+    },
+    {
+      "id": "J11-2016-q5",
+      "stage": "J11",
+      "topic": "Simultaneous equations",
+      "year": "2016",
+      "paper": "2",
+      "sourceTag": "[HKDSE 16-P2-Q5]",
+      "stem": "If 4α + β = 7α + 3β = 5, then β =",
+      "choices": {
+        "A": "– 3.",
+        "B": "– 2.",
+        "C": "2.",
+        "D": "3."
+      },
+      "answer": "A",
+      "correctPercent": 80,
+      "hasFigure": false,
+      "figure": null,
+      "figures": []
+    },
+    {
+      "id": "J11-2019-q3",
+      "stage": "J11",
+      "topic": "Simultaneous equations",
+      "year": "2019",
+      "paper": "2",
+      "sourceTag": "[HKDSE 19-P2-Q3]",
+      "stem": "If \\(6x-7y=40=2x+11y\\), then \\(y\\) =",
+      "choices": {
+        "A": "−4.",
+        "B": "2.",
+        "C": "4.",
+        "D": "9."
+      },
+      "answer": "B",
+      "correctPercent": 90,
+      "hasFigure": false,
+      "figure": null,
+      "figures": []
+    },
+    {
+      "id": "J11-2024-q5",
+      "stage": "J11",
+      "topic": "Simultaneous equations",
+      "year": "2024",
+      "paper": "2",
+      "sourceTag": "[HKDSE 24-P2-Q5]",
+      "stem": "The price of 2 apples and 3 lemons is $38. If the price of 3 apples and 2 lemons is $47, then the price of 4 apples and 7 lemons is",
+      "choices": {
+        "A": "$78.",
+        "B": "$80.",
+        "C": "$82.",
+        "D": "$84."
+      },
+      "answer": "B",
+      "correctPercent": 93,
+      "hasFigure": false,
+      "figure": null,
+      "figures": []
+    },
+    {
+      "id": "J12-2014-q6",
+      "stage": "J12",
+      "topic": "Inequalities",
+      "year": "2014",
+      "paper": "2",
+      "sourceTag": "[HKDSE 14-P2-Q6]",
+      "stem": "If \\(a\\) > \\(b\\) and \\(k\\) < 0, which of the following must be true?\n\nI. \\(a\\)\\(^{2}\\) > \\(b\\)\\(^{2}\\)\nII. \\(a\\) + \\(k\\) > \\(b\\) + \\(k\\)\nIII. \\(\\frac{ a }{ k^{2} }>\\frac{ b }{ k^{2} }\\)",
+      "choices": {
+        "A": "I only",
+        "B": "II only",
+        "C": "I and III only",
+        "D": "II and III only"
+      },
+      "answer": "D",
+      "correctPercent": 53,
+      "hasFigure": false,
+      "figure": null,
+      "figures": []
+    },
+    {
+      "id": "J13-sample-q20",
+      "stage": "J13",
+      "topic": "Plane Geometry",
+      "year": "Sample",
+      "paper": "2",
+      "sourceTag": "[HKDSE Maths Sample Paper-P2-Q20]",
+      "stem": "![](figures/j13-sample-q20-1.png)In the figure, AB = 1 cm , BC = CD = DE = 2 cm and EF = 3 cm . Find the distance between \\(A\\) and \\(F\\) correct to the nearest 0.1 cm",
+      "choices": {
+        "A": "7.2 cm",
+        "B": "7.4 cm",
+        "C": "8.0 cm",
+        "D": "8.1 cm"
+      },
+      "answer": "A",
+      "correctPercent": null,
+      "hasFigure": true,
+      "figure": "figures/j13-sample-q20-1.png",
+      "figures": [
+        "figures/j13-sample-q20-1.png"
+      ]
+    },
+    {
+      "id": "J13-sample-q23",
+      "stage": "J13",
+      "topic": "Plane Geometry",
+      "year": "Sample",
+      "paper": "2",
+      "sourceTag": "[HKDSE Maths Sample Paper-P2-Q23]",
+      "stem": "![](figures/j13-sample-q23-1.png)In the figure, ABCD is a parallelogram. \\(F\\) is a point lying on AD . BF produced and CD produced meet at \\(E\\) .\nIf CD : DE = 2 :1 , then AF : BC =",
+      "choices": {
+        "A": "1 : 2",
+        "B": "2 : 3",
+        "C": "3 : 4",
+        "D": "8 : 9"
+      },
+      "answer": "B",
+      "correctPercent": null,
+      "hasFigure": true,
+      "figure": "figures/j13-sample-q23-1.png",
+      "figures": [
+        "figures/j13-sample-q23-1.png"
+      ]
+    },
+    {
+      "id": "J13-practice-q19",
+      "stage": "J13",
+      "topic": "Plane Geometry",
+      "year": "Practice",
+      "paper": "2",
+      "sourceTag": "[HKDSE Maths Practice Paper-P2-Q19]",
+      "stem": "![](figures/j13-practice-q19-1.png)In the figure, AB = BC and D is a point lying on BC such that CD = DE . If AB // CE , find ∠CDE",
+      "choices": {
+        "A": "52°",
+        "B": "58°",
+        "C": "64°",
+        "D": "76°"
+      },
+      "answer": "D",
+      "correctPercent": null,
+      "hasFigure": true,
+      "figure": "figures/j13-practice-q19-1.png",
+      "figures": [
+        "figures/j13-practice-q19-1.png"
+      ]
+    },
+    {
+      "id": "J13-2012-q15",
+      "stage": "J13",
+      "topic": "Plane Geometry",
+      "year": "2012",
+      "paper": "2",
+      "sourceTag": "[HKDSE 12-P2-Q15]",
+      "stem": "![](figures/j13-2012-q15-1.png)In the figure, the area of quadrilateral ABCD is",
+      "choices": {
+        "A": "144 cm\\(^{2}\\)",
+        "B": "160 cm\\(^{2}\\)",
+        "C": "178 cm\\(^{2}\\)",
+        "D": "288 cm\\(^{2}\\)"
+      },
+      "answer": "A",
+      "correctPercent": 89,
+      "hasFigure": true,
+      "figure": "figures/j13-2012-q15-1.png",
+      "figures": [
+        "figures/j13-2012-q15-1.png"
+      ]
+    },
+    {
+      "id": "J13-2014-q16",
+      "stage": "J13",
+      "topic": "Plane Geometry",
+      "year": "2014",
+      "paper": "2",
+      "sourceTag": "[HKDSE 14-P2-Q16]",
+      "stem": "![](figures/j13-2014-q16-1.png)In the figure, ABCD is a square. BC is produced to \\(G\\) such that ∠CDG = 25°. E is a point lying on AB such that AE = CG. If \\(F\\) is a point lying on BC such that ∠CDF = 20°, then ∠DFE =",
+      "choices": {
+        "A": "60°",
+        "B": "65°",
+        "C": "70°",
+        "D": "73°"
+      },
+      "answer": "C",
+      "correctPercent": 33,
+      "hasFigure": true,
+      "figure": "figures/j13-2014-q16-1.png",
+      "figures": [
+        "figures/j13-2014-q16-1.png"
+      ]
+    },
+    {
+      "id": "J13-2015-q15",
+      "stage": "J13",
+      "topic": "Plane Geometry",
+      "year": "2015",
+      "paper": "2",
+      "sourceTag": "[HKDSE 15-P2-Q15]",
+      "stem": "![](figures/j13-2015-q15-1.png)In the figure, \\(N\\) is a point lying on AC and \\(E\\) is a point lying on DN. If DN = 6 cm and EN = 5 cm, then the area of ΔABC is",
+      "choices": {
+        "A": "24 cm\\(^{2}\\)",
+        "B": "30 cm\\(^{2}\\)",
+        "C": "96 cm\\(^{2}\\)",
+        "D": "192 cm\\(^{2}\\)"
+      },
+      "answer": "C",
+      "correctPercent": 91,
+      "hasFigure": true,
+      "figure": "figures/j13-2015-q15-1.png",
+      "figures": [
+        "figures/j13-2015-q15-1.png"
+      ]
+    },
+    {
+      "id": "J13-2016-q15",
+      "stage": "J13",
+      "topic": "Plane Geometry",
+      "year": "2016",
+      "paper": "2",
+      "sourceTag": "[HKDSE 16-P2-Q15]",
+      "stem": "![](figures/j13-2016-q15-1.png)According to the figure, which of the following must be true?\n\nI. \\(a+c=180{}^\\circ\\)\nII. \\(a+b-c=180{}^\\circ\\)\nIII. \\(b+c=360{}^\\circ\\)",
+      "choices": {
+        "A": "I only",
+        "B": "II only",
+        "C": "I and III only",
+        "D": "II and III only"
+      },
+      "answer": "B",
+      "correctPercent": 45,
+      "hasFigure": true,
+      "figure": "figures/j13-2016-q15-1.png",
+      "figures": [
+        "figures/j13-2016-q15-1.png"
+      ]
+    },
+    {
+      "id": "J13-2016-q16",
+      "stage": "J13",
+      "topic": "Plane Geometry",
+      "year": "2016",
+      "paper": "2",
+      "sourceTag": "[HKDSE 16-P2-Q16]",
+      "stem": "![](figures/j13-2016-q16-1.png)In the figure, ABC is a straight line. If AB = 24 cm , AD = 40 cm , BD = 32 cm and CD = 68 cm , then BC =",
+      "choices": {
+        "A": "43 cm",
+        "B": "54 cm",
+        "C": "55 cm",
+        "D": "60 cm"
+      },
+      "answer": "D",
+      "correctPercent": 80,
+      "hasFigure": true,
+      "figure": "figures/j13-2016-q16-1.png",
+      "figures": [
+        "figures/j13-2016-q16-1.png"
+      ]
+    },
+    {
+      "id": "J13-2016-q17",
+      "stage": "J13",
+      "topic": "Plane Geometry",
+      "year": "2016",
+      "paper": "2",
+      "sourceTag": "[HKDSE 16-P2-Q17]",
+      "stem": "![](figures/j13-2016-q17-1.png)In the figure, ABCD is a parallelogram. E is a point lying on CD such that\nBE = CE . If ∠ADC = 114°, then\n∠ABE =",
+      "choices": {
+        "A": "48°",
+        "B": "57°",
+        "C": "62°",
+        "D": "66°"
+      },
+      "answer": "A",
+      "correctPercent": 55,
+      "hasFigure": true,
+      "figure": "figures/j13-2016-q17-1.png",
+      "figures": [
+        "figures/j13-2016-q17-1.png"
+      ]
+    },
+    {
+      "id": "J13-2016-q24",
+      "stage": "J13",
+      "topic": "Plane Geometry",
+      "year": "2016",
+      "paper": "2",
+      "sourceTag": "[HKDSE 16-P2-Q24]",
+      "stem": "If the sum of the interior angles of a regular \\(n\\)-sided polygon is 3 240° , which of the following is true?",
+      "choices": {
+        "A": "The value of \\(n\\) is 16.",
+        "B": "Each exterior angle of the polygon is 18°.",
+        "C": "The number of diagonals of the polygon is 20.",
+        "D": "Each interior angle of the polygon is 160°."
+      },
+      "answer": "B",
+      "correctPercent": 64,
+      "hasFigure": false,
+      "figure": null,
+      "figures": []
+    },
+    {
+      "id": "J13-2017-q17",
+      "stage": "J13",
+      "topic": "Plane Geometry",
+      "year": "2017",
+      "paper": "2",
+      "sourceTag": "[HKDSE 17-P2-Q17]",
+      "stem": "![](figures/j13-2017-q17-1.png)In the figure, ABC is an equilateral triangle of side 16 cm. \\(D\\) and \\(E\\) are points lying on AB and BC respectively such that AD = 4 cm and ∠CDE = 60°. Find CE.",
+      "choices": {
+        "A": "9 cm",
+        "B": "10 cm",
+        "C": "12 cm",
+        "D": "13 cm"
+      },
+      "answer": "D",
+      "correctPercent": 36,
+      "hasFigure": true,
+      "figure": "figures/j13-2017-q17-1.png",
+      "figures": [
+        "figures/j13-2017-q17-1.png"
+      ]
+    },
+    {
+      "id": "J13-2017-q18",
+      "stage": "J13",
+      "topic": "Plane Geometry",
+      "year": "2017",
+      "paper": "2",
+      "sourceTag": "[HKDSE 17-P2-Q18]",
+      "stem": "![](figures/j13-2017-q18-1.png)In the figure, AB = BC and \\(D\\) is a point lying on AE such that AC = AD. If AE // BC, then ∠ABC =",
+      "choices": {
+        "A": "44°.",
+        "B": "56°.",
+        "C": "62°.",
+        "D": "68°."
+      },
+      "answer": "A",
+      "correctPercent": 45,
+      "hasFigure": true,
+      "figure": "figures/j13-2017-q18-1.png",
+      "figures": [
+        "figures/j13-2017-q18-1.png"
+      ]
+    },
+    {
+      "id": "J13-2017-q19",
+      "stage": "J13",
+      "topic": "Plane Geometry",
+      "year": "2017",
+      "paper": "2",
+      "sourceTag": "[HKDSE 17-P2-Q19]",
+      "stem": "![](figures/j13-2017-q19-1.png)In the figure, the length of the line segment joining \\(A\\) and \\(H\\) is",
+      "choices": {
+        "A": "6.",
+        "B": "8.",
+        "C": "9.",
+        "D": "10."
+      },
+      "answer": "D",
+      "correctPercent": 68,
+      "hasFigure": true,
+      "figure": "figures/j13-2017-q19-1.png",
+      "figures": [
+        "figures/j13-2017-q19-1.png"
+      ]
+    },
+    {
+      "id": "J13-2017-q20",
+      "stage": "J13",
+      "topic": "Plane Geometry",
+      "year": "2017",
+      "paper": "2",
+      "sourceTag": "[HKDSE 17-P2-Q20]",
+      "stem": "ABCD is a parallelogram. Let \\(E\\) be the mid-point of AD. If ∠ABE = ∠CBD = ∠DBE, which of the following are true?\n\nI. AB = BD\nII. ∠ABC = 135°\nIII. ΔABE ≅ ΔDBE",
+      "choices": {
+        "A": "I and II only",
+        "B": "I and III only",
+        "C": "II and III only",
+        "D": "I, II and III"
+      },
+      "answer": "D",
+      "correctPercent": 15,
+      "hasFigure": false,
+      "figure": null,
+      "figures": []
+    },
+    {
+      "id": "J13-2018-q18",
+      "stage": "J13",
+      "topic": "Plane Geometry",
+      "year": "2018",
+      "paper": "2",
+      "sourceTag": "[HKDSE 18-P2-Q18]",
+      "stem": "In the figure, ABCD is a rhombus. E and \\(F\\) are points lying on AB and AD respectively such that AE = AF and ∠ECF = 42°. If ∠BAD = 110°, then ∠BEC =\n![](figures/j13-2018-q18-1.png)",
+      "choices": {
+        "A": "70°.",
+        "B": "76°.",
+        "C": "80°.",
+        "D": "84°."
+      },
+      "answer": "B",
+      "correctPercent": 78,
+      "hasFigure": true,
+      "figure": "figures/j13-2018-q18-1.png",
+      "figures": [
+        "figures/j13-2018-q18-1.png"
+      ]
+    },
+    {
+      "id": "J13-2018-q19",
+      "stage": "J13",
+      "topic": "Plane Geometry",
+      "year": "2018",
+      "paper": "2",
+      "sourceTag": "[HKDSE 18-P2-Q19]",
+      "stem": "![](figures/j13-2018-q19-1.png)In the figure, ABCDE is a regular pentagon. AD and CE intersect at the point F. Which of the following are true?\nI. CD = CF\nII. ΔABF ≅ ΔCBF\nIII. ∠AFB + ∠EAF = 90°",
+      "choices": {
+        "A": "I and II only",
+        "B": "I and III only",
+        "C": "II and III only",
+        "D": "I, II and III"
+      },
+      "answer": "D",
+      "correctPercent": 23,
+      "hasFigure": true,
+      "figure": "figures/j13-2018-q19-1.png",
+      "figures": [
+        "figures/j13-2018-q19-1.png"
+      ]
+    },
+    {
+      "id": "J13-2018-q20",
+      "stage": "J13",
+      "topic": "Plane Geometry",
+      "year": "2018",
+      "paper": "2",
+      "sourceTag": "[HKDSE 18-P2-Q20]",
+      "stem": "![](figures/j13-2018-q20-1.png)In the figure, ABCD is a square. \\(E\\) is a point lying on AB produced such that\nBE= 4 cm . BC and DE intersect at the point \\(F\\). If EF = 5 cm, then DF =",
+      "choices": {
+        "A": "12 cm",
+        "B": "15 cm",
+        "C": "16 cm",
+        "D": "20 cm"
+      },
+      "answer": "B",
+      "correctPercent": 48,
+      "hasFigure": true,
+      "figure": "figures/j13-2018-q20-1.png",
+      "figures": [
+        "figures/j13-2018-q20-1.png"
+      ]
+    },
+    {
+      "id": "J13-2019-q17",
+      "stage": "J13",
+      "topic": "Plane Geometry",
+      "year": "2019",
+      "paper": "2",
+      "sourceTag": "[HKDSE 19-P2-Q17]",
+      "stem": "In the figure, ABC and ADE are straight lines. It is given that AB = BD and BC = CD. If ∠CDE = 66°, then ∠ACD =\n![](figures/j13-2019-q17-1.png)",
+      "choices": {
+        "A": "28°.",
+        "B": "33°.",
+        "C": "36°.",
+        "D": "38°."
+      },
+      "answer": "A",
+      "correctPercent": 58,
+      "hasFigure": true,
+      "figure": "figures/j13-2019-q17-1.png",
+      "figures": [
+        "figures/j13-2019-q17-1.png"
+      ]
+    },
+    {
+      "id": "J13-2019-q18",
+      "stage": "J13",
+      "topic": "Plane Geometry",
+      "year": "2019",
+      "paper": "2",
+      "sourceTag": "[HKDSE 19-P2-Q18]",
+      "stem": "![](figures/j13-2019-q18-1.png)In the figure, ABC is an isosceles triangle with\nAB = AC. \\(D\\) and E are points lying on AB such that AD = DE = 2EB while \\(F\\) is a point lying on AC such that DF //EC. If ∠ADF = 90° and CE = 60 cm, then EF =",
+      "choices": {
+        "A": "40 cm.",
+        "B": "45 cm.",
+        "C": "48 cm.",
+        "D": "50 cm."
+      },
+      "answer": "D",
+      "correctPercent": 26,
+      "hasFigure": true,
+      "figure": "figures/j13-2019-q18-1.png",
+      "figures": [
+        "figures/j13-2019-q18-1.png"
+      ]
+    },
+    {
+      "id": "J13-2019-q20",
+      "stage": "J13",
+      "topic": "Plane Geometry",
+      "year": "2019",
+      "paper": "2",
+      "sourceTag": "[HKDSE 19-P2-Q20]",
+      "stem": "![](figures/j13-2019-q20-1.png)In the figure, ABCD is a rhombus. ABE and BCF are straight lines such that BE = EF. If ∠BEF = 56°, then ∠BDC =",
+      "choices": {
+        "A": "48°.",
+        "B": "56°.",
+        "C": "59°.",
+        "D": "62°."
+      },
+      "answer": "C",
+      "correctPercent": 51,
+      "hasFigure": true,
+      "figure": "figures/j13-2019-q20-1.png",
+      "figures": [
+        "figures/j13-2019-q20-1.png"
+      ]
+    },
+    {
+      "id": "J13-2020-q19",
+      "stage": "J13",
+      "topic": "Plane Geometry",
+      "year": "2020",
+      "paper": "2",
+      "sourceTag": "[HKDSE 20-P2-Q19]",
+      "stem": "According to the figure, which of the following must be true?\nI. u – v + w = 0°\nII. u + v – w = 180°\nIII. u + v + w = 450°",
+      "choices": {
+        "A": "I only",
+        "B": "II only",
+        "C": "I and III only",
+        "D": "II and III only"
+      },
+      "answer": "B",
+      "correctPercent": 56,
+      "hasFigure": false,
+      "figure": null,
+      "figures": []
+    },
+    {
+      "id": "J13-2020-q20",
+      "stage": "J13",
+      "topic": "Plane Geometry",
+      "year": "2020",
+      "paper": "2",
+      "sourceTag": "[HKDSE 20-P2-Q20]",
+      "stem": "In the figure, ABC is an equilateral triangle and CDE is an isosceles triangle with CD = CE. If ∠ DCE = 78° and ∠ ADC = ∠ CAD = 40° , then ∠CBE =\n![](figures/j13-2020-q20-1.png)",
+      "choices": {
+        "A": "14°",
+        "B": "19°",
+        "C": "24°",
+        "D": "29°"
+      },
+      "answer": "D",
+      "correctPercent": 70,
+      "hasFigure": true,
+      "figure": "figures/j13-2020-q20-1.png",
+      "figures": [
+        "figures/j13-2020-q20-1.png"
+      ]
+    },
+    {
+      "id": "J13-2021-q18",
+      "stage": "J13",
+      "topic": "Plane Geometry",
+      "year": "2021",
+      "paper": "2",
+      "sourceTag": "[HKDSE 21-P2-Q18]",
+      "stem": "In the figure, AB = BC and AB // CD . Let \\(E\\) be the point of intersection of AD and BC . If \\(\\angle ADC=28{}^\\circ\\) and \\(\\angle AEB=94{}^\\circ\\), then \\(\\angle CAD=\\)",
+      "choices": {
+        "A": "\\(30{}^\\circ\\)",
+        "B": "\\(33{}^\\circ\\)",
+        "C": "\\(36{}^\\circ\\)",
+        "D": "\\(39{}^\\circ\\)"
+      },
+      "answer": "B",
+      "correctPercent": 72,
+      "hasFigure": false,
+      "figure": null,
+      "figures": []
+    },
+    {
+      "id": "J13-2021-q19",
+      "stage": "J13",
+      "topic": "Plane Geometry",
+      "year": "2021",
+      "paper": "2",
+      "sourceTag": "[HKDSE 21-P2-Q19]",
+      "stem": "![](figures/j13-2021-q19-1.png)In the figure, ABCD is a rectangle. Let \\(E\\) be a point lying on AC such that BE is perpendicular to AC. \\(B\\)\\(E\\) is produced to the point \\(F\\) such that CF = AD. Denote the point of the intersection of BF and CD by \\(G\\).\nWhich of the following are true?\nI. ∠DAE =∠DGF\nII. ∆BCE ~ ∆CGE\nIII. ∆BCE ≅ ∆FCE",
+      "choices": {
+        "A": "I and II only",
+        "B": "I and III only",
+        "C": "II and III only",
+        "D": "I, II and III"
+      },
+      "answer": "D",
+      "correctPercent": 35,
+      "hasFigure": true,
+      "figure": "figures/j13-2021-q19-1.png",
+      "figures": [
+        "figures/j13-2021-q19-1.png"
+      ]
+    },
+    {
+      "id": "J13-2021-q21",
+      "stage": "J13",
+      "topic": "Plane Geometry",
+      "year": "2021",
+      "paper": "2",
+      "sourceTag": "[HKDSE 21-P2-Q21]",
+      "stem": "If \\(ABCDEFGH\\) is a regular 8-sided polygon, which of the following are true?\nI. AG // BF\nII. BD = EG\nIII. ∠CAG = 2∠BDH",
+      "choices": {
+        "A": "I and II only",
+        "B": "I and III only",
+        "C": "II and III only",
+        "D": "I, II and III"
+      },
+      "answer": "D",
+      "correctPercent": 40,
+      "hasFigure": false,
+      "figure": null,
+      "figures": []
+    },
+    {
+      "id": "J13-2022-q18",
+      "stage": "J13",
+      "topic": "Plane Geometry",
+      "year": "2022",
+      "paper": "2",
+      "sourceTag": "[HKDSE 22-P2-Q18]",
+      "stem": "![](figures/j13-2022-q18-1.png)In the figure, the perimeter of the rectangle ABCD is 170 cm. It is given that EBF is a straight line and\n∠AEB =∠BFC = 90°. If AE = 24 cm and BC = 34 cm, then EF =",
+      "choices": {
+        "A": "45 cm",
+        "B": "51 cm",
+        "C": "61 cm",
+        "D": "75 cm"
+      },
+      "answer": "C",
+      "correctPercent": 70,
+      "hasFigure": true,
+      "figure": "figures/j13-2022-q18-1.png",
+      "figures": [
+        "figures/j13-2022-q18-1.png"
+      ]
+    },
+    {
+      "id": "J13-2022-q19",
+      "stage": "J13",
+      "topic": "Plane Geometry",
+      "year": "2022",
+      "paper": "2",
+      "sourceTag": "[HKDSE 22-P2-Q19]",
+      "stem": "In the figure, ABC is an equilateral triangle. Let \\(D\\) and \\(E\\) be points lying on AC and BC respectively such that AD = CE. If \\(\\angle CBD=38{}^\\circ\\), then\\(\\angle AEB\\)=\n![](figures/j13-2022-q19-1.png)",
+      "choices": {
+        "A": "73°",
+        "B": "75°",
+        "C": "78°",
+        "D": "82°"
+      },
+      "answer": "D",
+      "correctPercent": 67,
+      "hasFigure": true,
+      "figure": "figures/j13-2022-q19-1.png",
+      "figures": [
+        "figures/j13-2022-q19-1.png"
+      ]
+    },
+    {
+      "id": "J13-2022-q20",
+      "stage": "J13",
+      "topic": "Plane Geometry",
+      "year": "2022",
+      "paper": "2",
+      "sourceTag": "[HKDSE 22-P2-Q20]",
+      "stem": "![](figures/j13-2022-q20-1.png)The figure shows a parallelogram. Which of the following must be true?\nI. \\(a\\) + \\(b\\) = 180°\nII. \\(b\\) + \\(c\\) = 360°\nIII. \\(c\\) + \\(d\\) = 540°",
+      "choices": {
+        "A": "I and II only",
+        "B": "I and III only",
+        "C": "II and III only",
+        "D": "I, II and III"
+      },
+      "answer": "B",
+      "correctPercent": 69,
+      "hasFigure": true,
+      "figure": "figures/j13-2022-q20-1.png",
+      "figures": [
+        "figures/j13-2022-q20-1.png"
+      ]
+    },
+    {
+      "id": "J13-2023-q18",
+      "stage": "J13",
+      "topic": "Plane Geometry",
+      "year": "2023",
+      "paper": "2",
+      "sourceTag": "[HKDSE 23-P2-Q18]",
+      "stem": "![](figures/j13-2023-q18-1.png)According to the figure, which of the following must be true?\nI. \\(a\\) + b = 90°\nII. \\(c\\) + d = 180°\nIII. \\(a\\) + b + \\(c\\) = \\(d\\)",
+      "choices": {
+        "A": "I and II only",
+        "B": "I and III only",
+        "C": "II and III only",
+        "D": "I, II and III"
+      },
+      "answer": "A",
+      "correctPercent": 59,
+      "hasFigure": true,
+      "figure": "figures/j13-2023-q18-1.png",
+      "figures": [
+        "figures/j13-2023-q18-1.png"
+      ]
+    },
+    {
+      "id": "J13-2023-q19",
+      "stage": "J13",
+      "topic": "Plane Geometry",
+      "year": "2023",
+      "paper": "2",
+      "sourceTag": "[HKDSE 23-P2-Q19]",
+      "stem": "It is given that ABCD is a rhombus. Denote the point of intersection of AC and BD by \\(E\\). Which of the following must be true?\nI. AE = BE\nII. \\(\\frac { AE } { AC }=\\frac { BE } { BD }\\)\nIII. AE\\(^{2}\\)+ BE\\(^{2}\\)= CD\\(^{2}\\)",
+      "choices": {
+        "A": "I and II only",
+        "B": "I and III only",
+        "C": "II and III only",
+        "D": "I, II and III"
+      },
+      "answer": "C",
+      "correctPercent": 54,
+      "hasFigure": false,
+      "figure": null,
+      "figures": []
+    },
+    {
+      "id": "J13-2023-q20",
+      "stage": "J13",
+      "topic": "Plane Geometry",
+      "year": "2023",
+      "paper": "2",
+      "sourceTag": "[HKDSE 23-P2-Q20]",
+      "stem": "![](figures/j13-2023-q20-1.png)The figure shows the square ABCD, the regular pentagon ADEFG and the regular hexagon AGHIJK. Find ∠ABK.",
+      "choices": {
+        "A": "69°",
+        "B": "72°",
+        "C": "74°",
+        "D": "75°"
+      },
+      "answer": "A",
+      "correctPercent": 52,
+      "hasFigure": true,
+      "figure": "figures/j13-2023-q20-1.png",
+      "figures": [
+        "figures/j13-2023-q20-1.png"
+      ]
+    },
+    {
+      "id": "J13-2023-q21",
+      "stage": "J13",
+      "topic": "Plane Geometry",
+      "year": "2023",
+      "paper": "2",
+      "sourceTag": "[HKDSE 23-P2-Q21]",
+      "stem": "![](figures/j13-2023-q21-1.png)In the figure, PQRS is a rectangle. Let T be a point lying on QR such that ∠PTS = 90°. PQ produced and ST produced meet at the point \\(U\\). PT is produced to the point V such that RT = RV. Which of the following must be true?",
+      "choices": {
+        "A": "RV // ST",
+        "B": "∠PTQ = ∠RTS",
+        "C": "ΔPST ∼ ΔUTQ",
+        "D": "ΔPQT ≅ ΔTRS"
+      },
+      "answer": "C",
+      "correctPercent": 34,
+      "hasFigure": true,
+      "figure": "figures/j13-2023-q21-1.png",
+      "figures": [
+        "figures/j13-2023-q21-1.png"
+      ]
+    },
+    {
+      "id": "J13-2024-q19",
+      "stage": "J13",
+      "topic": "Plane Geometry",
+      "year": "2024",
+      "paper": "2",
+      "sourceTag": "[HKDSE 24-P2-Q19]",
+      "stem": "According to the figure, which of the following must be true?\n![](figures/j13-2024-q19-1.png)",
+      "choices": {
+        "A": "\\(p\\) + \\(q\\) – r = 90°",
+        "B": "\\(p\\) – \\(r\\) + \\(s\\) = 180°",
+        "C": "\\(p\\) + \\(q\\) – \\(r\\) + \\(s\\) = 270°",
+        "D": "\\(p\\) + \\(q\\) + \\(r\\) – \\(s\\) = 540°"
+      },
+      "answer": "D",
+      "correctPercent": 51,
+      "hasFigure": true,
+      "figure": "figures/j13-2024-q19-1.png",
+      "figures": [
+        "figures/j13-2024-q19-1.png"
+      ]
+    },
+    {
+      "id": "J13-2024-q21",
+      "stage": "J13",
+      "topic": "Plane Geometry",
+      "year": "2024",
+      "paper": "2",
+      "sourceTag": "[HKDSE 24-P2-Q21]",
+      "stem": "In the figure, ABCD is a rhombus. Denote the point of intersection of AC and BD by \\(E\\). Let \\(F\\) be a point such that BH // EF and CFHG is a rectangle, where \\(G\\) and \\(H\\) are points lying on AC produced and BC produced respectively. Denote the point of intersection of CD and EF by \\(I\\). Which of the following must be true?\n![](figures/j13-2024-q21-1.png)I. CI = FI\nII. ∠ABE = ∠GCH\nIII. ∆ADE ≅ ∆HCF",
+      "choices": {
+        "A": "I and II only",
+        "B": "I and III only",
+        "C": "II and III only",
+        "D": "I, II and III"
+      },
+      "answer": "B",
+      "correctPercent": 36,
+      "hasFigure": true,
+      "figure": "figures/j13-2024-q21-1.png",
+      "figures": [
+        "figures/j13-2024-q21-1.png"
+      ]
+    },
+    {
+      "id": "J13-2025-q18",
+      "stage": "J13",
+      "topic": "Plane Geometry",
+      "year": "2025",
+      "paper": "2",
+      "sourceTag": "[HKDSE 25-P2-Q18]",
+      "stem": "![](figures/j13-2025-q18-1.png)The figure shows the triangle WXY. Let \\(Z\\) be a point lying on WY such that\nWY : XY = XY : YZ. If WX = 65 cm, WZ = 25 cm and XZ = 60 cm, then XY =",
+      "choices": {
+        "A": "131 cm",
+        "B": "144 cm",
+        "C": "156 cm",
+        "D": "169 cm"
+      },
+      "answer": "C",
+      "correctPercent": 44,
+      "hasFigure": true,
+      "figure": "figures/j13-2025-q18-1.png",
+      "figures": [
+        "figures/j13-2025-q18-1.png"
+      ]
+    },
+    {
+      "id": "J13-2025-q19",
+      "stage": "J13",
+      "topic": "Plane Geometry",
+      "year": "2025",
+      "paper": "2",
+      "sourceTag": "[HKDSE 25-P2-Q19]",
+      "stem": "![](figures/j13-2025-q19-1.png)In the figure, ABCD is a square. Let \\(E\\) be a point such that CDEF is a rhombus, where \\(F\\) is a point lying on AC produced. DF is produced to the point \\(G\\) such that AF//BG. Which of the following are true?\nI. DF = FG\nII. ΔBFG ~ ΔDEF\nIII. \\(\\angle ABG\\)+\\(\\angle BFD\\)= 180\\({}^\\circ\\)",
+      "choices": {
+        "A": "I and II only",
+        "B": "I and III only",
+        "C": "II and III only",
+        "D": "I, II and III"
+      },
+      "answer": "D",
+      "correctPercent": 28,
+      "hasFigure": true,
+      "figure": "figures/j13-2025-q19-1.png",
+      "figures": [
+        "figures/j13-2025-q19-1.png"
+      ]
+    },
+    {
+      "id": "J13-2025-q21",
+      "stage": "J13",
+      "topic": "Plane Geometry",
+      "year": "2025",
+      "paper": "2",
+      "sourceTag": "[HKDSE 25-P2-Q21]",
+      "stem": "![](figures/j13-2025-q21-1.png)In the figure, ABCD is a rectangle. It is given that AE = 20 cm and \\(\\angle AED=90{}^\\circ\\). If the area of ΔADE is 150 cm\\(^{2}\\), then the perpendicular distance from \\(E\\) to CD is",
+      "choices": {
+        "A": "8 cm",
+        "B": "9 cm",
+        "C": "12 cm",
+        "D": "15 cm"
+      },
+      "answer": "B",
+      "correctPercent": 58,
+      "hasFigure": true,
+      "figure": "figures/j13-2025-q21-1.png",
+      "figures": [
+        "figures/j13-2025-q21-1.png"
+      ]
+    },
+    {
+      "id": "J14-sample-q26",
+      "stage": "J14",
+      "topic": "Coordinate Geometry",
+      "year": "Sample",
+      "paper": "2",
+      "sourceTag": "[HKDSE Maths Sample Paper-P2-Q26]",
+      "stem": "If the point (−4 , 3) is rotated anti-clockwise about the origin through 180° , then the coordinates of its image are",
+      "choices": {
+        "A": "(−3, −4)",
+        "B": "(3, 4)",
+        "C": "(−4, −3)",
+        "D": "(4, −3)"
+      },
+      "answer": "D",
+      "correctPercent": null,
+      "hasFigure": false,
+      "figure": null,
+      "figures": []
+    },
+    {
+      "id": "J14-practice-q7",
+      "stage": "J14",
+      "topic": "Coordinate Geometry",
+      "year": "Practice",
+      "paper": "2",
+      "sourceTag": "[HKDSE Maths Practice Paper-P2-Q7]",
+      "stem": "![](figures/j14-practice-q7-1.png)In the figure, the \\(x\\)-intercepts of the straight lines \\(L\\)\\(_{1}\\) and \\(L\\)\\(_{2}\\) are 5 while the \\(y\\)-intercepts of the straight lines \\(L\\)\\(_{2}\\) and \\(L\\)\\(_{3}\\) are 3 . Which of the following are true?\nI. The equation of \\(L\\)\\(_{1}\\) is x = 5 .\nII. The slope of \\(L\\)\\(_{2}\\) is \\(\\frac{ 3 }{ 5 }.\\)\nIII. The point (2, 3) lies on \\(L\\)\\(_{3}\\)",
+      "choices": {
+        "A": "I and II only",
+        "B": "I and III only",
+        "C": "II and III only",
+        "D": "I , II and III"
+      },
+      "answer": "B",
+      "correctPercent": null,
+      "hasFigure": true,
+      "figure": "figures/j14-practice-q7-1.png",
+      "figures": [
+        "figures/j14-practice-q7-1.png"
+      ]
+    },
+    {
+      "id": "J14-practice-q25",
+      "stage": "J14",
+      "topic": "Coordinate Geometry",
+      "year": "Practice",
+      "paper": "2",
+      "sourceTag": "[HKDSE Maths Practice Paper-P2-Q25]",
+      "stem": "If the point \\((-2,-1)\\) is reflected with respect to the straight line \\(y=-5\\) , then the coordinates of its image are",
+      "choices": {
+        "A": "\\((-8,-1).\\)",
+        "B": "\\((-2,-9).\\)",
+        "C": "\\((-2,11).\\)",
+        "D": "\\((12,-1).\\)"
+      },
+      "answer": "B",
+      "correctPercent": null,
+      "hasFigure": false,
+      "figure": null,
+      "figures": []
+    },
+    {
+      "id": "J14-practice-q42",
+      "stage": "J14",
+      "topic": "Coordinate Geometry",
+      "year": "Practice",
+      "paper": "2",
+      "sourceTag": "[HKDSE Maths Practice Paper-P2-Q42]",
+      "stem": "Let O be the origin. If the coordinates of the points A and B are (18, –24) and (18, 24) respectively, then the \\(x\\)-coordinate of the orthocentre of ΔOAB is",
+      "choices": {
+        "A": "–14.",
+        "B": "10",
+        "C": "12",
+        "D": "25"
+      },
+      "answer": "A",
+      "correctPercent": null,
+      "hasFigure": false,
+      "figure": null,
+      "figures": []
+    },
+    {
+      "id": "J14-2013-q43",
+      "stage": "J14",
+      "topic": "Coordinate Geometry",
+      "year": "2013",
+      "paper": "2",
+      "sourceTag": "[HKDSE 13-P2-Q43]",
+      "stem": "Let \\(O\\) be the origin. If the coordinates of the points \\(A\\) and B are (0, 12) and (30, 12) respectively, then the \\(y\\)-coordinate of the circumcentre of ΔOAB is",
+      "choices": {
+        "A": "6",
+        "B": "8",
+        "C": "12",
+        "D": "15"
+      },
+      "answer": "A",
+      "correctPercent": 30,
+      "hasFigure": false,
+      "figure": null,
+      "figures": []
+    },
+    {
+      "id": "J14-2015-q42",
+      "stage": "J14",
+      "topic": "Coordinate Geometry",
+      "year": "2015",
+      "paper": "2",
+      "sourceTag": "[HKDSE 15-P2-Q42]",
+      "stem": "Let \\(O\\) be the origin. The coordinates of the points \\(P\\) and \\(Q\\) are (0 , 60) and (96 , 48) respectively. The \\(x\\)-coordinate of the orthocentre of ΔOPQ is",
+      "choices": {
+        "A": "6.",
+        "B": "32.",
+        "C": "45.",
+        "D": "48."
+      },
+      "answer": "A",
+      "correctPercent": 30,
+      "hasFigure": false,
+      "figure": null,
+      "figures": []
+    },
+    {
+      "id": "J14-2018-q40",
+      "stage": "J14",
+      "topic": "Coordinate Geometry",
+      "year": "2018",
+      "paper": "2",
+      "sourceTag": "[HKDSE 18-P2-Q40]",
+      "stem": "It is given that \\(a\\) is a positive constant. The straight line \\(\\text{2}x+5y=a\\) cuts the \\(x\\)-axis and the \\(y\\)-axis at the points \\(P\\) and \\(Q\\) respectively. Let \\(R\\) be a point lying on the \\(y\\)-axis such that the \\(x\\)-coordinate of the orthocentre of ΔPQR is 10. Find the \\(y\\)-coordinate of \\(R\\)",
+      "choices": {
+        "A": "−25",
+        "B": "−4",
+        "C": "4",
+        "D": "25"
+      },
+      "answer": "A",
+      "correctPercent": 20,
+      "hasFigure": false,
+      "figure": null,
+      "figures": []
+    },
+    {
+      "id": "J14-2019-q25",
+      "stage": "J14",
+      "topic": "Coordinate Geometry",
+      "year": "2019",
+      "paper": "2",
+      "sourceTag": "[HKDSE 19-P2-Q25]",
+      "stem": "The coordinates of the point \\(A\\) are (−5, −2). \\(A\\) is translated rightwards by 9 units to the point \\(B\\). B is then rotated anticlockwise about the origin through 90° to the point \\(C\\). Find the \\(y\\)-coordinate of C.",
+      "choices": {
+        "A": "−4",
+        "B": "−2",
+        "C": "2",
+        "D": "4"
+      },
+      "answer": "D",
+      "correctPercent": 69,
+      "hasFigure": false,
+      "figure": null,
+      "figures": []
+    },
+    {
+      "id": "J14-2019-q41",
+      "stage": "J14",
+      "topic": "Coordinate Geometry",
+      "year": "2019",
+      "paper": "2",
+      "sourceTag": "[HKDSE 19-P2-Q41]",
+      "stem": "If ΔABC is a right-angled triangle with ∠ABC = 90°, which of the following is/are true?\n\nI. The orthocentre of ΔABC lies on AC.\nII. The centroid of ΔABC lies inside ΔABC.\nIII. The in-centre of ΔABC lies outside ΔABC.",
+      "choices": {
+        "A": "I only",
+        "B": "II only",
+        "C": "I and III only",
+        "D": "II and III only"
+      },
+      "answer": "B",
+      "correctPercent": 44,
+      "hasFigure": false,
+      "figure": null,
+      "figures": []
+    },
+    {
+      "id": "J14-2020-q40",
+      "stage": "J14",
+      "topic": "Coordinate Geometry",
+      "year": "2020",
+      "paper": "2",
+      "sourceTag": "[HKDSE 20-P2-Q40]",
+      "stem": "The equations of the three sides of a triangle are 4\\(x\\) + 3\\(y\\) = 24 , 4\\(x\\) − 3\\(y\\) = 24 and \\(x\\) = \\(a\\), where \\(a\\) is a constant. If the \\(x\\)-coordinate of the in-centre of the triangle is 31, then \\(a\\) =",
+      "choices": {
+        "A": "15.",
+        "B": "31.",
+        "C": "45.",
+        "D": "51."
+      },
+      "answer": "D",
+      "correctPercent": 23,
+      "hasFigure": false,
+      "figure": null,
+      "figures": []
+    },
+    {
+      "id": "J14-2021-q23",
+      "stage": "J14",
+      "topic": "Coordinate Geometry",
+      "year": "2021",
+      "paper": "2",
+      "sourceTag": "[HKDSE 21-P2-Q23]",
+      "stem": "The coordinates of the point \\(P\\) are (7, –5) . \\(P\\) is reflected with respect to the \\(y\\)-axis to the point \\(Q\\) . \\(Q\\) is then rotated clockwise about the origin through 90° to the point R . Find the \\(x\\)-coordinates of \\(R\\)",
+      "choices": {
+        "A": "–7",
+        "B": "–5",
+        "C": "5",
+        "D": "7"
+      },
+      "answer": "B",
+      "correctPercent": 65,
+      "hasFigure": false,
+      "figure": null,
+      "figures": []
+    },
+    {
+      "id": "J14-2021-q41",
+      "stage": "J14",
+      "topic": "Coordinate Geometry",
+      "year": "2021",
+      "paper": "2",
+      "sourceTag": "[HKDSE 21-P2-Q41]",
+      "stem": "Let \\(O\\) be the origin. The coordinates of the point \\(P\\) are (26, –18) . If the coordinates of the orthocentre of ∆OPQ are (21, –3), then the \\(y\\)-coordinate of \\(Q\\) is",
+      "choices": {
+        "A": "–30",
+        "B": "–10",
+        "C": "10",
+        "D": "30"
+      },
+      "answer": "C",
+      "correctPercent": 32,
+      "hasFigure": false,
+      "figure": null,
+      "figures": []
+    },
+    {
+      "id": "J14-2022-q41",
+      "stage": "J14",
+      "topic": "Coordinate Geometry",
+      "year": "2022",
+      "paper": "2",
+      "sourceTag": "[HKDSE 22-P2-Q41]",
+      "stem": "Let \\(O\\) be the origin. The coordinates of the points \\(A\\) and \\(B\\) are (\\(a\\), 0) and (0, \\(b\\)) respectively, where \\(a\\) and \\(b\\) are positive numbers. If the circumcentre of ∆OAB lies on the straight line 4\\(x\\) +16\\(y\\) =17\\(a\\), then \\(a\\) : b =",
+      "choices": {
+        "A": "8 : 15",
+        "B": "15 : 8",
+        "C": "16 : 47",
+        "D": "47 : 16"
+      },
+      "answer": "A",
+      "correctPercent": 30,
+      "hasFigure": false,
+      "figure": null,
+      "figures": []
+    },
+    {
+      "id": "J14-2023-q41",
+      "stage": "J14",
+      "topic": "Coordinate Geometry",
+      "year": "2023",
+      "paper": "2",
+      "sourceTag": "[HKDSE 23-P2-Q41]",
+      "stem": "The equations of the straight lines \\(L\\)\\(_{1}\\) and \\(L\\)\\(_{2}\\) are 3x − 4y + k = 0 and 4x + 3y − k = 0 respectively, where k is a positive constant. It is given that \\(L\\)\\(_{1}\\) cuts the \\(x\\)-axis at the point \\(P\\). Denote the point of intersection of \\(L\\)\\(_{1}\\) and \\(L\\)\\(_{2}\\) by \\(Q\\). If R is a point lying on \\(L\\)\\(_{2}\\) such that the in-centre of ΔPQR lies on the \\(x\\)-axis, then the \\(x\\)-coordinate of R is",
+      "choices": {
+        "A": "–7\\(k\\)",
+        "B": "–\\(k\\)",
+        "C": "\\(k\\)",
+        "D": "7\\(k\\)"
+      },
+      "answer": "C",
+      "correctPercent": 33,
+      "hasFigure": false,
+      "figure": null,
+      "figures": []
+    },
+    {
+      "id": "J14-2024-q24",
+      "stage": "J14",
+      "topic": "Coordinate Geometry",
+      "year": "2024",
+      "paper": "2",
+      "sourceTag": "[HKDSE 24-P2-Q24]",
+      "stem": "The coordinates of the point \\(U\\) are (−3, −8). \\(U\\) is rotated anticlockwise about the origin through 90° to the point \\(V\\). \\(V\\) is then reflected with respect to the straight line \\(x\\) = 2 to the point \\(W\\). Find the \\(x\\)-coordinate of \\(W\\)",
+      "choices": {
+        "A": "−4",
+        "B": "−3",
+        "C": "7",
+        "D": "12"
+      },
+      "answer": "A",
+      "correctPercent": 59,
+      "hasFigure": false,
+      "figure": null,
+      "figures": []
+    },
+    {
+      "id": "J14-2024-q41",
+      "stage": "J14",
+      "topic": "Coordinate Geometry",
+      "year": "2024",
+      "paper": "2",
+      "sourceTag": "[HKDSE 24-P2-Q41]",
+      "stem": "Let \\(G\\), \\(H\\), \\(I\\) and \\(J\\) be the centroid, the orthocentre, the in-centre and the circumcentre of ∆PQR respectively. If ∠PQR =∠PRQ = 22°, which of the following are true?\nI. \\(G\\) lies inside ∆PQR.\nII. \\(H\\) lies outside ∆PQR.\nIII. \\(I\\), \\(J\\) and \\(Q\\) are collinear.",
+      "choices": {
+        "A": "I and II only",
+        "B": "I and III only",
+        "C": "II and III only",
+        "D": "I, II and III"
+      },
+      "answer": "A",
+      "correctPercent": 27,
+      "hasFigure": false,
+      "figure": null,
+      "figures": []
+    },
+    {
+      "id": "J15-sample-q16",
+      "stage": "J15",
+      "topic": "Trigonometry (include bearing)",
+      "year": "Sample",
+      "paper": "2",
+      "sourceTag": "[HKDSE Maths Sample Paper-P2-Q16]",
+      "stem": "In the figure, \\(O\\) is the centre of the circle. \\(C\\) and \\(D\\) are points lying on the circle. OBC and BAD are straight lines. If OC = 20 cm and OA = AB = 10 cm , find the area of the shaded region BCD correct to the nearest cm\\(^{2}\\)",
+      "choices": {
+        "A": "214 cm\\(^{2}\\)",
+        "B": "230 cm\\(^{2}\\)",
+        "C": "246 cm\\(^{2}\\)",
+        "D": "270 cm\\(^{2}\\)"
+      },
+      "answer": "B",
+      "correctPercent": null,
+      "hasFigure": false,
+      "figure": null,
+      "figures": []
+    },
+    {
+      "id": "J15-sample-q24",
+      "stage": "J15",
+      "topic": "Trigonometry (include bearing)",
+      "year": "Sample",
+      "paper": "2",
+      "sourceTag": "[HKDSE Maths Sample Paper-P2-Q24]",
+      "stem": "![](figures/j15-sample-q24-1.png)In the figure, ABC is a straight line. If BD = CD and AB = 10 cm , find BC correct to the nearest cm",
+      "choices": {
+        "A": "8 cm",
+        "B": "13 cm",
+        "C": "14 cm",
+        "D": "15 cm"
+      },
+      "answer": "D",
+      "correctPercent": null,
+      "hasFigure": true,
+      "figure": "figures/j15-sample-q24-1.png",
+      "figures": [
+        "figures/j15-sample-q24-1.png"
+      ]
+    },
+    {
+      "id": "J15-practice-q22",
+      "stage": "J15",
+      "topic": "Trigonometry (include bearing)",
+      "year": "Practice",
+      "paper": "2",
+      "sourceTag": "[HKDSE Maths Practice Paper-P2-Q22]",
+      "stem": "![](figures/j15-practice-q22-1.png)In the figure, ABCD is a square. F is a point lying on AD such that CF // BE . If AB = AE , find ∠ABF correct to the nearest degree.",
+      "choices": {
+        "A": "17°",
+        "B": "18°",
+        "C": "22°",
+        "D": "26°"
+      },
+      "answer": "B",
+      "correctPercent": null,
+      "hasFigure": true,
+      "figure": "figures/j15-practice-q22-1.png",
+      "figures": [
+        "figures/j15-practice-q22-1.png"
+      ]
+    },
+    {
+      "id": "J15-practice-q23",
+      "stage": "J15",
+      "topic": "Trigonometry (include bearing)",
+      "year": "Practice",
+      "paper": "2",
+      "sourceTag": "[HKDSE Maths Practice Paper-P2-Q23]",
+      "stem": "For \\(0^{\\circ}\\le \\theta \\le 90^{\\circ}\\) , the least value of \\(\\frac{ 30 }{ 3\\sin ^{2}\\theta +2\\sin ^{2}(90^{\\circ}-\\theta ) }\\) is",
+      "choices": {
+        "A": "5",
+        "B": "6",
+        "C": "10",
+        "D": "15"
+      },
+      "answer": "C",
+      "correctPercent": null,
+      "hasFigure": false,
+      "figure": null,
+      "figures": []
+    },
+    {
+      "id": "J15-2012-q18",
+      "stage": "J15",
+      "topic": "Trigonometry (include bearing)",
+      "year": "2012",
+      "paper": "2",
+      "sourceTag": "[HKDSE 12-P2-Q18]",
+      "stem": "![](figures/j15-2012-q18-1.png)In the figure, \\(D\\) is a point lying on AC such that BD is perpendicular to AC. If \\(BC=ℓ,\\)then AB =",
+      "choices": {
+        "A": "\\(\\frac{ ℓ\\sin \\alpha }{ \\cos \\beta }.\\)",
+        "B": "\\(\\frac{ ℓ\\sin \\beta }{ \\cos \\alpha }.\\)",
+        "C": "\\(\\frac{ ℓ\\cos \\alpha }{ \\sin \\beta }.\\)",
+        "D": "\\(\\frac{ ℓ\\cos \\beta }{ \\sin \\alpha }.\\)"
+      },
+      "answer": "A",
+      "correctPercent": 70,
+      "hasFigure": true,
+      "figure": "figures/j15-2012-q18-1.png",
+      "figures": [
+        "figures/j15-2012-q18-1.png"
+      ]
+    },
+    {
+      "id": "J15-2013-q20",
+      "stage": "J15",
+      "topic": "Trigonometry (include bearing)",
+      "year": "2013",
+      "paper": "2",
+      "sourceTag": "[HKDSE 13-P2-Q20]",
+      "stem": "![](figures/j15-2013-q20-1.png)\nIn the figure, the bearing of \\(P\\) from \\(O\\) is S86°E and the bearing of \\(Q\\) from \\(O\\) is N32°E. If \\(P\\) and \\(Q\\) are equidistant from \\(O\\), then the bearing of \\(P\\) from \\(Q\\) is",
+      "choices": {
+        "A": "N24°W",
+        "B": "N27°W",
+        "C": "S24°E",
+        "D": "S27°E"
+      },
+      "answer": "D",
+      "correctPercent": 58,
+      "hasFigure": true,
+      "figure": "figures/j15-2013-q20-1.png",
+      "figures": [
+        "figures/j15-2013-q20-1.png"
+      ]
+    },
+    {
+      "id": "J15-2013-q22",
+      "stage": "J15",
+      "topic": "Trigonometry (include bearing)",
+      "year": "2013",
+      "paper": "2",
+      "sourceTag": "[HKDSE 13-P2-Q22]",
+      "stem": "In ΔABC, AB : BC : AC = 8 : 15 : 17. Find cos \\(A\\) : cos \\(C\\)",
+      "choices": {
+        "A": "8 : 15",
+        "B": "8 : 17",
+        "C": "15 : 8",
+        "D": "15 : 17"
+      },
+      "answer": "A",
+      "correctPercent": 48,
+      "hasFigure": false,
+      "figure": null,
+      "figures": []
+    },
+    {
+      "id": "J15-2014-q18",
+      "stage": "J15",
+      "topic": "Trigonometry (include bearing)",
+      "year": "2014",
+      "paper": "2",
+      "sourceTag": "[HKDSE 14-P2-Q18]",
+      "stem": "![](figures/j15-2014-q18-1.png)In the figure, ∠ABD = ∠ADC =∠BCD = 90°.\nIf AB =\\(ℓ\\), then CD =",
+      "choices": {
+        "A": "\\(ℓ\\sin \\theta\\)",
+        "B": "\\(ℓ\\cos \\theta\\)",
+        "C": "\\(ℓ\\sin \\theta \\tan \\theta\\)",
+        "D": "\\(\\frac{ ℓ\\tan \\theta }{ \\cos \\theta }\\)"
+      },
+      "answer": "A",
+      "correctPercent": 39,
+      "hasFigure": true,
+      "figure": "figures/j15-2014-q18-1.png",
+      "figures": [
+        "figures/j15-2014-q18-1.png"
+      ]
+    },
+    {
+      "id": "J15-2015-q18",
+      "stage": "J15",
+      "topic": "Trigonometry (include bearing)",
+      "year": "2015",
+      "paper": "2",
+      "sourceTag": "[HKDSE 15-P2-Q18]",
+      "stem": "![](figures/j15-2015-q18-1.png)In the figure, \\(\\frac{ AD }{ AB }=\\)",
+      "choices": {
+        "A": "\\(\\cos \\alpha \\tan \\beta\\)",
+        "B": "\\(\\sin \\alpha \\tan \\beta\\)",
+        "C": "\\(\\frac{ \\cos \\alpha }{ \\tan \\beta }\\)",
+        "D": "\\(\\frac{ \\sin \\alpha }{ \\tan \\beta }\\)"
+      },
+      "answer": "A",
+      "correctPercent": 57,
+      "hasFigure": true,
+      "figure": "figures/j15-2015-q18-1.png",
+      "figures": [
+        "figures/j15-2015-q18-1.png"
+      ]
+    },
+    {
+      "id": "J15-2016-q21",
+      "stage": "J15",
+      "topic": "Trigonometry (include bearing)",
+      "year": "2016",
+      "paper": "2",
+      "sourceTag": "[HKDSE 16-P2-Q21]",
+      "stem": "![](figures/j15-2016-q21-1.png)In the figure, AD =",
+      "choices": {
+        "A": "\\(AB\\cos a+BC\\cos c\\)",
+        "B": "\\(AB\\cos a+BC\\sin c\\)",
+        "C": "\\(AB\\sin a+BC\\cos c\\)",
+        "D": "\\(AB\\sin a+BC\\sin c\\)"
+      },
+      "answer": "B",
+      "correctPercent": 57,
+      "hasFigure": true,
+      "figure": "figures/j15-2016-q21-1.png",
+      "figures": [
+        "figures/j15-2016-q21-1.png"
+      ]
+    },
+    {
+      "id": "J15-2017-q22",
+      "stage": "J15",
+      "topic": "Trigonometry (include bearing)",
+      "year": "2017",
+      "paper": "2",
+      "sourceTag": "[HKDSE 17-P2-Q22]",
+      "stem": "![](figures/j15-2017-q22-1.png)In the figure, ABCD is a rectangle. If \\(E\\) is a point lying on CD such that ∠CBE = 40°, find ∠AED correct to the nearest degree.",
+      "choices": {
+        "A": "33°",
+        "B": "43°",
+        "C": "47°",
+        "D": "57°"
+      },
+      "answer": "D",
+      "correctPercent": 58,
+      "hasFigure": true,
+      "figure": "figures/j15-2017-q22-1.png",
+      "figures": [
+        "figures/j15-2017-q22-1.png"
+      ]
+    },
+    {
+      "id": "J15-2018-q21",
+      "stage": "J15",
+      "topic": "Trigonometry (include bearing)",
+      "year": "2018",
+      "paper": "2",
+      "sourceTag": "[HKDSE 18-P2-Q21]",
+      "stem": "![](figures/j15-2018-q21-1.png)In the figure, ABCD is a trapezium with ∠ABC = ∠BAD = 90°. \\(E\\) and \\(F\\) are points lying on AB such that \\(E\\) and \\(F\\) divide AB into three equal parts. Which of the following must be true?\nI. \\(AF\\sin \\alpha =BE\\sin \\beta\\)\nII. \\(CE\\cos \\alpha =DF\\cos \\beta\\)\nIII. \\(AD\\tan \\alpha =BC\\tan \\beta\\)",
+      "choices": {
+        "A": "I and II only",
+        "B": "I and III only",
+        "C": "II and III only",
+        "D": "I, II and III"
+      },
+      "answer": "C",
+      "correctPercent": 45,
+      "hasFigure": true,
+      "figure": "figures/j15-2018-q21-1.png",
+      "figures": [
+        "figures/j15-2018-q21-1.png"
+      ]
+    },
+    {
+      "id": "J15-2019-q22",
+      "stage": "J15",
+      "topic": "Trigonometry (include bearing)",
+      "year": "2019",
+      "paper": "2",
+      "sourceTag": "[HKDSE 19-P2-Q22]",
+      "stem": "![](figures/j15-2019-q22-1.png)In the figure, ABCD is a rectangle. \\(E\\) is a point lying on AD. Find \\(\\frac{ CE }{ AC }\\)",
+      "choices": {
+        "A": "\\(\\frac{ \\sin \\alpha }{ \\sin \\beta }\\)",
+        "B": "\\(\\frac{ \\cos \\alpha }{ \\cos \\beta }\\)",
+        "C": "\\(\\sin \\alpha \\sin \\beta\\)",
+        "D": "\\(\\cos \\alpha \\cos \\beta\\)"
+      },
+      "answer": "B",
+      "correctPercent": 59,
+      "hasFigure": true,
+      "figure": "figures/j15-2019-q22-1.png",
+      "figures": [
+        "figures/j15-2019-q22-1.png"
+      ]
+    },
+    {
+      "id": "J15-2020-q23",
+      "stage": "J15",
+      "topic": "Trigonometry (include bearing)",
+      "year": "2020",
+      "paper": "2",
+      "sourceTag": "[HKDSE 20-P2-Q23]",
+      "stem": "A ship is 50 km due west of a lighthouse. If the ship moves in the direction S60°E , find the shortest distance between the ship and the lighthouse.",
+      "choices": {
+        "A": "20 km",
+        "B": "25 km",
+        "C": "43 km",
+        "D": "87 km"
+      },
+      "answer": "B",
+      "correctPercent": 48,
+      "hasFigure": false,
+      "figure": null,
+      "figures": []
+    },
+    {
+      "id": "J15-2021-q24",
+      "stage": "J15",
+      "topic": "Trigonometry (include bearing)",
+      "year": "2021",
+      "paper": "2",
+      "sourceTag": "[HKDSE 21-P2-Q24]",
+      "stem": "![](figures/j15-2021-q24-1.png)In the figure, \\(\\frac { AB } { CD }=\\)",
+      "choices": {
+        "A": "\\(cos\\theta sin\\phi\\)",
+        "B": "\\(sin\\theta cos\\phi\\)",
+        "C": "\\(tan\\theta cos\\phi\\)",
+        "D": "\\(tan\\theta sin\\phi\\)"
+      },
+      "answer": "D",
+      "correctPercent": 64,
+      "hasFigure": true,
+      "figure": "figures/j15-2021-q24-1.png",
+      "figures": [
+        "figures/j15-2021-q24-1.png"
+      ]
+    },
+    {
+      "id": "J15-2022-q23",
+      "stage": "J15",
+      "topic": "Trigonometry (include bearing)",
+      "year": "2022",
+      "paper": "2",
+      "sourceTag": "[HKDSE 22-P2-Q23]",
+      "stem": "It is given that PQRS is a rhombus. Let \\(T\\) be the point of intersection of PR and QS. If \\(\\angle\\)QRT = θ , then \\(\\frac { PQ } { ST }\\) =",
+      "choices": {
+        "A": "sin θ",
+        "B": "cos θ",
+        "C": "\\(\\frac { 1 } { sin\\theta }\\)",
+        "D": "\\(\\frac { 1 } { cos }\\)"
+      },
+      "answer": "C",
+      "correctPercent": 47,
+      "hasFigure": false,
+      "figure": null,
+      "figures": []
+    },
+    {
+      "id": "J15-2023-q23",
+      "stage": "J15",
+      "topic": "Trigonometry (include bearing)",
+      "year": "2023",
+      "paper": "2",
+      "sourceTag": "[HKDSE 23-P2-Q23]",
+      "stem": "In the figure, ABCD is a trapezium with AD//BC. Let E be the mid-point of AD. It is given that ∠ABE = ∠BCE = 90°. Find \\(\\frac { CE } { DE }\\).\n![](figures/j15-2023-q23-1.png)",
+      "choices": {
+        "A": "\\(\\frac { 1 } { 2 }\\)",
+        "B": "1",
+        "C": "tanα",
+        "D": "sinαcosα"
+      },
+      "answer": "D",
+      "correctPercent": 38,
+      "hasFigure": true,
+      "figure": "figures/j15-2023-q23-1.png",
+      "figures": [
+        "figures/j15-2023-q23-1.png"
+      ]
+    },
+    {
+      "id": "J15-2024-q23",
+      "stage": "J15",
+      "topic": "Trigonometry (include bearing)",
+      "year": "2024",
+      "paper": "2",
+      "sourceTag": "[HKDSE 24-P2-Q23]",
+      "stem": "![](figures/j15-2024-q23-1.png)In the figure, ABC is a straight line. \\(\\frac { BC } { AD }\\)=",
+      "choices": {
+        "A": "\\(\\frac { sin\\theta } { tan\\phi }\\)",
+        "B": "\\(\\frac { tan\\phi } { sin\\theta }\\)",
+        "C": "\\(\\frac { cos\\theta } { tan\\phi }\\)",
+        "D": "\\(\\frac { tan\\phi } { cos\\theta }\\)"
+      },
+      "answer": "A",
+      "correctPercent": 56,
+      "hasFigure": true,
+      "figure": "figures/j15-2024-q23-1.png",
+      "figures": [
+        "figures/j15-2024-q23-1.png"
+      ]
+    },
+    {
+      "id": "J15-2025-q20",
+      "stage": "J15",
+      "topic": "Trigonometry (include bearing)",
+      "year": "2025",
+      "paper": "2",
+      "sourceTag": "[HKDSE 25-P2-Q20]",
+      "stem": "It is given that PQRS is a trapezium with PQ // SR. If PS = 41 cm, RS = 53 cm,\n\\(\\angle PSR=120{}^\\circ\\)and \\(\\angle QRS=150{}^\\circ\\), then PQ =",
+      "choices": {
+        "A": "82 cm",
+        "B": "100 cm",
+        "C": "106 cm",
+        "D": "135 cm"
+      },
+      "answer": "D",
+      "correctPercent": 39,
+      "hasFigure": false,
+      "figure": null,
+      "figures": []
+    },
+    {
+      "id": "J15-2025-q23",
+      "stage": "J15",
+      "topic": "Trigonometry (include bearing)",
+      "year": "2025",
+      "paper": "2",
+      "sourceTag": "[HKDSE 25-P2-Q23]",
+      "stem": "![](figures/j15-2025-q23-1.png)The figure shows the quadrilateral ABCD. If \\(\\angle ABC+\\angle ADC=\\angle ACD=\\angle BAC=90{}^\\circ\\), which of the following must be true?",
+      "choices": {
+        "A": "\\(tan\\angle ACB=\\frac { AB } { AD }\\)",
+        "B": "\\(tan\\angle ACB=\\frac { AB } { CD }\\)",
+        "C": "\\(tan\\angle ADC=\\frac { BC } { AD }\\)",
+        "D": "\\(tan\\angle ADC=\\frac { BC } { CD }\\)"
+      },
+      "answer": "C",
+      "correctPercent": 23,
+      "hasFigure": true,
+      "figure": "figures/j15-2025-q23-1.png",
+      "figures": [
+        "figures/j15-2025-q23-1.png"
+      ]
+    },
+    {
+      "id": "J16-sample-q28",
+      "stage": "J16",
+      "topic": "Statistics",
+      "year": "Sample",
+      "paper": "2",
+      "sourceTag": "[HKDSE Maths Sample Paper-P2-Q28]",
+      "stem": "The stem-and-leaf diagram below shows the distribution of heights (in cm) of 23 staff members in an office.\nFind the median of the distribution.",
+      "choices": {
+        "A": "164 cm",
+        "B": "165 cm",
+        "C": "165.5 cm",
+        "D": "166 cm"
+      },
+      "answer": "B",
+      "correctPercent": null,
+      "hasFigure": false,
+      "figure": null,
+      "figures": []
+    },
+    {
+      "id": "J16-2012-q30",
+      "stage": "J16",
+      "topic": "Statistics — Consider the following data:",
+      "year": "2012",
+      "paper": "2",
+      "sourceTag": "[HKDSE 12-P2-Q30]",
+      "stem": "19 10 12 12 13 13 14 15 16 \\(m\\) \\(n\\)\nIf both the mean and the median of the above data are 14, which of the following are true?\n\nI. \\(m\\ge 14\\)\nII. \\(n\\le 16\\)\nIII. \\(m+n=30\\)",
+      "choices": {
+        "A": "I and II only",
+        "B": "I and III only",
+        "C": "II and III only",
+        "D": "I, II and III"
+      },
+      "answer": "D",
+      "correctPercent": 47,
+      "hasFigure": false,
+      "figure": null,
+      "figures": []
+    },
+    {
+      "id": "J16-2013-q27",
+      "stage": "J16",
+      "topic": "Statistics",
+      "year": "2013",
+      "paper": "2",
+      "sourceTag": "[HKDSE 13-P2-Q27]",
+      "stem": "If the mean and the mode of the nine numbers 14 , 6 , 4 , 5 , 7 , 5 , \\(x\\) , \\(y\\) and \\(z\\) are 8 and 14 respectively, then the median of these nine numbers is",
+      "choices": {
+        "A": "5",
+        "B": "6",
+        "C": "7",
+        "D": "8"
+      },
+      "answer": "B",
+      "correctPercent": 68,
+      "hasFigure": false,
+      "figure": null,
+      "figures": []
+    },
+    {
+      "id": "J16-2013-q30",
+      "stage": "J16",
+      "topic": "Statistics",
+      "year": "2013",
+      "paper": "2",
+      "sourceTag": "[HKDSE 13-P2-Q30]",
+      "stem": "The pie charts below show the distributions of the profits of stationery shop \\(X\\) and stationery shop \\(Y\\) from the sales of stationery in a certain month. Which of the following must be true?\nDistribution of the profits of stationery shop \\(X\\) Distribution of the profits of stationery shop \\(Y\\)\n![](figures/j16-2013-q30-1.png)",
+      "choices": {
+        "A": "In that month, the profit from the sales of pencils of stationery shop \\(X\\) is the same as that of stationery shop \\(Y\\)",
+        "B": "In that month, the total profit from the sales of pens and notebooks of stationery shop \\(X\\) is less than the total profit from the sales of rulers and pencils of the shop.",
+        "C": "\\(k\\) = 14",
+        "D": "\\(\\theta =36^{\\circ}\\)"
+      },
+      "answer": "B",
+      "correctPercent": 54,
+      "hasFigure": true,
+      "figure": "figures/j16-2013-q30-1.png",
+      "figures": [
+        "figures/j16-2013-q30-1.png"
+      ]
+    },
+    {
+      "id": "J16-2014-q28",
+      "stage": "J16",
+      "topic": "Statistics",
+      "year": "2014",
+      "paper": "2",
+      "sourceTag": "[HKDSE 14-P2-Q28]",
+      "stem": "The mean height of 25 teachers and 140 students is 150 cm. If the mean height of the students is 145 cm, then the mean height of the teachers is",
+      "choices": {
+        "A": "151 cm.",
+        "B": "155 cm.",
+        "C": "176 cm.",
+        "D": "178 cm."
+      },
+      "answer": "D",
+      "correctPercent": 72,
+      "hasFigure": false,
+      "figure": null,
+      "figures": []
+    },
+    {
+      "id": "J16-2014-q29",
+      "stage": "J16",
+      "topic": "Statistics",
+      "year": "2014",
+      "paper": "2",
+      "sourceTag": "[HKDSE 14-P2-Q29]",
+      "stem": "![](figures/j16-2014-q29-1.png)The pie chart below shows the expenditure of John in a certain week. John spends $240 on clothing that week. Find his expenditure on transportation that week.",
+      "choices": {
+        "A": "$40",
+        "B": "$60",
+        "C": "$90",
+        "D": "$135"
+      },
+      "answer": "C",
+      "correctPercent": 82,
+      "hasFigure": true,
+      "figure": "figures/j16-2014-q29-1.png",
+      "figures": [
+        "figures/j16-2014-q29-1.png"
+      ]
+    },
+    {
+      "id": "J16-2015-q30",
+      "stage": "J16",
+      "topic": "Statistics — Consider the following integers:",
+      "year": "2015",
+      "paper": "2",
+      "sourceTag": "[HKDSE 15-P2-Q30]",
+      "stem": "2 2 3 3 3 3 3 5 5 6 8 8 9 10 \\(m\\)\nLet \\(p\\) , \\(q\\) and \\(r\\) be the mean, the median and the mode of the above integers respectively. If 3 ≤ \\(m\\) ≤ 5, which of the following must be true?\n\nI. \\(p\\) > \\(q\\)\nII. \\(p\\) > \\(r\\)\nIII. \\(q\\) > \\(r\\)",
+      "choices": {
+        "A": "I only",
+        "B": "II only",
+        "C": "I and III only",
+        "D": "II and III only."
+      },
+      "answer": "B",
+      "correctPercent": 45,
+      "hasFigure": false,
+      "figure": null,
+      "figures": []
+    },
+    {
+      "id": "J16-2016-q30",
+      "stage": "J16",
+      "topic": "Statistics — Consider the following data:",
+      "year": "2016",
+      "paper": "2",
+      "sourceTag": "[HKDSE 16-P2-Q30]",
+      "stem": "32 68 79 86 88 98 98 \\(a\\) \\(b\\) \\(c\\)\nIf the mean and the mode of the above data are 77 and 68 respectively, then the median of the above data is",
+      "choices": {
+        "A": "76",
+        "B": "82",
+        "C": "85",
+        "D": "93"
+      },
+      "answer": "B",
+      "correctPercent": 76,
+      "hasFigure": false,
+      "figure": null,
+      "figures": []
+    },
+    {
+      "id": "J16-2018-q29",
+      "stage": "J16",
+      "topic": "Statistics",
+      "year": "2018",
+      "paper": "2",
+      "sourceTag": "[HKDSE 18-P2-Q29]",
+      "stem": "The mean of the numbers of pages of 10 magazines is 132. If the mean of the numbers of pages of 6 of these 10 magazines is 108, then the mean of the numbers of pages of the remaining 4 magazines is",
+      "choices": {
+        "A": "148.",
+        "B": "156.",
+        "C": "168.",
+        "D": "176."
+      },
+      "answer": "C",
+      "correctPercent": 78,
+      "hasFigure": false,
+      "figure": null,
+      "figures": []
+    },
+    {
+      "id": "J16-2021-q30",
+      "stage": "J16",
+      "topic": "Statistics",
+      "year": "2021",
+      "paper": "2",
+      "sourceTag": "[HKDSE 21-P2-Q30]",
+      "stem": "The mean of 70 integers is 32 . If the mean of 30 of these 70 integers is 24 , then the mean of the remaining 40 integers is",
+      "choices": {
+        "A": "38",
+        "B": "40",
+        "C": "43",
+        "D": "74"
+      },
+      "answer": "A",
+      "correctPercent": 77,
+      "hasFigure": false,
+      "figure": null,
+      "figures": []
+    },
+    {
+      "id": "J16-2022-q29",
+      "stage": "J16",
+      "topic": "Statistics",
+      "year": "2022",
+      "paper": "2",
+      "sourceTag": "[HKDSE 22-P2-Q29]",
+      "stem": "The mean weight of 60 actors and 40 actresses is 57 kg. If the mean weight of the actors is 63 kg , then the mean weight of the actresses is",
+      "choices": {
+        "A": "48 kg",
+        "B": "50 kg",
+        "C": "53 kg",
+        "D": "60 kg"
+      },
+      "answer": "A",
+      "correctPercent": 79,
+      "hasFigure": false,
+      "figure": null,
+      "figures": []
+    },
+    {
+      "id": "J16-2023-q30",
+      "stage": "J16",
+      "topic": "Statistics",
+      "year": "2023",
+      "paper": "2",
+      "sourceTag": "[HKDSE 23-P2-Q30]",
+      "stem": "There are 14 full-time employees and 56 part-time employees in a company. The mean salary of the full-time employees is $31 530 while the mean salary of the part-time employees is $21 525. Find the mean salary of these employees of the company.",
+      "choices": {
+        "A": "$23 526",
+        "B": "$25 527",
+        "C": "$27 528",
+        "D": "$29 529"
+      },
+      "answer": "A",
+      "correctPercent": 84,
+      "hasFigure": false,
+      "figure": null,
+      "figures": []
+    },
+    {
+      "id": "J17-sample-q33",
+      "stage": "J17",
+      "topic": "Binary, hexadecimal, decimal numbers",
+      "year": "Sample",
+      "paper": "2",
+      "sourceTag": "[HKDSE Maths Sample Paper-P2-Q33]",
+      "stem": "1010010001001\\(_{2}\\) =",
+      "choices": {
+        "A": "\\(2^{12}+2^{10}+137\\)",
+        "B": "\\(2^{12}+2^{10}+273\\)",
+        "C": "\\(2^{13}+2^{11}+137\\)",
+        "D": "\\(2^{13}+2^{11}+273\\)"
+      },
+      "answer": "A",
+      "correctPercent": null,
+      "hasFigure": false,
+      "figure": null,
+      "figures": []
+    },
+    {
+      "id": "J17-2014-q34",
+      "stage": "J17",
+      "topic": "Binary, hexadecimal, decimal numbers",
+      "year": "2014",
+      "paper": "2",
+      "sourceTag": "[HKDSE 14-P2-Q34]",
+      "stem": "7 × 2\\(^{10}\\) + 2\\(^{8}\\)+ 5 × 2\\(^{3}\\)− 2\\(^{3}\\)=",
+      "choices": {
+        "A": "111010100000\\(_{2.}\\)",
+        "B": "111100010000\\(_{2}\\)",
+        "C": "1110100100000\\(_{2}\\)",
+        "D": "1111000010000\\(_{2}\\)"
+      },
+      "answer": "C",
+      "correctPercent": 49,
+      "hasFigure": false,
+      "figure": null,
+      "figures": []
+    },
+    {
+      "id": "J17-2015-q33",
+      "stage": "J17",
+      "topic": "Binary, hexadecimal, decimal numbers",
+      "year": "2015",
+      "paper": "2",
+      "sourceTag": "[HKDSE 15-P2-Q33]",
+      "stem": "11 + 2\\(^{6}\\) + 2\\(^{10}\\) + 2\\(^{11}\\) =",
+      "choices": {
+        "A": "110001001011\\(_{2}\\)",
+        "B": "110100100011\\(_{2}\\)",
+        "C": "1100001001011\\(_{2}\\)",
+        "D": "1101001000011\\(_{2}\\)"
+      },
+      "answer": "A",
+      "correctPercent": 66,
+      "hasFigure": false,
+      "figure": null,
+      "figures": []
+    },
+    {
+      "id": "J17-2019-q33",
+      "stage": "J17",
+      "topic": "Binary, hexadecimal, decimal numbers",
+      "year": "2019",
+      "paper": "2",
+      "sourceTag": "[HKDSE 19-P2-Q33]",
+      "stem": "100110000010110\\(_{2}\\)=",
+      "choices": {
+        "A": "\\(19\\times 2^{10}+22\\)",
+        "B": "\\(19\\times 2^{10}+44\\)",
+        "C": "\\(19\\times 2^{11}+22\\)",
+        "D": "\\(19\\times 2^{11}+44\\)"
+      },
+      "answer": "A",
+      "correctPercent": 61,
+      "hasFigure": false,
+      "figure": null,
+      "figures": []
+    },
+    {
+      "id": "J17-2023-q31",
+      "stage": "J17",
+      "topic": "Binary, hexadecimal, decimal numbers",
+      "year": "2023",
+      "paper": "2",
+      "sourceTag": "[HKDSE 23-P2-Q31]",
+      "stem": "1011001011001011\\(_{2}\\) =",
+      "choices": {
+        "A": "11 × 2\\(^{11}\\) + 11 × 2\\(^{5}\\) + 11",
+        "B": "11 × 2\\(^{12}\\) + 11 × 2\\(^{6}\\) + 11",
+        "C": "11 × 2\\(^{13}\\) + 11 × 2\\(^{7}\\) + 11",
+        "D": "11 × 2\\(^{14}\\) + 11 × 2\\(^{8}\\) + 11"
+      },
+      "answer": "B",
+      "correctPercent": 62,
+      "hasFigure": false,
+      "figure": null,
+      "figures": []
+    },
+    {
+      "id": "J18-sample-q11",
+      "stage": "J18",
+      "topic": "Sequences",
+      "year": "Sample",
+      "paper": "2",
+      "sourceTag": "[HKDSE Maths Sample Paper-P2-Q11]",
+      "stem": "Let\\(\\,a_{ n }\\) be the \\(n\\)th term of a sequence. If \\(\\,a_{ 1 } =4\\), \\(\\,a_{ 2 } =5\\) and \\(\\,a_{ n+2 } =\\,a_{ n } +\\,a_{ n+1 }\\) for any positive integer \\(n\\) ,then \\(\\,a_{ 10 }\\)=",
+      "choices": {
+        "A": "13",
+        "B": "157",
+        "C": "254",
+        "D": "411"
+      },
+      "answer": "C",
+      "correctPercent": null,
+      "hasFigure": false,
+      "figure": null,
+      "figures": []
+    },
+    {
+      "id": "J18-2012-q12",
+      "stage": "J18",
+      "topic": "Sequences",
+      "year": "2012",
+      "paper": "2",
+      "sourceTag": "[HKDSE 12-P2-Q12]",
+      "stem": "In the figure, the 1\\(^{st}\\) pattern consists of 1 dot. For any positive integer \\(n\\), the (n + 1)th pattern is formed by adding \\(n\\) dots to the \\(n\\)th pattern. Find the number of dots in the 8\\(^{th}\\) pattern.\n![](figures/j18-2012-q12-1.png)",
+      "choices": {
+        "A": "22",
+        "B": "29",
+        "C": "36",
+        "D": "37"
+      },
+      "answer": "B",
+      "correctPercent": 74,
+      "hasFigure": true,
+      "figure": "figures/j18-2012-q12-1.png",
+      "figures": [
+        "figures/j18-2012-q12-1.png"
+      ]
+    },
+    {
+      "id": "J18-2014-q14",
+      "stage": "J18",
+      "topic": "Sequences",
+      "year": "2014",
+      "paper": "2",
+      "sourceTag": "[HKDSE 14-P2-Q14]",
+      "stem": "Let \\(a\\)\\(_{n}\\) be the \\(n\\)th term of a sequence. If \\(a\\)\\(_{2}\\) = 7, \\(a\\)\\(_{4}\\) = 63 and \\(a\\)\\(_{n+2}\\) = \\(a\\)\\(_{n+1}\\) + \\(a\\)\\(_{n}\\) for any positive integer \\(n\\), then \\(a\\)\\(_{5}\\) =",
+      "choices": {
+        "A": "56.",
+        "B": "70.",
+        "C": "91.",
+        "D": "119."
+      },
+      "answer": "D",
+      "correctPercent": 50,
+      "hasFigure": false,
+      "figure": null,
+      "figures": []
+    },
+    {
+      "id": "J18-2015-q13",
+      "stage": "J18",
+      "topic": "Sequences",
+      "year": "2015",
+      "paper": "2",
+      "sourceTag": "[HKDSE 15-P2-Q13]",
+      "stem": "In the figure, the 1st pattern consists of 5 dots. For any positive integer \\(n\\), the (\\(n\\) +1)th pattern is formed by adding 4 dots to the \\(n\\)th pattern. Find the number of dots in the 6th pattern.\n![](figures/j18-2015-q13-1.png)",
+      "choices": {
+        "A": "21",
+        "B": "25",
+        "C": "29",
+        "D": "33"
+      },
+      "answer": "B",
+      "correctPercent": 92,
+      "hasFigure": true,
+      "figure": "figures/j18-2015-q13-1.png",
+      "figures": [
+        "figures/j18-2015-q13-1.png"
+      ]
+    },
+    {
+      "id": "J18-2016-q14",
+      "stage": "J18",
+      "topic": "Sequences",
+      "year": "2016",
+      "paper": "2",
+      "sourceTag": "[HKDSE 16-P2-Q14]",
+      "stem": "In the figure, the 1st pattern consists of 9 dots. For any positive integer \\(n\\), the (\\(n\\) + 1) th pattern is formed by adding 5 dots to the \\(n\\)th pattern. Find the number of dots in the 7th pattern.\n![](figures/j18-2016-q14-1.png)",
+      "choices": {
+        "A": "29",
+        "B": "34",
+        "C": "39",
+        "D": "44"
+      },
+      "answer": "C",
+      "correctPercent": 92,
+      "hasFigure": true,
+      "figure": "figures/j18-2016-q14-1.png",
+      "figures": [
+        "figures/j18-2016-q14-1.png"
+      ]
+    },
+    {
+      "id": "J18-2017-q13",
+      "stage": "J18",
+      "topic": "Sequences",
+      "year": "2017",
+      "paper": "2",
+      "sourceTag": "[HKDSE 17-P2-Q13]",
+      "stem": "In the figure, the 1st pattern consists of 1 dot. For any positive integer \\(n\\),\nthe (\\(n\\) + 1)th pattern is formed by adding (2\\(n\\) + 2) dots to the \\(n\\)th pattern. Find the number of dots in the 7th pattern.\n![](figures/j18-2017-q13-1.png)",
+      "choices": {
+        "A": "41",
+        "B": "55",
+        "C": "71",
+        "D": "161"
+      },
+      "answer": "B",
+      "correctPercent": 86,
+      "hasFigure": true,
+      "figure": "figures/j18-2017-q13-1.png",
+      "figures": [
+        "figures/j18-2017-q13-1.png"
+      ]
+    },
+    {
+      "id": "J18-2018-q12",
+      "stage": "J18",
+      "topic": "Sequences",
+      "year": "2018",
+      "paper": "2",
+      "sourceTag": "[HKDSE 18-P2-Q12]",
+      "stem": "Let \\(a\\)\\(_{n}\\) be the \\(n\\)th term of a sequence. If \\(a\\)\\(_{3}\\)= 21, \\(a\\)\\(_{6}\\)= 89 and \\(a\\)\\(_{n+2}\\)= a\\(_{n}\\)+ a\\(_{n+1}\\)for any positive integer n, then \\(a\\)\\(_{1}\\) =",
+      "choices": {
+        "A": "8.",
+        "B": "13.",
+        "C": "34.",
+        "D": "55."
+      },
+      "answer": "A",
+      "correctPercent": 62,
+      "hasFigure": false,
+      "figure": null,
+      "figures": []
+    },
+    {
+      "id": "J18-2019-q14",
+      "stage": "J18",
+      "topic": "Sequences",
+      "year": "2019",
+      "paper": "2",
+      "sourceTag": "[HKDSE 19-P2-Q14]",
+      "stem": "In the figure, the 1st pattern consists of 6 dots. For any positive integer \\(n\\), the (n + 1)th pattern is formed by adding 4 dots to the nth pattern. Find the number of dots in the 9thpattern.\n![](figures/j18-2019-q14-1.png)",
+      "choices": {
+        "A": "30",
+        "B": "34",
+        "C": "38",
+        "D": "42"
+      },
+      "answer": "C",
+      "correctPercent": 91,
+      "hasFigure": true,
+      "figure": "figures/j18-2019-q14-1.png",
+      "figures": [
+        "figures/j18-2019-q14-1.png"
+      ]
+    },
+    {
+      "id": "J18-2020-q12",
+      "stage": "J18",
+      "topic": "Sequences",
+      "year": "2020",
+      "paper": "2",
+      "sourceTag": "[HKDSE 20-P2-Q12]",
+      "stem": "In the figure, the 1st pattern consists of 3 dots. For any positive integer \\(n\\) , the (n + 1)th pattern is formed by adding (2n + 1)dots to the \\(n\\)th pattern. Find the number of dots in the 7th pattern.\n![](figures/j18-2020-q12-1.png)",
+      "choices": {
+        "A": "15",
+        "B": "27",
+        "C": "38",
+        "D": "51"
+      },
+      "answer": "D",
+      "correctPercent": 83,
+      "hasFigure": true,
+      "figure": "figures/j18-2020-q12-1.png",
+      "figures": [
+        "figures/j18-2020-q12-1.png"
+      ]
+    },
+    {
+      "id": "J18-2021-q13",
+      "stage": "J18",
+      "topic": "Sequences",
+      "year": "2021",
+      "paper": "2",
+      "sourceTag": "[HKDSE 21-P2-Q13]",
+      "stem": "In the figure, the 1st pattern consists of 3 dots. For any positive integer \\(n\\), the\n(n + 1)th pattern is formed by adding (2n + 3) dots to the \\(n\\)th pattern. Find the number of dots in the 8th pattern.\n…",
+      "choices": {
+        "A": "63",
+        "B": "75",
+        "C": "80",
+        "D": "99"
+      },
+      "answer": "C",
+      "correctPercent": 83,
+      "hasFigure": false,
+      "figure": null,
+      "figures": []
+    },
+    {
+      "id": "J18-2022-q14",
+      "stage": "J18",
+      "topic": "Sequences",
+      "year": "2022",
+      "paper": "2",
+      "sourceTag": "[HKDSE 22-P2-Q14]",
+      "stem": "In the figure, the 1st pattern consists of 8 dots. For any positive integer \\(n\\), the (\\(n\\) + 1)th pattern is formed by adding (2n + 6) dots to the \\(n\\)th pattern. Find the number of dots in the 7th pattern.\n![](figures/j18-2022-q14-1.png)",
+      "choices": {
+        "A": "52",
+        "B": "68",
+        "C": "86",
+        "D": "106"
+      },
+      "answer": "C",
+      "correctPercent": 86,
+      "hasFigure": true,
+      "figure": "figures/j18-2022-q14-1.png",
+      "figures": [
+        "figures/j18-2022-q14-1.png"
+      ]
+    },
+    {
+      "id": "J18-2023-q14",
+      "stage": "J18",
+      "topic": "Sequences",
+      "year": "2023",
+      "paper": "2",
+      "sourceTag": "[HKDSE 23-P2-Q14]",
+      "stem": "Let \\(a\\)\\(_{n}\\) be the \\(n\\)th term of a sequence. If \\(a\\)\\(_{6}\\) = 23 , \\(a\\)\\(_{8}\\) = 60 and \\(a\\)\\(_{n+2}\\) = \\(a\\)\\(_{n+1}\\) + \\(a\\)\\(_{n}\\) for any positive integer \\(n\\), then \\(a\\)\\(_{3}\\) =",
+      "choices": {
+        "A": "4",
+        "B": "5",
+        "C": "9",
+        "D": "14"
+      },
+      "answer": "B",
+      "correctPercent": 62,
+      "hasFigure": false,
+      "figure": null,
+      "figures": []
+    },
+    {
+      "id": "J18-2025-q13",
+      "stage": "J18",
+      "topic": "Sequences",
+      "year": "2025",
+      "paper": "2",
+      "sourceTag": "[HKDSE 25-P2-Q13]",
+      "stem": "Let \\(a\\)\\(_{n}\\) be the \\(n\\)th term of a sequence. If \\(a\\)\\(_{2}\\)= 3, \\(a\\)\\(_{5}\\)= 41 and \\(a\\)\\(_{n+2}\\)= 2\\(a\\)\\(_{n+1}\\)+ \\(a\\)\\(_{n}\\) for any positive integer \\(n\\), then a\\(_{6}\\) =",
+      "choices": {
+        "A": "99",
+        "B": "101",
+        "C": "239",
+        "D": "243"
+      },
+      "answer": "A",
+      "correctPercent": null,
+      "hasFigure": false,
+      "figure": null,
+      "figures": []
+    },
+    {
+      "id": "J19-practice-q28",
+      "stage": "J19",
+      "topic": "S3 Probability",
+      "year": "Practice",
+      "paper": "2",
+      "sourceTag": "[HKDSE Maths Practice Paper-P2-Q28]",
+      "stem": "Two numbers are randomly drawn at the same time from four cards numbered 2 , 3 , 5 and 7 respectively. Find the probability that the sum of the numbers drawn is a multiple of 4",
+      "choices": {
+        "A": "\\(\\frac{ 1 }{ 3 }\\)",
+        "B": "\\(\\frac{ 1 }{ 4 }\\)",
+        "C": "\\(\\frac{ 1 }{ 6 }\\)",
+        "D": "\\(\\frac{ 5 }{ 16 }\\)"
+      },
+      "answer": "A",
+      "correctPercent": null,
+      "hasFigure": false,
+      "figure": null,
+      "figures": []
+    },
+    {
+      "id": "J19-2012-q27",
+      "stage": "J19",
+      "topic": "S3 Probability",
+      "year": "2012",
+      "paper": "2",
+      "sourceTag": "[HKDSE 12-P2-Q27]",
+      "stem": "9★◆ is a 3-digit number, where ★ and ◆ are integers from 0 to 9 inclusive. Find the probability that the 3-digit number is divisible by 5.",
+      "choices": {
+        "A": "\\(\\frac{ 1 }{ 5 }\\)",
+        "B": "\\(\\frac{ 7 }{ 33 }\\)",
+        "C": "\\(\\frac{ 20 }{ 99 }\\)",
+        "D": "\\(\\frac{ 19 }{ 100 }\\)"
+      },
+      "answer": "A",
+      "correctPercent": 50,
+      "hasFigure": false,
+      "figure": null,
+      "figures": []
+    },
+    {
+      "id": "J19-2012-q28",
+      "stage": "J19",
+      "topic": "S3 Probability",
+      "year": "2012",
+      "paper": "2",
+      "sourceTag": "[HKDSE 12-P2-Q28]",
+      "stem": "The stem-and-leaf diagram below shows the distribution of the ages of a group of members in a recreational centre.\nA member is randomly selected from the group. Find the probability that the selected member is not under the age of 74.",
+      "choices": {
+        "A": "0.2",
+        "B": "0.3",
+        "C": "0.7",
+        "D": "0.8"
+      },
+      "answer": "B",
+      "correctPercent": 59,
+      "hasFigure": false,
+      "figure": null,
+      "figures": []
+    },
+    {
+      "id": "J19-2013-q26",
+      "stage": "J19",
+      "topic": "S3 Probability",
+      "year": "2013",
+      "paper": "2",
+      "sourceTag": "[HKDSE 13-P2-Q26]",
+      "stem": "Two numbers are randomly drawn at the same time from seven cards numbered 1 , 2 , 3 , 4 , 5 , 6 and 7 respectively. Find the probability that the product of the numbers drawn is an odd number.",
+      "choices": {
+        "A": "\\(\\frac{ 2 }{ 7 }\\)",
+        "B": "\\(\\frac{ 4 }{ 7 }\\)",
+        "C": "\\(\\frac{ 12 }{ 49 }\\)",
+        "D": "\\(\\frac{ 16 }{ 49 }\\)"
+      },
+      "answer": "A",
+      "correctPercent": 42,
+      "hasFigure": false,
+      "figure": null,
+      "figures": []
+    },
+    {
+      "id": "J19-2014-q27",
+      "stage": "J19",
+      "topic": "S3 Probability",
+      "year": "2014",
+      "paper": "2",
+      "sourceTag": "[HKDSE 14-P2-Q27]",
+      "stem": "A box contains \\(m\\) yellow balls and 20 black balls. If a ball is randomly drawn from the box, then the probability of drawing a yellow ball is \\(\\frac{ 1 }{ m }\\). Find the value of \\(m\\)",
+      "choices": {
+        "A": "4",
+        "B": "5",
+        "C": "15",
+        "D": "25"
+      },
+      "answer": "B",
+      "correctPercent": 76,
+      "hasFigure": false,
+      "figure": null,
+      "figures": []
+    },
+    {
+      "id": "J19-2015-q27",
+      "stage": "J19",
+      "topic": "S3 Probability",
+      "year": "2015",
+      "paper": "2",
+      "sourceTag": "[HKDSE 15-P2-Q27]",
+      "stem": "Two fair dice are thrown in a game. If the sum of the two numbers thrown is 7, $36 will be gained; otherwise, $6 will be gained. Find the expected gain of the game.",
+      "choices": {
+        "A": "$11",
+        "B": "$12",
+        "C": "$30",
+        "D": "$31"
+      },
+      "answer": "A",
+      "correctPercent": 48,
+      "hasFigure": false,
+      "figure": null,
+      "figures": []
+    },
+    {
+      "id": "J19-2015-q28",
+      "stage": "J19",
+      "topic": "S3 Probability",
+      "year": "2015",
+      "paper": "2",
+      "sourceTag": "[HKDSE 15-P2-Q28]",
+      "stem": "![](figures/j19-2015-q28-1.png)The bar chart below shows the distribution of the numbers of keys owned by the students in a class. Find the probability that a randomly selected student from the class owns 3 keys.",
+      "choices": {
+        "A": "\\(\\frac{ 1 }{ 5 }\\)",
+        "B": "\\(\\frac{ 2 }{ 11 }\\)",
+        "C": "\\(\\frac{ 4 }{ 11 }\\)",
+        "D": "\\(\\frac{ 9 }{ 11 }\\)"
+      },
+      "answer": "B",
+      "correctPercent": 84,
+      "hasFigure": true,
+      "figure": "figures/j19-2015-q28-1.png",
+      "figures": [
+        "figures/j19-2015-q28-1.png"
+      ]
+    },
+    {
+      "id": "J19-2016-q28",
+      "stage": "J19",
+      "topic": "S3 Probability",
+      "year": "2016",
+      "paper": "2",
+      "sourceTag": "[HKDSE 16-P2-Q28]",
+      "stem": "Christine has one $1 coin, one $2 coin, one $5 coin and one $10 coin in her pocket. If Christine takes out three coins randomly from her pocket, find the probability that she gets at least $13.",
+      "choices": {
+        "A": "\\(\\frac{ 1 }{ 2 }\\)",
+        "B": "\\(\\frac{ 1 }{ 4 }\\)",
+        "C": "\\(\\frac{ 3 }{ 4 }\\)",
+        "D": "\\(\\frac{ 23 }{ 24 }\\)"
+      },
+      "answer": "C",
+      "correctPercent": 58,
+      "hasFigure": false,
+      "figure": null,
+      "figures": []
+    },
+    {
+      "id": "J19-2016-q29",
+      "stage": "J19",
+      "topic": "S3 Probability",
+      "year": "2016",
+      "paper": "2",
+      "sourceTag": "[HKDSE 16-P2-Q29]",
+      "stem": "A bag contains 1 red ball, 3 yellow balls and 6 white balls. In a lucky draw, a ball is randomly drawn from the bag and a certain number of tokens will be got according to the following table:\nFind the expected number of tokens got in the lucky draw.",
+      "choices": {
+        "A": "10.",
+        "B": "21.",
+        "C": "40.",
+        "D": "61."
+      },
+      "answer": "B",
+      "correctPercent": 69,
+      "hasFigure": false,
+      "figure": null,
+      "figures": []
+    },
+    {
+      "id": "J19-2017-q28",
+      "stage": "J19",
+      "topic": "S3 Probability",
+      "year": "2017",
+      "paper": "2",
+      "sourceTag": "[HKDSE 17-P2-Q28]",
+      "stem": "The bar chart below shows the distribution of the numbers of tokens got by a group of children in a game. If a child is randomly selected from the group, find the probability that the selected child gets fewer than 5 tokens in the game.\n![](figures/j19-2017-q28-1.png)",
+      "choices": {
+        "A": "\\(\\frac{ 2 }{ 3 }\\)",
+        "B": "\\(\\frac{ 2 }{ 5 }\\)",
+        "C": "\\(\\frac { 5 } { 12 }\\)",
+        "D": "\\(\\frac { 7 } { 25 }\\)"
+      },
+      "answer": "C",
+      "correctPercent": 84,
+      "hasFigure": true,
+      "figure": "figures/j19-2017-q28-1.png",
+      "figures": [
+        "figures/j19-2017-q28-1.png"
+      ]
+    },
+    {
+      "id": "J19-2018-q28",
+      "stage": "J19",
+      "topic": "S3 Probability",
+      "year": "2018",
+      "paper": "2",
+      "sourceTag": "[HKDSE 18-P2-Q28]",
+      "stem": "Two numbers are randomly drawn at the same time from seven cards numbered 1, 1, 1, 2, 2, 3 and 4 respectively. Find the probability that the sum of the numbers drawn is 5.",
+      "choices": {
+        "A": "\\(\\frac{ 5 }{ 21 }\\)",
+        "B": "\\(\\frac{ 5 }{ 42 }\\)",
+        "C": "\\(\\frac{ 5 }{ 49 }\\)",
+        "D": "\\(\\frac{ 10 }{ 49 }\\)"
+      },
+      "answer": "A",
+      "correctPercent": 50,
+      "hasFigure": false,
+      "figure": null,
+      "figures": []
+    },
+    {
+      "id": "J19-2019-q28",
+      "stage": "J19",
+      "topic": "S3 Probability",
+      "year": "2019",
+      "paper": "2",
+      "sourceTag": "[HKDSE 19-P2-Q28]",
+      "stem": "Two numbers are randomly drawn at the same time from nine balls numbered 1, 2, 3, 4, 5, 6, 7, 8 and 9 respectively. Find the probability that the two numbers drawn are consecutive integers.",
+      "choices": {
+        "A": "\\(\\frac{ 1 }{ 2 }\\)",
+        "B": "\\(\\frac{ 1 }{ 4 }\\)",
+        "C": "\\(\\frac{ 2 }{ 9 }\\)",
+        "D": "\\(\\frac{ 7 }{ 9 }\\)"
+      },
+      "answer": "C",
+      "correctPercent": 66,
+      "hasFigure": false,
+      "figure": null,
+      "figures": []
+    },
+    {
+      "id": "J19-2020-q28",
+      "stage": "J19",
+      "topic": "S3 Probability",
+      "year": "2020",
+      "paper": "2",
+      "sourceTag": "[HKDSE 20-P2-Q28]",
+      "stem": "Two numbers are randomly drawn at the same time from four cards numbered 3 , 5 , 7 and 9 respectively. Find the probability that the product of the numbers drawn is greater than 35",
+      "choices": {
+        "A": "\\(\\frac{ 1 }{ 2 }\\)",
+        "B": "\\(\\frac{ 1 }{ 3 }\\)",
+        "C": "\\(\\frac{ 2 }{ 3 }\\)",
+        "D": "\\(\\frac{ 3 }{ 8 }\\)"
+      },
+      "answer": "B",
+      "correctPercent": 54,
+      "hasFigure": false,
+      "figure": null,
+      "figures": []
+    },
+    {
+      "id": "J19-2022-q28",
+      "stage": "J19",
+      "topic": "S3 Probability",
+      "year": "2022",
+      "paper": "2",
+      "sourceTag": "[HKDSE 22-P2-Q28]",
+      "stem": "5♦2 is a 3-digit number, where ♦ is an integer from 0 to 9 inclusive. Find the probability that the 3-digit number is divisible by 7.",
+      "choices": {
+        "A": "\\(\\frac { 1 } { 5 }\\)",
+        "B": "\\(\\frac { 1 } { 7 }\\)",
+        "C": "\\(\\frac { 1 } { 9 }\\)",
+        "D": "\\(\\frac { 1 } { 10 }\\)"
+      },
+      "answer": "D",
+      "correctPercent": 73,
+      "hasFigure": false,
+      "figure": null,
+      "figures": []
+    },
+    {
+      "id": "J19-2023-q28",
+      "stage": "J19",
+      "topic": "S3 Probability",
+      "year": "2023",
+      "paper": "2",
+      "sourceTag": "[HKDSE 23-P2-Q28]",
+      "stem": "A box contains five cards numbered 1, 2, 3, 4 and 5 respectively while another box contains four cards numbered 6, 7, 8 and 9 respectively. If a number is randomly drawn from each box, find the probability that the product of the two numbers drawn is divisible by 4.",
+      "choices": {
+        "A": "\\(\\frac { 1 } { 5 }\\)",
+        "B": "\\(\\frac { 3 } { 10 }\\)",
+        "C": "\\(\\frac { 7 } { 20 }\\)",
+        "D": "\\(\\frac { 9 } { 20 }\\)"
+      },
+      "answer": "D",
+      "correctPercent": 65,
+      "hasFigure": false,
+      "figure": null,
+      "figures": []
+    },
+    {
+      "id": "J19-2024-q28",
+      "stage": "J19",
+      "topic": "S3 Probability",
+      "year": "2024",
+      "paper": "2",
+      "sourceTag": "[HKDSE 24-P2-Q28]",
+      "stem": "Two numbers are randomly drawn at the same time from six cards numbered 1, 2, 3, 4, 5 and 6 respectively. Find the probability that the product of the numbers drawn is not less than 12.",
+      "choices": {
+        "A": "\\(\\frac { 1 } { 3 }\\)",
+        "B": "\\(\\frac { 2 } { 3 }\\)",
+        "C": "\\(\\frac { 7 } { 15 }\\)",
+        "D": "\\(\\frac { 8 } { 15 }\\)"
+      },
+      "answer": "C",
+      "correctPercent": 60,
+      "hasFigure": false,
+      "figure": null,
+      "figures": []
+    },
+    {
+      "id": "J19-2025-q28",
+      "stage": "J19",
+      "topic": "S3 Probability",
+      "year": "2025",
+      "paper": "2",
+      "sourceTag": "[HKDSE 25-P2-Q28]",
+      "stem": "A box contains six cards numbered 2, 2, 2, 3, 4 and 5 respectively. In a game, a number is randomly drawn from the box and a certain number of tokens will be got according to the following table:\nFind the expected number of tokens got in the game.",
+      "choices": {
+        "A": "3",
+        "B": "4",
+        "C": "20",
+        "D": "25"
+      },
+      "answer": "C",
+      "correctPercent": 60,
+      "hasFigure": false,
+      "figure": null,
+      "figures": []
+    }
+  ]
+}
