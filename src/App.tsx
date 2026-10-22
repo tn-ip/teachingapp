@@ -2,16 +2,19 @@ import { useEffect, useMemo, useState } from "react";
 import {
   CHOICES,
   act2Chapters,
+  difficultyLabel,
   questionById,
   questionsFor,
   stageById,
   stages,
   type Choice,
+  type Difficulty,
   type Question,
 } from "./bank";
 import { MathView } from "./MathView";
 import {
   allJuniorCleared,
+  anchorForMisses,
   loadProgress,
   saveProgress,
   startRun,
@@ -21,6 +24,20 @@ import {
 } from "./progress";
 
 type Screen = "map" | "quiz" | "result";
+
+function DifficultyChip({ difficulty }: { difficulty: Difficulty }) {
+  const label = difficultyLabel(difficulty);
+  const name = difficulty === "unknown" ? "Not tagged yet" : label;
+  return (
+    <span
+      className={`diff diff-${difficulty}`}
+      title={`Difficulty: ${name}`}
+      aria-label={`Difficulty: ${name}`}
+    >
+      {label}
+    </span>
+  );
+}
 
 function scoreRun(run: Run): { correct: number; total: number } {
   let correct = 0;
@@ -65,7 +82,7 @@ export function App() {
 
   function beginDrill() {
     if (!run) return;
-    const next = startRun(progress, run.stage, "drill");
+    const next = startRun(progress, run.stage, "drill", anchorForMisses(run));
     if (next) update(next, "quiz");
   }
 
@@ -173,9 +190,10 @@ function StageMap({
   return (
     <main className="map">
       <p className="lede">
-        Pick any Junior stage. A run is up to 5 real DSE questions. Clear it
-        only with a perfect paper. A miss opens a drill of unused questions
-        from the same stage.
+        Pick any Junior stage. A run is up to 5 real DSE questions, warming up
+        Easy → Medium → untagged → Hard. Clear it only with a perfect paper. A
+        miss opens a drill of unused questions from the same stage, preferring
+        the missed band or an easier one.
       </p>
       {run ? (
         <button className="resume" type="button" onClick={onResume}>
@@ -302,7 +320,13 @@ function Quiz({
       <p className="stage-name">
         {stage.id} · {stage.title}
       </p>
-      <p className="source">{question.sourceTag}</p>
+      {run.mode === "stage" ? (
+        <p className="warmup-hint">Warm-up: Easy → Hard</p>
+      ) : null}
+      <p className="source">
+        <DifficultyChip difficulty={question.difficulty} />
+        <span>{question.sourceTag}</span>
+      </p>
       <MathView text={question.stem} />
       <div className="choices" role="listbox" aria-label="Choices">
         {CHOICES.map((letter) => (
@@ -399,13 +423,16 @@ function Result({
                 <strong>
                   {index + 1}. {ok ? "Correct" : "Wrong"}
                 </strong>
-                <span>{question.sourceTag}</span>
+                <span className="review-meta">
+                  <DifficultyChip difficulty={question.difficulty} />
+                  {question.sourceTag}
+                </span>
               </header>
               <MathView text={question.stem} />
               <p className="verdict">
                 Your answer {picked ?? "—"} · key {question.answer}
-                {question.correctPercent != null
-                  ? ` · ${question.correctPercent}% of candidates`
+                {question.facilityPct != null
+                  ? ` · ${question.facilityPct}% of candidates`
                   : ""}
               </p>
             </li>

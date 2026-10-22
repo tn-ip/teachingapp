@@ -1,8 +1,12 @@
 import {
+  BAND_RANK,
+  byWarmup,
+  questionById,
   questionsFor,
   RUN_SIZE,
-  shuffle,
   type Choice,
+  type Difficulty,
+  type Question,
 } from "./bank";
 
 export type Mode = "stage" | "drill";
@@ -63,10 +67,39 @@ export function unusedCount(progress: Progress, stageId: string): number {
   return questionsFor(stageId).filter((q) => !used.has(q.id)).length;
 }
 
+/** Hardest missed band in a marked run. Drill stays at or below this band when it can. */
+export function anchorForMisses(run: Run): Difficulty | undefined {
+  let anchor: Difficulty | undefined;
+  for (const id of run.ids) {
+    const question = questionById(id);
+    if (!question || run.picks[id] === question.answer) continue;
+    if (!anchor || BAND_RANK[question.difficulty] > BAND_RANK[anchor]) {
+      anchor = question.difficulty;
+    }
+  }
+  return anchor;
+}
+
+/**
+ * Stage runs fill Easy, then Medium, then Unknown, then Hard.
+ * A drill prefers unused questions at or easier than the missed item, in that
+ * same warm-up order, and only then draws a harder band to fill the run.
+ */
+export function orderPool(pool: Question[], mode: Mode, anchor?: Difficulty): string[] {
+  if (mode === "drill" && anchor) {
+    const ceiling = BAND_RANK[anchor];
+    const preferred = pool.filter((q) => BAND_RANK[q.difficulty] <= ceiling);
+    const harder = pool.filter((q) => BAND_RANK[q.difficulty] > ceiling);
+    return [...byWarmup(preferred), ...byWarmup(harder)].map((q) => q.id);
+  }
+  return byWarmup(pool).map((q) => q.id);
+}
+
 export function startRun(
   progress: Progress,
   stageId: string,
   mode: Mode,
+  anchor?: Difficulty,
 ): Progress | null {
   const all = questionsFor(stageId);
   let usedIds = progress.used[stageId] ?? [];
@@ -76,8 +109,7 @@ export function startRun(
     pool = all.slice();
   }
   if (pool.length === 0) return null;
-  const picked = shuffle(pool).slice(0, Math.min(RUN_SIZE, pool.length));
-  const ids = picked.map((q) => q.id);
+  const ids = orderPool(pool, mode, anchor).slice(0, Math.min(RUN_SIZE, pool.length));
   return {
     ...progress,
     used: { ...progress.used, [stageId]: [...usedIds, ...ids] },
