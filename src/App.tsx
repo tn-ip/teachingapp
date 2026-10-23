@@ -5,6 +5,7 @@ import {
   difficultyLabel,
   questionById,
   questionsFor,
+  solutionFor,
   stageById,
   stages,
   type Choice,
@@ -36,6 +37,44 @@ function DifficultyChip({ difficulty }: { difficulty: Difficulty }) {
     >
       {label}
     </span>
+  );
+}
+
+function WorkedSolutionView({ question }: { question: Question }) {
+  const solution = solutionFor(question.id);
+  const steps = solution?.solutionSteps.trim() ?? "";
+  const url = solution?.solutionSourceUrl ?? null;
+  const videoUrl = solution?.videoUrl ?? null;
+  let fallback = "No written solution is stored for this question yet.";
+  if (solution?.hasDiagram && !steps) {
+    fallback = "mathseasy’s write-up for this question is a diagram, so it is not embedded here.";
+  } else if (!url) {
+    fallback = "Sample Paper has no mathseasy 題解 page. The key is above.";
+  }
+
+  return (
+    <section className="solution" aria-label="Worked solution">
+      <p className="solution-label">題解 · Worked solution</p>
+      {steps ? <MathView text={steps} /> : <p className="solution-missing">{fallback}</p>}
+      {steps && solution?.hasDiagram ? (
+        <p className="solution-note">原頁有圖，不在這裡顯示。圖見下方連結。</p>
+      ) : null}
+      {solution?.sourceAnswer && !solution.answerMatches ? (
+        <p className="solution-note">
+          mathseasy marks {solution.sourceAnswer}. This bank’s key is {question.answer}.
+        </p>
+      ) : null}
+      {url ? (
+        <a className="solution-source" href={url} target="_blank" rel="noopener noreferrer">
+          Solution adapted from mathseasy.hk (Thomas Fok)
+        </a>
+      ) : null}
+      {videoUrl ? (
+        <a className="solution-source video" href={videoUrl} target="_blank" rel="noopener noreferrer">
+          Video by Thomas Fok
+        </a>
+      ) : null}
+    </section>
   );
 }
 
@@ -435,6 +474,7 @@ function Result({
                   ? ` · ${question.facilityPct}% of candidates`
                   : ""}
               </p>
+              {ok ? null : <WorkedSolutionView question={question} />}
             </li>
           );
         })}

@@ -1,4 +1,5 @@
 import raw from "./data/questions.json";
+import solutionFile from "./data/solutions.json";
 
 export type Choice = "A" | "B" | "C" | "D";
 
@@ -89,6 +90,30 @@ export function questionById(id: string): Question | undefined {
 
 export function stageById(stageId: string): StageInfo | undefined {
   return stages.find((s) => s.id === stageId);
+}
+
+export type WorkedSolution = {
+  year: string;
+  number: number | null;
+  solutionSteps: string;
+  solutionSourceUrl: string | null;
+  solutionCredit: string;
+  sourceAnswer: string | null;
+  hasDiagram: boolean;
+  videoUrl: string | null;
+  answerMatches: boolean;
+};
+
+type SolutionFile = {
+  credit: string;
+  solutions: Record<string, WorkedSolution>;
+};
+
+const solutionBank = solutionFile as SolutionFile;
+
+/** Thomas Fok / mathseasy write-up for a bank question, when the fetch script matched one. */
+export function solutionFor(id: string): WorkedSolution | undefined {
+  return solutionBank.solutions[id];
 }
 
 /** Compulsory Part chapters shown as the locked Act 2 map. */

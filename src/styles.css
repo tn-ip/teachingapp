@@ -348,6 +348,67 @@ button {
 }
 .verdict { margin-bottom: 0; font-weight: 650; }
 
+.solution {
+  margin-top: 12px;
+  padding: 12px 12px 8px;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+}
+
+.solution-label {
+  margin: 0 0 8px;
+  color: var(--teal);
+  font-size: 0.78rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-weight: 700;
+}
+
+.solution-missing,
+.solution-note,
+.solution-credit {
+  margin: 8px 0 0;
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+
+.solution .mathview {
+  line-height: 1.55;
+}
+
+.math-display {
+  display: block;
+  max-width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  margin: 0.35em 0;
+  padding-bottom: 2px;
+}
+
+.solution .math-display .katex-display {
+  margin: 0.25em 0;
+  text-align: left;
+}
+
+.solution-source {
+  display: flex;
+  align-items: center;
+  min-height: 48px;
+  margin-top: 10px;
+  padding: 8px 12px;
+  border-radius: 12px;
+  background: #e7f4f2;
+  color: var(--teal-ink);
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.solution-source.video {
+  background: var(--gold-bg);
+  color: #7a4e0a;
+}
+
 @media (max-width: 640px) {
   .act2 ul { grid-template-columns: 1fr; }
   .top { align-items: flex-start; }
