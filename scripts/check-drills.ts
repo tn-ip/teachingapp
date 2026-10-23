@@ -1,5 +1,11 @@
 import assert from "node:assert/strict";
-import { questionById as bankQuestionById, questionsFor } from "../src/bank.ts";
+import {
+  BAND_RANK,
+  questionById as bankQuestionById,
+  questionsFor,
+  rankedStages,
+  stages,
+} from "../src/bank.ts";
 import { pickFromPool, skillsForStem } from "../src/drillPick.ts";
 import { generatedById, generatedQuestions, hasGeneratedPool } from "../src/drillPools.ts";
 import { questionById } from "../src/questions.ts";
@@ -108,6 +114,11 @@ for (const stage of ["J7", "J8", "J9", "J10"]) {
 
 assert.equal(hasGeneratedPool("J1"), false);
 assert.equal(hasGeneratedPool("J5"), false);
+assert.equal(hasGeneratedPool("C1"), false);
+assert.equal(hasGeneratedPool("C10"), false);
+assert.equal(hasGeneratedPool("C23"), false);
+assert.equal(startRun(empty(), "C4", "drill"), null);
+assert.equal(startRun(empty(), "C19", "drill"), null);
 
 const firstJ7 = generatedQuestions("J7")[0];
 assert.equal(firstJ7.archetype, "I1");
@@ -248,5 +259,79 @@ assert.ok(untagged?.run);
 assert.deepEqual(untagged.run.focus, []);
 assert.equal(untagged.run.ids.length, 5);
 assert.deepEqual(untagged.used, {});
+
+const stageIds = stages.map((stage) => stage.id);
+for (let number = 1; number <= 23; number += 1) {
+  assert.ok(stageIds.includes(`C${number}`), `missing C${number}`);
+}
+assert.equal(stageIds.some((id) => /^C\d+\./.test(id)), false);
+assert.equal(stageIds.includes("J6"), false);
+assert.equal(stageIds.filter((id) => id.startsWith("J")).length, 18);
+assert.equal(
+  stages.filter((stage) => stage.id.startsWith("J")).reduce((sum, stage) => sum + stage.questionCount, 0),
+  293,
+);
+assert.ok(bankQuestionById("J1-sample-q2"));
+assert.equal(bankQuestionById("J1-sample-q2")?.answer, "C");
+
+const q36 = bankQuestionById("C18-2025-q36");
+assert.ok(q36);
+assert.equal(q36.answer, "B");
+assert.equal(q36.facilityPct, 46);
+assert.equal(q36.stage, "C18");
+
+for (const [stageId, snippet] of [
+  ["C4", "Factor, remainder theorem"],
+  ["C4", "HCF, LCM, Rational Functions"],
+  ["C10", "10.1-10.3"],
+  ["C10", "10.4-10.6"],
+  ["C14", "14.1-14.5"],
+  ["C14", "14.6-14.7"],
+  ["C19", "19.1"],
+  ["C19", "19.2"],
+  ["C19", "19.3"],
+  ["C20", "Arithmetic Sequence"],
+  ["C20", "Geometric Sequence"],
+  ["C21", "Sum of Arithmetic Sequences"],
+  ["C21", "Sum of Geometric Sequences"],
+] as const) {
+  assert.ok(
+    questionsFor(stageId).some((question) => question.topic.includes(snippet)),
+    `${stageId} ${snippet}`,
+  );
+}
+
+const bandOrder = { easy: 0, medium: 1, hard: 2, unknown: 3 } as const;
+for (let index = 1; index < rankedStages.length; index += 1) {
+  const previous = rankedStages[index - 1];
+  const next = rankedStages[index];
+  assert.ok(bandOrder[previous.band] <= bandOrder[next.band]);
+  if (
+    previous.band === next.band &&
+    previous.averageFacility != null &&
+    next.averageFacility != null
+  ) {
+    assert.ok(previous.averageFacility >= next.averageFacility);
+  }
+}
+assert.deepEqual(
+  rankedStages.filter((stage) => stage.averageFacility == null).map((stage) => stage.id),
+  ["C23"],
+);
+assert.equal(rankedStages.at(-1)?.id, "C23");
+
+const compulsoryRun = startRun(empty(), "C1", "stage");
+assert.ok(compulsoryRun?.run);
+assert.equal(compulsoryRun.run.mode, "stage");
+assert.equal(compulsoryRun.run.source, undefined);
+assert.ok(compulsoryRun.run.ids.length > 0 && compulsoryRun.run.ids.length <= 5);
+assert.ok(compulsoryRun.run.ids.every((id) => id.startsWith("C1-")));
+const warmed = compulsoryRun.run.ids.map((id) => bankQuestionById(id)?.difficulty);
+for (let index = 1; index < warmed.length; index += 1) {
+  const before = warmed[index - 1];
+  const after = warmed[index];
+  assert.ok(before && after);
+  assert.ok(BAND_RANK[before] <= BAND_RANK[after]);
+}
 
 console.log("drill checks passed");

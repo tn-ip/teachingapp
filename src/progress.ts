@@ -170,7 +170,3 @@ export function startRun(
     run: { stage: stageId, mode, ids, picks: {}, index: 0, marked: false },
   };
 }
-
-export function allJuniorCleared(progress: Progress, stageIds: string[]): boolean {
-  return stageIds.every((id) => progress.cleared.includes(id));
-}

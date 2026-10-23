@@ -1,9 +1,10 @@
 import { useEffect, useMemo, useState } from "react";
 import {
   CHOICES,
-  act2Chapters,
   difficultyLabel,
+  formatFacility,
   questionsFor,
+  rankedStages,
   solutionFor,
   stageById,
   stages,
@@ -15,7 +16,6 @@ import { hasGeneratedPool } from "./drillPools";
 import { MathView } from "./MathView";
 import { questionById } from "./questions";
 import {
-  allJuniorCleared,
   loadProgress,
   saveProgress,
   stageClearedBy,
@@ -123,7 +123,6 @@ export function App() {
 
   const stageIds = stages.map((stage) => stage.id);
   const clearedCount = stageIds.filter((id) => progress.cleared.includes(id)).length;
-  const act2Open = allJuniorCleared(progress, stageIds);
   const run = progress.run;
 
   function update(next: Progress, nextScreen?: Screen) {
@@ -150,8 +149,8 @@ export function App() {
     <div className="app">
       <header className="top">
         <div>
-          <p className="eyebrow">HKDSE Mathematics · Compulsory Paper 2</p>
-          <h1>Junior stage map</h1>
+          <p className="eyebrow">HKDSE Mathematics · Paper 2</p>
+          <h1>Stage map</h1>
         </div>
         <p className="progress-pill">
           {clearedCount}/{stages.length} cleared
@@ -161,7 +160,6 @@ export function App() {
       {screen === "map" ? (
         <StageMap
           progress={progress}
-          act2Open={act2Open}
           onOpen={openStage}
           onResume={() => setScreen(run?.marked ? "result" : "quiz")}
           confirmReset={confirmReset}
@@ -226,7 +224,6 @@ export function App() {
 
 function StageMap({
   progress,
-  act2Open,
   onOpen,
   onResume,
   confirmReset,
@@ -235,7 +232,6 @@ function StageMap({
   onReset,
 }: {
   progress: Progress;
-  act2Open: boolean;
   onOpen: (stageId: string) => void;
   onResume: () => void;
   confirmReset: boolean;
@@ -247,11 +243,12 @@ function StageMap({
   return (
     <main className="map">
       <p className="lede">
-        Pick any Junior stage. A run is up to 5 real DSE questions, warming up
-        Easy → Medium → untagged → Hard. Clear it only with a perfect paper. A
-        miss on Indices, Identities, Factorization, or Ratio and map scale
-        opens 5 new practice questions. Other stages have no practice drill
-        yet. A practice drill does not clear the stage.
+        Pick any stage. Junior and Compulsory chapters sit on one map, ranked
+        by average facility from Easy to Hard. A run is up to 5 real DSE
+        questions, warming up Easy → Medium → untagged → Hard. Clear a stage
+        only with a perfect paper. A miss on Indices, Identities, Factorization,
+        or Ratio and map scale opens 5 new practice questions. Other stages
+        have no practice drill. A practice drill does not clear the stage.
       </p>
       {run ? (
         <button className="resume" type="button" onClick={onResume}>
@@ -264,10 +261,14 @@ function StageMap({
         </button>
       ) : null}
       <ol className="trail">
-        {stages.map((stage) => {
+        {rankedStages.map((stage) => {
           const cleared = progress.cleared.includes(stage.id);
           const last = progress.last[stage.id];
           const length = Math.min(5, stage.questionCount);
+          const facility =
+            stage.averageFacility != null
+              ? `avg ${formatFacility(stage.averageFacility)}%`
+              : "no tagged facility";
           return (
             <li key={stage.id}>
               <button
@@ -278,13 +279,18 @@ function StageMap({
                 <span className="badge">{stage.id}</span>
                 <span className="stage-copy">
                   <strong>{stage.title}</strong>
-                  <span>
-                    {stage.questionCount} in the bank · run of {length}
-                    {hasGeneratedPool(stage.id) ? " · practice drills" : ""}
-                    {cleared ? " · cleared" : ""}
-                    {last && !cleared
-                      ? ` · last ${last.source === "generated" ? "practice" : last.mode} ${last.correct}/${last.total}`
-                      : ""}
+                  <span className="stage-meta">
+                    <DifficultyChip difficulty={stage.band} />
+                    <span className="stage-detail">
+                      {facility}
+                      {" · "}
+                      {stage.questionCount} in the bank · run of {length}
+                      {hasGeneratedPool(stage.id) ? " · practice drills" : ""}
+                      {cleared ? " · cleared" : ""}
+                      {last && !cleared
+                        ? ` · last ${last.source === "generated" ? "practice" : last.mode} ${last.correct}/${last.total}`
+                        : ""}
+                    </span>
                   </span>
                 </span>
               </button>
@@ -292,26 +298,11 @@ function StageMap({
           );
         })}
       </ol>
-      <p className="note">J6 is not in this bank, so the path skips it.</p>
-
-      <section className={act2Open ? "act2 open" : "act2"} aria-label="Act 2">
-        <div className="act2-head">
-          <h2>Act 2 · Compulsory chapters</h2>
-          <p>
-            {act2Open
-              ? "Every Junior stage is cleared. Chapter questions are not in this version yet."
-              : "Locked until every Junior stage on this map is cleared."}
-          </p>
-        </div>
-        <ul>
-          {act2Chapters.map((chapter) => (
-            <li key={chapter.id}>
-              <span>{chapter.id.replace("C", "Ch ")}</span>
-              {chapter.title}
-            </li>
-          ))}
-        </ul>
-      </section>
+      <p className="note">
+        J6 is not in this bank, so it is not on the map. A stage with no tagged
+        facility percentage sits at the end. The average uses tagged questions
+        only.
+      </p>
 
       <footer className="reset">
         {confirmReset ? (
