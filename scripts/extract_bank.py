@@ -493,6 +493,17 @@ def parse_source(text: str):
     return tag, year, qnum
 
 
+def difficulty_band(percent: int | None) -> str:
+    """Easy ≥ 70, Medium 40–69, Hard below 40. Missing % stays unknown."""
+    if percent is None:
+        return "unknown"
+    if percent >= 70:
+        return "easy"
+    if percent >= 40:
+        return "medium"
+    return "hard"
+
+
 def is_subtitle(tokens) -> bool:
     if any(t[0] != "text" for t in tokens):
         return False
@@ -742,6 +753,12 @@ def main() -> None:
         used_ids[base_id] += 1
         qid = base_id if used_ids[base_id] == 1 else f"{base_id}-{used_ids[base_id]}"
         answer, percent = keys[i] if i < len(keys) else ("", None)
+        # 2025 P2 Q13 has no percent in the Keys; HKEAA facility is 60 (key A).
+        # 2025 P2 Q36 is Ch. 18 (not Junior). Keys say B (26); published facility is 46.
+        if year == "2025" and qnum == 13:
+            percent = 60
+        elif year == "2025" and qnum == 36:
+            percent = 46
         topic = stage_title
         if subtopic:
             topic = f"{stage_title} — {subtopic}"
@@ -757,6 +774,8 @@ def main() -> None:
                 "choices": {k: choices.get(k, "") for k in ("A", "B", "C", "D")},
                 "answer": answer,
                 "correctPercent": percent,
+                "facilityPct": percent,
+                "difficulty": difficulty_band(percent),
                 "hasFigure": bool(figure_paths),
                 "figure": figure_paths[0] if figure_paths else None,
                 "figures": figure_paths,

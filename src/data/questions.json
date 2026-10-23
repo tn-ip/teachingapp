@@ -110,6 +110,8 @@
       },
       "answer": "C",
       "correctPercent": null,
+      "facilityPct": null,
+      "difficulty": "unknown",
       "hasFigure": false,
       "figure": null,
       "figures": []
@@ -130,6 +132,8 @@
       },
       "answer": "C",
       "correctPercent": null,
+      "facilityPct": null,
+      "difficulty": "unknown",
       "hasFigure": false,
       "figure": null,
       "figures": []
@@ -150,6 +154,8 @@
       },
       "answer": "D",
       "correctPercent": 81,
+      "facilityPct": 81,
+      "difficulty": "easy",
       "hasFigure": false,
       "figure": null,
       "figures": []
@@ -170,6 +176,8 @@
       },
       "answer": "A",
       "correctPercent": 81,
+      "facilityPct": 81,
+      "difficulty": "easy",
       "hasFigure": false,
       "figure": null,
       "figures": []
@@ -190,6 +198,8 @@
       },
       "answer": "A",
       "correctPercent": 73,
+      "facilityPct": 73,
+      "difficulty": "easy",
       "hasFigure": false,
       "figure": null,
       "figures": []
@@ -210,6 +220,8 @@
       },
       "answer": "D",
       "correctPercent": 80,
+      "facilityPct": 80,
+      "difficulty": "easy",
       "hasFigure": false,
       "figure": null,
       "figures": []
@@ -230,6 +242,8 @@
       },
       "answer": "A",
       "correctPercent": 75,
+      "facilityPct": 75,
+      "difficulty": "easy",
       "hasFigure": false,
       "figure": null,
       "figures": []
@@ -250,6 +264,8 @@
       },
       "answer": "C",
       "correctPercent": 85,
+      "facilityPct": 85,
+      "difficulty": "easy",
       "hasFigure": false,
       "figure": null,
       "figures": []
@@ -270,6 +286,8 @@
       },
       "answer": "C",
       "correctPercent": 87,
+      "facilityPct": 87,
+      "difficulty": "easy",
       "hasFigure": false,
       "figure": null,
       "figures": []
@@ -290,6 +308,8 @@
       },
       "answer": "A",
       "correctPercent": 80,
+      "facilityPct": 80,
+      "difficulty": "easy",
       "hasFigure": false,
       "figure": null,
       "figures": []
@@ -310,6 +330,8 @@
       },
       "answer": "C",
       "correctPercent": 78,
+      "facilityPct": 78,
+      "difficulty": "easy",
       "hasFigure": false,
       "figure": null,
       "figures": []
@@ -330,6 +352,8 @@
       },
       "answer": "A",
       "correctPercent": 88,
+      "facilityPct": 88,
+      "difficulty": "easy",
       "hasFigure": false,
       "figure": null,
       "figures": []
@@ -350,6 +374,8 @@
       },
       "answer": "A",
       "correctPercent": 80,
+      "facilityPct": 80,
+      "difficulty": "easy",
       "hasFigure": false,
       "figure": null,
       "figures": []
@@ -370,6 +396,8 @@
       },
       "answer": "B",
       "correctPercent": null,
+      "facilityPct": null,
+      "difficulty": "unknown",
       "hasFigure": false,
       "figure": null,
       "figures": []
@@ -390,6 +418,8 @@
       },
       "answer": "D",
       "correctPercent": 79,
+      "facilityPct": 79,
+      "difficulty": "easy",
       "hasFigure": false,
       "figure": null,
       "figures": []
@@ -410,6 +440,8 @@
       },
       "answer": "C",
       "correctPercent": 75,
+      "facilityPct": 75,
+      "difficulty": "easy",
       "hasFigure": false,
       "figure": null,
       "figures": []
@@ -430,6 +462,8 @@
       },
       "answer": "D",
       "correctPercent": 75,
+      "facilityPct": 75,
+      "difficulty": "easy",
       "hasFigure": false,
       "figure": null,
       "figures": []
@@ -450,6 +484,8 @@
       },
       "answer": "C",
       "correctPercent": 87,
+      "facilityPct": 87,
+      "difficulty": "easy",
       "hasFigure": false,
       "figure": null,
       "figures": []
@@ -470,6 +506,8 @@
       },
       "answer": "D",
       "correctPercent": 90,
+      "facilityPct": 90,
+      "difficulty": "easy",
       "hasFigure": false,
       "figure": null,
       "figures": []
@@ -490,6 +528,8 @@
       },
       "answer": "D",
       "correctPercent": 80,
+      "facilityPct": 80,
+      "difficulty": "easy",
       "hasFigure": false,
       "figure": null,
       "figures": []
@@ -510,6 +550,8 @@
       },
       "answer": "D",
       "correctPercent": 74,
+      "facilityPct": 74,
+      "difficulty": "easy",
       "hasFigure": false,
       "figure": null,
       "figures": []
@@ -530,6 +572,8 @@
       },
       "answer": "B",
       "correctPercent": 45,
+      "facilityPct": 45,
+      "difficulty": "medium",
       "hasFigure": false,
       "figure": null,
       "figures": []
@@ -550,6 +594,8 @@
       },
       "answer": "C",
       "correctPercent": 82,
+      "facilityPct": 82,
+      "difficulty": "easy",
       "hasFigure": false,
       "figure": null,
       "figures": []
@@ -570,6 +616,8 @@
       },
       "answer": "A",
       "correctPercent": 91,
+      "facilityPct": 91,
+      "difficulty": "easy",
       "hasFigure": false,
       "figure": null,
       "figures": []
@@ -590,6 +638,8 @@
       },
       "answer": "D",
       "correctPercent": 81,
+      "facilityPct": 81,
+      "difficulty": "easy",
       "hasFigure": false,
       "figure": null,
       "figures": []
@@ -610,6 +660,8 @@
       },
       "answer": "B",
       "correctPercent": null,
+      "facilityPct": null,
+      "difficulty": "unknown",
       "hasFigure": false,
       "figure": null,
       "figures": []
@@ -630,6 +682,8 @@
       },
       "answer": "B",
       "correctPercent": 49,
+      "facilityPct": 49,
+      "difficulty": "medium",
       "hasFigure": false,
       "figure": null,
       "figures": []
@@ -650,6 +704,8 @@
       },
       "answer": "A",
       "correctPercent": 57,
+      "facilityPct": 57,
+      "difficulty": "medium",
       "hasFigure": false,
       "figure": null,
       "figures": []
@@ -670,6 +726,8 @@
       },
       "answer": "C",
       "correctPercent": 57,
+      "facilityPct": 57,
+      "difficulty": "medium",
       "hasFigure": false,
       "figure": null,
       "figures": []
@@ -690,6 +748,8 @@
       },
       "answer": "B",
       "correctPercent": 42,
+      "facilityPct": 42,
+      "difficulty": "medium",
       "hasFigure": true,
       "figure": "figures/j3-2018-q14-1.png",
       "figures": [
@@ -712,6 +772,8 @@
       },
       "answer": "B",
       "correctPercent": 41,
+      "facilityPct": 41,
+      "difficulty": "medium",
       "hasFigure": true,
       "figure": "figures/j3-2020-q14-1.png",
       "figures": [
@@ -734,6 +796,8 @@
       },
       "answer": "A",
       "correctPercent": null,
+      "facilityPct": null,
+      "difficulty": "unknown",
       "hasFigure": false,
       "figure": null,
       "figures": []
@@ -754,6 +818,8 @@
       },
       "answer": "B",
       "correctPercent": null,
+      "facilityPct": null,
+      "difficulty": "unknown",
       "hasFigure": false,
       "figure": null,
       "figures": []
@@ -774,6 +840,8 @@
       },
       "answer": "B",
       "correctPercent": null,
+      "facilityPct": null,
+      "difficulty": "unknown",
       "hasFigure": false,
       "figure": null,
       "figures": []
@@ -794,6 +862,8 @@
       },
       "answer": "D",
       "correctPercent": 84,
+      "facilityPct": 84,
+      "difficulty": "easy",
       "hasFigure": false,
       "figure": null,
       "figures": []
@@ -814,6 +884,8 @@
       },
       "answer": "A",
       "correctPercent": 45,
+      "facilityPct": 45,
+      "difficulty": "medium",
       "hasFigure": false,
       "figure": null,
       "figures": []
@@ -834,6 +906,8 @@
       },
       "answer": "D",
       "correctPercent": 65,
+      "facilityPct": 65,
+      "difficulty": "medium",
       "hasFigure": false,
       "figure": null,
       "figures": []
@@ -854,6 +928,8 @@
       },
       "answer": "B",
       "correctPercent": 69,
+      "facilityPct": 69,
+      "difficulty": "medium",
       "hasFigure": false,
       "figure": null,
       "figures": []
@@ -874,6 +950,8 @@
       },
       "answer": "D",
       "correctPercent": 58,
+      "facilityPct": 58,
+      "difficulty": "medium",
       "hasFigure": false,
       "figure": null,
       "figures": []
@@ -894,6 +972,8 @@
       },
       "answer": "C",
       "correctPercent": 69,
+      "facilityPct": 69,
+      "difficulty": "medium",
       "hasFigure": false,
       "figure": null,
       "figures": []
@@ -914,6 +994,8 @@
       },
       "answer": "C",
       "correctPercent": 76,
+      "facilityPct": 76,
+      "difficulty": "easy",
       "hasFigure": false,
       "figure": null,
       "figures": []
@@ -934,6 +1016,8 @@
       },
       "answer": "D",
       "correctPercent": 73,
+      "facilityPct": 73,
+      "difficulty": "easy",
       "hasFigure": false,
       "figure": null,
       "figures": []
@@ -954,6 +1038,8 @@
       },
       "answer": "C",
       "correctPercent": 79,
+      "facilityPct": 79,
+      "difficulty": "easy",
       "hasFigure": false,
       "figure": null,
       "figures": []
@@ -974,6 +1060,8 @@
       },
       "answer": "A",
       "correctPercent": 46,
+      "facilityPct": 46,
+      "difficulty": "medium",
       "hasFigure": false,
       "figure": null,
       "figures": []
@@ -994,6 +1082,8 @@
       },
       "answer": "A",
       "correctPercent": 62,
+      "facilityPct": 62,
+      "difficulty": "medium",
       "hasFigure": false,
       "figure": null,
       "figures": []
@@ -1014,6 +1104,8 @@
       },
       "answer": "C",
       "correctPercent": 76,
+      "facilityPct": 76,
+      "difficulty": "easy",
       "hasFigure": false,
       "figure": null,
       "figures": []
@@ -1034,6 +1126,8 @@
       },
       "answer": "B",
       "correctPercent": 81,
+      "facilityPct": 81,
+      "difficulty": "easy",
       "hasFigure": false,
       "figure": null,
       "figures": []
@@ -1054,6 +1148,8 @@
       },
       "answer": "C",
       "correctPercent": 58,
+      "facilityPct": 58,
+      "difficulty": "medium",
       "hasFigure": false,
       "figure": null,
       "figures": []
@@ -1074,6 +1170,8 @@
       },
       "answer": "C",
       "correctPercent": 78,
+      "facilityPct": 78,
+      "difficulty": "easy",
       "hasFigure": false,
       "figure": null,
       "figures": []
@@ -1094,6 +1192,8 @@
       },
       "answer": "A",
       "correctPercent": null,
+      "facilityPct": null,
+      "difficulty": "unknown",
       "hasFigure": true,
       "figure": "figures/j5-sample-q17-1.png",
       "figures": [
@@ -1118,6 +1218,8 @@
       },
       "answer": "B",
       "correctPercent": null,
+      "facilityPct": null,
+      "difficulty": "unknown",
       "hasFigure": true,
       "figure": "figures/j5-sample-q18-1.png",
       "figures": [
@@ -1140,6 +1242,8 @@
       },
       "answer": "D",
       "correctPercent": null,
+      "facilityPct": null,
+      "difficulty": "unknown",
       "hasFigure": false,
       "figure": null,
       "figures": []
@@ -1160,6 +1264,8 @@
       },
       "answer": "C",
       "correctPercent": null,
+      "facilityPct": null,
+      "difficulty": "unknown",
       "hasFigure": true,
       "figure": "figures/j5-practice-q15-1.png",
       "figures": [
@@ -1182,6 +1288,8 @@
       },
       "answer": "D",
       "correctPercent": null,
+      "facilityPct": null,
+      "difficulty": "unknown",
       "hasFigure": true,
       "figure": "figures/j5-practice-q16-1.png",
       "figures": [
@@ -1204,6 +1312,8 @@
       },
       "answer": "C",
       "correctPercent": null,
+      "facilityPct": null,
+      "difficulty": "unknown",
       "hasFigure": true,
       "figure": "figures/j5-practice-q17-1.png",
       "figures": [
@@ -1226,6 +1336,8 @@
       },
       "answer": "A",
       "correctPercent": null,
+      "facilityPct": null,
+      "difficulty": "unknown",
       "hasFigure": true,
       "figure": "figures/j5-practice-q18-1.png",
       "figures": [
@@ -1248,6 +1360,8 @@
       },
       "answer": "B",
       "correctPercent": 82,
+      "facilityPct": 82,
+      "difficulty": "easy",
       "hasFigure": true,
       "figure": "figures/j5-2012-q16-1.png",
       "figures": [
@@ -1270,6 +1384,8 @@
       },
       "answer": "B",
       "correctPercent": 43,
+      "facilityPct": 43,
+      "difficulty": "medium",
       "hasFigure": true,
       "figure": "figures/j5-2012-q17-1.png",
       "figures": [
@@ -1292,6 +1408,8 @@
       },
       "answer": "B",
       "correctPercent": 33,
+      "facilityPct": 33,
+      "difficulty": "hard",
       "hasFigure": true,
       "figure": "figures/j5-2013-q16-1.png",
       "figures": [
@@ -1314,6 +1432,8 @@
       },
       "answer": "B",
       "correctPercent": 56,
+      "facilityPct": 56,
+      "difficulty": "medium",
       "hasFigure": true,
       "figure": "figures/j5-2013-q17-1.png",
       "figures": [
@@ -1336,6 +1456,8 @@
       },
       "answer": "C",
       "correctPercent": 37,
+      "facilityPct": 37,
+      "difficulty": "hard",
       "hasFigure": true,
       "figure": "figures/j5-2013-q18-1.png",
       "figures": [
@@ -1358,6 +1480,8 @@
       },
       "answer": "B",
       "correctPercent": 21,
+      "facilityPct": 21,
+      "difficulty": "hard",
       "hasFigure": false,
       "figure": null,
       "figures": []
@@ -1378,6 +1502,8 @@
       },
       "answer": "C",
       "correctPercent": 49,
+      "facilityPct": 49,
+      "difficulty": "medium",
       "hasFigure": false,
       "figure": null,
       "figures": []
@@ -1398,6 +1524,8 @@
       },
       "answer": "C",
       "correctPercent": 81,
+      "facilityPct": 81,
+      "difficulty": "easy",
       "hasFigure": true,
       "figure": "figures/j5-2014-q15-1.png",
       "figures": [
@@ -1420,6 +1548,8 @@
       },
       "answer": "D",
       "correctPercent": 24,
+      "facilityPct": 24,
+      "difficulty": "hard",
       "hasFigure": true,
       "figure": "figures/j5-2014-q17-1.png",
       "figures": [
@@ -1442,6 +1572,8 @@
       },
       "answer": "B",
       "correctPercent": 70,
+      "facilityPct": 70,
+      "difficulty": "easy",
       "hasFigure": true,
       "figure": "figures/j5-2015-q16-1.png",
       "figures": [
@@ -1464,6 +1596,8 @@
       },
       "answer": "D",
       "correctPercent": 26,
+      "facilityPct": 26,
+      "difficulty": "hard",
       "hasFigure": true,
       "figure": "figures/j5-2015-q17-1.png",
       "figures": [
@@ -1486,6 +1620,8 @@
       },
       "answer": "C",
       "correctPercent": 79,
+      "facilityPct": 79,
+      "difficulty": "easy",
       "hasFigure": true,
       "figure": "figures/j5-2016-q18-1.png",
       "figures": [
@@ -1508,6 +1644,8 @@
       },
       "answer": "A",
       "correctPercent": 59,
+      "facilityPct": 59,
+      "difficulty": "medium",
       "hasFigure": true,
       "figure": "figures/j5-2016-q19-1.png",
       "figures": [
@@ -1530,6 +1668,8 @@
       },
       "answer": "C",
       "correctPercent": 51,
+      "facilityPct": 51,
+      "difficulty": "medium",
       "hasFigure": false,
       "figure": null,
       "figures": []
@@ -1550,6 +1690,8 @@
       },
       "answer": "B",
       "correctPercent": 71,
+      "facilityPct": 71,
+      "difficulty": "easy",
       "hasFigure": true,
       "figure": "figures/j5-2017-q14-1.png",
       "figures": [
@@ -1572,6 +1714,8 @@
       },
       "answer": "C",
       "correctPercent": 53,
+      "facilityPct": 53,
+      "difficulty": "medium",
       "hasFigure": false,
       "figure": null,
       "figures": []
@@ -1592,6 +1736,8 @@
       },
       "answer": "D",
       "correctPercent": 32,
+      "facilityPct": 32,
+      "difficulty": "hard",
       "hasFigure": true,
       "figure": "figures/j5-2017-q16-1.png",
       "figures": [
@@ -1614,6 +1760,8 @@
       },
       "answer": "D",
       "correctPercent": 83,
+      "facilityPct": 83,
+      "difficulty": "easy",
       "hasFigure": true,
       "figure": "figures/j5-2018-q15-1.png",
       "figures": [
@@ -1636,6 +1784,8 @@
       },
       "answer": "A",
       "correctPercent": 39,
+      "facilityPct": 39,
+      "difficulty": "hard",
       "hasFigure": true,
       "figure": "figures/j5-2018-q16-1.png",
       "figures": [
@@ -1658,6 +1808,8 @@
       },
       "answer": "B",
       "correctPercent": 28,
+      "facilityPct": 28,
+      "difficulty": "hard",
       "hasFigure": true,
       "figure": "figures/j5-2018-q17-1.png",
       "figures": [
@@ -1680,6 +1832,8 @@
       },
       "answer": "D",
       "correctPercent": 61,
+      "facilityPct": 61,
+      "difficulty": "medium",
       "hasFigure": false,
       "figure": null,
       "figures": []
@@ -1700,6 +1854,8 @@
       },
       "answer": "D",
       "correctPercent": 25,
+      "facilityPct": 25,
+      "difficulty": "hard",
       "hasFigure": true,
       "figure": "figures/j5-2019-q16-1.png",
       "figures": [
@@ -1722,6 +1878,8 @@
       },
       "answer": "A",
       "correctPercent": 85,
+      "facilityPct": 85,
+      "difficulty": "easy",
       "hasFigure": true,
       "figure": "figures/j5-2019-q19-1.png",
       "figures": [
@@ -1744,6 +1902,8 @@
       },
       "answer": "D",
       "correctPercent": 42,
+      "facilityPct": 42,
+      "difficulty": "medium",
       "hasFigure": false,
       "figure": null,
       "figures": []
@@ -1764,6 +1924,8 @@
       },
       "answer": "B",
       "correctPercent": 39,
+      "facilityPct": 39,
+      "difficulty": "hard",
       "hasFigure": false,
       "figure": null,
       "figures": []
@@ -1784,6 +1946,8 @@
       },
       "answer": "C",
       "correctPercent": 48,
+      "facilityPct": 48,
+      "difficulty": "medium",
       "hasFigure": true,
       "figure": "figures/j5-2020-q17-1.png",
       "figures": [
@@ -1806,6 +1970,8 @@
       },
       "answer": "B",
       "correctPercent": 43,
+      "facilityPct": 43,
+      "difficulty": "medium",
       "hasFigure": true,
       "figure": "figures/j5-2020-q18-1.png",
       "figures": [
@@ -1828,6 +1994,8 @@
       },
       "answer": "C",
       "correctPercent": 62,
+      "facilityPct": 62,
+      "difficulty": "medium",
       "hasFigure": true,
       "figure": "figures/j5-2020-q21-1.png",
       "figures": [
@@ -1850,6 +2018,8 @@
       },
       "answer": "C",
       "correctPercent": 43,
+      "facilityPct": 43,
+      "difficulty": "medium",
       "hasFigure": false,
       "figure": null,
       "figures": []
@@ -1870,6 +2040,8 @@
       },
       "answer": "A",
       "correctPercent": 34,
+      "facilityPct": 34,
+      "difficulty": "hard",
       "hasFigure": false,
       "figure": null,
       "figures": []
@@ -1890,6 +2062,8 @@
       },
       "answer": "B",
       "correctPercent": 50,
+      "facilityPct": 50,
+      "difficulty": "medium",
       "hasFigure": false,
       "figure": null,
       "figures": []
@@ -1910,6 +2084,8 @@
       },
       "answer": "C",
       "correctPercent": 34,
+      "facilityPct": 34,
+      "difficulty": "hard",
       "hasFigure": true,
       "figure": "figures/j5-2021-q20-1.png",
       "figures": [
@@ -1932,6 +2108,8 @@
       },
       "answer": "A",
       "correctPercent": 43,
+      "facilityPct": 43,
+      "difficulty": "medium",
       "hasFigure": false,
       "figure": null,
       "figures": []
@@ -1952,6 +2130,8 @@
       },
       "answer": "D",
       "correctPercent": 32,
+      "facilityPct": 32,
+      "difficulty": "hard",
       "hasFigure": false,
       "figure": null,
       "figures": []
@@ -1972,6 +2152,8 @@
       },
       "answer": "B",
       "correctPercent": 38,
+      "facilityPct": 38,
+      "difficulty": "hard",
       "hasFigure": true,
       "figure": "figures/j5-2022-q17-1.png",
       "figures": [
@@ -1994,6 +2176,8 @@
       },
       "answer": "A",
       "correctPercent": 50,
+      "facilityPct": 50,
+      "difficulty": "medium",
       "hasFigure": false,
       "figure": null,
       "figures": []
@@ -2014,6 +2198,8 @@
       },
       "answer": "D",
       "correctPercent": 27,
+      "facilityPct": 27,
+      "difficulty": "hard",
       "hasFigure": true,
       "figure": "figures/j5-2023-q16-1.png",
       "figures": [
@@ -2036,6 +2222,8 @@
       },
       "answer": "B",
       "correctPercent": 44,
+      "facilityPct": 44,
+      "difficulty": "medium",
       "hasFigure": true,
       "figure": "figures/j5-2023-q17-1.png",
       "figures": [
@@ -2058,6 +2246,8 @@
       },
       "answer": "D",
       "correctPercent": 68,
+      "facilityPct": 68,
+      "difficulty": "medium",
       "hasFigure": false,
       "figure": null,
       "figures": []
@@ -2078,6 +2268,8 @@
       },
       "answer": "D",
       "correctPercent": 55,
+      "facilityPct": 55,
+      "difficulty": "medium",
       "hasFigure": false,
       "figure": null,
       "figures": []
@@ -2098,6 +2290,8 @@
       },
       "answer": "C",
       "correctPercent": 36,
+      "facilityPct": 36,
+      "difficulty": "hard",
       "hasFigure": true,
       "figure": "figures/j5-2024-q17-1.png",
       "figures": [
@@ -2120,6 +2314,8 @@
       },
       "answer": "C",
       "correctPercent": 82,
+      "facilityPct": 82,
+      "difficulty": "easy",
       "hasFigure": true,
       "figure": "figures/j5-2024-q18-1.png",
       "figures": [
@@ -2142,6 +2338,8 @@
       },
       "answer": "D",
       "correctPercent": 25,
+      "facilityPct": 25,
+      "difficulty": "hard",
       "hasFigure": false,
       "figure": null,
       "figures": []
@@ -2162,6 +2360,8 @@
       },
       "answer": "B",
       "correctPercent": 66,
+      "facilityPct": 66,
+      "difficulty": "medium",
       "hasFigure": false,
       "figure": null,
       "figures": []
@@ -2182,6 +2382,8 @@
       },
       "answer": "B",
       "correctPercent": 40,
+      "facilityPct": 40,
+      "difficulty": "medium",
       "hasFigure": true,
       "figure": "figures/j5-2025-q17-1.png",
       "figures": [
@@ -2204,6 +2406,8 @@
       },
       "answer": "C",
       "correctPercent": null,
+      "facilityPct": null,
+      "difficulty": "unknown",
       "hasFigure": false,
       "figure": null,
       "figures": []
@@ -2224,6 +2428,8 @@
       },
       "answer": "A",
       "correctPercent": null,
+      "facilityPct": null,
+      "difficulty": "unknown",
       "hasFigure": false,
       "figure": null,
       "figures": []
@@ -2244,6 +2450,8 @@
       },
       "answer": "C",
       "correctPercent": 94,
+      "facilityPct": 94,
+      "difficulty": "easy",
       "hasFigure": false,
       "figure": null,
       "figures": []
@@ -2264,6 +2472,8 @@
       },
       "answer": "B",
       "correctPercent": 69,
+      "facilityPct": 69,
+      "difficulty": "medium",
       "hasFigure": false,
       "figure": null,
       "figures": []
@@ -2284,6 +2494,8 @@
       },
       "answer": "B",
       "correctPercent": 94,
+      "facilityPct": 94,
+      "difficulty": "easy",
       "hasFigure": false,
       "figure": null,
       "figures": []
@@ -2304,6 +2516,8 @@
       },
       "answer": "D",
       "correctPercent": 93,
+      "facilityPct": 93,
+      "difficulty": "easy",
       "hasFigure": false,
       "figure": null,
       "figures": []
@@ -2324,6 +2538,8 @@
       },
       "answer": "A",
       "correctPercent": 47,
+      "facilityPct": 47,
+      "difficulty": "medium",
       "hasFigure": false,
       "figure": null,
       "figures": []
@@ -2344,6 +2560,8 @@
       },
       "answer": "D",
       "correctPercent": 72,
+      "facilityPct": 72,
+      "difficulty": "easy",
       "hasFigure": true,
       "figure": "figures/eq-j7-498-0.png",
       "figures": [
@@ -2368,6 +2586,8 @@
       },
       "answer": "B",
       "correctPercent": 71,
+      "facilityPct": 71,
+      "difficulty": "easy",
       "hasFigure": false,
       "figure": null,
       "figures": []
@@ -2388,6 +2608,8 @@
       },
       "answer": "D",
       "correctPercent": 88,
+      "facilityPct": 88,
+      "difficulty": "easy",
       "hasFigure": false,
       "figure": null,
       "figures": []
@@ -2408,6 +2630,8 @@
       },
       "answer": "C",
       "correctPercent": 76,
+      "facilityPct": 76,
+      "difficulty": "easy",
       "hasFigure": false,
       "figure": null,
       "figures": []
@@ -2428,6 +2652,8 @@
       },
       "answer": "B",
       "correctPercent": 73,
+      "facilityPct": 73,
+      "difficulty": "easy",
       "hasFigure": false,
       "figure": null,
       "figures": []
@@ -2448,6 +2674,8 @@
       },
       "answer": "B",
       "correctPercent": 81,
+      "facilityPct": 81,
+      "difficulty": "easy",
       "hasFigure": false,
       "figure": null,
       "figures": []
@@ -2468,6 +2696,8 @@
       },
       "answer": "A",
       "correctPercent": 72,
+      "facilityPct": 72,
+      "difficulty": "easy",
       "hasFigure": false,
       "figure": null,
       "figures": []
@@ -2488,6 +2718,8 @@
       },
       "answer": "D",
       "correctPercent": 78,
+      "facilityPct": 78,
+      "difficulty": "easy",
       "hasFigure": false,
       "figure": null,
       "figures": []
@@ -2508,6 +2740,8 @@
       },
       "answer": "C",
       "correctPercent": 88,
+      "facilityPct": 88,
+      "difficulty": "easy",
       "hasFigure": false,
       "figure": null,
       "figures": []
@@ -2528,6 +2762,8 @@
       },
       "answer": "A",
       "correctPercent": null,
+      "facilityPct": null,
+      "difficulty": "unknown",
       "hasFigure": false,
       "figure": null,
       "figures": []
@@ -2548,6 +2784,8 @@
       },
       "answer": "D",
       "correctPercent": null,
+      "facilityPct": null,
+      "difficulty": "unknown",
       "hasFigure": false,
       "figure": null,
       "figures": []
@@ -2568,6 +2806,8 @@
       },
       "answer": "C",
       "correctPercent": 59,
+      "facilityPct": 59,
+      "difficulty": "medium",
       "hasFigure": false,
       "figure": null,
       "figures": []
@@ -2588,6 +2828,8 @@
       },
       "answer": "A",
       "correctPercent": 59,
+      "facilityPct": 59,
+      "difficulty": "medium",
       "hasFigure": false,
       "figure": null,
       "figures": []
@@ -2608,6 +2850,8 @@
       },
       "answer": "B",
       "correctPercent": 63,
+      "facilityPct": 63,
+      "difficulty": "medium",
       "hasFigure": false,
       "figure": null,
       "figures": []
@@ -2628,6 +2872,8 @@
       },
       "answer": "B",
       "correctPercent": 65,
+      "facilityPct": 65,
+      "difficulty": "medium",
       "hasFigure": false,
       "figure": null,
       "figures": []
@@ -2648,6 +2894,8 @@
       },
       "answer": "A",
       "correctPercent": 62,
+      "facilityPct": 62,
+      "difficulty": "medium",
       "hasFigure": false,
       "figure": null,
       "figures": []
@@ -2668,6 +2916,8 @@
       },
       "answer": "C",
       "correctPercent": 69,
+      "facilityPct": 69,
+      "difficulty": "medium",
       "hasFigure": false,
       "figure": null,
       "figures": []
@@ -2688,6 +2938,8 @@
       },
       "answer": "C",
       "correctPercent": 79,
+      "facilityPct": 79,
+      "difficulty": "easy",
       "hasFigure": false,
       "figure": null,
       "figures": []
@@ -2708,6 +2960,8 @@
       },
       "answer": "D",
       "correctPercent": 49,
+      "facilityPct": 49,
+      "difficulty": "medium",
       "hasFigure": false,
       "figure": null,
       "figures": []
@@ -2728,6 +2982,8 @@
       },
       "answer": "A",
       "correctPercent": 64,
+      "facilityPct": 64,
+      "difficulty": "medium",
       "hasFigure": false,
       "figure": null,
       "figures": []
@@ -2748,6 +3004,8 @@
       },
       "answer": "A",
       "correctPercent": 70,
+      "facilityPct": 70,
+      "difficulty": "easy",
       "hasFigure": false,
       "figure": null,
       "figures": []
@@ -2768,6 +3026,8 @@
       },
       "answer": "D",
       "correctPercent": 79,
+      "facilityPct": 79,
+      "difficulty": "easy",
       "hasFigure": false,
       "figure": null,
       "figures": []
@@ -2788,6 +3048,8 @@
       },
       "answer": "C",
       "correctPercent": null,
+      "facilityPct": null,
+      "difficulty": "unknown",
       "hasFigure": false,
       "figure": null,
       "figures": []
@@ -2808,6 +3070,8 @@
       },
       "answer": "A",
       "correctPercent": null,
+      "facilityPct": null,
+      "difficulty": "unknown",
       "hasFigure": false,
       "figure": null,
       "figures": []
@@ -2828,6 +3092,8 @@
       },
       "answer": "D",
       "correctPercent": 74,
+      "facilityPct": 74,
+      "difficulty": "easy",
       "hasFigure": false,
       "figure": null,
       "figures": []
@@ -2848,6 +3114,8 @@
       },
       "answer": "D",
       "correctPercent": 85,
+      "facilityPct": 85,
+      "difficulty": "easy",
       "hasFigure": false,
       "figure": null,
       "figures": []
@@ -2868,6 +3136,8 @@
       },
       "answer": "A",
       "correctPercent": 79,
+      "facilityPct": 79,
+      "difficulty": "easy",
       "hasFigure": false,
       "figure": null,
       "figures": []
@@ -2888,6 +3158,8 @@
       },
       "answer": "D",
       "correctPercent": 90,
+      "facilityPct": 90,
+      "difficulty": "easy",
       "hasFigure": false,
       "figure": null,
       "figures": []
@@ -2908,6 +3180,8 @@
       },
       "answer": "D",
       "correctPercent": 65,
+      "facilityPct": 65,
+      "difficulty": "medium",
       "hasFigure": false,
       "figure": null,
       "figures": []
@@ -2928,6 +3202,8 @@
       },
       "answer": "A",
       "correctPercent": 89,
+      "facilityPct": 89,
+      "difficulty": "easy",
       "hasFigure": false,
       "figure": null,
       "figures": []
@@ -2948,6 +3224,8 @@
       },
       "answer": "C",
       "correctPercent": 80,
+      "facilityPct": 80,
+      "difficulty": "easy",
       "hasFigure": false,
       "figure": null,
       "figures": []
@@ -2968,6 +3246,8 @@
       },
       "answer": "C",
       "correctPercent": 67,
+      "facilityPct": 67,
+      "difficulty": "medium",
       "hasFigure": false,
       "figure": null,
       "figures": []
@@ -2988,6 +3268,8 @@
       },
       "answer": "A",
       "correctPercent": 85,
+      "facilityPct": 85,
+      "difficulty": "easy",
       "hasFigure": false,
       "figure": null,
       "figures": []
@@ -3008,6 +3290,8 @@
       },
       "answer": "D",
       "correctPercent": 82,
+      "facilityPct": 82,
+      "difficulty": "easy",
       "hasFigure": false,
       "figure": null,
       "figures": []
@@ -3028,6 +3312,8 @@
       },
       "answer": "D",
       "correctPercent": 77,
+      "facilityPct": 77,
+      "difficulty": "easy",
       "hasFigure": false,
       "figure": null,
       "figures": []
@@ -3048,6 +3334,8 @@
       },
       "answer": "B",
       "correctPercent": 87,
+      "facilityPct": 87,
+      "difficulty": "easy",
       "hasFigure": false,
       "figure": null,
       "figures": []
@@ -3068,6 +3356,8 @@
       },
       "answer": "C",
       "correctPercent": 86,
+      "facilityPct": 86,
+      "difficulty": "easy",
       "hasFigure": false,
       "figure": null,
       "figures": []
@@ -3088,6 +3378,8 @@
       },
       "answer": "B",
       "correctPercent": 78,
+      "facilityPct": 78,
+      "difficulty": "easy",
       "hasFigure": false,
       "figure": null,
       "figures": []
@@ -3108,6 +3400,8 @@
       },
       "answer": "D",
       "correctPercent": null,
+      "facilityPct": null,
+      "difficulty": "unknown",
       "hasFigure": false,
       "figure": null,
       "figures": []
@@ -3128,6 +3422,8 @@
       },
       "answer": "A",
       "correctPercent": null,
+      "facilityPct": null,
+      "difficulty": "unknown",
       "hasFigure": false,
       "figure": null,
       "figures": []
@@ -3148,6 +3444,8 @@
       },
       "answer": "A",
       "correctPercent": 75,
+      "facilityPct": 75,
+      "difficulty": "easy",
       "hasFigure": false,
       "figure": null,
       "figures": []
@@ -3168,6 +3466,8 @@
       },
       "answer": "C",
       "correctPercent": 79,
+      "facilityPct": 79,
+      "difficulty": "easy",
       "hasFigure": false,
       "figure": null,
       "figures": []
@@ -3188,6 +3488,8 @@
       },
       "answer": "C",
       "correctPercent": 31,
+      "facilityPct": 31,
+      "difficulty": "hard",
       "hasFigure": false,
       "figure": null,
       "figures": []
@@ -3208,6 +3510,8 @@
       },
       "answer": "D",
       "correctPercent": 59,
+      "facilityPct": 59,
+      "difficulty": "medium",
       "hasFigure": false,
       "figure": null,
       "figures": []
@@ -3228,6 +3532,8 @@
       },
       "answer": "C",
       "correctPercent": 70,
+      "facilityPct": 70,
+      "difficulty": "easy",
       "hasFigure": false,
       "figure": null,
       "figures": []
@@ -3248,6 +3554,8 @@
       },
       "answer": "D",
       "correctPercent": 81,
+      "facilityPct": 81,
+      "difficulty": "easy",
       "hasFigure": false,
       "figure": null,
       "figures": []
@@ -3268,6 +3576,8 @@
       },
       "answer": "A",
       "correctPercent": 81,
+      "facilityPct": 81,
+      "difficulty": "easy",
       "hasFigure": false,
       "figure": null,
       "figures": []
@@ -3288,6 +3598,8 @@
       },
       "answer": "B",
       "correctPercent": 56,
+      "facilityPct": 56,
+      "difficulty": "medium",
       "hasFigure": false,
       "figure": null,
       "figures": []
@@ -3308,6 +3620,8 @@
       },
       "answer": "B",
       "correctPercent": 72,
+      "facilityPct": 72,
+      "difficulty": "easy",
       "hasFigure": false,
       "figure": null,
       "figures": []
@@ -3328,6 +3642,8 @@
       },
       "answer": "B",
       "correctPercent": 66,
+      "facilityPct": 66,
+      "difficulty": "medium",
       "hasFigure": false,
       "figure": null,
       "figures": []
@@ -3348,6 +3664,8 @@
       },
       "answer": "B",
       "correctPercent": 33,
+      "facilityPct": 33,
+      "difficulty": "hard",
       "hasFigure": false,
       "figure": null,
       "figures": []
@@ -3368,6 +3686,8 @@
       },
       "answer": "C",
       "correctPercent": 73,
+      "facilityPct": 73,
+      "difficulty": "easy",
       "hasFigure": false,
       "figure": null,
       "figures": []
@@ -3388,6 +3708,8 @@
       },
       "answer": "C",
       "correctPercent": 66,
+      "facilityPct": 66,
+      "difficulty": "medium",
       "hasFigure": false,
       "figure": null,
       "figures": []
@@ -3408,6 +3730,8 @@
       },
       "answer": "D",
       "correctPercent": 39,
+      "facilityPct": 39,
+      "difficulty": "hard",
       "hasFigure": false,
       "figure": null,
       "figures": []
@@ -3428,6 +3752,8 @@
       },
       "answer": "A",
       "correctPercent": 77,
+      "facilityPct": 77,
+      "difficulty": "easy",
       "hasFigure": false,
       "figure": null,
       "figures": []
@@ -3448,6 +3774,8 @@
       },
       "answer": "A",
       "correctPercent": 73,
+      "facilityPct": 73,
+      "difficulty": "easy",
       "hasFigure": false,
       "figure": null,
       "figures": []
@@ -3468,6 +3796,8 @@
       },
       "answer": "A",
       "correctPercent": 52,
+      "facilityPct": 52,
+      "difficulty": "medium",
       "hasFigure": false,
       "figure": null,
       "figures": []
@@ -3488,6 +3818,8 @@
       },
       "answer": "B",
       "correctPercent": 78,
+      "facilityPct": 78,
+      "difficulty": "easy",
       "hasFigure": false,
       "figure": null,
       "figures": []
@@ -3508,6 +3840,8 @@
       },
       "answer": "A",
       "correctPercent": 84,
+      "facilityPct": 84,
+      "difficulty": "easy",
       "hasFigure": false,
       "figure": null,
       "figures": []
@@ -3528,6 +3862,8 @@
       },
       "answer": "A",
       "correctPercent": 63,
+      "facilityPct": 63,
+      "difficulty": "medium",
       "hasFigure": false,
       "figure": null,
       "figures": []
@@ -3548,6 +3884,8 @@
       },
       "answer": "A",
       "correctPercent": 84,
+      "facilityPct": 84,
+      "difficulty": "easy",
       "hasFigure": false,
       "figure": null,
       "figures": []
@@ -3568,6 +3906,8 @@
       },
       "answer": "A",
       "correctPercent": 80,
+      "facilityPct": 80,
+      "difficulty": "easy",
       "hasFigure": false,
       "figure": null,
       "figures": []
@@ -3588,6 +3928,8 @@
       },
       "answer": "B",
       "correctPercent": 90,
+      "facilityPct": 90,
+      "difficulty": "easy",
       "hasFigure": false,
       "figure": null,
       "figures": []
@@ -3608,6 +3950,8 @@
       },
       "answer": "B",
       "correctPercent": 93,
+      "facilityPct": 93,
+      "difficulty": "easy",
       "hasFigure": false,
       "figure": null,
       "figures": []
@@ -3628,6 +3972,8 @@
       },
       "answer": "D",
       "correctPercent": 53,
+      "facilityPct": 53,
+      "difficulty": "medium",
       "hasFigure": false,
       "figure": null,
       "figures": []
@@ -3648,6 +3994,8 @@
       },
       "answer": "A",
       "correctPercent": null,
+      "facilityPct": null,
+      "difficulty": "unknown",
       "hasFigure": true,
       "figure": "figures/j13-sample-q20-1.png",
       "figures": [
@@ -3670,6 +4018,8 @@
       },
       "answer": "B",
       "correctPercent": null,
+      "facilityPct": null,
+      "difficulty": "unknown",
       "hasFigure": true,
       "figure": "figures/j13-sample-q23-1.png",
       "figures": [
@@ -3692,6 +4042,8 @@
       },
       "answer": "D",
       "correctPercent": null,
+      "facilityPct": null,
+      "difficulty": "unknown",
       "hasFigure": true,
       "figure": "figures/j13-practice-q19-1.png",
       "figures": [
@@ -3714,6 +4066,8 @@
       },
       "answer": "A",
       "correctPercent": 89,
+      "facilityPct": 89,
+      "difficulty": "easy",
       "hasFigure": true,
       "figure": "figures/j13-2012-q15-1.png",
       "figures": [
@@ -3736,6 +4090,8 @@
       },
       "answer": "C",
       "correctPercent": 33,
+      "facilityPct": 33,
+      "difficulty": "hard",
       "hasFigure": true,
       "figure": "figures/j13-2014-q16-1.png",
       "figures": [
@@ -3758,6 +4114,8 @@
       },
       "answer": "C",
       "correctPercent": 91,
+      "facilityPct": 91,
+      "difficulty": "easy",
       "hasFigure": true,
       "figure": "figures/j13-2015-q15-1.png",
       "figures": [
@@ -3780,6 +4138,8 @@
       },
       "answer": "B",
       "correctPercent": 45,
+      "facilityPct": 45,
+      "difficulty": "medium",
       "hasFigure": true,
       "figure": "figures/j13-2016-q15-1.png",
       "figures": [
@@ -3802,6 +4162,8 @@
       },
       "answer": "D",
       "correctPercent": 80,
+      "facilityPct": 80,
+      "difficulty": "easy",
       "hasFigure": true,
       "figure": "figures/j13-2016-q16-1.png",
       "figures": [
@@ -3824,6 +4186,8 @@
       },
       "answer": "A",
       "correctPercent": 55,
+      "facilityPct": 55,
+      "difficulty": "medium",
       "hasFigure": true,
       "figure": "figures/j13-2016-q17-1.png",
       "figures": [
@@ -3846,6 +4210,8 @@
       },
       "answer": "B",
       "correctPercent": 64,
+      "facilityPct": 64,
+      "difficulty": "medium",
       "hasFigure": false,
       "figure": null,
       "figures": []
@@ -3866,6 +4232,8 @@
       },
       "answer": "D",
       "correctPercent": 36,
+      "facilityPct": 36,
+      "difficulty": "hard",
       "hasFigure": true,
       "figure": "figures/j13-2017-q17-1.png",
       "figures": [
@@ -3888,6 +4256,8 @@
       },
       "answer": "A",
       "correctPercent": 45,
+      "facilityPct": 45,
+      "difficulty": "medium",
       "hasFigure": true,
       "figure": "figures/j13-2017-q18-1.png",
       "figures": [
@@ -3910,6 +4280,8 @@
       },
       "answer": "D",
       "correctPercent": 68,
+      "facilityPct": 68,
+      "difficulty": "medium",
       "hasFigure": true,
       "figure": "figures/j13-2017-q19-1.png",
       "figures": [
@@ -3932,6 +4304,8 @@
       },
       "answer": "D",
       "correctPercent": 15,
+      "facilityPct": 15,
+      "difficulty": "hard",
       "hasFigure": false,
       "figure": null,
       "figures": []
@@ -3952,6 +4326,8 @@
       },
       "answer": "B",
       "correctPercent": 78,
+      "facilityPct": 78,
+      "difficulty": "easy",
       "hasFigure": true,
       "figure": "figures/j13-2018-q18-1.png",
       "figures": [
@@ -3974,6 +4350,8 @@
       },
       "answer": "D",
       "correctPercent": 23,
+      "facilityPct": 23,
+      "difficulty": "hard",
       "hasFigure": true,
       "figure": "figures/j13-2018-q19-1.png",
       "figures": [
@@ -3996,6 +4374,8 @@
       },
       "answer": "B",
       "correctPercent": 48,
+      "facilityPct": 48,
+      "difficulty": "medium",
       "hasFigure": true,
       "figure": "figures/j13-2018-q20-1.png",
       "figures": [
@@ -4018,6 +4398,8 @@
       },
       "answer": "A",
       "correctPercent": 58,
+      "facilityPct": 58,
+      "difficulty": "medium",
       "hasFigure": true,
       "figure": "figures/j13-2019-q17-1.png",
       "figures": [
@@ -4040,6 +4422,8 @@
       },
       "answer": "D",
       "correctPercent": 26,
+      "facilityPct": 26,
+      "difficulty": "hard",
       "hasFigure": true,
       "figure": "figures/j13-2019-q18-1.png",
       "figures": [
@@ -4062,6 +4446,8 @@
       },
       "answer": "C",
       "correctPercent": 51,
+      "facilityPct": 51,
+      "difficulty": "medium",
       "hasFigure": true,
       "figure": "figures/j13-2019-q20-1.png",
       "figures": [
@@ -4084,6 +4470,8 @@
       },
       "answer": "B",
       "correctPercent": 56,
+      "facilityPct": 56,
+      "difficulty": "medium",
       "hasFigure": false,
       "figure": null,
       "figures": []
@@ -4104,6 +4492,8 @@
       },
       "answer": "D",
       "correctPercent": 70,
+      "facilityPct": 70,
+      "difficulty": "easy",
       "hasFigure": true,
       "figure": "figures/j13-2020-q20-1.png",
       "figures": [
@@ -4126,6 +4516,8 @@
       },
       "answer": "B",
       "correctPercent": 72,
+      "facilityPct": 72,
+      "difficulty": "easy",
       "hasFigure": false,
       "figure": null,
       "figures": []
@@ -4146,6 +4538,8 @@
       },
       "answer": "D",
       "correctPercent": 35,
+      "facilityPct": 35,
+      "difficulty": "hard",
       "hasFigure": true,
       "figure": "figures/j13-2021-q19-1.png",
       "figures": [
@@ -4168,6 +4562,8 @@
       },
       "answer": "D",
       "correctPercent": 40,
+      "facilityPct": 40,
+      "difficulty": "medium",
       "hasFigure": false,
       "figure": null,
       "figures": []
@@ -4188,6 +4584,8 @@
       },
       "answer": "C",
       "correctPercent": 70,
+      "facilityPct": 70,
+      "difficulty": "easy",
       "hasFigure": true,
       "figure": "figures/j13-2022-q18-1.png",
       "figures": [
@@ -4210,6 +4608,8 @@
       },
       "answer": "D",
       "correctPercent": 67,
+      "facilityPct": 67,
+      "difficulty": "medium",
       "hasFigure": true,
       "figure": "figures/j13-2022-q19-1.png",
       "figures": [
@@ -4232,6 +4632,8 @@
       },
       "answer": "B",
       "correctPercent": 69,
+      "facilityPct": 69,
+      "difficulty": "medium",
       "hasFigure": true,
       "figure": "figures/j13-2022-q20-1.png",
       "figures": [
@@ -4254,6 +4656,8 @@
       },
       "answer": "A",
       "correctPercent": 59,
+      "facilityPct": 59,
+      "difficulty": "medium",
       "hasFigure": true,
       "figure": "figures/j13-2023-q18-1.png",
       "figures": [
@@ -4276,6 +4680,8 @@
       },
       "answer": "C",
       "correctPercent": 54,
+      "facilityPct": 54,
+      "difficulty": "medium",
       "hasFigure": false,
       "figure": null,
       "figures": []
@@ -4296,6 +4702,8 @@
       },
       "answer": "A",
       "correctPercent": 52,
+      "facilityPct": 52,
+      "difficulty": "medium",
       "hasFigure": true,
       "figure": "figures/j13-2023-q20-1.png",
       "figures": [
@@ -4318,6 +4726,8 @@
       },
       "answer": "C",
       "correctPercent": 34,
+      "facilityPct": 34,
+      "difficulty": "hard",
       "hasFigure": true,
       "figure": "figures/j13-2023-q21-1.png",
       "figures": [
@@ -4340,6 +4750,8 @@
       },
       "answer": "D",
       "correctPercent": 51,
+      "facilityPct": 51,
+      "difficulty": "medium",
       "hasFigure": true,
       "figure": "figures/j13-2024-q19-1.png",
       "figures": [
@@ -4362,6 +4774,8 @@
       },
       "answer": "B",
       "correctPercent": 36,
+      "facilityPct": 36,
+      "difficulty": "hard",
       "hasFigure": true,
       "figure": "figures/j13-2024-q21-1.png",
       "figures": [
@@ -4384,6 +4798,8 @@
       },
       "answer": "C",
       "correctPercent": 44,
+      "facilityPct": 44,
+      "difficulty": "medium",
       "hasFigure": true,
       "figure": "figures/j13-2025-q18-1.png",
       "figures": [
@@ -4406,6 +4822,8 @@
       },
       "answer": "D",
       "correctPercent": 28,
+      "facilityPct": 28,
+      "difficulty": "hard",
       "hasFigure": true,
       "figure": "figures/j13-2025-q19-1.png",
       "figures": [
@@ -4428,6 +4846,8 @@
       },
       "answer": "B",
       "correctPercent": 58,
+      "facilityPct": 58,
+      "difficulty": "medium",
       "hasFigure": true,
       "figure": "figures/j13-2025-q21-1.png",
       "figures": [
@@ -4450,6 +4870,8 @@
       },
       "answer": "D",
       "correctPercent": null,
+      "facilityPct": null,
+      "difficulty": "unknown",
       "hasFigure": false,
       "figure": null,
       "figures": []
@@ -4470,6 +4892,8 @@
       },
       "answer": "B",
       "correctPercent": null,
+      "facilityPct": null,
+      "difficulty": "unknown",
       "hasFigure": true,
       "figure": "figures/j14-practice-q7-1.png",
       "figures": [
@@ -4492,6 +4916,8 @@
       },
       "answer": "B",
       "correctPercent": null,
+      "facilityPct": null,
+      "difficulty": "unknown",
       "hasFigure": false,
       "figure": null,
       "figures": []
@@ -4512,6 +4938,8 @@
       },
       "answer": "A",
       "correctPercent": null,
+      "facilityPct": null,
+      "difficulty": "unknown",
       "hasFigure": false,
       "figure": null,
       "figures": []
@@ -4532,6 +4960,8 @@
       },
       "answer": "A",
       "correctPercent": 30,
+      "facilityPct": 30,
+      "difficulty": "hard",
       "hasFigure": false,
       "figure": null,
       "figures": []
@@ -4552,6 +4982,8 @@
       },
       "answer": "A",
       "correctPercent": 30,
+      "facilityPct": 30,
+      "difficulty": "hard",
       "hasFigure": false,
       "figure": null,
       "figures": []
@@ -4572,6 +5004,8 @@
       },
       "answer": "A",
       "correctPercent": 20,
+      "facilityPct": 20,
+      "difficulty": "hard",
       "hasFigure": false,
       "figure": null,
       "figures": []
@@ -4592,6 +5026,8 @@
       },
       "answer": "D",
       "correctPercent": 69,
+      "facilityPct": 69,
+      "difficulty": "medium",
       "hasFigure": false,
       "figure": null,
       "figures": []
@@ -4612,6 +5048,8 @@
       },
       "answer": "B",
       "correctPercent": 44,
+      "facilityPct": 44,
+      "difficulty": "medium",
       "hasFigure": false,
       "figure": null,
       "figures": []
@@ -4632,6 +5070,8 @@
       },
       "answer": "D",
       "correctPercent": 23,
+      "facilityPct": 23,
+      "difficulty": "hard",
       "hasFigure": false,
       "figure": null,
       "figures": []
@@ -4652,6 +5092,8 @@
       },
       "answer": "B",
       "correctPercent": 65,
+      "facilityPct": 65,
+      "difficulty": "medium",
       "hasFigure": false,
       "figure": null,
       "figures": []
@@ -4672,6 +5114,8 @@
       },
       "answer": "C",
       "correctPercent": 32,
+      "facilityPct": 32,
+      "difficulty": "hard",
       "hasFigure": false,
       "figure": null,
       "figures": []
@@ -4692,6 +5136,8 @@
       },
       "answer": "A",
       "correctPercent": 30,
+      "facilityPct": 30,
+      "difficulty": "hard",
       "hasFigure": false,
       "figure": null,
       "figures": []
@@ -4712,6 +5158,8 @@
       },
       "answer": "C",
       "correctPercent": 33,
+      "facilityPct": 33,
+      "difficulty": "hard",
       "hasFigure": false,
       "figure": null,
       "figures": []
@@ -4732,6 +5180,8 @@
       },
       "answer": "A",
       "correctPercent": 59,
+      "facilityPct": 59,
+      "difficulty": "medium",
       "hasFigure": false,
       "figure": null,
       "figures": []
@@ -4752,6 +5202,8 @@
       },
       "answer": "A",
       "correctPercent": 27,
+      "facilityPct": 27,
+      "difficulty": "hard",
       "hasFigure": false,
       "figure": null,
       "figures": []
@@ -4772,6 +5224,8 @@
       },
       "answer": "B",
       "correctPercent": null,
+      "facilityPct": null,
+      "difficulty": "unknown",
       "hasFigure": false,
       "figure": null,
       "figures": []
@@ -4792,6 +5246,8 @@
       },
       "answer": "D",
       "correctPercent": null,
+      "facilityPct": null,
+      "difficulty": "unknown",
       "hasFigure": true,
       "figure": "figures/j15-sample-q24-1.png",
       "figures": [
@@ -4814,6 +5270,8 @@
       },
       "answer": "B",
       "correctPercent": null,
+      "facilityPct": null,
+      "difficulty": "unknown",
       "hasFigure": true,
       "figure": "figures/j15-practice-q22-1.png",
       "figures": [
@@ -4836,6 +5294,8 @@
       },
       "answer": "C",
       "correctPercent": null,
+      "facilityPct": null,
+      "difficulty": "unknown",
       "hasFigure": false,
       "figure": null,
       "figures": []
@@ -4856,6 +5316,8 @@
       },
       "answer": "A",
       "correctPercent": 70,
+      "facilityPct": 70,
+      "difficulty": "easy",
       "hasFigure": true,
       "figure": "figures/j15-2012-q18-1.png",
       "figures": [
@@ -4878,6 +5340,8 @@
       },
       "answer": "D",
       "correctPercent": 58,
+      "facilityPct": 58,
+      "difficulty": "medium",
       "hasFigure": true,
       "figure": "figures/j15-2013-q20-1.png",
       "figures": [
@@ -4900,6 +5364,8 @@
       },
       "answer": "A",
       "correctPercent": 48,
+      "facilityPct": 48,
+      "difficulty": "medium",
       "hasFigure": false,
       "figure": null,
       "figures": []
@@ -4920,6 +5386,8 @@
       },
       "answer": "A",
       "correctPercent": 39,
+      "facilityPct": 39,
+      "difficulty": "hard",
       "hasFigure": true,
       "figure": "figures/j15-2014-q18-1.png",
       "figures": [
@@ -4942,6 +5410,8 @@
       },
       "answer": "A",
       "correctPercent": 57,
+      "facilityPct": 57,
+      "difficulty": "medium",
       "hasFigure": true,
       "figure": "figures/j15-2015-q18-1.png",
       "figures": [
@@ -4964,6 +5434,8 @@
       },
       "answer": "B",
       "correctPercent": 57,
+      "facilityPct": 57,
+      "difficulty": "medium",
       "hasFigure": true,
       "figure": "figures/j15-2016-q21-1.png",
       "figures": [
@@ -4986,6 +5458,8 @@
       },
       "answer": "D",
       "correctPercent": 58,
+      "facilityPct": 58,
+      "difficulty": "medium",
       "hasFigure": true,
       "figure": "figures/j15-2017-q22-1.png",
       "figures": [
@@ -5008,6 +5482,8 @@
       },
       "answer": "C",
       "correctPercent": 45,
+      "facilityPct": 45,
+      "difficulty": "medium",
       "hasFigure": true,
       "figure": "figures/j15-2018-q21-1.png",
       "figures": [
@@ -5030,6 +5506,8 @@
       },
       "answer": "B",
       "correctPercent": 59,
+      "facilityPct": 59,
+      "difficulty": "medium",
       "hasFigure": true,
       "figure": "figures/j15-2019-q22-1.png",
       "figures": [
@@ -5052,6 +5530,8 @@
       },
       "answer": "B",
       "correctPercent": 48,
+      "facilityPct": 48,
+      "difficulty": "medium",
       "hasFigure": false,
       "figure": null,
       "figures": []
@@ -5072,6 +5552,8 @@
       },
       "answer": "D",
       "correctPercent": 64,
+      "facilityPct": 64,
+      "difficulty": "medium",
       "hasFigure": true,
       "figure": "figures/j15-2021-q24-1.png",
       "figures": [
@@ -5094,6 +5576,8 @@
       },
       "answer": "C",
       "correctPercent": 47,
+      "facilityPct": 47,
+      "difficulty": "medium",
       "hasFigure": false,
       "figure": null,
       "figures": []
@@ -5114,6 +5598,8 @@
       },
       "answer": "D",
       "correctPercent": 38,
+      "facilityPct": 38,
+      "difficulty": "hard",
       "hasFigure": true,
       "figure": "figures/j15-2023-q23-1.png",
       "figures": [
@@ -5136,6 +5622,8 @@
       },
       "answer": "A",
       "correctPercent": 56,
+      "facilityPct": 56,
+      "difficulty": "medium",
       "hasFigure": true,
       "figure": "figures/j15-2024-q23-1.png",
       "figures": [
@@ -5158,6 +5646,8 @@
       },
       "answer": "D",
       "correctPercent": 39,
+      "facilityPct": 39,
+      "difficulty": "hard",
       "hasFigure": false,
       "figure": null,
       "figures": []
@@ -5178,6 +5668,8 @@
       },
       "answer": "C",
       "correctPercent": 23,
+      "facilityPct": 23,
+      "difficulty": "hard",
       "hasFigure": true,
       "figure": "figures/j15-2025-q23-1.png",
       "figures": [
@@ -5200,6 +5692,8 @@
       },
       "answer": "B",
       "correctPercent": null,
+      "facilityPct": null,
+      "difficulty": "unknown",
       "hasFigure": false,
       "figure": null,
       "figures": []
@@ -5220,6 +5714,8 @@
       },
       "answer": "D",
       "correctPercent": 47,
+      "facilityPct": 47,
+      "difficulty": "medium",
       "hasFigure": false,
       "figure": null,
       "figures": []
@@ -5240,6 +5736,8 @@
       },
       "answer": "B",
       "correctPercent": 68,
+      "facilityPct": 68,
+      "difficulty": "medium",
       "hasFigure": false,
       "figure": null,
       "figures": []
@@ -5260,6 +5758,8 @@
       },
       "answer": "B",
       "correctPercent": 54,
+      "facilityPct": 54,
+      "difficulty": "medium",
       "hasFigure": true,
       "figure": "figures/j16-2013-q30-1.png",
       "figures": [
@@ -5282,6 +5782,8 @@
       },
       "answer": "D",
       "correctPercent": 72,
+      "facilityPct": 72,
+      "difficulty": "easy",
       "hasFigure": false,
       "figure": null,
       "figures": []
@@ -5302,6 +5804,8 @@
       },
       "answer": "C",
       "correctPercent": 82,
+      "facilityPct": 82,
+      "difficulty": "easy",
       "hasFigure": true,
       "figure": "figures/j16-2014-q29-1.png",
       "figures": [
@@ -5324,6 +5828,8 @@
       },
       "answer": "B",
       "correctPercent": 45,
+      "facilityPct": 45,
+      "difficulty": "medium",
       "hasFigure": false,
       "figure": null,
       "figures": []
@@ -5344,6 +5850,8 @@
       },
       "answer": "B",
       "correctPercent": 76,
+      "facilityPct": 76,
+      "difficulty": "easy",
       "hasFigure": false,
       "figure": null,
       "figures": []
@@ -5364,6 +5872,8 @@
       },
       "answer": "C",
       "correctPercent": 78,
+      "facilityPct": 78,
+      "difficulty": "easy",
       "hasFigure": false,
       "figure": null,
       "figures": []
@@ -5384,6 +5894,8 @@
       },
       "answer": "A",
       "correctPercent": 77,
+      "facilityPct": 77,
+      "difficulty": "easy",
       "hasFigure": false,
       "figure": null,
       "figures": []
@@ -5404,6 +5916,8 @@
       },
       "answer": "A",
       "correctPercent": 79,
+      "facilityPct": 79,
+      "difficulty": "easy",
       "hasFigure": false,
       "figure": null,
       "figures": []
@@ -5424,6 +5938,8 @@
       },
       "answer": "A",
       "correctPercent": 84,
+      "facilityPct": 84,
+      "difficulty": "easy",
       "hasFigure": false,
       "figure": null,
       "figures": []
@@ -5444,6 +5960,8 @@
       },
       "answer": "A",
       "correctPercent": null,
+      "facilityPct": null,
+      "difficulty": "unknown",
       "hasFigure": false,
       "figure": null,
       "figures": []
@@ -5464,6 +5982,8 @@
       },
       "answer": "C",
       "correctPercent": 49,
+      "facilityPct": 49,
+      "difficulty": "medium",
       "hasFigure": false,
       "figure": null,
       "figures": []
@@ -5484,6 +6004,8 @@
       },
       "answer": "A",
       "correctPercent": 66,
+      "facilityPct": 66,
+      "difficulty": "medium",
       "hasFigure": false,
       "figure": null,
       "figures": []
@@ -5504,6 +6026,8 @@
       },
       "answer": "A",
       "correctPercent": 61,
+      "facilityPct": 61,
+      "difficulty": "medium",
       "hasFigure": false,
       "figure": null,
       "figures": []
@@ -5524,6 +6048,8 @@
       },
       "answer": "B",
       "correctPercent": 62,
+      "facilityPct": 62,
+      "difficulty": "medium",
       "hasFigure": false,
       "figure": null,
       "figures": []
@@ -5544,6 +6070,8 @@
       },
       "answer": "C",
       "correctPercent": null,
+      "facilityPct": null,
+      "difficulty": "unknown",
       "hasFigure": false,
       "figure": null,
       "figures": []
@@ -5564,6 +6092,8 @@
       },
       "answer": "B",
       "correctPercent": 74,
+      "facilityPct": 74,
+      "difficulty": "easy",
       "hasFigure": true,
       "figure": "figures/j18-2012-q12-1.png",
       "figures": [
@@ -5586,6 +6116,8 @@
       },
       "answer": "D",
       "correctPercent": 50,
+      "facilityPct": 50,
+      "difficulty": "medium",
       "hasFigure": false,
       "figure": null,
       "figures": []
@@ -5606,6 +6138,8 @@
       },
       "answer": "B",
       "correctPercent": 92,
+      "facilityPct": 92,
+      "difficulty": "easy",
       "hasFigure": true,
       "figure": "figures/j18-2015-q13-1.png",
       "figures": [
@@ -5628,6 +6162,8 @@
       },
       "answer": "C",
       "correctPercent": 92,
+      "facilityPct": 92,
+      "difficulty": "easy",
       "hasFigure": true,
       "figure": "figures/j18-2016-q14-1.png",
       "figures": [
@@ -5650,6 +6186,8 @@
       },
       "answer": "B",
       "correctPercent": 86,
+      "facilityPct": 86,
+      "difficulty": "easy",
       "hasFigure": true,
       "figure": "figures/j18-2017-q13-1.png",
       "figures": [
@@ -5672,6 +6210,8 @@
       },
       "answer": "A",
       "correctPercent": 62,
+      "facilityPct": 62,
+      "difficulty": "medium",
       "hasFigure": false,
       "figure": null,
       "figures": []
@@ -5692,6 +6232,8 @@
       },
       "answer": "C",
       "correctPercent": 91,
+      "facilityPct": 91,
+      "difficulty": "easy",
       "hasFigure": true,
       "figure": "figures/j18-2019-q14-1.png",
       "figures": [
@@ -5714,6 +6256,8 @@
       },
       "answer": "D",
       "correctPercent": 83,
+      "facilityPct": 83,
+      "difficulty": "easy",
       "hasFigure": true,
       "figure": "figures/j18-2020-q12-1.png",
       "figures": [
@@ -5736,6 +6280,8 @@
       },
       "answer": "C",
       "correctPercent": 83,
+      "facilityPct": 83,
+      "difficulty": "easy",
       "hasFigure": false,
       "figure": null,
       "figures": []
@@ -5756,6 +6302,8 @@
       },
       "answer": "C",
       "correctPercent": 86,
+      "facilityPct": 86,
+      "difficulty": "easy",
       "hasFigure": true,
       "figure": "figures/j18-2022-q14-1.png",
       "figures": [
@@ -5778,6 +6326,8 @@
       },
       "answer": "B",
       "correctPercent": 62,
+      "facilityPct": 62,
+      "difficulty": "medium",
       "hasFigure": false,
       "figure": null,
       "figures": []
@@ -5797,7 +6347,9 @@
         "D": "243"
       },
       "answer": "A",
-      "correctPercent": null,
+      "correctPercent": 60,
+      "facilityPct": 60,
+      "difficulty": "medium",
       "hasFigure": false,
       "figure": null,
       "figures": []
@@ -5818,6 +6370,8 @@
       },
       "answer": "A",
       "correctPercent": null,
+      "facilityPct": null,
+      "difficulty": "unknown",
       "hasFigure": false,
       "figure": null,
       "figures": []
@@ -5838,6 +6392,8 @@
       },
       "answer": "A",
       "correctPercent": 50,
+      "facilityPct": 50,
+      "difficulty": "medium",
       "hasFigure": false,
       "figure": null,
       "figures": []
@@ -5858,6 +6414,8 @@
       },
       "answer": "B",
       "correctPercent": 59,
+      "facilityPct": 59,
+      "difficulty": "medium",
       "hasFigure": false,
       "figure": null,
       "figures": []
@@ -5878,6 +6436,8 @@
       },
       "answer": "A",
       "correctPercent": 42,
+      "facilityPct": 42,
+      "difficulty": "medium",
       "hasFigure": false,
       "figure": null,
       "figures": []
@@ -5898,6 +6458,8 @@
       },
       "answer": "B",
       "correctPercent": 76,
+      "facilityPct": 76,
+      "difficulty": "easy",
       "hasFigure": false,
       "figure": null,
       "figures": []
@@ -5918,6 +6480,8 @@
       },
       "answer": "A",
       "correctPercent": 48,
+      "facilityPct": 48,
+      "difficulty": "medium",
       "hasFigure": false,
       "figure": null,
       "figures": []
@@ -5938,6 +6502,8 @@
       },
       "answer": "B",
       "correctPercent": 84,
+      "facilityPct": 84,
+      "difficulty": "easy",
       "hasFigure": true,
       "figure": "figures/j19-2015-q28-1.png",
       "figures": [
@@ -5960,6 +6526,8 @@
       },
       "answer": "C",
       "correctPercent": 58,
+      "facilityPct": 58,
+      "difficulty": "medium",
       "hasFigure": false,
       "figure": null,
       "figures": []
@@ -5980,6 +6548,8 @@
       },
       "answer": "B",
       "correctPercent": 69,
+      "facilityPct": 69,
+      "difficulty": "medium",
       "hasFigure": false,
       "figure": null,
       "figures": []
@@ -6000,6 +6570,8 @@
       },
       "answer": "C",
       "correctPercent": 84,
+      "facilityPct": 84,
+      "difficulty": "easy",
       "hasFigure": true,
       "figure": "figures/j19-2017-q28-1.png",
       "figures": [
@@ -6022,6 +6594,8 @@
       },
       "answer": "A",
       "correctPercent": 50,
+      "facilityPct": 50,
+      "difficulty": "medium",
       "hasFigure": false,
       "figure": null,
       "figures": []
@@ -6042,6 +6616,8 @@
       },
       "answer": "C",
       "correctPercent": 66,
+      "facilityPct": 66,
+      "difficulty": "medium",
       "hasFigure": false,
       "figure": null,
       "figures": []
@@ -6062,6 +6638,8 @@
       },
       "answer": "B",
       "correctPercent": 54,
+      "facilityPct": 54,
+      "difficulty": "medium",
       "hasFigure": false,
       "figure": null,
       "figures": []
@@ -6082,6 +6660,8 @@
       },
       "answer": "D",
       "correctPercent": 73,
+      "facilityPct": 73,
+      "difficulty": "easy",
       "hasFigure": false,
       "figure": null,
       "figures": []
@@ -6102,6 +6682,8 @@
       },
       "answer": "D",
       "correctPercent": 65,
+      "facilityPct": 65,
+      "difficulty": "medium",
       "hasFigure": false,
       "figure": null,
       "figures": []
@@ -6122,6 +6704,8 @@
       },
       "answer": "C",
       "correctPercent": 60,
+      "facilityPct": 60,
+      "difficulty": "medium",
       "hasFigure": false,
       "figure": null,
       "figures": []
@@ -6142,6 +6726,8 @@
       },
       "answer": "C",
       "correctPercent": 60,
+      "facilityPct": 60,
+      "difficulty": "medium",
       "hasFigure": false,
       "figure": null,
       "figures": []
