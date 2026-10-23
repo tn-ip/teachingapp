@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -p tsconfig.json --noEmit && vite build",
+    "check:drills": "esbuild scripts/check-drills.ts --bundle --platform=node --format=esm --outfile=node_modules/.cache/check-drills.mjs && node node_modules/.cache/check-drills.mjs",
     "preview": "vite preview --host 0.0.0.0 --port 4173"
   },
   "dependencies": {

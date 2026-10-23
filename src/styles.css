@@ -365,6 +365,34 @@ button {
   font-weight: 700;
 }
 
+.steps {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 8px;
+}
+
+.steps li {
+  display: grid;
+  grid-template-columns: 2.6rem 1fr;
+  gap: 8px;
+  align-items: start;
+}
+
+.step-mark {
+  font-weight: 700;
+  color: var(--teal-ink);
+  font-size: 0.85rem;
+  padding-top: 6px;
+}
+
+.step-note {
+  display: block;
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
 .solution-missing,
 .solution-note,
 .solution-credit {
