@@ -5,8 +5,8 @@ import j9 from "./data/drillPools/j9.json";
 import j10 from "./data/drillPools/j10.json";
 
 /**
- * Weekly Question Generator Paper 2 pools, committed as JSON
- * (see scripts/convert-drill-pools.mjs).
+ * Weekly Question Generator Paper 2 MC pools only, committed as JSON
+ * (see scripts/convert-drill-pools.mjs). Paper 1 conventional pools are not used.
  *
  * J7 Indices ← POOLS.J7MC
  * J8 Identities ← POOLS.J8

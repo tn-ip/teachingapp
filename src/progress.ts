@@ -1,12 +1,9 @@
 import {
-  BAND_RANK,
   byWarmup,
   questionById,
   questionsFor,
   RUN_SIZE,
   type Choice,
-  type Difficulty,
-  type Question,
 } from "./bank";
 import { generatedById, generatedQuestions, hasGeneratedPool } from "./drillPools";
 import { pickFromPool, skillsForMisses } from "./drillPick";
@@ -22,8 +19,9 @@ export type Run = {
   index: number;
   marked: boolean;
   /**
-   * Generated drills draw new WQG questions and do not add those ids to `used`.
-   * Bank drills omit this.
+   * "generated" on a Weekly Question Generator Paper 2 MC practice drill.
+   * Those ids are not added to `used`. Stage runs omit this. Older saves may
+   * still say "bank"; a new drill is not started from the past-paper bank.
    */
   source?: DrillSource;
   /** Archetypes preferred because they match the missed bank questions. */
@@ -73,39 +71,6 @@ export function loadProgress(): Progress {
 
 export function saveProgress(progress: Progress): void {
   localStorage.setItem(KEY, JSON.stringify(progress));
-}
-
-export function unusedCount(progress: Progress, stageId: string): number {
-  const used = new Set(progress.used[stageId] ?? []);
-  return questionsFor(stageId).filter((q) => !used.has(q.id)).length;
-}
-
-/** Hardest missed band in a marked run. Drill stays at or below this band when it can. */
-export function anchorForMisses(run: Run): Difficulty | undefined {
-  let anchor: Difficulty | undefined;
-  for (const id of run.ids) {
-    const question = questionById(id);
-    if (!question || run.picks[id] === question.answer) continue;
-    if (!anchor || BAND_RANK[question.difficulty] > BAND_RANK[anchor]) {
-      anchor = question.difficulty;
-    }
-  }
-  return anchor;
-}
-
-/**
- * Stage runs fill Easy, then Medium, then Unknown, then Hard.
- * A drill prefers unused questions at or easier than the missed item, in that
- * same warm-up order, and only then draws a harder band to fill the run.
- */
-export function orderPool(pool: Question[], mode: Mode, anchor?: Difficulty): string[] {
-  if (mode === "drill" && anchor) {
-    const ceiling = BAND_RANK[anchor];
-    const preferred = pool.filter((q) => BAND_RANK[q.difficulty] <= ceiling);
-    const harder = pool.filter((q) => BAND_RANK[q.difficulty] > ceiling);
-    return [...byWarmup(preferred), ...byWarmup(harder)].map((q) => q.id);
-  }
-  return byWarmup(pool).map((q) => q.id);
 }
 
 /** A stage clears only on a perfect stage run. A drill, including generated practice, does not. */
@@ -185,20 +150,20 @@ export function startRun(
   progress: Progress,
   stageId: string,
   mode: Mode,
-  anchor?: Difficulty,
 ): Progress | null {
-  if (mode === "drill" && hasGeneratedPool(stageId)) {
+  if (mode === "drill") {
+    if (!hasGeneratedPool(stageId)) return null;
     return startGeneratedDrill(progress, stageId);
   }
   const all = questionsFor(stageId);
   let usedIds = progress.used[stageId] ?? [];
   let pool = all.filter((q) => !usedIds.includes(q.id));
-  if (mode === "stage" && pool.length === 0) {
+  if (pool.length === 0) {
     usedIds = [];
     pool = all.slice();
   }
   if (pool.length === 0) return null;
-  const ids = orderPool(pool, mode, anchor).slice(0, Math.min(RUN_SIZE, pool.length));
+  const ids = byWarmup(pool).map((question) => question.id).slice(0, Math.min(RUN_SIZE, pool.length));
   return {
     ...progress,
     used: { ...progress.used, [stageId]: [...usedIds, ...ids] },

@@ -16,12 +16,10 @@ import { MathView } from "./MathView";
 import { questionById } from "./questions";
 import {
   allJuniorCleared,
-  anchorForMisses,
   loadProgress,
   saveProgress,
   stageClearedBy,
   startRun,
-  unusedCount,
   type Progress,
   type Run,
 } from "./progress";
@@ -144,7 +142,7 @@ export function App() {
 
   function beginDrill() {
     if (!run) return;
-    const next = startRun(progress, run.stage, "drill", anchorForMisses(run));
+    const next = startRun(progress, run.stage, "drill");
     if (next) update(next, "quiz");
   }
 
@@ -214,7 +212,6 @@ export function App() {
         <Result
           run={run}
           cleared={progress.cleared.includes(run.stage)}
-          unused={unusedCount(progress, run.stage)}
           onHome={() => setScreen("map")}
           onRetry={() => {
             const next = startRun(progress, run.stage, "stage");
@@ -252,9 +249,9 @@ function StageMap({
       <p className="lede">
         Pick any Junior stage. A run is up to 5 real DSE questions, warming up
         Easy → Medium → untagged → Hard. Clear it only with a perfect paper. A
-        miss on J7, J8, J9, or J10 opens 5 new practice questions. Any other
-        miss opens a drill of unused past papers from that stage, preferring
-        the missed band or an easier one. A drill does not clear the stage.
+        miss on Indices, Identities, Factorization, or Ratio and map scale
+        opens 5 new practice questions. Other stages have no practice drill
+        yet. A practice drill does not clear the stage.
       </p>
       {run ? (
         <button className="resume" type="button" onClick={onResume}>
@@ -446,14 +443,12 @@ function Quiz({
 function Result({
   run,
   cleared,
-  unused,
   onHome,
   onRetry,
   onDrill,
 }: {
   run: Run;
   cleared: boolean;
-  unused: number;
   onHome: () => void;
   onRetry: () => void;
   onDrill: () => void;
@@ -467,16 +462,13 @@ function Result({
   const justCleared = stageClearedBy(run, correct, items.length);
   const practice = run.source === "generated";
   const practicePool = hasGeneratedPool(run.stage);
-  const drillCount = Math.min(5, unused);
   const lede = justCleared
     ? `${stage?.title} is cleared on this iPad.`
     : run.mode === "stage" && practicePool
       ? "The stage stays open. Drill 5 new practice questions, then retry the stage for a perfect paper."
       : run.mode === "stage"
-        ? "The stage stays open. Consolidate with unused past-paper questions from the same stage, then retry the stage."
-        : practice
-          ? "A practice drill does not clear the stage. Retry the stage when you want another perfect-paper attempt."
-          : "A drill does not clear the stage. Retry the stage when you want another perfect-paper attempt.";
+        ? "The stage stays open. Retry it for another perfect-paper attempt."
+        : "A practice drill does not clear the stage. Retry the stage when you want another perfect-paper attempt.";
 
   return (
     <main className="result">
@@ -540,36 +532,26 @@ function Result({
           <button type="button" className="primary" onClick={onDrill}>
             Drill 5 new practice Qs
           </button>
-        ) : run.mode === "stage" && !perfect && unused > 0 ? (
-          <button type="button" className="primary" onClick={onDrill}>
-            Drill {drillCount} unused past papers
-          </button>
         ) : (
           <button type="button" className="primary" onClick={onRetry}>
             Retry stage
           </button>
         )}
       </div>
-      {run.mode === "stage" && !perfect && !practicePool && unused === 0 ? (
+      {run.mode === "stage" && !perfect && !practicePool ? (
         <p className="note">
-          No unused questions remain in {stage?.id}. Retry the stage to draw
-          again from the full bank.
+          Generated MC practice is available for Indices, Identities,
+          Factorization, and Ratio and map scale for now.
         </p>
       ) : null}
-      {run.mode === "drill" ? (
+      {run.mode === "drill" && practicePool ? (
         <div className="quiz-nav second">
           <button type="button" className="ghost" onClick={onRetry}>
             Retry stage
           </button>
-          {practicePool ? (
-            <button type="button" className="primary" onClick={onDrill}>
-              Another 5 practice Qs
-            </button>
-          ) : unused > 0 ? (
-            <button type="button" className="primary" onClick={onDrill}>
-              Drill {drillCount} unused past papers
-            </button>
-          ) : null}
+          <button type="button" className="primary" onClick={onDrill}>
+            Another 5 practice Qs
+          </button>
         </div>
       ) : null}
       <p className="bank-note">

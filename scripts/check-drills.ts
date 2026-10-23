@@ -174,23 +174,30 @@ assert.deepEqual(again.cleared, ["J5"]);
 const firstIds = new Set(drill.run.ids);
 assert.ok(again.run.ids.every((id) => !firstIds.has(id)));
 
-const j1 = startRun(
-  { cleared: ["J3"], used: {}, last: {}, run: null },
-  "J1",
-  "drill",
-  "medium",
-);
-assert.ok(j1?.run);
-assert.equal(j1.run.source, undefined);
-assert.equal(j1.run.mode, "drill");
-assert.ok(j1.run.ids.every((id) => id.startsWith("J1-")));
-assert.deepEqual(j1.used.J1, j1.run.ids);
-assert.deepEqual(j1.cleared, ["J3"]);
+const beforeJ1: Progress = {
+  cleared: ["J3"],
+  used: { J1: ["J1-sample-q2"] },
+  last: {},
+  run: null,
+};
+assert.equal(startRun(beforeJ1, "J1", "drill"), null);
+for (const stageId of ["J2", "J5", "J11", "J14"]) {
+  assert.equal(hasGeneratedPool(stageId), false);
+  assert.equal(startRun(beforeJ1, stageId, "drill"), null);
+}
+const j1Stage = startRun(beforeJ1, "J1", "stage");
+assert.ok(j1Stage?.run);
+assert.equal(j1Stage.run.source, undefined);
+assert.equal(j1Stage.run.mode, "stage");
+assert.ok(j1Stage.run.ids.every((id) => id.startsWith("J1-") && !id.startsWith("wqg-")));
+assert.ok(!j1Stage.run.ids.includes("J1-sample-q2"));
+assert.deepEqual(j1Stage.cleared, ["J3"]);
+assert.deepEqual(beforeJ1.used, { J1: ["J1-sample-q2"] });
 
 const perfectStage: Run = {
   stage: "J1",
   mode: "stage",
-  ids: j1.run.ids,
+  ids: j1Stage.run.ids,
   picks: {},
   index: 0,
   marked: true,

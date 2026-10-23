@@ -10,12 +10,12 @@ Open it on an iPad at [https://tn-ip.github.io/teachingapp/](https://tn-ip.githu
 - A stage run is up to **5 real DSE questions** from that stage. If the stage has fewer than 5, the run uses all of them.
 - The run warms up **Easy → Medium → Unknown → Hard**, filling from the easier pool first. Each question shows a light difficulty chip (Easy, Medium, Hard, or — when the facility is not tagged yet).
 - The stage clears only when **every** question in that run is correct (5/5, or 3/3, and so on).
-- A wrong answer does not clear the stage. The next step is a **consolidate drill** of up to 5 questions. A drill does not clear the stage.
-- **J7 Indices, J8 Identities, J9 Factorization, and J10 Ratio / rate** drill 5 new generated practice questions (not past papers). The draw prefers the pool archetype that matches each missed bank question, then varies the archetype so two items in a row are not the same kind. Another drill in that session skips stems already shown.
-- **Every other Junior stage** still drills unused real Paper 2 questions from the same stage, preferring the missed band or an easier one. When those run out, retrying the stage draws from the full bank again.
-
-The four practice pools live in `src/data/drillPools/` (`j7.json`, `j8.json`, `j9.json`, `j10.json`), 300 questions each. They were converted from the Weekly Question Generator scripts (`POOLS.J7MC`, `POOLS.J8`, `POOLS.J9MC`, `POOLS.J10`). J10 stems are built from the area and scale fields. `scripts/convert-drill-pools.mjs` repeats that conversion. `npm run check:drills` checks the stage-to-archetype mapping and that a practice drill does not touch `used` or `cleared`.
+- A wrong answer does not clear the stage. Practice is optional, and it never clears the stage.
+- **J7 Indices, J8 Identities, J9 Factorization, and J10 Ratio / rate** can drill 5 new Weekly Question Generator **Paper 2 MC** questions. The draw prefers the pool archetype that matches each missed bank question, then varies the archetype so two items in a row are not the same kind. Another drill in that session skips stems already shown.
+- **Every other Junior stage** has no practice drill. The result offers another stage run only. Practice does not fall back to unused past papers, and it does not use Paper 1 generator pools.
 - When a stage’s unused questions run out, retrying the stage draws from the full bank again.
+
+The four practice pools live in `src/data/drillPools/` (`j7.json`, `j8.json`, `j9.json`, `j10.json`), 300 multiple-choice items each. They were converted from the Paper 2 scripts `POOLS.J7MC`, `POOLS.J8`, `POOLS.J9MC`, and `POOLS.J10`. J10 stems are built from the area and scale fields. `scripts/convert-drill-pools.mjs` repeats that conversion. `npm run check:drills` checks the stage-to-archetype mapping, that every practice item has choices A–D, and that a practice drill does not touch `used` or `cleared`.
 - Act 2 (Compulsory Chapters 1–23) stays locked until every Junior stage on the map is cleared. Those chapters are stubs in this version.
 
 ## Question bank
@@ -43,7 +43,7 @@ The script needs `emf2svg-conv`, `wmf2svg`, and `rsvg-convert` for the diagrams.
 
 ## Worked solutions
 
-After a wrong answer on a stage run or a past-paper drill, the review shows the correct letter and then the worked steps for that question. A correct answer stays as it is. A generated practice drill shows the pool’s own short marking (1M / 1A) instead, and does not link to mathseasy.
+After a wrong answer on a stage run, the review shows the correct letter and then the worked steps for that question. A correct answer stays as it is. A generated practice drill shows the pool’s own short marking (1M / 1A) instead, and does not link to mathseasy.
 
 Steps are adapted from [Thomas Fok’s Paper II 題解 on mathseasy.hk](https://mathseasy.hk/). They are not original to this trainer. The review always shows that credit, and the link opens the year’s page on the tab that contains the question (1–10, 11–20, and so on). mathseasy does not publish a per-question anchor. Diagrams and whole-page captures are not stored; if a write-up depends on a figure, the app says so and links out. Two mensuration questions also link to Thomas Fok’s YouTube video when that is how the page explains them.
 
