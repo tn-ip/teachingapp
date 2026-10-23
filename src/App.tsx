@@ -386,11 +386,7 @@ function Quiz({
       <p className="stage-name">
         {stage.id} · {stage.title}
       </p>
-      {run.source === "generated" ? (
-        <p className="warmup-hint">New practice questions · not a past paper</p>
-      ) : run.mode === "stage" ? (
-        <p className="warmup-hint">Warm-up: Easy → Hard</p>
-      ) : null}
+      {run.mode === "stage" ? <p className="warmup-hint">Warm-up: Easy → Hard</p> : null}
       {question.generated ? (
         <p className="source">Generated practice · not a past paper</p>
       ) : (
