@@ -23,6 +23,12 @@ export type Question = {
   hasFigure: boolean;
   figure: string | null;
   figures: string[];
+  /** WQG practice item. Real Paper 2 questions leave this unset. */
+  generated?: boolean;
+  /** Pool tpl / subtype, used to vary a generated drill. */
+  archetype?: string;
+  /** Short marking for a generated practice item. */
+  steps?: { mark: string; text: string; note: string }[];
 };
 
 export type StageInfo = {
@@ -84,6 +90,7 @@ export function questionsFor(stageId: string): Question[] {
   return questions.filter((q) => q.stage === stageId);
 }
 
+/** Bank ids only. Generated practice ids (`wqg-…`) resolve in `questions.ts`. */
 export function questionById(id: string): Question | undefined {
   return questions.find((q) => q.id === id);
 }

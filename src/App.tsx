@@ -3,7 +3,6 @@ import {
   CHOICES,
   act2Chapters,
   difficultyLabel,
-  questionById,
   questionsFor,
   solutionFor,
   stageById,
@@ -12,12 +11,15 @@ import {
   type Difficulty,
   type Question,
 } from "./bank";
+import { hasGeneratedPool } from "./drillPools";
 import { MathView } from "./MathView";
+import { questionById } from "./questions";
 import {
   allJuniorCleared,
   anchorForMisses,
   loadProgress,
   saveProgress,
+  stageClearedBy,
   startRun,
   unusedCount,
   type Progress,
@@ -74,6 +76,27 @@ function WorkedSolutionView({ question }: { question: Question }) {
           Video by Thomas Fok
         </a>
       ) : null}
+    </section>
+  );
+}
+
+function PracticeWorking({ question }: { question: Question }) {
+  const steps = question.steps ?? [];
+  if (steps.length === 0) return null;
+  return (
+    <section className="solution" aria-label="Practice working">
+      <p className="solution-label">Working</p>
+      <ol className="steps">
+        {steps.map((step, index) => (
+          <li key={index}>
+            <span className="step-mark">{step.mark}</span>
+            <div>
+              <MathView text={step.text} />
+              {step.note ? <span className="step-note">{step.note}</span> : null}
+            </div>
+          </li>
+        ))}
+      </ol>
     </section>
   );
 }
@@ -163,12 +186,9 @@ export function App() {
           onHome={() => setScreen("map")}
           onMarked={(nextRun) => {
             const result = scoreRun(nextRun);
-            const cleared =
-              nextRun.mode === "stage" &&
-              result.total > 0 &&
-              result.correct === result.total
-                ? Array.from(new Set([...progress.cleared, nextRun.stage]))
-                : progress.cleared;
+            const cleared = stageClearedBy(nextRun, result.correct, result.total)
+              ? Array.from(new Set([...progress.cleared, nextRun.stage]))
+              : progress.cleared;
             update(
               {
                 ...progress,
@@ -180,6 +200,7 @@ export function App() {
                     correct: result.correct,
                     total: result.total,
                     mode: nextRun.mode,
+                    source: nextRun.source,
                   },
                 },
               },
@@ -231,13 +252,18 @@ function StageMap({
       <p className="lede">
         Pick any Junior stage. A run is up to 5 real DSE questions, warming up
         Easy → Medium → untagged → Hard. Clear it only with a perfect paper. A
-        miss opens a drill of unused questions from the same stage, preferring
-        the missed band or an easier one.
+        miss on J7, J8, J9, or J10 opens 5 new practice questions. Any other
+        miss opens a drill of unused past papers from that stage, preferring
+        the missed band or an easier one. A drill does not clear the stage.
       </p>
       {run ? (
         <button className="resume" type="button" onClick={onResume}>
           {run.marked ? "Review" : "Continue"} {stageById(run.stage)?.id} ·{" "}
-          {run.mode === "drill" ? "drill" : "stage run"}
+          {run.source === "generated"
+            ? "practice drill"
+            : run.mode === "drill"
+              ? "drill"
+              : "stage run"}
         </button>
       ) : null}
       <ol className="trail">
@@ -257,9 +283,10 @@ function StageMap({
                   <strong>{stage.title}</strong>
                   <span>
                     {stage.questionCount} in the bank · run of {length}
+                    {hasGeneratedPool(stage.id) ? " · practice drills" : ""}
                     {cleared ? " · cleared" : ""}
                     {last && !cleared
-                      ? ` · last ${last.mode} ${last.correct}/${last.total}`
+                      ? ` · last ${last.source === "generated" ? "practice" : last.mode} ${last.correct}/${last.total}`
                       : ""}
                   </span>
                 </span>
@@ -348,8 +375,8 @@ function Quiz({
           Map
         </button>
         <p>
-          {run.mode === "drill" ? "Drill" : "Stage"} · {run.index + 1}/
-          {items.length}
+          {run.source === "generated" ? "Practice" : run.mode === "drill" ? "Drill" : "Stage"} ·{" "}
+          {run.index + 1}/{items.length}
           <span>
             {" "}
             · {answered}/{items.length} answered
@@ -359,13 +386,19 @@ function Quiz({
       <p className="stage-name">
         {stage.id} · {stage.title}
       </p>
-      {run.mode === "stage" ? (
+      {run.source === "generated" ? (
+        <p className="warmup-hint">New practice questions · not a past paper</p>
+      ) : run.mode === "stage" ? (
         <p className="warmup-hint">Warm-up: Easy → Hard</p>
       ) : null}
-      <p className="source">
-        <DifficultyChip difficulty={question.difficulty} />
-        <span>{question.sourceTag}</span>
-      </p>
+      {question.generated ? (
+        <p className="source">Generated practice · not a past paper</p>
+      ) : (
+        <p className="source">
+          <DifficultyChip difficulty={question.difficulty} />
+          <span>{question.sourceTag}</span>
+        </p>
+      )}
       <MathView text={question.stem} />
       <div className="choices" role="listbox" aria-label="Choices">
         {CHOICES.map((letter) => (
@@ -435,21 +468,37 @@ function Result({
   const correct = items.filter((q) => run.picks[q.id] === q.answer).length;
   const perfect = correct === items.length && items.length > 0;
   const stage = stageById(run.stage);
-  const justCleared = run.mode === "stage" && perfect;
+  const justCleared = stageClearedBy(run, correct, items.length);
+  const practice = run.source === "generated";
+  const practicePool = hasGeneratedPool(run.stage);
+  const drillCount = Math.min(5, unused);
+  const lede = justCleared
+    ? `${stage?.title} is cleared on this iPad.`
+    : run.mode === "stage" && practicePool
+      ? "The stage stays open. Drill 5 new practice questions, then retry the stage for a perfect paper."
+      : run.mode === "stage"
+        ? "The stage stays open. Consolidate with unused past-paper questions from the same stage, then retry the stage."
+        : practice
+          ? "A practice drill does not clear the stage. Retry the stage when you want another perfect-paper attempt."
+          : "A drill does not clear the stage. Retry the stage when you want another perfect-paper attempt.";
 
   return (
     <main className="result">
-      <p className="eyebrow">{stage?.id} · {run.mode === "drill" ? "Drill" : "Stage run"}</p>
+      <p className="eyebrow">
+        {stage?.id} · {practice ? "Practice drill" : run.mode === "drill" ? "Drill" : "Stage run"}
+      </p>
       <h2>
         {correct}/{items.length}
-        {justCleared ? " · stage cleared" : perfect && run.mode === "drill" ? " · drill complete" : ""}
+        {justCleared
+          ? " · stage cleared"
+          : perfect && practice
+            ? " · practice complete"
+            : perfect && run.mode === "drill"
+              ? " · drill complete"
+              : ""}
       </h2>
       <p className="lede">
-        {justCleared
-          ? `${stage?.title} is cleared on this iPad.`
-          : run.mode === "stage"
-            ? "The stage stays open. Consolidate with unused questions from the same bank, then retry the stage."
-            : "A drill does not clear the stage. Retry the stage when you want another perfect-paper attempt."}
+        {lede}
         {cleared && !justCleared ? " This stage is already cleared." : ""}
       </p>
       <ol className="review">
@@ -462,10 +511,14 @@ function Result({
                 <strong>
                   {index + 1}. {ok ? "Correct" : "Wrong"}
                 </strong>
-                <span className="review-meta">
-                  <DifficultyChip difficulty={question.difficulty} />
-                  {question.sourceTag}
-                </span>
+                {question.generated ? (
+                  <span className="review-meta">Generated practice</span>
+                ) : (
+                  <span className="review-meta">
+                    <DifficultyChip difficulty={question.difficulty} />
+                    {question.sourceTag}
+                  </span>
+                )}
               </header>
               <MathView text={question.stem} />
               <p className="verdict">
@@ -474,7 +527,11 @@ function Result({
                   ? ` · ${question.facilityPct}% of candidates`
                   : ""}
               </p>
-              {ok ? null : <WorkedSolutionView question={question} />}
+              {ok ? null : question.generated ? (
+                <PracticeWorking question={question} />
+              ) : (
+                <WorkedSolutionView question={question} />
+              )}
             </li>
           );
         })}
@@ -483,9 +540,13 @@ function Result({
         <button type="button" className="ghost" onClick={onHome}>
           Map
         </button>
-        {run.mode === "stage" && !perfect && unused > 0 ? (
+        {run.mode === "stage" && !perfect && practicePool ? (
           <button type="button" className="primary" onClick={onDrill}>
-            Drill {Math.min(5, unused)} unused
+            Drill 5 new practice Qs
+          </button>
+        ) : run.mode === "stage" && !perfect && unused > 0 ? (
+          <button type="button" className="primary" onClick={onDrill}>
+            Drill {drillCount} unused past papers
           </button>
         ) : (
           <button type="button" className="primary" onClick={onRetry}>
@@ -493,7 +554,7 @@ function Result({
           </button>
         )}
       </div>
-      {run.mode === "stage" && !perfect && unused === 0 ? (
+      {run.mode === "stage" && !perfect && !practicePool && unused === 0 ? (
         <p className="note">
           No unused questions remain in {stage?.id}. Retry the stage to draw
           again from the full bank.
@@ -504,15 +565,21 @@ function Result({
           <button type="button" className="ghost" onClick={onRetry}>
             Retry stage
           </button>
-          {unused > 0 ? (
+          {practicePool ? (
             <button type="button" className="primary" onClick={onDrill}>
-              Another drill
+              Another 5 practice Qs
+            </button>
+          ) : unused > 0 ? (
+            <button type="button" className="primary" onClick={onDrill}>
+              Drill {drillCount} unused past papers
             </button>
           ) : null}
         </div>
       ) : null}
       <p className="bank-note">
-        {questionsFor(run.stage).length} real Paper 2 questions in this stage.
+        {practice
+          ? `${questionsFor(run.stage).length} real Paper 2 questions stay on the stage run. This drill is generated practice.`
+          : `${questionsFor(run.stage).length} real Paper 2 questions in this stage.`}
       </p>
     </main>
   );
