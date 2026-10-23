@@ -37,6 +37,30 @@ python3 scripts/extract_bank.py /path/to/sort_paper2.docx
 
 The script needs `emf2svg-conv`, `wmf2svg`, and `rsvg-convert` for the diagrams.
 
+## Worked solutions
+
+After a wrong answer, the review shows the correct letter and then the worked steps for that question. A correct answer stays as it is. The consolidate drill is unchanged.
+
+Steps are adapted from [Thomas Fok’s Paper II 題解 on mathseasy.hk](https://mathseasy.hk/). They are not original to this trainer. The review always shows that credit, and the link opens the year’s page on the tab that contains the question (1–10, 11–20, and so on). mathseasy does not publish a per-question anchor. Diagrams and whole-page captures are not stored; if a write-up depends on a figure, the app says so and links out. Two mensuration questions also link to Thomas Fok’s YouTube video when that is how the page explains them.
+
+`src/data/solutions.json` is the companion file, keyed by question id. Each record has `solutionSteps` (text plus `\(...\)` / `\[...\]` for KaTeX), `solutionSourceUrl`, and `solutionCredit`. The static site reads this file. It does not scrape mathseasy in the browser.
+
+Refresh it from the repo root:
+
+```bash
+python3 scripts/fetch_solutions.py
+```
+
+The script walks `https://mathseasy.hk/articles/hkdse-YYYY-p2-ans/` for 2012–2026 and `hkdse-2012pp-p2-ans` for the Practice Paper, then matches year + question number to the Junior bank. It prints questions it could not fill.
+
+Coverage from the last run: **272 / 293** questions have steps. Every matched letter agrees with this bank’s key.
+
+Gaps:
+
+- **Sample Paper (18):** no Paper II 題解 page on mathseasy. The review shows the key only.
+- **Diagram only (3):** Practice Q25, 2019 Q25, 2021 Q23. The page is a figure. The review links out and does not embed the image.
+- **2026:** the fetch URL is included, but this Junior bank has no 2026 questions yet.
+
 ## Develop
 
 ```bash
