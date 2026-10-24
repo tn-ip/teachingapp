@@ -1,26 +1,35 @@
 # DSE Maths Paper 2 trainer
 
-Junior-stage trainer for HKDSE Mathematics Compulsory Part **Paper 2** multiple choice. Stage 1 is the Junior (J) topics. Act 2, the compulsory chapters, stays locked until those stages are cleared.
+Trainer for HKDSE Mathematics Compulsory Part **Paper 2** multiple choice. One map holds the Junior stages and Compulsory chapters 1–23. Any stage can be started. Nothing is locked behind clearing another stage.
 
 Open it on an iPad at [https://tn-ip.github.io/teachingapp/](https://tn-ip.github.io/teachingapp/) (after this branch is merged and GitHub Pages is set to deploy from Actions). In Safari, use **Share → Add to Home Screen** so it opens full screen. Progress stays on that iPad in `localStorage`. There is no login.
 
 ## How a stage works
 
-- Any Junior stage can be started. Nothing inside the Junior path is sequential. J6 is not in the bank, so the map skips it.
+- Pick any stage. The map ranks Junior and Compulsory together by each stage’s **average facility %** (tagged questions only). Easy is 70% or higher, Medium is 40–69, Hard is below 40. Within a band, higher averages come first. A stage with no tagged facility sits at the end. Each tile shows that average and its band.
+- J6 is not in the bank, so the map skips it.
 - A stage run is up to **5 real DSE questions** from that stage. If the stage has fewer than 5, the run uses all of them.
 - The run warms up **Easy → Medium → Unknown → Hard**, filling from the easier pool first. Each question shows a light difficulty chip (Easy, Medium, Hard, or — when the facility is not tagged yet).
 - The stage clears only when **every** question in that run is correct (5/5, or 3/3, and so on).
 - A wrong answer does not clear the stage. Practice is optional, and it never clears the stage.
 - **J7 Indices, J8 Identities, J9 Factorization, and J10 Ratio / rate** can drill 5 new Weekly Question Generator **Paper 2 MC** questions. The draw prefers the pool archetype that matches each missed bank question, then varies the archetype so two items in a row are not the same kind. Another drill in that session skips stems already shown.
-- **Every other Junior stage** has no practice drill. The result offers another stage run only. Practice does not fall back to unused past papers, and it does not use Paper 1 generator pools.
+- **Every other stage, including all Compulsory chapters,** has no practice drill. The result offers another stage run only. Practice does not fall back to unused past papers, and it does not use Paper 1 generator pools.
 - When a stage’s unused questions run out, retrying the stage draws from the full bank again.
 
 The four practice pools live in `src/data/drillPools/` (`j7.json`, `j8.json`, `j9.json`, `j10.json`), 300 multiple-choice items each. They were converted from the Paper 2 scripts `POOLS.J7MC`, `POOLS.J8`, `POOLS.J9MC`, and `POOLS.J10`. J10 stems are built from the area and scale fields. `scripts/convert-drill-pools.mjs` repeats that conversion. `npm run check:drills` checks the stage-to-archetype mapping, that every practice item has choices A–D, and that a practice drill does not touch `used` or `cleared`.
-- Act 2 (Compulsory Chapters 1–23) stays locked until every Junior stage on the map is cleared. Those chapters are stubs in this version.
 
 ## Question bank
 
-`src/data/questions.json` holds the Junior questions (293). Each record has the stage, year, source tag, stem, choices A–D, the key, a facility percentage when the HKEAA Keys include one (`facilityPct`, also kept as `correctPercent`), a `difficulty` band, and a figure path when the paper has a diagram. Stems and choices use `\(...\)` for KaTeX. Diagrams are PNGs in `public/figures/`, extracted from the topic-sorted Paper 2 Word bank (Sample, Practice, and 2012–2025). Keys are the A–D letters in document order, aligned with all 683 tagged Paper 2 questions, then sliced to the Junior chapters. A Keys line like `A (60)` means 60% of candidates chose the correct answer.
+`src/data/questions.json` holds the Junior questions (293) and Compulsory chapters 1–23. Stage ids are `J1`–`J19` (no `J6`) and `C1`–`C23`. Compulsory is one stage per chapter number. The Word bank’s TOC splits are merged:
+
+- Ch. 4 Factor/remainder and HCF/LCM/Rational → `C4`
+- Ch. 10.1–10.3 and 10.4–10.6 → `C10`
+- Ch. 14.1–14.5 and 14.6–14.7 → `C14`
+- Ch. 19.1 Locus, 19.2 Equations of Circles, and 19.3 Intersection → `C19`
+- Ch. 20 Arithmetic and Geometric sequence → `C20`
+- Ch. 21 Sum of Arithmetic and Sum of Geometric → `C21`
+
+Question ids stay `{stage}-{year}-q{number}` (Junior ids are unchanged, so saved progress still matches). Each record has the stage, year, source tag, stem, choices A–D, the key, a facility percentage when the HKEAA Keys include one (`facilityPct`, also kept as `correctPercent`), a `difficulty` band, and a figure path when the paper has a diagram. Stems and choices use `\(...\)` for KaTeX. Diagrams are PNGs in `public/figures/`, extracted from the topic-sorted Paper 2 Word bank (Sample, Practice, and 2012–2025). Keys are the A–D letters in document order, aligned with all 683 Paper 2 questions. A Keys line like `A (60)` means 60% of candidates chose the correct answer.
 
 Difficulty bands use that facility percentage:
 

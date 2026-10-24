@@ -72,6 +72,11 @@ export function difficultyLabel(difficulty: Difficulty): string {
   return "—";
 }
 
+/**
+ * Stage ids: Junior stays J1–J19 (there is no J6). Compulsory is C1–C23,
+ * one stage per chapter number. TOC splits of chapters 4, 10, 14, 19, 20,
+ * and 21 are already merged into that chapter in the bank.
+ */
 export const stages: StageInfo[] = bank.stages;
 export const questions: Question[] = bank.questions.map((question) => {
   const facilityPct = question.facilityPct ?? question.correctPercent ?? null;
@@ -123,32 +128,65 @@ export function solutionFor(id: string): WorkedSolution | undefined {
   return solutionBank.solutions[id];
 }
 
-/** Compulsory Part chapters shown as the locked Act 2 map. */
-export const act2Chapters: { id: string; title: string }[] = [
-  { id: "C1", title: "Quadratic equations (I)" },
-  { id: "C2", title: "Quadratic equations (II)" },
-  { id: "C3", title: "Functions" },
-  { id: "C4", title: "Polynomials" },
-  { id: "C5", title: "Straight lines" },
-  { id: "C6", title: "Exponential functions" },
-  { id: "C7", title: "Logarithms" },
-  { id: "C8", title: "More about equations" },
-  { id: "C9", title: "More about trigonometry" },
-  { id: "C10", title: "Trigonometry applications" },
-  { id: "C11", title: "Variations" },
-  { id: "C12", title: "Circles" },
-  { id: "C13", title: "Tangents to circles" },
-  { id: "C14", title: "Dispersion" },
-  { id: "C15", title: "Permutation and combination" },
-  { id: "C16", title: "More about probability" },
-  { id: "C17", title: "Inequalities" },
-  { id: "C18", title: "Linear programming" },
-  { id: "C19", title: "Locus and circles" },
-  { id: "C20", title: "Sequences" },
-  { id: "C21", title: "Sum of sequences" },
-  { id: "C22", title: "Graphs of functions" },
-  { id: "C23", title: "Use and abuse of statistics" },
-];
+export type StageCard = StageInfo & {
+  /** Mean facility of tagged questions. Null when none are tagged. */
+  averageFacility: number | null;
+  band: Difficulty;
+  taggedCount: number;
+};
+
+export function formatFacility(value: number): string {
+  const tenths = Math.round(value * 10) / 10;
+  return Number.isInteger(tenths) ? String(tenths) : tenths.toFixed(1);
+}
+
+export function stageFacility(stageId: string): {
+  averageFacility: number | null;
+  taggedCount: number;
+  band: Difficulty;
+} {
+  const tagged = questionsFor(stageId)
+    .map((question) => question.facilityPct)
+    .filter((value): value is number => value != null);
+  if (tagged.length === 0) {
+    return { averageFacility: null, taggedCount: 0, band: "unknown" };
+  }
+  const averageFacility = tagged.reduce((sum, value) => sum + value, 0) / tagged.length;
+  return {
+    averageFacility,
+    taggedCount: tagged.length,
+    band: difficultyOf(averageFacility),
+  };
+}
+
+/** Map order is Easy, then Medium, then Hard. Untagged stages are not a warm-up band. */
+const MAP_BAND_RANK: Record<Difficulty, number> = {
+  easy: 0,
+  medium: 1,
+  hard: 2,
+  unknown: 3,
+};
+
+/** Easy → Medium → Hard by descending average facility. Stages with no tagged % last. */
+export const rankedStages: StageCard[] = stages
+  .map((stage, index) => ({
+    ...stage,
+    ...stageFacility(stage.id),
+    index,
+  }))
+  .sort((left, right) => {
+    const bandDelta = MAP_BAND_RANK[left.band] - MAP_BAND_RANK[right.band];
+    if (bandDelta !== 0) return bandDelta;
+    if (
+      left.averageFacility != null &&
+      right.averageFacility != null &&
+      left.averageFacility !== right.averageFacility
+    ) {
+      return right.averageFacility - left.averageFacility;
+    }
+    return left.index - right.index;
+  })
+  .map(({ index: _index, ...stage }) => stage);
 
 export function shuffle<T>(items: T[]): T[] {
   const copy = items.slice();
