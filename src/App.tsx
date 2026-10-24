@@ -246,9 +246,10 @@ function StageMap({
         Pick any stage. Junior and Compulsory chapters sit on one map, ranked
         by average facility from Easy to Hard. A run is up to 5 real DSE
         questions, warming up Easy → Medium → untagged → Hard. Clear a stage
-        only with a perfect paper. A miss on Indices, Identities, Factorization,
-        or Ratio and map scale opens 5 new practice questions. Other stages
-        have no practice drill. A practice drill does not clear the stage.
+        only with a perfect paper. A miss on Change of subjects, Indices,
+        Identities, Factorization, Ratio and map scale, or Simultaneous
+        equations opens 5 new practice questions. Other stages have no
+        practice drill. A practice drill does not clear the stage.
       </p>
       {run ? (
         <button className="resume" type="button" onClick={onResume}>
@@ -375,8 +376,16 @@ function Quiz({
         {stage.id} · {stage.title}
       </p>
       {run.mode === "stage" ? <p className="warmup-hint">Warm-up: Easy → Hard</p> : null}
+      {run.source === "generated" && question.difficulty !== "unknown" ? (
+        <p className="warmup-hint">Practice prefers Easy, then Medium, then Hard</p>
+      ) : null}
       {question.generated ? (
-        <p className="source">Generated practice · not a past paper</p>
+        <p className="source">
+          {question.difficulty !== "unknown" ? (
+            <DifficultyChip difficulty={question.difficulty} />
+          ) : null}
+          <span>Generated practice · not a past paper</span>
+        </p>
       ) : (
         <p className="source">
           <DifficultyChip difficulty={question.difficulty} />
@@ -491,7 +500,12 @@ function Result({
                   {index + 1}. {ok ? "Correct" : "Wrong"}
                 </strong>
                 {question.generated ? (
-                  <span className="review-meta">Generated practice</span>
+                  <span className="review-meta">
+                    {question.difficulty !== "unknown" ? (
+                      <DifficultyChip difficulty={question.difficulty} />
+                    ) : null}
+                    Generated practice
+                  </span>
                 ) : (
                   <span className="review-meta">
                     <DifficultyChip difficulty={question.difficulty} />
@@ -531,8 +545,9 @@ function Result({
       </div>
       {run.mode === "stage" && !perfect && !practicePool ? (
         <p className="note">
-          Generated MC practice is available for Indices, Identities,
-          Factorization, and Ratio and map scale for now.
+          Generated MC practice is available for Change of subjects, Indices,
+          Identities, Factorization, Ratio and map scale, and Simultaneous
+          equations for now.
         </p>
       ) : null}
       {run.mode === "drill" && practicePool ? (

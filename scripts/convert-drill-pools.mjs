@@ -2,21 +2,36 @@
  * Turn Weekly Question Generator Paper 2 pool scripts into JSON the Vite app can import.
  *
  *   node scripts/convert-drill-pools.mjs j7mc_pool.js j8_pool.js j9mc_pool.js j10_pool.js
+ *   node scripts/convert-drill-pools.mjs j1mc_pool.js j11mc_pool.js
  *
- * Pool keys: J7MC, J8, J9MC, J10. J10 items have no stem; this script builds one
- * from the area / scale fields. `$...$` becomes `\(...\)` for MathView.
+ * Pool keys: J1MC, J7MC, J8, J9MC, J10, J11MC. The stage is read from the
+ * POOLS.<key> declaration. The old four-file order still works when a file
+ * does not name a key. J10 items have no stem; this script builds one from
+ * the area / scale fields. `$...$` becomes `\(...\)` for MathView.
+ * Easy | Medium | Hard is kept on each item as `band` when the pool has one.
  */
 import fs from "node:fs";
 import path from "node:path";
 
 const OUT_DIR = path.resolve("src/data/drillPools");
 
-const SOURCES = [
-  { file: 0, key: "J7MC", stage: "J7" },
-  { file: 1, key: "J8", stage: "J8" },
-  { file: 2, key: "J9MC", stage: "J9" },
-  { file: 3, key: "J10", stage: "J10" },
+const KEY_TO_STAGE = {
+  J1MC: "J1",
+  J7MC: "J7",
+  J8: "J8",
+  J9MC: "J9",
+  J10: "J10",
+  J11MC: "J11",
+};
+
+const POSITIONAL = [
+  { key: "J7MC", stage: "J7" },
+  { key: "J8", stage: "J8" },
+  { key: "J9MC", stage: "J9" },
+  { key: "J10", stage: "J10" },
 ];
+
+const BANDS = new Set(["Easy", "Medium", "Hard"]);
 
 function loadPool(file, key) {
   const src = fs.readFileSync(file, "utf8");
@@ -28,6 +43,20 @@ function loadPool(file, key) {
     throw new Error(`No questions in ${file} (POOLS.${key})`);
   }
   return pool.questions;
+}
+
+function sourceFor(file, index, total) {
+  const src = fs.readFileSync(file, "utf8");
+  const found = [...src.matchAll(/POOLS\.([A-Za-z0-9]+)\s*=/g)].map((match) => match[1]);
+  const known = found.filter((key) => KEY_TO_STAGE[key]);
+  if (known.length === 1) {
+    return { key: known[0], stage: KEY_TO_STAGE[known[0]] };
+  }
+  if (known.length > 1) {
+    throw new Error(`${file} declares ${known.join(", ")}`);
+  }
+  if (total === 4 && POSITIONAL[index]) return POSITIONAL[index];
+  throw new Error(`${file} has no known POOLS key`);
 }
 
 function dollarsToKatex(value) {
@@ -113,26 +142,46 @@ function convert(raw, stage, index) {
     return { mark: String(step.m ?? ""), text, note: String(step.note ?? "") };
   });
   if (steps.length === 0) throw new Error(`${id} has no steps`);
-  return { id, tpl, stem, choices, answer, steps };
+  let band;
+  if (raw.band != null && raw.band !== "") {
+    if (!BANDS.has(raw.band)) throw new Error(`${id} has band ${raw.band}`);
+    band = raw.band;
+  }
+  const item = { id, tpl, stem, choices, answer, steps };
+  if (band) return { id, tpl, band, stem, choices, answer, steps };
+  return item;
 }
 
 const args = process.argv.slice(2);
-if (args.length !== 4) {
-  console.error("Usage: node scripts/convert-drill-pools.mjs <j7mc> <j8> <j9mc> <j10>");
+if (args.length === 0) {
+  console.error(
+    "Usage: node scripts/convert-drill-pools.mjs <pool.js> [more pools...]\n" +
+      "       node scripts/convert-drill-pools.mjs <j7mc> <j8> <j9mc> <j10>",
+  );
   process.exit(1);
 }
 
 fs.mkdirSync(OUT_DIR, { recursive: true });
 
-for (const source of SOURCES) {
-  const raws = loadPool(args[source.file], source.key);
-  const items = raws.map((raw, index) => convert(raw, source.stage, index));
+for (let index = 0; index < args.length; index += 1) {
+  const source = sourceFor(args[index], index, args.length);
+  const raws = loadPool(args[index], source.key);
+  const items = raws.map((raw, itemIndex) => convert(raw, source.stage, itemIndex));
   const stems = new Set(items.map((item) => item.stem));
   const tpls = {};
-  for (const item of items) tpls[item.tpl] = (tpls[item.tpl] ?? 0) + 1;
+  const bands = {};
+  for (const item of items) {
+    tpls[item.tpl] = (tpls[item.tpl] ?? 0) + 1;
+    if (item.band) bands[item.band] = (bands[item.band] ?? 0) + 1;
+  }
   const file = path.join(OUT_DIR, `${source.stage.toLowerCase()}.json`);
   fs.writeFileSync(file, `[\n${items.map((item) => JSON.stringify(item)).join(",\n")}\n]\n`);
+  const bandNote = itemHasBand(items) ? `, band ${JSON.stringify(bands)}` : "";
   console.log(
-    `${source.stage} ← POOLS.${source.key}: ${items.length} items, ${stems.size} unique stems, tpl ${JSON.stringify(tpls)} → ${path.relative(process.cwd(), file)}`,
+    `${source.stage} ← POOLS.${source.key}: ${items.length} items, ${stems.size} unique stems, tpl ${JSON.stringify(tpls)}${bandNote} → ${path.relative(process.cwd(), file)}`,
   );
+}
+
+function itemHasBand(items) {
+  return items.some((item) => item.band);
 }

@@ -12,6 +12,19 @@ import { questionById } from "../src/questions.ts";
 import { stageClearedBy, startRun, type Progress, type Run } from "../src/progress.ts";
 
 const EXPECTED: Record<string, string[]> = {
+  "J1-sample-q2": [],
+  "J1-practice-q2": [],
+  "J1-2013-q2": ["CS4"],
+  "J1-2016-q2": ["CS7"],
+  "J1-2017-q3": [],
+  "J1-2018-q2": ["CS8"],
+  "J1-2019-q5": ["CS5"],
+  "J1-2020-q2": [],
+  "J1-2021-q2": [],
+  "J1-2022-q5": ["CS7"],
+  "J1-2023-q1": ["CS8"],
+  "J1-2024-q3": ["CS5"],
+  "J1-2025-q4": [],
   "J7-sample-q1": ["I1"],
   "J7-practice-q1": [],
   "J7-2012-q1": ["I2"],
@@ -76,6 +89,13 @@ const EXPECTED: Record<string, string[]> = {
   "J10-2024-q6": [],
   "J10-2024-q12": [],
   "J10-2025-q11": [],
+  "J11-2012-q5": ["SE1"],
+  "J11-2014-q8": ["SE1"],
+  "J11-2014-q9": ["SE2"],
+  "J11-2015-q3": ["SE1"],
+  "J11-2016-q5": ["SE1"],
+  "J11-2019-q3": ["SE1"],
+  "J11-2024-q5": ["SE1"],
 };
 
 const empty = (): Progress => ({ cleared: [], used: {}, last: {}, run: null });
@@ -84,7 +104,7 @@ function wrongLetter(answer: string): "A" | "B" | "C" | "D" {
   return answer === "A" ? "B" : "A";
 }
 
-for (const stage of ["J7", "J8", "J9", "J10"]) {
+for (const stage of ["J1", "J7", "J8", "J9", "J10", "J11"]) {
   assert.equal(hasGeneratedPool(stage), true);
   const pool = generatedQuestions(stage);
   assert.equal(pool.length, 300, stage);
@@ -103,6 +123,12 @@ for (const stage of ["J7", "J8", "J9", "J10"]) {
       assert.equal(question.choices[letter].includes("$"), false);
     }
     assert.equal(question.stem.includes("$"), false);
+    if (stage === "J1" || stage === "J11") {
+      assert.notEqual(question.difficulty, "unknown", question.id);
+      assert.match(question.archetype ?? "", stage === "J1" ? /^CS[1-8]$/ : /^SE[1-7]$/);
+    } else {
+      assert.equal(question.difficulty, "unknown", question.id);
+    }
   }
   for (const bankQuestion of questionsFor(stage)) {
     const got = skillsForStem(stage, bankQuestion.stem);
@@ -112,7 +138,6 @@ for (const stage of ["J7", "J8", "J9", "J10"]) {
   }
 }
 
-assert.equal(hasGeneratedPool("J1"), false);
 assert.equal(hasGeneratedPool("J5"), false);
 assert.equal(hasGeneratedPool("C1"), false);
 assert.equal(hasGeneratedPool("C10"), false);
@@ -130,6 +155,33 @@ assert.equal(firstJ10.archetype, "S1");
 assert.equal(firstJ10.answer, "B");
 assert.match(firstJ10.stem, /playground/);
 assert.match(firstJ10.stem, /250000/);
+
+function bandCounts(stageId: string) {
+  const counts = { easy: 0, medium: 0, hard: 0, unknown: 0 };
+  for (const question of generatedQuestions(stageId)) counts[question.difficulty] += 1;
+  return counts;
+}
+assert.deepEqual(bandCounts("J1"), { easy: 76, medium: 114, hard: 110, unknown: 0 });
+assert.deepEqual(bandCounts("J11"), { easy: 88, medium: 128, hard: 84, unknown: 0 });
+assert.deepEqual(bandCounts("J7"), { easy: 0, medium: 0, hard: 0, unknown: 300 });
+assert.equal(questionsFor("J1").length, 13);
+assert.equal(questionsFor("J11").length, 7);
+assert.ok(questionsFor("J1").every((question) => !question.generated && !question.id.startsWith("wqg-")));
+assert.ok(questionsFor("J11").every((question) => !question.generated && !question.id.startsWith("wqg-")));
+
+const firstJ1 = generatedQuestions("J1")[0];
+assert.equal(firstJ1.id, "wqg-J1-001");
+assert.equal(firstJ1.archetype, "CS8");
+assert.equal(firstJ1.answer, "D");
+assert.equal(firstJ1.difficulty, "hard");
+assert.match(firstJ1.stem, /c\+d/);
+
+const firstJ11 = generatedQuestions("J11")[0];
+assert.equal(firstJ11.id, "wqg-J11-001");
+assert.equal(firstJ11.archetype, "SE1");
+assert.equal(firstJ11.answer, "A");
+assert.equal(firstJ11.difficulty, "easy");
+assert.match(firstJ11.stem, /2p\+3q/);
 
 const j7Stage = startRun(empty(), "J7", "stage");
 assert.ok(j7Stage);
@@ -191,8 +243,17 @@ const beforeJ1: Progress = {
   last: {},
   run: null,
 };
-assert.equal(startRun(beforeJ1, "J1", "drill"), null);
-for (const stageId of ["J2", "J5", "J11", "J14"]) {
+const strayJ1 = startRun(beforeJ1, "J1", "drill");
+assert.ok(strayJ1?.run);
+assert.equal(strayJ1.run.source, "generated");
+assert.equal(strayJ1.run.mode, "drill");
+assert.deepEqual(strayJ1.run.focus, []);
+assert.equal(strayJ1.run.ids.length, 5);
+assert.ok(strayJ1.run.ids.every((id) => id.startsWith("wqg-J1-")));
+assert.ok(strayJ1.run.ids.every((id) => generatedById(id)?.difficulty === "easy"));
+assert.deepEqual(strayJ1.used, beforeJ1.used);
+assert.deepEqual(strayJ1.cleared, ["J3"]);
+for (const stageId of ["J2", "J5", "J14"]) {
   assert.equal(hasGeneratedPool(stageId), false);
   assert.equal(startRun(beforeJ1, stageId, "drill"), null);
 }
@@ -215,6 +276,124 @@ const perfectStage: Run = {
 };
 assert.equal(stageClearedBy(perfectStage, 5, 5), true);
 assert.equal(stageClearedBy(perfectStage, 4, 5), false);
+
+const cs7 = bankQuestionById("J1-2016-q2");
+const cs4 = bankQuestionById("J1-2013-q2");
+const cs8 = bankQuestionById("J1-2018-q2");
+const se2 = bankQuestionById("J11-2014-q9");
+const se1 = bankQuestionById("J11-2015-q3");
+assert.ok(cs7 && cs4 && cs8 && se2 && se1);
+
+function wrongRun(stageId: string, questions: { id: string; answer: string }[]): Progress {
+  return {
+    cleared: ["J3"],
+    used: { [stageId]: ["kept-bank-id"] },
+    last: {},
+    run: {
+      stage: stageId,
+      mode: "stage",
+      ids: questions.map((question) => question.id),
+      picks: Object.fromEntries(questions.map((question) => [question.id, wrongLetter(question.answer)])),
+      index: questions.length - 1,
+      marked: true,
+    },
+  };
+}
+
+for (let trial = 0; trial < 12; trial += 1) {
+  const focused = startRun(wrongRun("J1", [cs7]), "J1", "drill");
+  assert.ok(focused?.run);
+  assert.deepEqual(focused.run.focus, ["CS7"]);
+  assert.equal(focused.run.ids.length, 5);
+  assert.deepEqual(focused.used, { J1: ["kept-bank-id"] });
+  assert.deepEqual(focused.cleared, ["J3"]);
+  assert.equal(stageClearedBy(focused.run, 5, 5), false);
+  const kinds = focused.run.ids.map((id) => generatedById(id));
+  assert.equal(kinds.filter((question) => question?.archetype === "CS7").length, 3);
+  assert.ok(
+    kinds.filter((question) => question?.archetype !== "CS7").every((question) => question?.difficulty === "easy"),
+  );
+  for (let i = 1; i < kinds.length; i += 1) {
+    assert.notEqual(kinds[i]?.archetype, kinds[i - 1]?.archetype);
+  }
+  const againJ1 = startRun(focused, "J1", "drill");
+  assert.ok(againJ1?.run);
+  assert.deepEqual(againJ1.run.focus, ["CS7"]);
+  assert.deepEqual(againJ1.used, focused.used);
+  const seen = new Set(focused.run.ids);
+  assert.ok(againJ1.run.ids.every((id) => !seen.has(id)));
+}
+
+const paired = startRun(wrongRun("J1", [cs4, cs8]), "J1", "drill");
+assert.ok(paired?.run);
+assert.deepEqual(paired.run.focus, ["CS4", "CS8"]);
+assert.deepEqual(
+  paired.run.ids.map((id) => generatedById(id)?.archetype),
+  ["CS4", "CS8", "CS4", "CS8", "CS4"],
+);
+assert.deepEqual(paired.used, { J1: ["kept-bank-id"] });
+
+for (let trial = 0; trial < 8; trial += 1) {
+  const ratioMiss = startRun(wrongRun("J11", [se2]), "J11", "drill");
+  assert.ok(ratioMiss?.run);
+  assert.deepEqual(ratioMiss.run.focus, ["SE2"]);
+  assert.deepEqual(ratioMiss.used, { J11: ["kept-bank-id"] });
+  assert.deepEqual(ratioMiss.cleared, ["J3"]);
+  const kinds = ratioMiss.run.ids.map((id) => generatedById(id));
+  assert.equal(kinds.filter((question) => question?.archetype === "SE2").length, 3);
+  assert.ok(kinds.every((question) => question?.difficulty === "easy"));
+  assert.ok(kinds.every((question) => question?.id.startsWith("wqg-J11-")));
+  for (let i = 1; i < kinds.length; i += 1) {
+    assert.notEqual(kinds[i]?.archetype, kinds[i - 1]?.archetype);
+  }
+
+  const linear = startRun(wrongRun("J11", [se1]), "J11", "drill");
+  assert.ok(linear?.run);
+  assert.deepEqual(linear.run.focus, ["SE1"]);
+  const linearKinds = linear.run.ids.map((id) => generatedById(id));
+  assert.equal(linearKinds.filter((question) => question?.archetype === "SE1").length, 3);
+  assert.ok(linearKinds.every((question) => question?.difficulty === "easy"));
+}
+
+const easyJ1 = generatedQuestions("J1").filter((question) => question.difficulty === "easy").map((question) => question.id);
+const afterEasy: Progress = {
+  cleared: ["J3"],
+  used: { J1: ["J1-sample-q2"] },
+  last: {},
+  run: {
+    stage: "J1",
+    mode: "drill",
+    source: "generated",
+    ids: easyJ1.slice(0, 5),
+    picks: {},
+    index: 0,
+    marked: true,
+    focus: [],
+    seenIds: easyJ1,
+  },
+};
+const mediumDrill = startRun(afterEasy, "J1", "drill");
+assert.ok(mediumDrill?.run);
+assert.deepEqual(mediumDrill.run.focus, []);
+assert.deepEqual(mediumDrill.used, afterEasy.used);
+assert.ok(mediumDrill.run.ids.every((id) => generatedById(id)?.difficulty === "medium"));
+for (let i = 1; i < mediumDrill.run.ids.length; i += 1) {
+  assert.notEqual(generatedById(mediumDrill.run.ids[i])?.archetype, generatedById(mediumDrill.run.ids[i - 1])?.archetype);
+}
+const mediumIds = generatedQuestions("J1").filter((question) => question.difficulty === "medium").map((question) => question.id);
+const afterMedium: Progress = {
+  ...afterEasy,
+  run: {
+    ...afterEasy.run!,
+    ids: mediumIds.slice(0, 5),
+    seenIds: [...easyJ1, ...mediumIds],
+  },
+};
+const hardDrill = startRun(afterMedium, "J1", "drill");
+assert.ok(hardDrill?.run);
+assert.ok(hardDrill.run.ids.every((id) => generatedById(id)?.difficulty === "hard"));
+assert.deepEqual(hardDrill.used, { J1: ["J1-sample-q2"] });
+assert.deepEqual(hardDrill.cleared, ["J3"]);
 
 const pool = [
   ...Array.from({ length: 10 }, (_, i) => ({ id: `a${i}`, tpl: "I2", stem: `a${i}` })),
