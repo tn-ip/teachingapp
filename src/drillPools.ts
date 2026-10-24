@@ -1,24 +1,32 @@
-import type { Choice, Question } from "./bank";
+import type { Choice, Difficulty, Question } from "./bank";
+import j1 from "./data/drillPools/j1.json";
 import j7 from "./data/drillPools/j7.json";
 import j8 from "./data/drillPools/j8.json";
 import j9 from "./data/drillPools/j9.json";
 import j10 from "./data/drillPools/j10.json";
+import j11 from "./data/drillPools/j11.json";
 
 /**
  * Weekly Question Generator Paper 2 MC pools only, committed as JSON
  * (see scripts/convert-drill-pools.mjs). Paper 1 conventional pools are not used.
  *
+ * J1 Change of subjects ← POOLS.J1MC
  * J7 Indices ← POOLS.J7MC
  * J8 Identities ← POOLS.J8
  * J9 Factorization, expansion ← POOLS.J9MC
  * J10 Ratio, rate (map scale) ← POOLS.J10
+ * J11 Simultaneous equations ← POOLS.J11MC
  */
 
 type PoolStep = { mark: string; text: string; note: string };
 
+type PoolBand = "Easy" | "Medium" | "Hard";
+
 type PoolRecord = {
   id: string;
   tpl: string;
+  /** Generator band. J7–J10 pools omit it. */
+  band?: PoolBand;
   stem: string;
   choices: Record<Choice, string>;
   answer: Choice;
@@ -26,18 +34,29 @@ type PoolRecord = {
 };
 
 const TITLES: Record<string, string> = {
+  J1: "Change of subjects",
   J7: "Indices",
   J8: "Identities",
   J9: "Factorization, expansion",
   J10: "Ratio, rate (map scale)",
+  J11: "Simultaneous equations",
 };
 
 const FILES: Record<string, PoolRecord[]> = {
+  J1: j1 as PoolRecord[],
   J7: j7 as PoolRecord[],
   J8: j8 as PoolRecord[],
   J9: j9 as PoolRecord[],
   J10: j10 as PoolRecord[],
+  J11: j11 as PoolRecord[],
 };
+
+function difficultyFromBand(band: PoolBand | undefined): Difficulty {
+  if (band === "Easy") return "easy";
+  if (band === "Medium") return "medium";
+  if (band === "Hard") return "hard";
+  return "unknown";
+}
 
 const byStage = new Map<string, Question[]>();
 const byId = new Map<string, Question>();
@@ -61,7 +80,7 @@ function toQuestion(stageId: string, record: PoolRecord): Question {
     answer: record.answer,
     correctPercent: null,
     facilityPct: null,
-    difficulty: "unknown",
+    difficulty: difficultyFromBand(record.band),
     hasFigure: false,
     figure: null,
     figures: [],

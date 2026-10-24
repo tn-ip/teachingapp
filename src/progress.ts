@@ -91,10 +91,12 @@ function missedStems(run: Run | null, stageId: string): string[] {
 }
 
 /**
- * J7–J10 practice drills. `used` is left as it was, so a practice drill
- * does not burn real Paper 2 questions and does not change a cleared stage.
- * Another drill in the same session keeps the original focus and skips stems
- * already shown, until the pool cannot fill five fresh items.
+ * Practice drills for stages that have a Weekly Question Generator pool.
+ * `used` is left as it was, so a practice drill does not burn real Paper 2
+ * questions and does not change a cleared stage. Another drill in the same
+ * session keeps the original focus and skips stems already shown, until the
+ * pool cannot fill five fresh items. Items carry their generator band so the
+ * draw can prefer Easy, then Medium, then Hard.
  */
 function startGeneratedDrill(progress: Progress, stageId: string): Progress | null {
   const pool = generatedQuestions(stageId);
@@ -121,6 +123,7 @@ function startGeneratedDrill(progress: Progress, stageId: string): Progress | nu
       id: question.id,
       tpl: question.archetype ?? "",
       stem: question.stem,
+      difficulty: question.difficulty,
     })),
     focus,
     avoid,
