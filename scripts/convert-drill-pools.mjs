@@ -3,8 +3,9 @@
  *
  *   node scripts/convert-drill-pools.mjs j7mc_pool.js j8_pool.js j9mc_pool.js j10_pool.js
  *   node scripts/convert-drill-pools.mjs j1mc_pool.js j11mc_pool.js
+ *   node scripts/convert-drill-pools.mjs j2mc_pool.js j18mc_pool.js
  *
- * Pool keys: J1MC, J7MC, J8, J9MC, J10, J11MC. The stage is read from the
+ * Pool keys: J1MC, J2MC, J7MC, J8, J9MC, J10, J11MC, J18MC. The stage is read from the
  * POOLS.<key> declaration. The old four-file order still works when a file
  * does not name a key. J10 items have no stem; this script builds one from
  * the area / scale fields. `$...$` becomes `\(...\)` for MathView.
@@ -17,11 +18,13 @@ const OUT_DIR = path.resolve("src/data/drillPools");
 
 const KEY_TO_STAGE = {
   J1MC: "J1",
+  J2MC: "J2",
   J7MC: "J7",
   J8: "J8",
   J9MC: "J9",
   J10: "J10",
   J11MC: "J11",
+  J18MC: "J18",
 };
 
 const POSITIONAL = [

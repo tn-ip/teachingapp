@@ -53,6 +53,12 @@
  * - CS2 (integer ± letter) / letter = integer
  * - no tag when the stem is none of those shapes
  *
+ * J2 Significant figure and J18 Sequences
+ * - no tag. Bank stems (which rounding statement is true, a range after
+ *   rounding, a recurrence, a dot pattern) are not the SF1–SF8 or SQ1–SQ8
+ *   drill shapes. A miss therefore warms up the whole pool Easy, then
+ *   Medium, then Hard, the same way an unmatched J1 or J11 drill does.
+ *
  * J11 Simultaneous equations
  * - SE7 a journey at two speeds
  * - SE6 the sum and the product of two positive numbers

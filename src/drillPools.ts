@@ -1,21 +1,25 @@
 import type { Choice, Difficulty, Question } from "./bank";
 import j1 from "./data/drillPools/j1.json";
+import j2 from "./data/drillPools/j2.json";
 import j7 from "./data/drillPools/j7.json";
 import j8 from "./data/drillPools/j8.json";
 import j9 from "./data/drillPools/j9.json";
 import j10 from "./data/drillPools/j10.json";
 import j11 from "./data/drillPools/j11.json";
+import j18 from "./data/drillPools/j18.json";
 
 /**
  * Weekly Question Generator Paper 2 MC pools only, committed as JSON
  * (see scripts/convert-drill-pools.mjs). Paper 1 conventional pools are not used.
  *
  * J1 Change of subjects ← POOLS.J1MC
+ * J2 Significant figure ← POOLS.J2MC
  * J7 Indices ← POOLS.J7MC
  * J8 Identities ← POOLS.J8
  * J9 Factorization, expansion ← POOLS.J9MC
  * J10 Ratio, rate (map scale) ← POOLS.J10
  * J11 Simultaneous equations ← POOLS.J11MC
+ * J18 Sequences ← POOLS.J18MC
  */
 
 type PoolStep = { mark: string; text: string; note: string };
@@ -35,20 +39,24 @@ type PoolRecord = {
 
 const TITLES: Record<string, string> = {
   J1: "Change of subjects",
+  J2: "Significant figure",
   J7: "Indices",
   J8: "Identities",
   J9: "Factorization, expansion",
   J10: "Ratio, rate (map scale)",
   J11: "Simultaneous equations",
+  J18: "Sequences",
 };
 
 const FILES: Record<string, PoolRecord[]> = {
   J1: j1 as PoolRecord[],
+  J2: j2 as PoolRecord[],
   J7: j7 as PoolRecord[],
   J8: j8 as PoolRecord[],
   J9: j9 as PoolRecord[],
   J10: j10 as PoolRecord[],
   J11: j11 as PoolRecord[],
+  J18: j18 as PoolRecord[],
 };
 
 function difficultyFromBand(band: PoolBand | undefined): Difficulty {
