@@ -5,6 +5,7 @@ import {
   formatFacility,
   questionsFor,
   rankedStages,
+  solutionAttribution,
   solutionFor,
   stageById,
   stages,
@@ -56,18 +57,18 @@ function WorkedSolutionView({ question }: { question: Question }) {
     <section className="solution" aria-label="Worked solution">
       <p className="solution-label">題解 · Worked solution</p>
       {steps ? <MathView text={steps} /> : <p className="solution-missing">{fallback}</p>}
-      {steps && solution?.hasDiagram ? (
-        <p className="solution-note">原頁有圖，不在這裡顯示。圖見下方連結。</p>
+      {solution?.hasDiagram && url ? (
+        <p className="solution-note">
+          原頁有圖，不在這裡顯示。{" "}
+          <a href={url} target="_blank" rel="noopener noreferrer">
+            圖見原頁
+          </a>
+        </p>
       ) : null}
       {solution?.sourceAnswer && !solution.answerMatches ? (
         <p className="solution-note">
           mathseasy marks {solution.sourceAnswer}. This bank’s key is {question.answer}.
         </p>
-      ) : null}
-      {url ? (
-        <a className="solution-source" href={url} target="_blank" rel="noopener noreferrer">
-          Solution adapted from mathseasy.hk (Thomas Fok)
-        </a>
       ) : null}
       {videoUrl ? (
         <a className="solution-source video" href={videoUrl} target="_blank" rel="noopener noreferrer">
@@ -300,6 +301,13 @@ function StageMap({
         Identities, Factorization, Ratio and map scale, or Simultaneous
         equations opens 5 new practice questions. Other stages have no
         practice drill. A practice drill does not clear the stage.
+      </p>
+      <p className="note source-credit">
+        Worked solutions are adapted from{" "}
+        <a href={solutionAttribution.home} target="_blank" rel="noopener noreferrer">
+          mathseasy.hk
+        </a>{" "}
+        ({solutionAttribution.author}).
       </p>
       {run ? (
         <button className="resume" type="button" onClick={onResume}>

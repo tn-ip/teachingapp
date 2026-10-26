@@ -117,11 +117,19 @@ export type WorkedSolution = {
 };
 
 type SolutionFile = {
+  author: string;
+  sourceHome: string;
   credit: string;
   solutions: Record<string, WorkedSolution>;
 };
 
 const solutionBank = solutionFile as SolutionFile;
+
+/** Shown once on the stage map. Individual solutions do not repeat it. */
+export const solutionAttribution = {
+  author: solutionBank.author,
+  home: solutionBank.sourceHome,
+};
 
 /** Thomas Fok / mathseasy write-up for a bank question, when the fetch script matched one. */
 export function solutionFor(id: string): WorkedSolution | undefined {

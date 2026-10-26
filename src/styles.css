@@ -91,6 +91,15 @@ button {
 
 .note, .bank-note { font-size: 0.95rem; }
 
+.source-credit {
+  margin: 0 0 14px;
+}
+
+.source-credit a {
+  color: var(--teal);
+  font-weight: 700;
+}
+
 .resume {
   width: 100%;
   text-align: left;

@@ -1,17 +1,18 @@
 #!/usr/bin/env python3
-"""Pull Junior Paper 2 worked solutions from mathseasy.hk.
+"""Pull Paper 2 worked solutions from mathseasy.hk.
 
 Thomas Fok publishes a Paper II 題解 page for each HKDSE year (and the 2012
 Practice Paper). This script fetches those pages once, keeps the blocks that
 match src/data/questions.json by year and question number, and writes
-src/data/solutions.json. The trainer renders that file with KaTeX. GitHub
-Pages stays static: nothing is scraped in the browser.
+src/data/solutions.json. The match covers Junior stages and Compulsory
+chapters C1–C23. The trainer renders that file with KaTeX. GitHub Pages stays
+static: nothing is scraped in the browser.
 
 Diagrams on the source pages are not downloaded. A question that uses one is
 flagged so the app can point at the original page.
 
-Re-run from the repo root when mathseasy updates a year, or when the Junior
-bank changes:
+Re-run from the repo root when mathseasy updates a year, or when the bank
+changes:
 
     python3 scripts/fetch_solutions.py
 
@@ -65,7 +66,9 @@ DELIM_RE = re.compile(r"\$\$([\s\S]+?)\$\$|##([\s\S]+?)##")
 ENV_RE = re.compile(
     r"\\begin\{(?:aligned|align\*?|cases|array|gathered|gather\*?|split|matrix|pmatrix|bmatrix|eqnarray\*?)}"
 )
-RELATED_RE = re.compile(r"相關文章：[^\n]*")
+RELATED_RE = re.compile(r"相關文章[:：][^\n]*")
+# WordPress tag/category lines sit after the last question on a page.
+CHROME_RE = re.compile(r"^(?:標籤|分類)[:：].*$", re.M)
 TAG_RE = re.compile(r"<[^>]+>")
 
 
@@ -294,6 +297,7 @@ def tidy(text: str) -> str:
     text = text.replace("\r", "")
     text = text.replace("\xa0", " ")
     text = RELATED_RE.sub("", text)
+    text = CHROME_RE.sub("", text)
     text = re.sub(r"If you enjoyed this article[\s\S]*", "", text)
     text = re.sub(r"Subscribe via RSS Feed", "", text)
     lines = [re.sub(r"[ \t]+", " ", line).strip() for line in text.split("\n")]
