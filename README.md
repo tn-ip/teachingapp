@@ -54,7 +54,7 @@ The script needs `emf2svg-conv`, `wmf2svg`, and `rsvg-convert` for the diagrams.
 
 After a wrong answer on a stage run, the review shows the correct letter and then the worked steps for that question. A correct answer stays as it is. A generated practice drill shows the pool’s own short marking (1M / 1A) instead, and does not link to mathseasy.
 
-Steps are adapted from [Thomas Fok’s Paper II 題解 on mathseasy.hk](https://mathseasy.hk/). They are not original to this trainer. The review always shows that credit, and the link opens the year’s page on the tab that contains the question (1–10, 11–20, and so on). mathseasy does not publish a per-question anchor. Diagrams and whole-page captures are not stored; if a write-up depends on a figure, the app says so and links out. Two mensuration questions also link to Thomas Fok’s YouTube video when that is how the page explains them.
+Steps are adapted from [Thomas Fok’s Paper II 題解 on mathseasy.hk](https://mathseasy.hk/). They are not original to this trainer. The stage map credits that source once. A wrong-answer review does not repeat the credit. mathseasy does not publish a per-question anchor. Diagrams and whole-page captures are not stored; if a write-up depends on a figure, the review says so and links to the year’s page on the tab that contains the question (1–10, 11–20, and so on). Two mensuration questions also link to Thomas Fok’s YouTube video when that is how the page explains them.
 
 `src/data/solutions.json` is the companion file, keyed by question id. Each record has `solutionSteps` (text plus `\(...\)` / `\[...\]` for KaTeX), `solutionSourceUrl`, and `solutionCredit`. The static site reads this file. It does not scrape mathseasy in the browser.
 
@@ -64,15 +64,15 @@ Refresh it from the repo root:
 python3 scripts/fetch_solutions.py
 ```
 
-The script walks `https://mathseasy.hk/articles/hkdse-YYYY-p2-ans/` for 2012–2026 and `hkdse-2012pp-p2-ans` for the Practice Paper, then matches year + question number to the Junior bank. It prints questions it could not fill.
+The script walks `https://mathseasy.hk/articles/hkdse-YYYY-p2-ans/` for 2012–2026 and `hkdse-2012pp-p2-ans` for the Practice Paper, then matches year + question number to every Junior and Compulsory question in the bank. It prints questions it could not fill.
 
-Coverage from the last run: **272 / 293** questions have steps. Every matched letter agrees with this bank’s key.
+Coverage from the last run: **634 / 683** questions have steps (Junior 272 / 293, Compulsory 362 / 390). **C10 is 17 / 19.** Every matched letter agrees with this bank’s key.
 
-Gaps:
+Gaps, left blank because mathseasy has no usable text for them:
 
-- **Sample Paper (18):** no Paper II 題解 page on mathseasy. The review shows the key only.
-- **Diagram only (3):** Practice Q25, 2019 Q25, 2021 Q23. The page is a figure. The review links out and does not embed the image.
-- **2026:** the fetch URL is included, but this Junior bank has no 2026 questions yet.
+- **Sample Paper (44):** no Paper II 題解 page on mathseasy. That includes both C10 Sample items, `C10-sample-q38` and `C10-sample-q40`. The review shows the key only.
+- **Diagram only (5):** Practice Q25 (J14), 2019 Q25 (J14), 2021 Q23 (J14), 2012 Q24 (C19), and 2015 Q24 (C19). The page is a figure (2012 Q24 and 2015 Q24 also point at a “常見軌跡” article and have no written steps). The review links out and does not embed the image.
+- **2026:** the fetch URL is included, but this bank has no 2026 questions yet.
 
 ## Develop
 
