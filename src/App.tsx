@@ -297,10 +297,11 @@ function StageMap({
         Pick any stage. Junior and Compulsory chapters sit on one map, ranked
         by average facility from Easy to Hard. A run is up to 5 real DSE
         questions, warming up Easy → Medium → untagged → Hard. Clear a stage
-        only with a perfect paper. A miss on Change of subjects, Indices,
-        Identities, Factorization, Ratio and map scale, or Simultaneous
-        equations opens 5 new practice questions. Other stages have no
-        practice drill. A practice drill does not clear the stage.
+        only with a perfect paper. A miss on Change of subjects, Significant
+        figure, Indices, Identities, Factorization, Ratio and map scale,
+        Simultaneous equations, or Sequences opens 5 new practice questions.
+        Other stages have no practice drill. A practice drill does not clear
+        the stage.
       </p>
       <p className="note source-credit">
         Worked solutions are adapted from{" "}
@@ -607,9 +608,9 @@ function Result({
       </div>
       {run.mode === "stage" && !perfect && !practicePool ? (
         <p className="note">
-          Generated MC practice is available for Change of subjects, Indices,
-          Identities, Factorization, Ratio and map scale, and Simultaneous
-          equations for now.
+          Generated MC practice is available for Change of subjects, Significant
+          figure, Indices, Identities, Factorization, Ratio and map scale,
+          Simultaneous equations, and Sequences for now.
         </p>
       ) : null}
       {run.mode === "drill" && practicePool ? (

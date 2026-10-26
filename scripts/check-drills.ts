@@ -104,18 +104,27 @@ function wrongLetter(answer: string): "A" | "B" | "C" | "D" {
   return answer === "A" ? "B" : "A";
 }
 
-for (const stage of ["J1", "J7", "J8", "J9", "J10", "J11"]) {
+const BANDED = new Set(["J1", "J2", "J11", "J18"]);
+const ARCHETYPE = {
+  J1: /^CS[1-8]$/,
+  J2: /^SF[1-8]$/,
+  J11: /^SE[1-7]$/,
+  J18: /^SQ[1-8]$/,
+} as const;
+
+for (const stage of ["J1", "J2", "J7", "J8", "J9", "J10", "J11", "J18"]) {
   assert.equal(hasGeneratedPool(stage), true);
   const pool = generatedQuestions(stage);
   assert.equal(pool.length, 300, stage);
   const ids = new Set(pool.map((question) => question.id));
   const stems = new Set(pool.map((question) => question.stem));
   assert.equal(ids.size, 300, stage);
-  assert.equal(stems.size, 300, `${stage} stems`);
+  assert.equal(stems.size, stage === "J2" ? 288 : 300, `${stage} stems`);
   for (const question of pool) {
     assert.equal(question.generated, true);
     assert.ok(question.archetype);
     assert.ok(question.steps && question.steps.length > 0);
+    assert.equal(question.topic, stages.find((item) => item.id === stage)?.title, question.id);
     assert.equal(bankQuestionById(question.id), undefined);
     assert.equal(questionById(question.id)?.id, question.id);
     for (const letter of ["A", "B", "C", "D"] as const) {
@@ -123,13 +132,14 @@ for (const stage of ["J1", "J7", "J8", "J9", "J10", "J11"]) {
       assert.equal(question.choices[letter].includes("$"), false);
     }
     assert.equal(question.stem.includes("$"), false);
-    if (stage === "J1" || stage === "J11") {
+    if (BANDED.has(stage)) {
       assert.notEqual(question.difficulty, "unknown", question.id);
-      assert.match(question.archetype ?? "", stage === "J1" ? /^CS[1-8]$/ : /^SE[1-7]$/);
+      assert.match(question.archetype ?? "", ARCHETYPE[stage as keyof typeof ARCHETYPE]);
     } else {
       assert.equal(question.difficulty, "unknown", question.id);
     }
   }
+  if (stage === "J2" || stage === "J18") continue;
   for (const bankQuestion of questionsFor(stage)) {
     const got = skillsForStem(stage, bankQuestion.stem);
     const want = EXPECTED[bankQuestion.id];
@@ -162,12 +172,18 @@ function bandCounts(stageId: string) {
   return counts;
 }
 assert.deepEqual(bandCounts("J1"), { easy: 76, medium: 114, hard: 110, unknown: 0 });
+assert.deepEqual(bandCounts("J2"), { easy: 76, medium: 114, hard: 110, unknown: 0 });
 assert.deepEqual(bandCounts("J11"), { easy: 88, medium: 128, hard: 84, unknown: 0 });
+assert.deepEqual(bandCounts("J18"), { easy: 76, medium: 114, hard: 110, unknown: 0 });
 assert.deepEqual(bandCounts("J7"), { easy: 0, medium: 0, hard: 0, unknown: 300 });
 assert.equal(questionsFor("J1").length, 13);
+assert.equal(questionsFor("J2").length, 12);
 assert.equal(questionsFor("J11").length, 7);
+assert.equal(questionsFor("J18").length, 13);
 assert.ok(questionsFor("J1").every((question) => !question.generated && !question.id.startsWith("wqg-")));
+assert.ok(questionsFor("J2").every((question) => !question.generated && !question.id.startsWith("wqg-")));
 assert.ok(questionsFor("J11").every((question) => !question.generated && !question.id.startsWith("wqg-")));
+assert.ok(questionsFor("J18").every((question) => !question.generated && !question.id.startsWith("wqg-")));
 
 const firstJ1 = generatedQuestions("J1")[0];
 assert.equal(firstJ1.id, "wqg-J1-001");
@@ -182,6 +198,22 @@ assert.equal(firstJ11.archetype, "SE1");
 assert.equal(firstJ11.answer, "A");
 assert.equal(firstJ11.difficulty, "easy");
 assert.match(firstJ11.stem, /2p\+3q/);
+
+const firstJ2 = generatedQuestions("J2")[0];
+assert.equal(firstJ2.id, "wqg-J2-001");
+assert.equal(firstJ2.topic, "Significant figure");
+assert.equal(firstJ2.archetype, "SF1");
+assert.equal(firstJ2.answer, "C");
+assert.equal(firstJ2.difficulty, "easy");
+assert.match(firstJ2.stem, /3556\.86/);
+
+const firstJ18 = generatedQuestions("J18")[0];
+assert.equal(firstJ18.id, "wqg-J18-001");
+assert.equal(firstJ18.topic, "Sequences");
+assert.equal(firstJ18.archetype, "SQ6");
+assert.equal(firstJ18.answer, "C");
+assert.equal(firstJ18.difficulty, "hard");
+assert.match(firstJ18.stem, /a=13/);
 
 const j7Stage = startRun(empty(), "J7", "stage");
 assert.ok(j7Stage);
@@ -253,9 +285,20 @@ assert.ok(strayJ1.run.ids.every((id) => id.startsWith("wqg-J1-")));
 assert.ok(strayJ1.run.ids.every((id) => generatedById(id)?.difficulty === "easy"));
 assert.deepEqual(strayJ1.used, beforeJ1.used);
 assert.deepEqual(strayJ1.cleared, ["J3"]);
-for (const stageId of ["J2", "J5", "J14"]) {
+for (const stageId of ["J3", "J5", "J14"]) {
   assert.equal(hasGeneratedPool(stageId), false);
   assert.equal(startRun(beforeJ1, stageId, "drill"), null);
+}
+for (const stageId of ["J2", "J18"]) {
+  for (const bankQuestion of questionsFor(stageId)) {
+    assert.deepEqual(skillsForStem(stageId, bankQuestion.stem), [], bankQuestion.id);
+  }
+  const stageRun = startRun(beforeJ1, stageId, "stage");
+  assert.ok(stageRun?.run);
+  assert.equal(stageRun.run.source, undefined);
+  assert.equal(stageRun.run.mode, "stage");
+  assert.ok(stageRun.run.ids.every((id) => id.startsWith(`${stageId}-`) && !id.startsWith("wqg-")));
+  assert.deepEqual(stageRun.cleared, ["J3"]);
 }
 const j1Stage = startRun(beforeJ1, "J1", "stage");
 assert.ok(j1Stage?.run);
@@ -353,6 +396,82 @@ for (let trial = 0; trial < 8; trial += 1) {
   const linearKinds = linear.run.ids.map((id) => generatedById(id));
   assert.equal(linearKinds.filter((question) => question?.archetype === "SE1").length, 3);
   assert.ok(linearKinds.every((question) => question?.difficulty === "easy"));
+}
+
+const sfMiss = bankQuestionById("J2-2016-q4");
+const sqMiss = bankQuestionById("J18-2016-q14");
+assert.ok(sfMiss && sqMiss);
+for (const missed of [sfMiss, sqMiss]) {
+  const drilled = startRun(wrongRun(missed.stage, [missed]), missed.stage, "drill");
+  assert.ok(drilled?.run);
+  assert.equal(drilled.run.source, "generated");
+  assert.equal(drilled.run.mode, "drill");
+  assert.deepEqual(drilled.run.focus, []);
+  assert.equal(drilled.run.ids.length, 5);
+  assert.ok(drilled.run.ids.every((id) => id.startsWith(`wqg-${missed.stage}-`)));
+  assert.ok(drilled.run.ids.every((id) => generatedById(id)?.difficulty === "easy"));
+  assert.ok(drilled.run.ids.every((id) => generatedById(id)?.paper === "2"));
+  assert.deepEqual(drilled.used, { [missed.stage]: ["kept-bank-id"] });
+  assert.deepEqual(drilled.cleared, ["J3"]);
+  assert.equal(stageClearedBy(drilled.run, 5, 5), false);
+  for (let i = 1; i < drilled.run.ids.length; i += 1) {
+    assert.notEqual(
+      generatedById(drilled.run.ids[i])?.archetype,
+      generatedById(drilled.run.ids[i - 1])?.archetype,
+    );
+  }
+  const againStage = startRun(drilled, missed.stage, "drill");
+  assert.ok(againStage?.run);
+  assert.deepEqual(againStage.run.focus, []);
+  assert.deepEqual(againStage.used, drilled.used);
+  assert.deepEqual(againStage.cleared, ["J3"]);
+  const seen = new Set(drilled.run.ids);
+  assert.ok(againStage.run.ids.every((id) => !seen.has(id)));
+  assert.ok(againStage.run.ids.every((id) => generatedById(id)?.difficulty === "easy"));
+}
+
+for (const stageId of ["J2", "J18"] as const) {
+  const easyIds = generatedQuestions(stageId)
+    .filter((question) => question.difficulty === "easy")
+    .map((question) => question.id);
+  const mediumIds = generatedQuestions(stageId)
+    .filter((question) => question.difficulty === "medium")
+    .map((question) => question.id);
+  const afterEasyBand: Progress = {
+    cleared: ["J3"],
+    used: { [stageId]: ["kept-bank-id"] },
+    last: {},
+    run: {
+      stage: stageId,
+      mode: "drill",
+      source: "generated",
+      ids: easyIds.slice(0, 5),
+      picks: {},
+      index: 0,
+      marked: true,
+      focus: [],
+      seenIds: easyIds,
+    },
+  };
+  const mediumNext = startRun(afterEasyBand, stageId, "drill");
+  assert.ok(mediumNext?.run);
+  assert.deepEqual(mediumNext.run.focus, []);
+  assert.deepEqual(mediumNext.used, afterEasyBand.used);
+  assert.ok(mediumNext.run.ids.every((id) => generatedById(id)?.difficulty === "medium"));
+  const afterMediumBand: Progress = {
+    ...afterEasyBand,
+    run: {
+      ...afterEasyBand.run!,
+      ids: mediumIds.slice(0, 5),
+      seenIds: [...easyIds, ...mediumIds],
+    },
+  };
+  const hardNext = startRun(afterMediumBand, stageId, "drill");
+  assert.ok(hardNext?.run);
+  assert.ok(hardNext.run.ids.every((id) => id.startsWith(`wqg-${stageId}-`)));
+  assert.ok(hardNext.run.ids.every((id) => generatedById(id)?.difficulty === "hard"));
+  assert.deepEqual(hardNext.used, { [stageId]: ["kept-bank-id"] });
+  assert.deepEqual(hardNext.cleared, ["J3"]);
 }
 
 const easyJ1 = generatedQuestions("J1").filter((question) => question.difficulty === "easy").map((question) => question.id);
