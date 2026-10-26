@@ -2,7 +2,7 @@
 
 Trainer for HKDSE Mathematics Compulsory Part **Paper 2** multiple choice. One map holds the Junior stages and Compulsory chapters 1–23. Any stage can be started. Nothing is locked behind clearing another stage.
 
-Open it on an iPad at [https://tn-ip.github.io/teachingapp/](https://tn-ip.github.io/teachingapp/) (after this branch is merged and GitHub Pages is set to deploy from Actions). In Safari, use **Share → Add to Home Screen** so it opens full screen. Progress stays on that iPad in `localStorage`. There is no login.
+Open it on an iPad at [https://tn-ip.github.io/teachingapp/](https://tn-ip.github.io/teachingapp/). In Safari, use **Share → Add to Home Screen** so it opens full screen. With no sign-in, progress stays on that iPad in `localStorage`. When Microsoft sign-in is configured, that same progress is saved to the student's account.
 
 ## How a stage works
 
@@ -73,6 +73,26 @@ Gaps, left blank because mathseasy has no usable text for them:
 - **Sample Paper (44):** no Paper II 題解 page on mathseasy. That includes both C10 Sample items, `C10-sample-q38` and `C10-sample-q40`. The review shows the key only.
 - **Diagram only (5):** Practice Q25 (J14), 2019 Q25 (J14), 2021 Q23 (J14), 2012 Q24 (C19), and 2015 Q24 (C19). The page is a figure (2012 Q24 and 2015 Q24 also point at a “常見軌跡” article and have no written steps). The review links out and does not embed the image.
 - **2026:** the fetch URL is included, but this bank has no 2026 questions yet.
+
+## Microsoft sign-in and Vercel
+
+Sign-in uses Supabase Auth with the school Microsoft Entra tenant: `signInWithOAuth({ provider: 'azure', options: { scopes: 'email', redirectTo } })`. Guests are not blocked. The map still runs from `localStorage` when nobody is signed in, and when the site is built without the env vars below (that is how GitHub Pages keeps working until cutover).
+
+Copy `.env.example` to `.env.local` for `npm run dev`. On Vercel, set:
+
+| Name | Value |
+| --- | --- |
+| `VITE_SUPABASE_URL` | `https://zjseatmkwpwsfcyhiivj.supabase.co` |
+| `VITE_SUPABASE_PUBLISHABLE_KEY` | The project publishable key (`sb_publishable_...`). `VITE_SUPABASE_ANON_KEY` is only the legacy anon JWT fallback. |
+| `VITE_BASE_PATH` | `/` so a Vercel project at the domain root does not look for `/teachingapp/` assets. |
+
+Do not set `VITE_BASE_PATH` for GitHub Pages. The Vite default stays `/teachingapp/`. The Pages workflow passes the same Supabase names from repository secrets when they exist, and an empty secret leaves Pages as a guest trainer.
+
+After the Vercel production URL exists, add it under Supabase → Authentication → URL configuration → Redirect URLs. The entry has to match `redirectTo`, including the trailing slash, for example `https://your-app.vercel.app/`. Also allow `http://localhost:5173/teachingapp/` for local dev, and `https://tn-ip.github.io/teachingapp/` if Pages should sign in before cutover. `vercel.json` sends other paths to `index.html` so a host refresh still opens the app.
+
+Signing in unions this iPad with the account. Cleared stages and used question ids are kept from either side. Each finished stage or practice run is appended once. The open paper stays the one on the device you are holding. Sign out leaves that copy on the iPad. Reset while signed in clears the account too. A different Microsoft account on the same iPad does not receive the previous student's paper.
+
+The per-question timer is not stored, so `run_history.elapsed_ms` is empty. There is no teacher class view in this slice.
 
 ## Develop
 

@@ -51,9 +51,67 @@ button {
   display: flex;
   justify-content: space-between;
   gap: 16px;
-  align-items: flex-end;
+  align-items: flex-start;
   margin-bottom: 12px;
 }
+
+.top-side {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8px;
+  min-width: 0;
+}
+
+.account-slot {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 6px;
+  max-width: 100%;
+}
+
+.account {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 8px;
+}
+
+.account-name {
+  max-width: min(240px, 100%);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 0.95rem;
+  font-weight: 700;
+}
+
+.microsoft {
+  background: white;
+  color: var(--ink);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  min-height: 48px;
+  padding: 10px 14px;
+  font-weight: 700;
+  box-shadow: var(--shadow);
+}
+
+.microsoft:disabled { opacity: 0.6; }
+
+.account-out { min-height: 48px; }
+
+.sync-note {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.82rem;
+  text-align: right;
+  max-width: 280px;
+}
+
+.sync-note.error { color: var(--bad); }
 
 .top h1, .result h2 {
   font-family: Palatino, "Iowan Old Style", Georgia, serif;
@@ -455,8 +513,12 @@ button {
 }
 
 @media (max-width: 640px) {
-  .top { align-items: flex-start; }
+  .top { flex-direction: column; }
   .top h1 { font-size: 1.7rem; }
+  .top-side, .account-slot, .account { align-items: stretch; width: 100%; }
+  .account { justify-content: space-between; }
+  .microsoft { width: 100%; }
+  .sync-note { text-align: left; max-width: none; }
   .quiz-bar {
     grid-template-columns: auto auto;
     grid-template-areas:
