@@ -198,8 +198,53 @@ button {
   align-items: center;
 }
 
-.quiz-bar p { margin: 0; color: var(--muted); }
-.quiz-bar span { color: var(--ink); }
+.quiz-bar {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  align-items: center;
+  gap: 10px;
+}
+
+.quiz-bar > .ghost { justify-self: start; }
+
+.quiz-progress {
+  justify-self: end;
+  margin: 0;
+  color: var(--muted);
+  text-align: right;
+}
+.quiz-progress span { color: var(--ink); }
+
+.question-timer {
+  display: inline-flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 8px;
+  margin: 0;
+  min-height: 44px;
+  padding: 8px 14px;
+  border-radius: 999px;
+  background: #e7f4f2;
+  border: 1px solid #b7d9d4;
+  color: var(--teal-ink);
+  white-space: nowrap;
+}
+
+.question-timer-label {
+  color: var(--teal);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.question-timer-value {
+  min-width: 4ch;
+  font-size: 1.05rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+}
 
 .stage-name { margin: 12px 0 0; font-weight: 700; }
 .warmup-hint {
@@ -403,4 +448,13 @@ button {
 @media (max-width: 640px) {
   .top { align-items: flex-start; }
   .top h1 { font-size: 1.7rem; }
+  .quiz-bar {
+    grid-template-columns: auto auto;
+    grid-template-areas:
+      "home timer"
+      "meta meta";
+  }
+  .quiz-bar > .ghost { grid-area: home; }
+  .question-timer { grid-area: timer; justify-self: end; }
+  .quiz-progress { grid-area: meta; justify-self: start; text-align: left; }
 }

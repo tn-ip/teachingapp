@@ -99,6 +99,56 @@ function PracticeWorking({ question }: { question: Question }) {
   );
 }
 
+/** Under a minute: `0s`, `12s`. From 60s: `1:00`, `1:05`. */
+export function formatElapsed(totalSeconds: number): string {
+  const seconds = Math.max(0, Math.floor(totalSeconds));
+  if (seconds < 60) return `${seconds}s`;
+  const minutes = Math.floor(seconds / 60);
+  const rest = seconds % 60;
+  return `${minutes}:${rest.toString().padStart(2, "0")}`;
+}
+
+function QuestionTimer({ resetKey }: { resetKey: string }) {
+  const [elapsed, setElapsed] = useState(0);
+
+  useEffect(() => {
+    const startedAt = Date.now();
+    setElapsed(0);
+    let timeoutId = 0;
+
+    const tick = () => {
+      const elapsedMs = Date.now() - startedAt;
+      setElapsed(Math.floor(elapsedMs / 1000));
+      timeoutId = window.setTimeout(tick, 1000 - (elapsedMs % 1000));
+    };
+    timeoutId = window.setTimeout(tick, 1000);
+
+    const onWake = () => {
+      if (document.visibilityState === "hidden") return;
+      setElapsed(Math.floor((Date.now() - startedAt) / 1000));
+    };
+    document.addEventListener("visibilitychange", onWake);
+
+    return () => {
+      window.clearTimeout(timeoutId);
+      document.removeEventListener("visibilitychange", onWake);
+    };
+  }, [resetKey]);
+
+  const label = formatElapsed(elapsed);
+  return (
+    <div
+      className="question-timer"
+      role="timer"
+      title="Time on this question"
+      aria-label={`Time on this question: ${label}`}
+    >
+      <span className="question-timer-label">Time</span>
+      <span className="question-timer-value">{label}</span>
+    </div>
+  );
+}
+
 function scoreRun(run: Run): { correct: number; total: number } {
   let correct = 0;
   for (const id of run.ids) {
@@ -363,7 +413,11 @@ function Quiz({
         <button type="button" className="ghost" onClick={onHome}>
           Map
         </button>
-        <p>
+        <QuestionTimer
+          key={`${run.index}:${question.id}`}
+          resetKey={`${run.index}:${question.id}`}
+        />
+        <p className="quiz-progress">
           {run.source === "generated" ? "Practice" : run.mode === "drill" ? "Drill" : "Stage"} ·{" "}
           {run.index + 1}/{items.length}
           <span>
