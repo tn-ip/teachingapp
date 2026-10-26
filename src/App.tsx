@@ -14,16 +14,19 @@ import {
   type Question,
 } from "./bank";
 import { hasGeneratedPool } from "./drillPools";
+import { AccountBar } from "./AccountBar";
 import { MathView } from "./MathView";
 import { questionById } from "./questions";
 import {
   loadProgress,
   saveProgress,
+  scoreRun,
   stageClearedBy,
   startRun,
   type Progress,
   type Run,
 } from "./progress";
+import { useAccountSync } from "./useAccountSync";
 
 type Screen = "map" | "quiz" | "result";
 
@@ -150,15 +153,6 @@ function QuestionTimer({ resetKey }: { resetKey: string }) {
   );
 }
 
-function scoreRun(run: Run): { correct: number; total: number } {
-  let correct = 0;
-  for (const id of run.ids) {
-    const question = questionById(id);
-    if (question && run.picks[id] === question.answer) correct += 1;
-  }
-  return { correct, total: run.ids.length };
-}
-
 export function App() {
   const [progress, setProgress] = useState<Progress>(() => loadProgress());
   const [screen, setScreen] = useState<Screen>(() => {
@@ -167,6 +161,12 @@ export function App() {
     return saved.run.marked ? "result" : "quiz";
   });
   const [confirmReset, setConfirmReset] = useState(false);
+  const account = useAccountSync(progress, setProgress, (next) => {
+    setProgress(next);
+    if (!next.run) setScreen("map");
+    else setScreen(next.run.marked ? "result" : "quiz");
+  });
+  const signedIn = Boolean(account.label);
 
   useEffect(() => {
     saveProgress(progress);
@@ -198,15 +198,18 @@ export function App() {
 
   return (
     <div className="app">
-      <header className="top">
-        <div>
-          <p className="eyebrow">HKDSE Mathematics · Paper 2</p>
-          <h1>Stage map</h1>
-        </div>
-        <p className="progress-pill">
-          {clearedCount}/{stages.length} cleared
-        </p>
-      </header>
+        <header className="top">
+          <div>
+            <p className="eyebrow">HKDSE Mathematics · Paper 2</p>
+            <h1>Stage map</h1>
+          </div>
+          <div className="top-side">
+            <AccountBar account={account} />
+            <p className="progress-pill">
+              {clearedCount}/{stages.length} cleared
+            </p>
+          </div>
+        </header>
 
       {screen === "map" ? (
         <StageMap
@@ -217,12 +220,17 @@ export function App() {
           onAskReset={() => setConfirmReset(true)}
           onCancelReset={() => setConfirmReset(false)}
           onReset={() => {
-            update(
-              { cleared: [], used: {}, last: {}, run: null },
-              "map",
-            );
-            setConfirmReset(false);
+            void account
+              .reset()
+              .then(() => {
+                setScreen("map");
+                setConfirmReset(false);
+              })
+              .catch(() => {
+                setConfirmReset(false);
+              });
           }}
+          signedIn={signedIn}
         />
       ) : null}
 
@@ -232,22 +240,26 @@ export function App() {
           onChange={(nextRun) => update({ ...progress, run: nextRun })}
           onHome={() => setScreen("map")}
           onMarked={(nextRun) => {
-            const result = scoreRun(nextRun);
-            const cleared = stageClearedBy(nextRun, result.correct, result.total)
-              ? Array.from(new Set([...progress.cleared, nextRun.stage]))
+            const stamped = nextRun.clientId
+              ? nextRun
+              : { ...nextRun, clientId: crypto.randomUUID() };
+            const result = scoreRun(stamped);
+            const cleared = stageClearedBy(stamped, result.correct, result.total)
+              ? Array.from(new Set([...progress.cleared, stamped.stage]))
               : progress.cleared;
             update(
               {
                 ...progress,
                 cleared,
-                run: nextRun,
+                run: stamped,
                 last: {
                   ...progress.last,
-                  [nextRun.stage]: {
+                  [stamped.stage]: {
                     correct: result.correct,
                     total: result.total,
-                    mode: nextRun.mode,
-                    source: nextRun.source,
+                    mode: stamped.mode,
+                    source: stamped.source,
+                    at: new Date().toISOString(),
                   },
                 },
               },
@@ -267,6 +279,7 @@ export function App() {
             if (next) update(next, "quiz");
           }}
           onDrill={beginDrill}
+          signedIn={signedIn}
         />
       ) : null}
     </div>
@@ -281,6 +294,7 @@ function StageMap({
   onAskReset,
   onCancelReset,
   onReset,
+  signedIn,
 }: {
   progress: Progress;
   onOpen: (stageId: string) => void;
@@ -289,6 +303,7 @@ function StageMap({
   onAskReset: () => void;
   onCancelReset: () => void;
   onReset: () => void;
+  signedIn: boolean;
 }) {
   const run = progress.run;
   return (
@@ -367,7 +382,11 @@ function StageMap({
       <footer className="reset">
         {confirmReset ? (
           <div className="reset-row">
-            <p>Clear saved progress on this iPad?</p>
+            <p>
+              {signedIn
+                ? "Clear saved progress for this account?"
+                : "Clear saved progress on this iPad?"}
+            </p>
             <button type="button" className="ghost" onClick={onCancelReset}>
               Keep it
             </button>
@@ -377,7 +396,7 @@ function StageMap({
           </div>
         ) : (
           <button type="button" className="texty" onClick={onAskReset}>
-            Reset this iPad
+            {signedIn ? "Reset saved progress" : "Reset this iPad"}
           </button>
         )}
       </footer>
@@ -509,12 +528,14 @@ function Result({
   onHome,
   onRetry,
   onDrill,
+  signedIn,
 }: {
   run: Run;
   cleared: boolean;
   onHome: () => void;
   onRetry: () => void;
   onDrill: () => void;
+  signedIn: boolean;
 }) {
   const items = run.ids
     .map((id) => questionById(id))
@@ -526,7 +547,7 @@ function Result({
   const practice = run.source === "generated";
   const practicePool = hasGeneratedPool(run.stage);
   const lede = justCleared
-    ? `${stage?.title} is cleared on this iPad.`
+    ? `${stage?.title} is cleared${signedIn ? " and saved to your account." : " on this iPad."}`
     : run.mode === "stage" && practicePool
       ? "The stage stays open. Drill 5 new practice questions, then retry the stage for a perfect paper."
       : run.mode === "stage"

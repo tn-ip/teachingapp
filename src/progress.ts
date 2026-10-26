@@ -7,6 +7,7 @@ import {
 } from "./bank";
 import { generatedById, generatedQuestions, hasGeneratedPool } from "./drillPools";
 import { pickFromPool, skillsForMisses } from "./drillPick";
+import { questionById as questionOrDrillById } from "./questions";
 
 export type Mode = "stage" | "drill";
 export type DrillSource = "bank" | "generated";
@@ -28,6 +29,8 @@ export type Run = {
   focus?: string[];
   /** Generated ids already shown in this drill session. */
   seenIds?: string[];
+  /** Stable id for one finished attempt, so an account upload can skip duplicates. */
+  clientId?: string;
 };
 
 export type LastResult = {
@@ -35,6 +38,8 @@ export type LastResult = {
   total: number;
   mode: Mode;
   source?: DrillSource;
+  /** ISO time the attempt was marked. Older saves omit it. */
+  at?: string;
 };
 
 export type Progress = {
@@ -44,33 +49,115 @@ export type Progress = {
   run: Run | null;
 };
 
-const KEY = "teachingapp.dse-paper2.v1";
+export const PROGRESS_KEY = "teachingapp.dse-paper2.v1";
 
-const empty = (): Progress => ({
+export const emptyProgress = (): Progress => ({
   cleared: [],
   used: {},
   last: {},
   run: null,
 });
 
+export function normalizeProgress(value: unknown): Progress {
+  if (!value || typeof value !== "object") return emptyProgress();
+  const parsed = value as Partial<Progress>;
+  return {
+    cleared: uniqueStrings(parsed.cleared),
+    used: normalizeUsed(parsed.used),
+    last: normalizeLast(parsed.last),
+    run: normalizeRun(parsed.run),
+  };
+}
+
 export function loadProgress(): Progress {
   try {
-    const raw = localStorage.getItem(KEY);
-    if (!raw) return empty();
-    const parsed = JSON.parse(raw) as Progress;
-    return {
-      cleared: parsed.cleared ?? [],
-      used: parsed.used ?? {},
-      last: parsed.last ?? {},
-      run: parsed.run ?? null,
-    };
+    const raw = localStorage.getItem(PROGRESS_KEY);
+    if (!raw) return emptyProgress();
+    return normalizeProgress(JSON.parse(raw));
   } catch {
-    return empty();
+    return emptyProgress();
   }
 }
 
 export function saveProgress(progress: Progress): void {
-  localStorage.setItem(KEY, JSON.stringify(progress));
+  localStorage.setItem(PROGRESS_KEY, JSON.stringify(progress));
+}
+
+function uniqueStrings(value: unknown): string[] {
+  if (!Array.isArray(value)) return [];
+  const seen = new Set<string>();
+  const ids: string[] = [];
+  for (const item of value) {
+    if (typeof item !== "string" || seen.has(item)) continue;
+    seen.add(item);
+    ids.push(item);
+  }
+  return ids;
+}
+
+function normalizeUsed(value: unknown): Record<string, string[]> {
+  if (!value || typeof value !== "object") return {};
+  const used: Record<string, string[]> = {};
+  for (const [stage, ids] of Object.entries(value)) {
+    used[stage] = uniqueStrings(ids);
+  }
+  return used;
+}
+
+function normalizeLast(value: unknown): Record<string, LastResult> {
+  if (!value || typeof value !== "object") return {};
+  const last: Record<string, LastResult> = {};
+  for (const [stage, raw] of Object.entries(value)) {
+    if (!raw || typeof raw !== "object") continue;
+    const item = raw as Partial<LastResult>;
+    if (item.mode !== "stage" && item.mode !== "drill") continue;
+    if (typeof item.correct !== "number" || typeof item.total !== "number") continue;
+    last[stage] = {
+      correct: item.correct,
+      total: item.total,
+      mode: item.mode,
+      source: item.source === "bank" || item.source === "generated" ? item.source : undefined,
+      at: typeof item.at === "string" ? item.at : undefined,
+    };
+  }
+  return last;
+}
+
+function normalizeRun(value: unknown): Run | null {
+  if (!value || typeof value !== "object") return null;
+  const run = value as Partial<Run>;
+  if (typeof run.stage !== "string") return null;
+  if (run.mode !== "stage" && run.mode !== "drill") return null;
+  if (!Array.isArray(run.ids) || run.ids.some((id) => typeof id !== "string")) return null;
+  const picks: Partial<Record<string, Choice>> = {};
+  if (run.picks && typeof run.picks === "object") {
+    for (const [id, letter] of Object.entries(run.picks)) {
+      if (letter === "A" || letter === "B" || letter === "C" || letter === "D") picks[id] = letter;
+    }
+  }
+  return {
+    stage: run.stage,
+    mode: run.mode,
+    ids: run.ids,
+    picks,
+    index: typeof run.index === "number" && Number.isFinite(run.index) && run.index > 0
+      ? Math.floor(run.index)
+      : 0,
+    marked: Boolean(run.marked),
+    source: run.source === "bank" || run.source === "generated" ? run.source : undefined,
+    focus: Array.isArray(run.focus) ? uniqueStrings(run.focus) : undefined,
+    seenIds: Array.isArray(run.seenIds) ? uniqueStrings(run.seenIds) : undefined,
+    clientId: typeof run.clientId === "string" && run.clientId ? run.clientId : undefined,
+  };
+}
+
+export function scoreRun(run: Run): { correct: number; total: number } {
+  let correct = 0;
+  for (const id of run.ids) {
+    const question = questionOrDrillById(id);
+    if (question && run.picks[id] === question.answer) correct += 1;
+  }
+  return { correct, total: run.ids.length };
 }
 
 /** A stage clears only on a perfect stage run. A drill, including generated practice, does not. */
