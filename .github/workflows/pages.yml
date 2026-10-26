@@ -26,7 +26,7 @@ jobs:
       - run: npm run build
         env:
           # Optional. Empty secrets keep the Pages build as a guest-only trainer.
-          # Do not set VITE_BASE_PATH here; Pages stays at /teachingapp/.
+          # Do not set VERCEL or VITE_BASE_PATH here; Pages stays at /teachingapp/.
           VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
           VITE_SUPABASE_PUBLISHABLE_KEY: ${{ secrets.VITE_SUPABASE_PUBLISHABLE_KEY }}
           VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}

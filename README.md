@@ -84,11 +84,10 @@ Copy `.env.example` to `.env.local` for `npm run dev`. On Vercel, set:
 | --- | --- |
 | `VITE_SUPABASE_URL` | `https://zjseatmkwpwsfcyhiivj.supabase.co` |
 | `VITE_SUPABASE_PUBLISHABLE_KEY` | The project publishable key (`sb_publishable_...`). `VITE_SUPABASE_ANON_KEY` is only the legacy anon JWT fallback. |
-| `VITE_BASE_PATH` | `/` so a Vercel project at the domain root does not look for `/teachingapp/` assets. |
 
-Do not set `VITE_BASE_PATH` for GitHub Pages. The Vite default stays `/teachingapp/`. The Pages workflow passes the same Supabase names from repository secrets when they exist, and an empty secret leaves Pages as a guest trainer.
+Vercel sets `VERCEL=1` during the build, and Vite then uses base `/` so scripts load from `/assets/...`. GitHub Pages does not set `VERCEL`, so its base stays `/teachingapp/`. Do not set `VITE_BASE_PATH` on either host unless you need to override that. The Pages workflow passes the Supabase names from repository secrets when they exist, and an empty secret leaves Pages as a guest trainer.
 
-After the Vercel production URL exists, add it under Supabase → Authentication → URL configuration → Redirect URLs. The entry has to match `redirectTo`, including the trailing slash, for example `https://your-app.vercel.app/`. Also allow `http://localhost:5173/teachingapp/` for local dev, and `https://tn-ip.github.io/teachingapp/` if Pages should sign in before cutover. `vercel.json` sends other paths to `index.html` so a host refresh still opens the app.
+Add `https://teachingapp-tn-ip.vercel.app/` under Supabase → Authentication → URL configuration → Redirect URLs. The entry has to match `redirectTo`, including the trailing slash. Also allow `http://localhost:5173/teachingapp/` for local dev, and `https://tn-ip.github.io/teachingapp/` if Pages should sign in before cutover. `vercel.json` sends other paths to `index.html` so a host refresh still opens the app.
 
 Signing in unions this iPad with the account. Cleared stages and used question ids are kept from either side. Each finished stage or practice run is appended once. The open paper stays the one on the device you are holding. Sign out leaves that copy on the iPad. Reset while signed in clears the account too. A different Microsoft account on the same iPad does not receive the previous student's paper.
 
@@ -102,4 +101,4 @@ npm run dev
 npm run build
 ```
 
-The Vite `base` is `/teachingapp/`, which matches GitHub Pages for this repository. `.github/workflows/pages.yml` builds the site and deploys `dist` from `main` with the Actions source.
+The Vite `base` is `/teachingapp/` for GitHub Pages and `/` when `VERCEL` is set. `.github/workflows/pages.yml` builds the site and deploys `dist` from `main` with the Actions source. That workflow does not set `VERCEL`.

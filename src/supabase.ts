@@ -4,14 +4,14 @@ import { createClient, type SupabaseClient } from "@supabase/supabase-js";
  * Browser client for Microsoft Entra sign-in.
  *
  * Vercel needs VITE_SUPABASE_URL and VITE_SUPABASE_PUBLISHABLE_KEY (or
- * VITE_SUPABASE_ANON_KEY). Set VITE_BASE_PATH=/ when the site is served from
- * the domain root. GitHub Pages keeps the default base `/teachingapp/` and
- * still runs with these unset: there is no sign-in button, and progress stays
- * in localStorage.
+ * VITE_SUPABASE_ANON_KEY). Vercel sets VERCEL=1, so the Vite base becomes `/`
+ * and assets load from /assets/. GitHub Pages does not set VERCEL, keeps
+ * `/teachingapp/`, and still runs with these keys unset: there is no sign-in
+ * button, and progress stays in localStorage.
  *
- * After deploy, add the Vercel production origin to Supabase Auth → URL
+ * Add https://teachingapp-tn-ip.vercel.app/ to Supabase Auth → URL
  * configuration → Redirect URLs. It must match `redirectTo`, including the
- * trailing slash, for example `https://your-app.vercel.app/`.
+ * trailing slash.
  */
 
 function envValue(name: "VITE_SUPABASE_URL" | "VITE_SUPABASE_PUBLISHABLE_KEY" | "VITE_SUPABASE_ANON_KEY"): string | undefined {
