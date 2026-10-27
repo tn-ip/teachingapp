@@ -269,10 +269,11 @@ assert.match(firstJ2.stem, /range of values/);
 const firstJ18 = generatedQuestions("J18")[0];
 assert.equal(firstJ18.id, "wqg-J18-001");
 assert.equal(firstJ18.topic, "Sequences");
-assert.equal(firstJ18.archetype, "SQ6");
-assert.equal(firstJ18.answer, "C");
-assert.equal(firstJ18.difficulty, "hard");
-assert.match(firstJ18.stem, /a=13/);
+assert.equal(firstJ18.archetype, "SQ4");
+assert.equal(firstJ18.answer, "D");
+assert.equal(firstJ18.difficulty, "medium");
+assert.match(firstJ18.stem, /common ratio/);
+assert.match(firstJ18.stem, /16/);
 
 const j7Stage = startRun(empty(), "J7", "stage");
 assert.ok(j7Stage);
