@@ -10,6 +10,7 @@
  * does not name a key. J10 items have no stem; this script builds one from
  * the area / scale fields. `$...$` becomes `\(...\)` for MathView.
  * Easy | Medium | Hard is kept on each item as `band` when the pool has one.
+ * Optional source fields such as `ref` (a DSE year_Qn) are not copied.
  */
 import fs from "node:fs";
 import path from "node:path";
