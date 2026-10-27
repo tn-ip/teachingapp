@@ -1,5 +1,6 @@
 import assert from "node:assert/strict";
 import { normalizeProgress, PROGRESS_KEY, type Progress, type Run } from "../src/progress.ts";
+import { buildSchoolRoster } from "../src/schoolRoster.ts";
 import {
   claimDeviceProgress,
   clearScore,
@@ -164,5 +165,35 @@ const sameStudent = memory({
 });
 assert.deepEqual(claimDeviceProgress(sameStudent, "user-a").cleared, ["J1"]);
 assert.equal(sameStudent.getItem(userProgressKey("user-a")), null);
+
+const roster = buildSchoolRoster(
+  [
+    { id: "t", displayName: "Ms Wong", email: "ipcm@taknga.edu.hk", role: "teacher" },
+    { id: "b", displayName: "1A 10 Chan", email: "chan@school.test", role: "student" },
+    { id: "a", displayName: "1A 2 Lee", email: "lee@school.test", role: "student" },
+    { id: "c", displayName: null, email: "no-name@school.test", role: "student" },
+    { id: "d", displayName: "  ", email: null, role: null },
+  ],
+  [
+    { userId: "t", stageId: "J1" },
+    { userId: "a", stageId: "C2" },
+    { userId: "a", stageId: "J1" },
+    { userId: "a", stageId: "J1" },
+    { userId: "a", stageId: "Z9" },
+    { userId: "b", stageId: "J2" },
+    { userId: "missing", stageId: "J1" },
+  ],
+  ["J1", "J2", "C2"],
+);
+assert.deepEqual(
+  roster.map((student) => student.displayName),
+  ["1A 2 Lee", "1A 10 Chan", "no-name@school.test", "Student"],
+);
+assert.deepEqual(roster[0]?.cleared, ["J1", "C2", "Z9"]);
+assert.equal(roster[0]?.email, "lee@school.test");
+assert.deepEqual(roster[1]?.cleared, ["J2"]);
+assert.equal(roster[2]?.email, null);
+assert.deepEqual(roster[3]?.cleared, []);
+assert.equal(roster.some((student) => student.id === "t"), false);
 
 console.log("sync checks passed");

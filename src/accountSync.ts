@@ -1,4 +1,8 @@
 import { scoreRun, type Progress, type Run } from "./progress";
+import {
+  buildSchoolRoster,
+  type SchoolStudent,
+} from "./schoolRoster";
 import { clearScore, historyRunType, prepareAccountMerge, progressFromRemote, type HistorySummary } from "./sync";
 import { supabase } from "./supabase";
 
@@ -124,19 +128,93 @@ export async function deleteAccountProgress(userId: string): Promise<void> {
   }
 }
 
-export async function fetchDisplayName(userId: string): Promise<string | null> {
-  if (!supabase) return null;
+export type AccountRole = "teacher" | "student";
+
+export type OwnProfile = {
+  label: string | null;
+  /** Null when the profile row could not be read. Callers treat that as a student. */
+  role: AccountRole | null;
+};
+
+export async function fetchOwnProfile(userId: string): Promise<OwnProfile> {
+  if (!supabase) return { label: null, role: null };
   const { data, error } = await supabase
     .from("profiles")
-    .select("display_name, email")
+    .select("display_name, email, role")
     .eq("id", userId)
     .maybeSingle();
-  if (error || !data) return null;
-  const row = data as { display_name: string | null; email: string | null };
+  if (error || !data) return { label: null, role: null };
+  const row = data as { display_name: string | null; email: string | null; role: string | null };
   const name = row.display_name?.trim();
-  if (name) return name;
   const email = row.email?.trim();
-  return email || null;
+  return {
+    label: name || email || null,
+    role: row.role === "teacher" ? "teacher" : "student",
+  };
+}
+
+type ProfileRow = {
+  id: string;
+  display_name: string | null;
+  email: string | null;
+  role: string | null;
+};
+
+type SchoolClearRow = {
+  user_id: string;
+  stage_id: string;
+};
+
+/** PostgREST caps a response at 1000 rows. Page so a full school still loads. */
+async function eachPage(
+  query: (from: number, to: number) => PromiseLike<{ data: unknown; error: { message: string } | null }>,
+): Promise<unknown[]> {
+  const pageSize = 1000;
+  const rows: unknown[] = [];
+  for (let from = 0; from < pageSize * 50; from += pageSize) {
+    const { data, error } = await query(from, from + pageSize - 1);
+    fail(error);
+    const batch = Array.isArray(data) ? data : [];
+    rows.push(...batch);
+    if (batch.length < pageSize) break;
+  }
+  return rows;
+}
+
+/** Whole-school clears. Teachers can read every row; other roles only see their own under RLS. */
+export async function fetchSchoolRoster(stageOrder: readonly string[]): Promise<SchoolStudent[]> {
+  if (!supabase) return [];
+  const client = supabase;
+  const [profileRows, clearRows] = await Promise.all([
+    eachPage((from, to) =>
+      client
+        .from("profiles")
+        .select("id, display_name, email, role")
+        .order("id", { ascending: true })
+        .range(from, to),
+    ),
+    eachPage((from, to) =>
+      client
+        .from("stage_clears")
+        .select("user_id, stage_id")
+        .order("user_id", { ascending: true })
+        .order("stage_id", { ascending: true })
+        .range(from, to),
+    ),
+  ]);
+  return buildSchoolRoster(
+    (profileRows as ProfileRow[]).map((row) => ({
+      id: row.id,
+      displayName: row.display_name,
+      email: row.email,
+      role: row.role,
+    })),
+    (clearRows as SchoolClearRow[]).map((row) => ({
+      userId: row.user_id,
+      stageId: row.stage_id,
+    })),
+    stageOrder,
+  );
 }
 
 let chain: Promise<void> = Promise.resolve();

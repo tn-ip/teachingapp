@@ -1,6 +1,12 @@
 import { useEffect, useRef, useState } from "react";
 import type { Session } from "@supabase/supabase-js";
-import { deleteAccountProgress, enqueueSync, fetchDisplayName, syncProgress } from "./accountSync";
+import {
+  deleteAccountProgress,
+  enqueueSync,
+  fetchOwnProfile,
+  syncProgress,
+  type AccountRole,
+} from "./accountSync";
 import { emptyProgress, loadProgress, saveProgress, type Progress } from "./progress";
 import { claimDeviceProgress, mergeProgress, OWNER_KEY, rememberDeviceProgress } from "./sync";
 import { appRedirectUrl, supabase, supabaseConfigured } from "./supabase";
@@ -11,6 +17,8 @@ export type AccountControls = {
   configured: boolean;
   phase: AccountPhase;
   label: string | null;
+  /** Null for a guest, or when the profile role could not be read (treat as a student). */
+  role: AccountRole | null;
   banner: string | null;
   signingIn: boolean;
   signIn: () => Promise<void>;
@@ -48,6 +56,8 @@ export function useAccountSync(
   const [authReady, setAuthReady] = useState(!configured);
   const [phase, setPhase] = useState<AccountPhase>(phaseRef.current);
   const [label, setLabel] = useState<string | null>(null);
+  const [role, setRole] = useState<AccountRole | null>(null);
+  const roleFor = useRef<string | null>(null);
   const [banner, setBanner] = useState<string | null>(null);
   const [attempt, setAttempt] = useState(0);
   const [signingIn, setSigningIn] = useState(false);
@@ -85,7 +95,9 @@ export function useAccountSync(
     const user = session?.user;
     if (!user || !supabase) {
       readyUser.current = null;
+      roleFor.current = null;
       setLabel(null);
+      setRole(null);
       showPhase("guest");
       return;
     }
@@ -93,8 +105,15 @@ export function useAccountSync(
     let cancelled = false;
     showPhase("syncing");
     setLabel(user.email ?? "Signed in");
-    void fetchDisplayName(userId).then((name) => {
-      if (!cancelled && name) setLabel(name);
+    if (roleFor.current !== userId) {
+      roleFor.current = null;
+      setRole(null);
+    }
+    void fetchOwnProfile(userId).then((profile) => {
+      if (cancelled) return;
+      roleFor.current = userId;
+      if (profile.label) setLabel(profile.label);
+      setRole(profile.role);
     });
     const ownerBefore = localStorage.getItem(OWNER_KEY) ?? "guest";
     const switched = ownerBefore !== "guest" && ownerBefore !== userId;
@@ -222,6 +241,7 @@ export function useAccountSync(
     configured,
     phase,
     label,
+    role,
     banner,
     signingIn,
     signIn,
