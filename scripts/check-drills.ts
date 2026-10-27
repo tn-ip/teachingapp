@@ -74,18 +74,18 @@ const EXPECTED: Record<string, string[]> = {
   "J10-practice-q12": [],
   "J10-2012-q9": [],
   "J10-2012-q11": [],
-  "J10-2013-q12": ["S1"],
+  "J10-2013-q12": ["M1"],
   "J10-2014-q12": [],
   "J10-2015-q11": [],
   "J10-2016-q11": [],
   "J10-2016-q13": [],
-  "J10-2017-q11": ["S2"],
+  "J10-2017-q11": ["M2"],
   "J10-2018-q10": [],
   "J10-2019-q12": [],
-  "J10-2020-q10": ["S1"],
+  "J10-2020-q10": ["M1"],
   "J10-2021-q11": [],
   "J10-2022-q12": [],
-  "J10-2023-q12": ["S3"],
+  "J10-2023-q12": ["M3"],
   "J10-2024-q6": [],
   "J10-2024-q12": [],
   "J10-2025-q11": [],
@@ -104,22 +104,55 @@ function wrongLetter(answer: string): "A" | "B" | "C" | "D" {
   return answer === "A" ? "B" : "A";
 }
 
-const BANDED = new Set(["J1", "J2", "J11", "J18"]);
-const ARCHETYPE = {
+const DRILL_STAGES = [
+  "J1",
+  "J2",
+  "J4",
+  "J7",
+  "J8",
+  "J9",
+  "J10",
+  "J11",
+  "J16",
+  "J18",
+  "J19",
+  "C2",
+  "C3",
+  "C4",
+  "C11",
+  "C17",
+];
+const UNBANDED = new Set(["J7", "J8", "J9"]);
+const SKILL_STAGES = new Set(["J1", "J7", "J8", "J9", "J10", "J11"]);
+const UNIQUE_STEMS: Record<string, number> = { C2: 285, C3: 299 };
+const ARCHETYPE: Record<string, RegExp> = {
   J1: /^CS[1-8]$/,
   J2: /^RS[1-8]$/,
+  J4: /^P[1-6]$/,
+  J10: /^(?:M[1-3]|R[1-3])$/,
   J11: /^SE[1-7]$/,
+  J16: /^ST[1-6]$/,
   J18: /^SQ[1-8]$/,
-} as const;
+  J19: /^P[1-4]$/,
+  C2: /^Q[1-4]$/,
+  C3: /^F[1-5]$/,
+  C4: /^(?:F[1-4]|H[1-4])$/,
+  C11: /^V[1-5]$/,
+  C17: /^I[1-6]$/,
+};
 
-for (const stage of ["J1", "J2", "J7", "J8", "J9", "J10", "J11", "J18"]) {
-  assert.equal(hasGeneratedPool(stage), true);
+function hasRawMathDollar(value: string): boolean {
+  return value.replace(/\\\$/g, "").replace(/\$\d+(?:\.\d+)?/g, "").includes("$");
+}
+
+for (const stage of DRILL_STAGES) {
+  assert.equal(hasGeneratedPool(stage), true, stage);
   const pool = generatedQuestions(stage);
   assert.equal(pool.length, 300, stage);
   const ids = new Set(pool.map((question) => question.id));
   const stems = new Set(pool.map((question) => question.stem));
   assert.equal(ids.size, 300, stage);
-  assert.equal(stems.size, 300, `${stage} stems`);
+  assert.equal(stems.size, UNIQUE_STEMS[stage] ?? 300, `${stage} stems`);
   for (const question of pool) {
     assert.equal(question.generated, true);
     assert.ok(question.archetype);
@@ -129,20 +162,20 @@ for (const stage of ["J1", "J2", "J7", "J8", "J9", "J10", "J11", "J18"]) {
     assert.equal(questionById(question.id)?.id, question.id);
     for (const letter of ["A", "B", "C", "D"] as const) {
       assert.ok(question.choices[letter], `${question.id} ${letter}`);
-      assert.equal(question.choices[letter].includes("$"), false);
+      assert.equal(hasRawMathDollar(question.choices[letter]), false, `${question.id} ${letter}`);
     }
-    assert.equal(question.stem.includes("$"), false);
+    assert.equal(hasRawMathDollar(question.stem), false, question.id);
     if (stage === "J2") {
       assert.equal(/how many significant figures/i.test(question.stem), false, question.id);
     }
-    if (BANDED.has(stage)) {
-      assert.notEqual(question.difficulty, "unknown", question.id);
-      assert.match(question.archetype ?? "", ARCHETYPE[stage as keyof typeof ARCHETYPE]);
-    } else {
+    if (UNBANDED.has(stage)) {
       assert.equal(question.difficulty, "unknown", question.id);
+    } else {
+      assert.notEqual(question.difficulty, "unknown", question.id);
     }
+    if (ARCHETYPE[stage]) assert.match(question.archetype ?? "", ARCHETYPE[stage], question.id);
   }
-  if (stage === "J2" || stage === "J18") continue;
+  if (!SKILL_STAGES.has(stage)) continue;
   for (const bankQuestion of questionsFor(stage)) {
     const got = skillsForStem(stage, bankQuestion.stem);
     const want = EXPECTED[bankQuestion.id];
@@ -155,8 +188,20 @@ assert.equal(hasGeneratedPool("J5"), false);
 assert.equal(hasGeneratedPool("C1"), false);
 assert.equal(hasGeneratedPool("C10"), false);
 assert.equal(hasGeneratedPool("C23"), false);
-assert.equal(startRun(empty(), "C4", "drill"), null);
+assert.equal(startRun(empty(), "C5", "drill"), null);
 assert.equal(startRun(empty(), "C19", "drill"), null);
+
+const c4Drill = startRun(empty(), "C4", "drill");
+assert.ok(c4Drill?.run);
+assert.equal(c4Drill.run.source, "generated");
+assert.equal(c4Drill.run.mode, "drill");
+assert.deepEqual(c4Drill.run.focus, []);
+assert.equal(c4Drill.run.ids.length, 5);
+assert.ok(c4Drill.run.ids.every((id) => id.startsWith("wqg-C4-")));
+assert.ok(c4Drill.run.ids.every((id) => generatedById(id)?.difficulty === "easy"));
+assert.deepEqual(c4Drill.used, {});
+assert.deepEqual(c4Drill.cleared, []);
+assert.equal(stageClearedBy(c4Drill.run, 5, 5), false);
 
 const firstJ7 = generatedQuestions("J7")[0];
 assert.equal(firstJ7.archetype, "I1");
@@ -164,10 +209,11 @@ assert.equal(firstJ7.answer, "C");
 assert.match(firstJ7.stem, /\(5a\)/);
 
 const firstJ10 = generatedQuestions("J10")[0];
-assert.equal(firstJ10.archetype, "S1");
-assert.equal(firstJ10.answer, "B");
-assert.match(firstJ10.stem, /playground/);
-assert.match(firstJ10.stem, /250000/);
+assert.equal(firstJ10.archetype, "M1");
+assert.equal(firstJ10.answer, "C");
+assert.equal(firstJ10.difficulty, "easy");
+assert.match(firstJ10.stem, /garden/);
+assert.match(firstJ10.stem, /12500/);
 
 function bandCounts(stageId: string) {
   const counts = { easy: 0, medium: 0, hard: 0, unknown: 0 };
@@ -178,6 +224,15 @@ assert.deepEqual(bandCounts("J1"), { easy: 76, medium: 114, hard: 110, unknown: 
 assert.deepEqual(bandCounts("J2"), { easy: 76, medium: 114, hard: 110, unknown: 0 });
 assert.deepEqual(bandCounts("J11"), { easy: 88, medium: 128, hard: 84, unknown: 0 });
 assert.deepEqual(bandCounts("J18"), { easy: 76, medium: 114, hard: 110, unknown: 0 });
+assert.deepEqual(bandCounts("J4"), { easy: 33, medium: 258, hard: 9, unknown: 0 });
+assert.deepEqual(bandCounts("J10"), { easy: 61, medium: 239, hard: 0, unknown: 0 });
+assert.deepEqual(bandCounts("J16"), { easy: 150, medium: 150, hard: 0, unknown: 0 });
+assert.deepEqual(bandCounts("J19"), { easy: 185, medium: 115, hard: 0, unknown: 0 });
+assert.deepEqual(bandCounts("C2"), { easy: 150, medium: 150, hard: 0, unknown: 0 });
+assert.deepEqual(bandCounts("C3"), { easy: 142, medium: 158, hard: 0, unknown: 0 });
+assert.deepEqual(bandCounts("C4"), { easy: 115, medium: 185, hard: 0, unknown: 0 });
+assert.deepEqual(bandCounts("C11"), { easy: 35, medium: 155, hard: 110, unknown: 0 });
+assert.deepEqual(bandCounts("C17"), { easy: 72, medium: 198, hard: 30, unknown: 0 });
 assert.deepEqual(bandCounts("J7"), { easy: 0, medium: 0, hard: 0, unknown: 300 });
 assert.equal(questionsFor("J1").length, 13);
 assert.equal(questionsFor("J2").length, 12);
@@ -250,14 +305,14 @@ const drill = startRun(before, "J10", "drill");
 assert.ok(drill?.run);
 assert.equal(drill.run.source, "generated");
 assert.equal(drill.run.mode, "drill");
-assert.deepEqual(drill.run.focus, ["S1"]);
+assert.deepEqual(drill.run.focus, ["M1"]);
 assert.equal(drill.run.ids.length, 5);
 assert.ok(drill.run.ids.every((id) => id.startsWith("wqg-J10-")));
 assert.deepEqual(drill.used, before.used);
 assert.deepEqual(drill.cleared, ["J5"]);
 const archetypes = drill.run.ids.map((id) => generatedById(id)?.archetype);
 assert.deepEqual(
-  archetypes.filter((tpl) => tpl === "S1").length,
+  archetypes.filter((tpl) => tpl === "M1").length,
   3,
 );
 for (let i = 1; i < archetypes.length; i += 1) {
@@ -267,7 +322,7 @@ assert.equal(stageClearedBy(drill.run, 5, 5), false);
 
 const again = startRun(drill, "J10", "drill");
 assert.ok(again?.run);
-assert.deepEqual(again.run.focus, ["S1"]);
+assert.deepEqual(again.run.focus, ["M1"]);
 assert.deepEqual(again.used, before.used);
 assert.deepEqual(again.cleared, ["J5"]);
 const firstIds = new Set(drill.run.ids);

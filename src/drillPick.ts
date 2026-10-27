@@ -1,7 +1,7 @@
 /**
  * Skill tags for a missed bank question, and the draw for a generated drill.
  *
- * Archetypes are the pool `tpl` values (J10 uses S1–S3 for the three map-scale subtypes).
+ * Archetypes are the pool `tpl` values (J10 map scale is M1–M3; ratio and rate are R1–R3).
  * A miss maps onto those tags only when the stem is a clear example of that pattern.
  * Anything else is left untagged so the drill shuffles the whole pool.
  *
@@ -10,7 +10,7 @@
  * (1st, 3rd, 5th) and the other two places are different tags.
  * Generator bands break the remaining ties. An unmatched drill takes Easy
  * archetypes before Medium and Hard. A filler is the easiest different
- * archetype still available. J7–J10 items have no band, so this tie-break
+ * archetype still available. J7–J9 items have no band, so this tie-break
  * does not change those draws.
  *
  * J7 Indices
@@ -36,10 +36,10 @@
  * - F4 the other factorisations (cross term or grouping)
  *
  * J10 Ratio, rate, map scale
- * - S1 actual area and map area given, ask for the scale
- * - S2 scale and map area given, ask for the actual area
- * - S3 scale and actual area given, ask for the map area
- * - no tag for ratio, speed, or mixture stems. The drill then shuffles S1–S3.
+ * - M1 actual area and map area given, ask for the scale
+ * - M2 scale and map area given, ask for the actual area
+ * - M3 scale and actual area given, ask for the map area
+ * - no tag for ratio, speed, or mixture stems. The drill then shuffles the pool.
  *
  * J1 Change of subjects
  * - CS7 sum of two single-letter fractions equals an integer: a/x + b/y = 3
@@ -69,6 +69,11 @@
  * - SE1 two linear equations, a chain of equal expressions, or the price of two items
  * - no tag when the stem is none of those
  *
+ * J4 Percentage, J16 Statistics, J19 S3 Probability, C2 Quadratic equations (II),
+ * C3 Functions, C4 Polynomials, C11 Variations, and C17 Inequalities
+ * - no tag. A miss warms up the whole pool Easy, then Medium, then Hard,
+ *   the same way an unmatched J1 or J11 drill does.
+ *
  * When several misses match, the drill prefers the union of those tags.
  * If two matched tags are both allowed, the easier band is taken first.
  */
@@ -79,7 +84,7 @@ export type PoolItem = {
   id: string;
   tpl: string;
   stem: string;
-  /** Generator band. Omitted on J7–J10, which stay unordered by difficulty. */
+  /** Generator band. Omitted on J7–J9, which stay unordered by difficulty. */
   difficulty?: Difficulty;
 };
 
@@ -250,9 +255,9 @@ function skillsJ11(stem: string): string[] {
 function skillsJ10(stem: string): string[] {
   const text = stem.toLowerCase().replace(/\s+/g, " ");
   if (!text.includes("map")) return [];
-  if (text.includes("then the scale of the map")) return ["S1"];
-  if (text.includes("then the actual area")) return ["S2"];
-  if (text.includes("on the map is")) return ["S3"];
+  if (text.includes("then the scale of the map")) return ["M1"];
+  if (text.includes("then the actual area")) return ["M2"];
+  if (text.includes("on the map is")) return ["M3"];
   return [];
 }
 
