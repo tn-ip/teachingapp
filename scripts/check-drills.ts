@@ -124,7 +124,7 @@ const DRILL_STAGES = [
 ];
 const UNBANDED = new Set(["J7", "J8", "J9"]);
 const SKILL_STAGES = new Set(["J1", "J7", "J8", "J9", "J10", "J11"]);
-const UNIQUE_STEMS: Record<string, number> = { C2: 285, C3: 299 };
+const UNIQUE_STEMS: Record<string, number> = { C2: 286, C3: 299 };
 const ARCHETYPE: Record<string, RegExp> = {
   J1: /^CS[1-8]$/,
   J2: /^RS[1-8]$/,
@@ -209,11 +209,11 @@ assert.equal(firstJ7.answer, "C");
 assert.match(firstJ7.stem, /\(5a\)/);
 
 const firstJ10 = generatedQuestions("J10")[0];
-assert.equal(firstJ10.archetype, "M1");
-assert.equal(firstJ10.answer, "C");
-assert.equal(firstJ10.difficulty, "easy");
-assert.match(firstJ10.stem, /garden/);
-assert.match(firstJ10.stem, /12500/);
+assert.equal(firstJ10.archetype, "M2");
+assert.equal(firstJ10.answer, "B");
+assert.equal(firstJ10.difficulty, "medium");
+assert.match(firstJ10.stem, /zoo/);
+assert.match(firstJ10.stem, /15000/);
 
 function bandCounts(stageId: string) {
   const counts = { easy: 0, medium: 0, hard: 0, unknown: 0 };
@@ -224,12 +224,12 @@ assert.deepEqual(bandCounts("J1"), { easy: 76, medium: 114, hard: 110, unknown: 
 assert.deepEqual(bandCounts("J2"), { easy: 76, medium: 114, hard: 110, unknown: 0 });
 assert.deepEqual(bandCounts("J11"), { easy: 88, medium: 128, hard: 84, unknown: 0 });
 assert.deepEqual(bandCounts("J18"), { easy: 76, medium: 114, hard: 110, unknown: 0 });
-assert.deepEqual(bandCounts("J4"), { easy: 33, medium: 258, hard: 9, unknown: 0 });
-assert.deepEqual(bandCounts("J10"), { easy: 61, medium: 239, hard: 0, unknown: 0 });
+assert.deepEqual(bandCounts("J4"), { easy: 34, medium: 259, hard: 7, unknown: 0 });
+assert.deepEqual(bandCounts("J10"), { easy: 65, medium: 235, hard: 0, unknown: 0 });
 assert.deepEqual(bandCounts("J16"), { easy: 150, medium: 150, hard: 0, unknown: 0 });
-assert.deepEqual(bandCounts("J19"), { easy: 185, medium: 115, hard: 0, unknown: 0 });
+assert.deepEqual(bandCounts("J19"), { easy: 192, medium: 108, hard: 0, unknown: 0 });
 assert.deepEqual(bandCounts("C2"), { easy: 150, medium: 150, hard: 0, unknown: 0 });
-assert.deepEqual(bandCounts("C3"), { easy: 142, medium: 158, hard: 0, unknown: 0 });
+assert.deepEqual(bandCounts("C3"), { easy: 145, medium: 155, hard: 0, unknown: 0 });
 assert.deepEqual(bandCounts("C4"), { easy: 115, medium: 185, hard: 0, unknown: 0 });
 assert.deepEqual(bandCounts("C11"), { easy: 35, medium: 155, hard: 110, unknown: 0 });
 assert.deepEqual(bandCounts("C17"), { easy: 72, medium: 198, hard: 30, unknown: 0 });
