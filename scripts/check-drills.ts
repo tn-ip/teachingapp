@@ -107,7 +107,7 @@ function wrongLetter(answer: string): "A" | "B" | "C" | "D" {
 const BANDED = new Set(["J1", "J2", "J11", "J18"]);
 const ARCHETYPE = {
   J1: /^CS[1-8]$/,
-  J2: /^SF[1-8]$/,
+  J2: /^RS[1-8]$/,
   J11: /^SE[1-7]$/,
   J18: /^SQ[1-8]$/,
 } as const;
@@ -119,7 +119,7 @@ for (const stage of ["J1", "J2", "J7", "J8", "J9", "J10", "J11", "J18"]) {
   const ids = new Set(pool.map((question) => question.id));
   const stems = new Set(pool.map((question) => question.stem));
   assert.equal(ids.size, 300, stage);
-  assert.equal(stems.size, stage === "J2" ? 288 : 300, `${stage} stems`);
+  assert.equal(stems.size, 300, `${stage} stems`);
   for (const question of pool) {
     assert.equal(question.generated, true);
     assert.ok(question.archetype);
@@ -132,6 +132,9 @@ for (const stage of ["J1", "J2", "J7", "J8", "J9", "J10", "J11", "J18"]) {
       assert.equal(question.choices[letter].includes("$"), false);
     }
     assert.equal(question.stem.includes("$"), false);
+    if (stage === "J2") {
+      assert.equal(/how many significant figures/i.test(question.stem), false, question.id);
+    }
     if (BANDED.has(stage)) {
       assert.notEqual(question.difficulty, "unknown", question.id);
       assert.match(question.archetype ?? "", ARCHETYPE[stage as keyof typeof ARCHETYPE]);
@@ -202,10 +205,11 @@ assert.match(firstJ11.stem, /2p\+3q/);
 const firstJ2 = generatedQuestions("J2")[0];
 assert.equal(firstJ2.id, "wqg-J2-001");
 assert.equal(firstJ2.topic, "Significant figure");
-assert.equal(firstJ2.archetype, "SF1");
+assert.equal(firstJ2.archetype, "RS5");
 assert.equal(firstJ2.answer, "C");
-assert.equal(firstJ2.difficulty, "easy");
-assert.match(firstJ2.stem, /3556\.86/);
+assert.equal(firstJ2.difficulty, "medium");
+assert.match(firstJ2.stem, /44\.8/);
+assert.match(firstJ2.stem, /range of values/);
 
 const firstJ18 = generatedQuestions("J18")[0];
 assert.equal(firstJ18.id, "wqg-J18-001");
