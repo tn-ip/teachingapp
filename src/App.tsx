@@ -26,9 +26,10 @@ import {
   type Progress,
   type Run,
 } from "./progress";
+import { SchoolProgress } from "./SchoolProgress";
 import { useAccountSync } from "./useAccountSync";
 
-type Screen = "map" | "quiz" | "result";
+type Screen = "map" | "quiz" | "result" | "school";
 
 function DifficultyChip({ difficulty }: { difficulty: Difficulty }) {
   const label = difficultyLabel(difficulty);
@@ -163,10 +164,18 @@ export function App() {
   const [confirmReset, setConfirmReset] = useState(false);
   const account = useAccountSync(progress, setProgress, (next) => {
     setProgress(next);
-    if (!next.run) setScreen("map");
-    else setScreen(next.run.marked ? "result" : "quiz");
+    setScreen((current) => {
+      if (current === "school") return current;
+      if (!next.run) return "map";
+      return next.run.marked ? "result" : "quiz";
+    });
   });
   const signedIn = Boolean(account.label);
+  const teacher = account.role === "teacher";
+
+  useEffect(() => {
+    if (!teacher && screen === "school") setScreen("map");
+  }, [teacher, screen]);
 
   useEffect(() => {
     saveProgress(progress);
@@ -201,19 +210,25 @@ export function App() {
         <header className="top">
           <div>
             <p className="eyebrow">HKDSE Mathematics · Paper 2</p>
-            <h1>Stage map</h1>
+            <h1>{screen === "school" ? "School progress" : "Stage map"}</h1>
           </div>
           <div className="top-side">
             <AccountBar account={account} />
-            <p className="progress-pill">
-              {clearedCount}/{stages.length} cleared
-            </p>
+            {screen === "school" ? null : (
+              <p className="progress-pill">
+                {clearedCount}/{stages.length} cleared
+              </p>
+            )}
           </div>
         </header>
+
+      {screen === "school" && teacher ? <SchoolProgress onBack={() => setScreen("map")} /> : null}
 
       {screen === "map" ? (
         <StageMap
           progress={progress}
+          teacher={teacher}
+          onOpenSchool={() => setScreen("school")}
           onOpen={openStage}
           onResume={() => setScreen(run?.marked ? "result" : "quiz")}
           confirmReset={confirmReset}
@@ -288,6 +303,8 @@ export function App() {
 
 function StageMap({
   progress,
+  teacher,
+  onOpenSchool,
   onOpen,
   onResume,
   confirmReset,
@@ -297,6 +314,8 @@ function StageMap({
   signedIn,
 }: {
   progress: Progress;
+  teacher: boolean;
+  onOpenSchool: () => void;
   onOpen: (stageId: string) => void;
   onResume: () => void;
   confirmReset: boolean;
@@ -308,6 +327,11 @@ function StageMap({
   const run = progress.run;
   return (
     <main className="map">
+      {teacher ? (
+        <button type="button" className="school-entry" onClick={onOpenSchool}>
+          School progress
+        </button>
+      ) : null}
       <p className="lede">
         Pick any stage. Junior and Compulsory chapters sit on one map, ranked
         by average facility from Easy to Hard. A run is up to 5 real DSE

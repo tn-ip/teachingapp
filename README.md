@@ -91,7 +91,9 @@ Add `https://teachingapp-tn-ip.vercel.app/` under Supabase → Authentication �
 
 Signing in unions this iPad with the account. Cleared stages and used question ids are kept from either side. Each finished stage or practice run is appended once. The open paper stays the one on the device you are holding. Sign out leaves that copy on the iPad. Reset while signed in clears the account too. A different Microsoft account on the same iPad does not receive the previous student's paper.
 
-The per-question timer is not stored, so `run_history.elapsed_ms` is empty. There is no teacher class view in this slice.
+The per-question timer is not stored, so `run_history.elapsed_ms` is empty.
+
+A signed-in teacher (`profiles.role` is `teacher`) sees **School progress** at the top of the stage map. That list is the whole school: each student’s display name (email underneath when both exist) and the stage ids they have cleared. Search by name, or show only students who cleared one stage. Students never see the button. If the role cannot be read, the app treats the account as a student.
 
 ## Develop
 
