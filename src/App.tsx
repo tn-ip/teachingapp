@@ -386,7 +386,7 @@ function StageMap({
                       {facility}
                       {" · "}
                       {stage.questionCount} in the bank · run of {length}
-                      {hasGeneratedPool(stage.id) ? " · practice drills" : ""}
+                      {hasGeneratedPool(stage.id) ? " · [Practice available 🙂]" : ""}
                       {cleared ? " · cleared" : ""}
                       {last && !cleared
                         ? ` · last ${last.source === "generated" ? "practice" : last.mode} ${last.correct}/${last.total}`
