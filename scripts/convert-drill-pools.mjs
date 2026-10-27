@@ -4,11 +4,17 @@
  *   node scripts/convert-drill-pools.mjs j7mc_pool.js j8_pool.js j9mc_pool.js j10_pool.js
  *   node scripts/convert-drill-pools.mjs j1mc_pool.js j11mc_pool.js
  *   node scripts/convert-drill-pools.mjs j2mc_pool.js j18mc_pool.js
+ *   node scripts/convert-drill-pools.mjs j4mc_pool.js j16mc_pool.js c2mc_pool.js
  *
- * Pool keys: J1MC, J2MC, J7MC, J8, J9MC, J10, J11MC, J18MC. The stage is read from the
- * POOLS.<key> declaration. The old four-file order still works when a file
- * does not name a key. J10 items have no stem; this script builds one from
- * the area / scale fields. `$...$` becomes `\(...\)` for MathView.
+ * Pool keys: J1MC, J2MC, J4MC, J7MC, J8, J9MC, J10, J11MC, J16MC, J18MC, J19MC,
+ * C2MC, C3MC, C4MC, C11MC, C17MC. The stage is read from the POOLS.<key>
+ * declaration. The old four-file order still works when a file does not name a key.
+ * `$...$` becomes `\(...\)` for MathView. A `\$` inside those delimiters stays a
+ * literal dollar. A lone `$` before a number (a price in prose) is left as text.
+ * A working step that is already LaTeX, with a backslash and no `$...$`, is
+ * wrapped in `\(...\)`.
+ * J10 uses `q` whenever it is present. The old map-scale stem is built from the
+ * area / scale fields only when `q` is missing (subtypes 1, 2, and 3).
  * Easy | Medium | Hard is kept on each item as `band` when the pool has one.
  * Optional source fields such as `ref` (a DSE year_Qn) are not copied.
  */
@@ -16,16 +22,25 @@ import fs from "node:fs";
 import path from "node:path";
 
 const OUT_DIR = path.resolve("src/data/drillPools");
+const ESCAPED_DOLLAR = "\uE000";
 
 const KEY_TO_STAGE = {
   J1MC: "J1",
   J2MC: "J2",
+  J4MC: "J4",
   J7MC: "J7",
   J8: "J8",
   J9MC: "J9",
   J10: "J10",
   J11MC: "J11",
+  J16MC: "J16",
   J18MC: "J18",
+  J19MC: "J19",
+  C2MC: "C2",
+  C3MC: "C3",
+  C4MC: "C4",
+  C11MC: "C11",
+  C17MC: "C17",
 };
 
 const POSITIONAL = [
@@ -64,7 +79,15 @@ function sourceFor(file, index, total) {
 }
 
 function dollarsToKatex(value) {
-  return String(value ?? "").replace(/\$([^$]*)\$/g, (_, inner) => `\\(${inner}\\)`);
+  let text = String(value ?? "").replace(/\\\$/g, ESCAPED_DOLLAR);
+  text = text.replace(/\$([^$]*)\$/g, (_, inner) => `\\(${inner}\\)`);
+  text = text.replaceAll(ESCAPED_DOLLAR, "\\$");
+  if (!text.includes("\\(") && text.includes("\\")) text = `\\(${text}\\)`;
+  return text;
+}
+
+function hasRawMathDollar(value) {
+  return value.replace(/\\\$/g, "").replace(/\$\d+(?:\.\d+)?/g, "").includes("$");
 }
 
 function fmt(n) {
@@ -126,6 +149,10 @@ function choicesOf(options, label) {
   return { choices, answer };
 }
 
+function hasQuestionStem(raw) {
+  return raw.q != null && String(raw.q).trim() !== "";
+}
+
 function convert(raw, stage, index) {
   const id = `wqg-${stage}-${String(index + 1).padStart(3, "0")}`;
   const { choices, answer } = choicesOf(raw.options, id);
@@ -133,16 +160,19 @@ function convert(raw, stage, index) {
   if (ansLetter && ansLetter !== answer) {
     throw new Error(`${id} ans ${raw.ans} disagrees with c:true (${answer})`);
   }
-  const stem = stage === "J10" ? stemJ10(raw) : dollarsToKatex(raw.q);
-  if (!stem || stem.includes("$")) throw new Error(`${id} stem still has $ or is empty`);
+  const hasQ = hasQuestionStem(raw);
+  const stem = hasQ ? dollarsToKatex(raw.q) : stage === "J10" ? stemJ10(raw) : dollarsToKatex(raw.q);
+  if (!stem || hasRawMathDollar(stem)) throw new Error(`${id} stem still has $ or is empty`);
   for (const letter of ["A", "B", "C", "D"]) {
-    if (choices[letter].includes("$")) throw new Error(`${id} option ${letter} still has $`);
+    if (hasRawMathDollar(choices[letter])) throw new Error(`${id} option ${letter} still has $`);
   }
-  const tpl = stage === "J10" ? `S${raw.subtype}` : String(raw.tpl || raw.subtype || "");
+  let tpl = raw.tpl != null && String(raw.tpl) !== "" ? String(raw.tpl) : "";
+  if (!tpl && stage === "J10" && !hasQ) tpl = `S${raw.subtype}`;
+  if (!tpl) tpl = String(raw.subtype || "");
   if (!tpl) throw new Error(`${id} has no tpl`);
   const steps = (raw.steps ?? []).map((step) => {
     const text = dollarsToKatex(step.ex);
-    if (text.includes("$")) throw new Error(`${id} step still has $`);
+    if (hasRawMathDollar(text)) throw new Error(`${id} step still has $`);
     return { mark: String(step.m ?? ""), text, note: String(step.note ?? "") };
   });
   if (steps.length === 0) throw new Error(`${id} has no steps`);

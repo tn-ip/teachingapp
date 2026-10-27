@@ -337,10 +337,12 @@ function StageMap({
         by average facility from Easy to Hard. A run is up to 5 real DSE
         questions, warming up Easy → Medium → untagged → Hard. Clear a stage
         only with a perfect paper. A miss on Change of subjects, Significant
-        figure, Indices, Identities, Factorization, Ratio and map scale,
-        Simultaneous equations, or Sequences opens 5 new practice questions.
-        Other stages have no practice drill. A practice drill does not clear
-        the stage.
+        figure, Percentage, Indices, Identities, Factorization, Ratio and map
+        scale, Simultaneous equations, Statistics, Sequences, or S3 Probability
+        opens 5 new practice questions, and so does a miss on Quadratic
+        equations (II), Functions, Polynomials, Variations, or Inequalities in
+        one unknown. Other stages have no practice drill. A practice drill does
+        not clear the stage.
       </p>
       <p className="note source-credit">
         Worked solutions are adapted from{" "}
@@ -654,8 +656,10 @@ function Result({
       {run.mode === "stage" && !perfect && !practicePool ? (
         <p className="note">
           Generated MC practice is available for Change of subjects, Significant
-          figure, Indices, Identities, Factorization, Ratio and map scale,
-          Simultaneous equations, and Sequences for now.
+          figure, Percentage, Indices, Identities, Factorization, Ratio and map
+          scale, Simultaneous equations, Statistics, Sequences, S3 Probability,
+          Quadratic equations (II), Functions, Polynomials, Variations, and
+          Inequalities in one unknown.
         </p>
       ) : null}
       {run.mode === "drill" && practicePool ? (
