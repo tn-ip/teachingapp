@@ -340,7 +340,7 @@ function StageMap({
         figure, Percentage, Indices, Identities, Factorization, Ratio and map
         scale, Simultaneous equations, Statistics, Sequences, or S3 Probability
         opens 5 new practice questions, and so does a miss on Quadratic
-        equations (II), Functions, Polynomials, Variations, or Inequalities in
+        equations (II), Functions and Graphs, Polynomials, Variations, or Inequalities in
         one unknown. Other stages have no practice drill. A practice drill does
         not clear the stage.
       </p>
@@ -658,7 +658,7 @@ function Result({
           Generated MC practice is available for Change of subjects, Significant
           figure, Percentage, Indices, Identities, Factorization, Ratio and map
           scale, Simultaneous equations, Statistics, Sequences, S3 Probability,
-          Quadratic equations (II), Functions, Polynomials, Variations, and
+          Quadratic equations (II), Functions and Graphs, Polynomials, Variations, and
           Inequalities in one unknown.
         </p>
       ) : null}
