@@ -32,7 +32,7 @@ import c17 from "./data/drillPools/c17.json";
  * J18 Sequences ← POOLS.J18MC
  * J19 S3 Probability ← POOLS.J19MC
  * C2 Quadratic equations in one unknown (II) ← POOLS.C2MC
- * C3 Basic knowledge of functions ← POOLS.C3MC
+ * C3 Functions and Graphs ← POOLS.C3MC
  * C4 More about polynomials ← POOLS.C4MC
  * C11 Variations ← POOLS.C11MC
  * C17 Inequalities in one unknown ← POOLS.C17MC
@@ -66,7 +66,7 @@ const TITLES: Record<string, string> = {
   J18: "Sequences",
   J19: "S3 Probability",
   C2: "Quadratic equations in one unknown (II)",
-  C3: "Basic knowledge of functions",
+  C3: "Functions and Graphs",
   C4: "More about polynomials",
   C11: "Variations",
   C17: "Inequalities in one unknown",

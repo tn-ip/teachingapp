@@ -70,7 +70,7 @@
  * - no tag when the stem is none of those
  *
  * J4 Percentage, J16 Statistics, J19 S3 Probability, C2 Quadratic equations (II),
- * C3 Functions, C4 Polynomials, C11 Variations, and C17 Inequalities
+ * C3 Functions and Graphs, C4 Polynomials, C11 Variations, and C17 Inequalities
  * - no tag. A miss warms up the whole pool Easy, then Medium, then Hard,
  *   the same way an unmatched J1 or J11 drill does.
  *
