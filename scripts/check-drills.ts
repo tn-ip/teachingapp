@@ -222,7 +222,7 @@ function bandCounts(stageId: string) {
 }
 assert.deepEqual(bandCounts("J1"), { easy: 76, medium: 114, hard: 110, unknown: 0 });
 assert.deepEqual(bandCounts("J2"), { easy: 76, medium: 114, hard: 110, unknown: 0 });
-assert.deepEqual(bandCounts("J11"), { easy: 88, medium: 128, hard: 84, unknown: 0 });
+assert.deepEqual(bandCounts("J11"), { easy: 74, medium: 128, hard: 98, unknown: 0 });
 assert.deepEqual(bandCounts("J18"), { easy: 76, medium: 114, hard: 110, unknown: 0 });
 assert.deepEqual(bandCounts("J4"), { easy: 34, medium: 259, hard: 7, unknown: 0 });
 assert.deepEqual(bandCounts("J10"), { easy: 65, medium: 235, hard: 0, unknown: 0 });
@@ -252,10 +252,11 @@ assert.match(firstJ1.stem, /c\+d/);
 
 const firstJ11 = generatedQuestions("J11")[0];
 assert.equal(firstJ11.id, "wqg-J11-001");
-assert.equal(firstJ11.archetype, "SE1");
+assert.equal(firstJ11.archetype, "SE3");
 assert.equal(firstJ11.answer, "A");
-assert.equal(firstJ11.difficulty, "easy");
-assert.match(firstJ11.stem, /2p\+3q/);
+assert.equal(firstJ11.difficulty, "medium");
+assert.match(firstJ11.stem, /cinema/);
+assert.match(firstJ11.stem, /2:3/);
 
 const firstJ2 = generatedQuestions("J2")[0];
 assert.equal(firstJ2.id, "wqg-J2-001");
