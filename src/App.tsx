@@ -2,7 +2,6 @@ import { useEffect, useMemo, useState } from "react";
 import {
   CHOICES,
   difficultyLabel,
-  formatFacility,
   questionsFor,
   rankedStages,
   solutionAttribution,
@@ -13,6 +12,7 @@ import {
   type Difficulty,
   type Question,
 } from "./bank";
+import { HoneycombMap } from "./HoneycombMap";
 import { hasGeneratedPool } from "./drillPools";
 import { isPracticeDrillRun, PRACTICE_DRILL_ENABLED } from "./features";
 import { AccountBar } from "./AccountBar";
@@ -24,7 +24,6 @@ import {
   scoreRun,
   stageClearedBy,
   startRun,
-  type LastResult,
   type Progress,
   type Run,
 } from "./progress";
@@ -38,14 +37,6 @@ function screenForProgress(saved: Progress): Screen {
   if (!saved.run) return "map";
   if (!PRACTICE_DRILL_ENABLED && isPracticeDrillRun(saved.run)) return "map";
   return saved.run.marked ? "result" : "quiz";
-}
-
-function lastRunLabel(last: LastResult): string {
-  const hiddenDrill =
-    !PRACTICE_DRILL_ENABLED && (last.mode === "drill" || last.source === "generated");
-  if (hiddenDrill) return `last ${last.correct}/${last.total}`;
-  const kind = last.source === "generated" ? "practice" : last.mode;
-  return `last ${kind} ${last.correct}/${last.total}`;
 }
 
 function DifficultyChip({ difficulty }: { difficulty: Difficulty }) {
@@ -362,10 +353,11 @@ function StageMap({
         </button>
       ) : null}
       <p className="lede">
-        Pick any stage. Junior and Compulsory chapters sit on one map, ranked
-        by average facility from Easy to Hard. A run is up to 5 real DSE
-        questions, warming up Easy → Medium → untagged → Hard. Clear a stage
-        only with a perfect paper.
+        Pick any stage. Junior and Compulsory chapters sit on one honeycomb,
+        in bands from Easy to Hard, then Untagged. Neighbour lines are only a
+        visual path. Every stage stays open. A run is up to 5 real DSE questions,
+        warming up Easy → Medium → untagged → Hard. Clear a stage only with a
+        perfect paper.
         {PRACTICE_DRILL_ENABLED
           ? " A miss on Change of subjects, Significant figure, Percentage, Indices, Identities, Factorization, Ratio and map scale, Simultaneous equations, Statistics, Sequences, or S3 Probability opens 5 new practice questions, and so does a miss on Quadratic equations (II), Functions and Graphs, Polynomials, Variations, or Inequalities in one unknown. Other stages have no practice drill. A practice drill does not clear the stage."
           : ""}
@@ -387,50 +379,17 @@ function StageMap({
               : "stage run"}
         </button>
       ) : null}
-      <ol className="trail">
-        {rankedStages.map((stage) => {
-          const cleared = progress.cleared.includes(stage.id);
-          const last = progress.last[stage.id];
-          const length = Math.min(5, stage.questionCount);
-          const facility =
-            stage.averageFacility != null
-              ? `avg ${formatFacility(stage.averageFacility)}%`
-              : "no tagged facility";
-          return (
-            <li key={stage.id}>
-              <button
-                type="button"
-                className={`stage band-${stage.band}${cleared ? " cleared" : ""}`}
-                onClick={() => onOpen(stage.id)}
-              >
-                <span className="badge">{stage.id}</span>
-                <span className="stage-copy">
-                  <strong>{stage.title}</strong>
-                  <span className="stage-meta">
-                    <DifficultyChip difficulty={stage.band} />
-                    <span className="stage-detail">
-                      {facility}
-                      {" · "}
-                      {stage.questionCount} in the bank · run of {length}
-                      {PRACTICE_DRILL_ENABLED && hasGeneratedPool(stage.id)
-                        ? " · [Practice available 🙂]"
-                        : ""}
-                      {cleared ? " · cleared" : ""}
-                    </span>
-                    {last && !cleared ? (
-                      <span className="stage-score">{lastRunLabel(last)}</span>
-                    ) : null}
-                  </span>
-                </span>
-              </button>
-            </li>
-          );
-        })}
-      </ol>
+      <HoneycombMap
+        stages={rankedStages}
+        clearedIds={progress.cleared}
+        last={progress.last}
+        onOpen={onOpen}
+      />
       <p className="note">
         J6 is not in this bank, so it is not on the map. A stage with no tagged
-        facility percentage sits at the end. The average uses tagged questions
-        only.
+        facility percentage sits in Untagged, after Hard. The average uses
+        tagged questions only. A cleared hex shows its last score. An uncleared
+        hex does not.
       </p>
 
       <footer className="reset">
