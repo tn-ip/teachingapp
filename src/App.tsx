@@ -43,9 +43,9 @@ function screenForProgress(saved: Progress): Screen {
 function lastRunLabel(last: LastResult): string {
   const hiddenDrill =
     !PRACTICE_DRILL_ENABLED && (last.mode === "drill" || last.source === "generated");
-  if (hiddenDrill) return ` · last ${last.correct}/${last.total}`;
+  if (hiddenDrill) return `last ${last.correct}/${last.total}`;
   const kind = last.source === "generated" ? "practice" : last.mode;
-  return ` · last ${kind} ${last.correct}/${last.total}`;
+  return `last ${kind} ${last.correct}/${last.total}`;
 }
 
 function DifficultyChip({ difficulty }: { difficulty: Difficulty }) {
@@ -227,11 +227,19 @@ export function App() {
   }
 
   return (
-    <div className="app">
+    <div className={`app screen-${screen === "school" ? "school" : studentScreen}`}>
         <header className="top">
           <div>
             <p className="eyebrow">HKDSE Mathematics · Paper 2</p>
-            <h1>{screen === "school" ? "School progress" : "Stage map"}</h1>
+            <h1>
+              {screen === "school"
+                ? "School progress"
+                : studentScreen === "quiz"
+                  ? "Stage run"
+                  : studentScreen === "result"
+                    ? "Result"
+                    : "Stage map"}
+            </h1>
           </div>
           <div className="top-side">
             <AccountBar account={account} />
@@ -392,7 +400,7 @@ function StageMap({
             <li key={stage.id}>
               <button
                 type="button"
-                className={cleared ? "stage cleared" : "stage"}
+                className={`stage band-${stage.band}${cleared ? " cleared" : ""}`}
                 onClick={() => onOpen(stage.id)}
               >
                 <span className="badge">{stage.id}</span>
@@ -408,8 +416,10 @@ function StageMap({
                         ? " · [Practice available 🙂]"
                         : ""}
                       {cleared ? " · cleared" : ""}
-                      {last && !cleared ? lastRunLabel(last) : ""}
                     </span>
+                    {last && !cleared ? (
+                      <span className="stage-score">{lastRunLabel(last)}</span>
+                    ) : null}
                   </span>
                 </span>
               </button>
@@ -510,20 +520,22 @@ function Quiz({
       {PRACTICE_DRILL_ENABLED && run.source === "generated" && question.difficulty !== "unknown" ? (
         <p className="warmup-hint">Practice prefers Easy, then Medium, then Hard</p>
       ) : null}
-      {PRACTICE_DRILL_ENABLED && question.generated ? (
-        <p className="source">
-          {question.difficulty !== "unknown" ? (
+      <article className="question-card">
+        {PRACTICE_DRILL_ENABLED && question.generated ? (
+          <p className="source">
+            {question.difficulty !== "unknown" ? (
+              <DifficultyChip difficulty={question.difficulty} />
+            ) : null}
+            <span>Generated practice · not a past paper</span>
+          </p>
+        ) : (
+          <p className="source">
             <DifficultyChip difficulty={question.difficulty} />
-          ) : null}
-          <span>Generated practice · not a past paper</span>
-        </p>
-      ) : (
-        <p className="source">
-          <DifficultyChip difficulty={question.difficulty} />
-          <span>{question.sourceTag}</span>
-        </p>
-      )}
-      <MathView text={question.stem} />
+            <span>{question.sourceTag}</span>
+          </p>
+        )}
+        <MathView text={question.stem} />
+      </article>
       <div className="choices" role="listbox" aria-label="Choices">
         {CHOICES.map((letter) => (
           <button
@@ -605,28 +617,32 @@ function Result({
 
   return (
     <main className="result">
-      <p className="eyebrow">
-        {stage?.id} ·{" "}
-        {practice
-          ? "Practice drill"
-          : PRACTICE_DRILL_ENABLED && run.mode === "drill"
-            ? "Drill"
-            : "Stage run"}
-      </p>
-      <h2>
-        {correct}/{items.length}
-        {justCleared
-          ? " · stage cleared"
-          : perfect && practice
-            ? " · practice complete"
-            : perfect && PRACTICE_DRILL_ENABLED && run.mode === "drill"
-              ? " · drill complete"
-              : ""}
-      </h2>
-      <p className="lede">
-        {lede}
-        {cleared && !justCleared ? " This stage is already cleared." : ""}
-      </p>
+      <header className={perfect ? "result-summary perfect" : "result-summary mixed"}>
+        <p className="eyebrow">
+          {stage?.id} ·{" "}
+          {practice
+            ? "Practice drill"
+            : PRACTICE_DRILL_ENABLED && run.mode === "drill"
+              ? "Drill"
+              : "Stage run"}
+        </p>
+        <h2>
+          <span className="score">
+            {correct}/{items.length}
+          </span>
+          {justCleared
+            ? " · stage cleared"
+            : perfect && practice
+              ? " · practice complete"
+              : perfect && PRACTICE_DRILL_ENABLED && run.mode === "drill"
+                ? " · drill complete"
+                : ""}
+        </h2>
+        <p className="lede">
+          {lede}
+          {cleared && !justCleared ? " This stage is already cleared." : ""}
+        </p>
+      </header>
       <ol className="review">
         {items.map((question, index) => {
           const picked = run.picks[question.id];
