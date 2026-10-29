@@ -11,7 +11,8 @@ Open it on an iPad at [https://tn-ip.github.io/teachingapp/](https://tn-ip.githu
 - A stage run is up to **5 real DSE questions** from that stage. If the stage has fewer than 5, the run uses all of them.
 - The run warms up **Easy → Medium → Unknown → Hard**, filling from the easier pool first. Each question shows a light difficulty chip (Easy, Medium, Hard, or — when the facility is not tagged yet).
 - The stage clears only when **every** question in that run is correct (5/5, or 3/3, and so on).
-- A wrong answer does not clear the stage. Practice is optional, and it never clears the stage.
+- A wrong answer does not clear the stage. The review offers another stage run.
+- Practice Drill is hidden in the student UI. Weekly Question Generator practice stays outside this app. To show it here again, set `PRACTICE_DRILL_ENABLED` to `true` in `src/features.ts`. Pool JSON under `src/data/drillPools/`, `scripts/convert-drill-pools.mjs`, and `npm run check:drills` stay in the repo either way. The next two notes describe the drill when that flag is on.
 - **J1 Change of subjects, J2 Significant figure, J4 Percentage, J7 Indices, J8 Identities, J9 Factorization, J10 Ratio / rate, J11 Simultaneous equations, J16 Statistics, J18 Sequences, J19 S3 Probability, C2 Quadratic equations (II), C3 Functions, C4 Polynomials, C11 Variations, and C17 Inequalities** can drill 5 new Weekly Question Generator **Paper 2 MC** questions. The draw prefers the pool archetype that matches each missed bank question, then varies the archetype so two items in a row are not the same kind. When those rules tie, an easier generator band is taken before a harder one, so an unmatched drill uses Easy items before Medium and Hard. A matched archetype still takes the 1st, 3rd, and 5th places, and the other two places take the easiest different archetype still available. Another drill in that session skips stems already shown, so Easy runs out before Medium and Hard. J2, J18, and the newer pools are not tagged from bank stems, so those drills warm up Easy, then Medium, then Hard. J7–J9 items have no generator band. J10 map-scale misses still match M1–M3; ratio and rate stems stay untagged.
 - **Every other stage, including all Compulsory chapters,** has no practice drill. The result offers another stage run only. Practice does not fall back to unused past papers, and it does not use Paper 1 generator pools.
 - When a stage’s unused questions run out, retrying the stage draws from the full bank again.
@@ -52,7 +53,7 @@ The script needs `emf2svg-conv`, `wmf2svg`, and `rsvg-convert` for the diagrams.
 
 ## Worked solutions
 
-After a wrong answer on a stage run, the review shows the correct letter and then the worked steps for that question. A correct answer stays as it is. A generated practice drill shows the pool’s own short marking (1M / 1A) instead, and does not link to mathseasy.
+After a wrong answer on a stage run, the review shows the correct letter and then the worked steps for that question. A correct answer stays as it is. When Practice Drill is enabled, a generated practice drill shows the pool’s own short marking (1M / 1A) instead, and does not link to mathseasy.
 
 Steps are adapted from [Thomas Fok’s Paper II 題解 on mathseasy.hk](https://mathseasy.hk/). They are not original to this trainer. The stage map credits that source once. A wrong-answer review does not repeat the credit. mathseasy does not publish a per-question anchor. Diagrams and whole-page captures are not stored; if a write-up depends on a figure, the review says so and links to the year’s page on the tab that contains the question (1–10, 11–20, and so on). Two mensuration questions also link to Thomas Fok’s YouTube video when that is how the page explains them.
 

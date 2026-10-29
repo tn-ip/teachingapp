@@ -14,6 +14,7 @@ import {
   type Question,
 } from "./bank";
 import { hasGeneratedPool } from "./drillPools";
+import { isPracticeDrillRun, PRACTICE_DRILL_ENABLED } from "./features";
 import { AccountBar } from "./AccountBar";
 import { MathView } from "./MathView";
 import { questionById } from "./questions";
@@ -23,6 +24,7 @@ import {
   scoreRun,
   stageClearedBy,
   startRun,
+  type LastResult,
   type Progress,
   type Run,
 } from "./progress";
@@ -30,6 +32,21 @@ import { SchoolProgress } from "./SchoolProgress";
 import { useAccountSync } from "./useAccountSync";
 
 type Screen = "map" | "quiz" | "result" | "school";
+
+/** An open practice drill is not a screen while the drill is hidden. */
+function screenForProgress(saved: Progress): Screen {
+  if (!saved.run) return "map";
+  if (!PRACTICE_DRILL_ENABLED && isPracticeDrillRun(saved.run)) return "map";
+  return saved.run.marked ? "result" : "quiz";
+}
+
+function lastRunLabel(last: LastResult): string {
+  const hiddenDrill =
+    !PRACTICE_DRILL_ENABLED && (last.mode === "drill" || last.source === "generated");
+  if (hiddenDrill) return ` · last ${last.correct}/${last.total}`;
+  const kind = last.source === "generated" ? "practice" : last.mode;
+  return ` · last ${kind} ${last.correct}/${last.total}`;
+}
 
 function DifficultyChip({ difficulty }: { difficulty: Difficulty }) {
   const label = difficultyLabel(difficulty);
@@ -156,19 +173,11 @@ function QuestionTimer({ resetKey }: { resetKey: string }) {
 
 export function App() {
   const [progress, setProgress] = useState<Progress>(() => loadProgress());
-  const [screen, setScreen] = useState<Screen>(() => {
-    const saved = loadProgress();
-    if (!saved.run) return "map";
-    return saved.run.marked ? "result" : "quiz";
-  });
+  const [screen, setScreen] = useState<Screen>(() => screenForProgress(loadProgress()));
   const [confirmReset, setConfirmReset] = useState(false);
   const account = useAccountSync(progress, setProgress, (next) => {
     setProgress(next);
-    setScreen((current) => {
-      if (current === "school") return current;
-      if (!next.run) return "map";
-      return next.run.marked ? "result" : "quiz";
-    });
+    setScreen((current) => (current === "school" ? current : screenForProgress(next)));
   });
   const signedIn = Boolean(account.label);
   const teacher = account.role === "teacher";
@@ -184,6 +193,13 @@ export function App() {
   const stageIds = stages.map((stage) => stage.id);
   const clearedCount = stageIds.filter((id) => progress.cleared.includes(id)).length;
   const run = progress.run;
+  const drillBlocked = !PRACTICE_DRILL_ENABLED && isPracticeDrillRun(run);
+  const studentScreen: Screen = drillBlocked && screen !== "school" ? "map" : screen;
+
+  useEffect(() => {
+    if (!drillBlocked || screen === "school" || screen === "map") return;
+    setScreen("map");
+  }, [drillBlocked, screen]);
 
   function update(next: Progress, nextScreen?: Screen) {
     setProgress(next);
@@ -191,7 +207,12 @@ export function App() {
   }
 
   function openStage(stageId: string) {
-    if (run && run.stage === stageId && !run.marked) {
+    const resumeOpenPaper =
+      run &&
+      run.stage === stageId &&
+      !run.marked &&
+      (PRACTICE_DRILL_ENABLED || !isPracticeDrillRun(run));
+    if (resumeOpenPaper) {
       setScreen("quiz");
       return;
     }
@@ -200,7 +221,7 @@ export function App() {
   }
 
   function beginDrill() {
-    if (!run) return;
+    if (!PRACTICE_DRILL_ENABLED || !run) return;
     const next = startRun(progress, run.stage, "drill");
     if (next) update(next, "quiz");
   }
@@ -224,7 +245,7 @@ export function App() {
 
       {screen === "school" && teacher ? <SchoolProgress onBack={() => setScreen("map")} /> : null}
 
-      {screen === "map" ? (
+      {studentScreen === "map" ? (
         <StageMap
           progress={progress}
           teacher={teacher}
@@ -249,7 +270,7 @@ export function App() {
         />
       ) : null}
 
-      {screen === "quiz" && run ? (
+      {studentScreen === "quiz" && run ? (
         <Quiz
           run={run}
           onChange={(nextRun) => update({ ...progress, run: nextRun })}
@@ -284,7 +305,7 @@ export function App() {
         />
       ) : null}
 
-      {screen === "result" && run?.marked ? (
+      {studentScreen === "result" && run?.marked ? (
         <Result
           run={run}
           cleared={progress.cleared.includes(run.stage)}
@@ -336,13 +357,10 @@ function StageMap({
         Pick any stage. Junior and Compulsory chapters sit on one map, ranked
         by average facility from Easy to Hard. A run is up to 5 real DSE
         questions, warming up Easy → Medium → untagged → Hard. Clear a stage
-        only with a perfect paper. A miss on Change of subjects, Significant
-        figure, Percentage, Indices, Identities, Factorization, Ratio and map
-        scale, Simultaneous equations, Statistics, Sequences, or S3 Probability
-        opens 5 new practice questions, and so does a miss on Quadratic
-        equations (II), Functions and Graphs, Polynomials, Variations, or Inequalities in
-        one unknown. Other stages have no practice drill. A practice drill does
-        not clear the stage.
+        only with a perfect paper.
+        {PRACTICE_DRILL_ENABLED
+          ? " A miss on Change of subjects, Significant figure, Percentage, Indices, Identities, Factorization, Ratio and map scale, Simultaneous equations, Statistics, Sequences, or S3 Probability opens 5 new practice questions, and so does a miss on Quadratic equations (II), Functions and Graphs, Polynomials, Variations, or Inequalities in one unknown. Other stages have no practice drill. A practice drill does not clear the stage."
+          : ""}
       </p>
       <p className="note source-credit">
         Worked solutions are adapted from{" "}
@@ -351,7 +369,7 @@ function StageMap({
         </a>{" "}
         ({solutionAttribution.author}).
       </p>
-      {run ? (
+      {run && (PRACTICE_DRILL_ENABLED || !isPracticeDrillRun(run)) ? (
         <button className="resume" type="button" onClick={onResume}>
           {run.marked ? "Review" : "Continue"} {stageById(run.stage)?.id} ·{" "}
           {run.source === "generated"
@@ -386,11 +404,11 @@ function StageMap({
                       {facility}
                       {" · "}
                       {stage.questionCount} in the bank · run of {length}
-                      {hasGeneratedPool(stage.id) ? " · [Practice available 🙂]" : ""}
-                      {cleared ? " · cleared" : ""}
-                      {last && !cleared
-                        ? ` · last ${last.source === "generated" ? "practice" : last.mode} ${last.correct}/${last.total}`
+                      {PRACTICE_DRILL_ENABLED && hasGeneratedPool(stage.id)
+                        ? " · [Practice available 🙂]"
                         : ""}
+                      {cleared ? " · cleared" : ""}
+                      {last && !cleared ? lastRunLabel(last) : ""}
                     </span>
                   </span>
                 </span>
@@ -472,7 +490,12 @@ function Quiz({
           resetKey={`${run.index}:${question.id}`}
         />
         <p className="quiz-progress">
-          {run.source === "generated" ? "Practice" : run.mode === "drill" ? "Drill" : "Stage"} ·{" "}
+          {PRACTICE_DRILL_ENABLED && run.source === "generated"
+            ? "Practice"
+            : PRACTICE_DRILL_ENABLED && run.mode === "drill"
+              ? "Drill"
+              : "Stage"}{" "}
+          ·{" "}
           {run.index + 1}/{items.length}
           <span>
             {" "}
@@ -484,10 +507,10 @@ function Quiz({
         {stage.id} · {stage.title}
       </p>
       {run.mode === "stage" ? <p className="warmup-hint">Warm-up: Easy → Hard</p> : null}
-      {run.source === "generated" && question.difficulty !== "unknown" ? (
+      {PRACTICE_DRILL_ENABLED && run.source === "generated" && question.difficulty !== "unknown" ? (
         <p className="warmup-hint">Practice prefers Easy, then Medium, then Hard</p>
       ) : null}
-      {question.generated ? (
+      {PRACTICE_DRILL_ENABLED && question.generated ? (
         <p className="source">
           {question.difficulty !== "unknown" ? (
             <DifficultyChip difficulty={question.difficulty} />
@@ -570,20 +593,25 @@ function Result({
   const perfect = correct === items.length && items.length > 0;
   const stage = stageById(run.stage);
   const justCleared = stageClearedBy(run, correct, items.length);
-  const practice = run.source === "generated";
-  const practicePool = hasGeneratedPool(run.stage);
+  const practice = PRACTICE_DRILL_ENABLED && run.source === "generated";
+  const practicePool = PRACTICE_DRILL_ENABLED && hasGeneratedPool(run.stage);
   const lede = justCleared
     ? `${stage?.title} is cleared${signedIn ? " and saved to your account." : " on this iPad."}`
     : run.mode === "stage" && practicePool
       ? "The stage stays open. Drill 5 new practice questions, then retry the stage for a perfect paper."
-      : run.mode === "stage"
+      : run.mode === "stage" || !PRACTICE_DRILL_ENABLED
         ? "The stage stays open. Retry it for another perfect-paper attempt."
         : "A practice drill does not clear the stage. Retry the stage when you want another perfect-paper attempt.";
 
   return (
     <main className="result">
       <p className="eyebrow">
-        {stage?.id} · {practice ? "Practice drill" : run.mode === "drill" ? "Drill" : "Stage run"}
+        {stage?.id} ·{" "}
+        {practice
+          ? "Practice drill"
+          : PRACTICE_DRILL_ENABLED && run.mode === "drill"
+            ? "Drill"
+            : "Stage run"}
       </p>
       <h2>
         {correct}/{items.length}
@@ -591,7 +619,7 @@ function Result({
           ? " · stage cleared"
           : perfect && practice
             ? " · practice complete"
-            : perfect && run.mode === "drill"
+            : perfect && PRACTICE_DRILL_ENABLED && run.mode === "drill"
               ? " · drill complete"
               : ""}
       </h2>
@@ -609,7 +637,7 @@ function Result({
                 <strong>
                   {index + 1}. {ok ? "Correct" : "Wrong"}
                 </strong>
-                {question.generated ? (
+                {PRACTICE_DRILL_ENABLED && question.generated ? (
                   <span className="review-meta">
                     {question.difficulty !== "unknown" ? (
                       <DifficultyChip difficulty={question.difficulty} />
@@ -630,7 +658,7 @@ function Result({
                   ? ` · ${question.facilityPct}% of candidates`
                   : ""}
               </p>
-              {ok ? null : question.generated ? (
+              {ok ? null : PRACTICE_DRILL_ENABLED && question.generated ? (
                 <PracticeWorking question={question} />
               ) : (
                 <WorkedSolutionView question={question} />
@@ -653,7 +681,7 @@ function Result({
           </button>
         )}
       </div>
-      {run.mode === "stage" && !perfect && !practicePool ? (
+      {PRACTICE_DRILL_ENABLED && run.mode === "stage" && !perfect && !hasGeneratedPool(run.stage) ? (
         <p className="note">
           Generated MC practice is available for Change of subjects, Significant
           figure, Percentage, Indices, Identities, Factorization, Ratio and map
