@@ -6,7 +6,7 @@ Open it on an iPad at [https://tn-ip.github.io/teachingapp/](https://tn-ip.githu
 
 ## How a stage works
 
-- Pick any stage. The map ranks Junior and Compulsory together by each stage’s **average facility %** (tagged questions only). Easy is 70% or higher, Medium is 40–69, Hard is below 40. Within a band, higher averages come first. A stage with no tagged facility sits at the end. Each tile shows that average and its band.
+- Pick any stage. The map is a vertical honeycomb of Junior and Compulsory together, clustered **Easy → Medium → Hard → Untagged**. Easy is an average facility of 70% or higher, Medium is 40–69, Hard is below 40 (tagged questions only). Within a band, higher averages come first. A stage with no tagged facility sits in Untagged at the end. Each hex shows the stage code and chapter title. A cleared hex has a green ring and, only then, its last score. Lines join neighbouring hexes as a visual path. Nothing is locked.
 - J6 is not in the bank, so the map skips it.
 - A stage run is up to **5 real DSE questions** from that stage. If the stage has fewer than 5, the run uses all of them.
 - The run warms up **Easy → Medium → Unknown → Hard**, filling from the easier pool first. Each question shows a light difficulty chip (Easy, Medium, Hard, or — when the facility is not tagged yet).
