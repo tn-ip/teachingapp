@@ -1,7 +1,7 @@
 /**
  * Pointy-top honeycomb, odd rows shifted right by half a hex.
- * Centres are spaced so parallel sides stay `gap` apart. Bridges are the
- * visible segment in that gap: every geometric neighbour, nothing else.
+ * Centres are spaced so parallel sides stay `gap` apart. Clusters stay packed.
+ * Neighbour lines are not drawn.
  */
 
 export const HEX_GAP = 12;
@@ -18,16 +18,8 @@ export type HexSlot = {
   y: number;
 };
 
-export type HexBridge = {
-  x1: number;
-  y1: number;
-  x2: number;
-  y2: number;
-};
-
 export type HoneycombLayout = {
   slots: HexSlot[];
-  bridges: HexBridge[];
   width: number;
   height: number;
   hexW: number;
@@ -103,19 +95,6 @@ export function layoutHoneycomb(
     });
   }
 
-  const byCoord = new Map<string, HexSlot>();
-  for (const slot of slots) byCoord.set(`${slot.col},${slot.row}`, slot);
-
-  const bridges: HexBridge[] = [];
-  for (const slot of slots) {
-    for (const [col, row] of neighbourCoords(slot.col, slot.row)) {
-      const other = byCoord.get(`${col},${row}`);
-      if (!other || other.index <= slot.index) continue;
-      const segment = bridgeSegment(slot.x, slot.y, other.x, other.y, hexW);
-      if (segment) bridges.push(segment);
-    }
-  }
-
   let width = hexW;
   let height = hexH;
   if (slots.length === 0) {
@@ -127,49 +106,5 @@ export function layoutHoneycomb(
     height = Math.max(height, slot.y + hexH / 2);
   }
 
-  return { slots, bridges, width, height, hexW, hexH };
-}
-
-function neighbourCoords(col: number, row: number): [number, number][] {
-  if (row % 2 === 0) {
-    return [
-      [col - 1, row],
-      [col + 1, row],
-      [col - 1, row - 1],
-      [col, row - 1],
-      [col - 1, row + 1],
-      [col, row + 1],
-    ];
-  }
-  return [
-    [col - 1, row],
-    [col + 1, row],
-    [col, row - 1],
-    [col + 1, row - 1],
-    [col, row + 1],
-    [col + 1, row + 1],
-  ];
-}
-
-/** The piece of the centre-line that sits in the gap, clear of both hexes. */
-function bridgeSegment(
-  x1: number,
-  y1: number,
-  x2: number,
-  y2: number,
-  hexW: number,
-): HexBridge | null {
-  const dx = x2 - x1;
-  const dy = y2 - y1;
-  const dist = Math.hypot(dx, dy);
-  const inset = hexW / 2 + 2;
-  if (dist <= inset * 2 + 0.5) return null;
-  const start = inset / dist;
-  const end = 1 - start;
-  return {
-    x1: x1 + dx * start,
-    y1: y1 + dy * start,
-    x2: x1 + dx * end,
-    y2: y1 + dy * end,
-  };
+  return { slots, width, height, hexW, hexH };
 }

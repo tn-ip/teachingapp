@@ -43,6 +43,8 @@
 
 html, body, #root { min-height: 100%; }
 
+html, body { overflow-x: hidden; }
+
 body {
   margin: 0;
   background: var(--background);
@@ -295,6 +297,8 @@ button:active:not(:disabled),
   display: grid;
   gap: 22px;
   width: 100%;
+  max-width: 100%;
+  overflow-x: clip;
 }
 
 .hex-band-head {
@@ -340,6 +344,7 @@ button:active:not(:disabled),
 .hex-cluster {
   position: relative;
   margin: 0 auto;
+  max-width: 100%;
 }
 
 .hex-cluster ol {
@@ -348,21 +353,6 @@ button:active:not(:disabled),
   margin: 0;
   padding: 0;
   list-style: none;
-}
-
-.hex-bridges {
-  position: absolute;
-  left: 0;
-  top: 0;
-  z-index: 0;
-  pointer-events: none;
-  overflow: visible;
-}
-
-.hex-bridges line {
-  stroke: #64748b;
-  stroke-width: 3;
-  stroke-linecap: round;
 }
 
 .hex-slot {
@@ -425,16 +415,7 @@ button.hex:hover .hex-svg {
 
 button.hex:hover .hex-svg polygon { stroke: #a5b4fc; }
 
-button.hex.cleared .hex-svg polygon {
-  fill: var(--accent-soft);
-  stroke: var(--accent);
-  stroke-width: 3.4;
-}
-
-button.hex.cleared:hover .hex-svg polygon { stroke: #047857; }
-
-button.hex:focus-visible .hex-svg polygon,
-button.hex.cleared:focus-visible .hex-svg polygon {
+button.hex:focus-visible .hex-svg polygon {
   stroke: var(--primary);
   stroke-width: 4;
 }
@@ -475,9 +456,9 @@ button.hex.cleared:focus-visible .hex-svg polygon {
   overflow-wrap: anywhere;
 }
 
-button.hex.has-score .hex-title { -webkit-line-clamp: 2; }
+button.hex.has-mark .hex-title { -webkit-line-clamp: 2; }
 
-.hex-score {
+.hex-halfway {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -485,12 +466,21 @@ button.hex.has-score .hex-title { -webkit-line-clamp: 2; }
   min-height: 20px;
   padding: 0 7px;
   border-radius: 999px;
-  background: #d1fae5;
-  color: var(--accent-ink);
+  background: #e0e7ff;
+  color: #3730a3;
   font-size: max(11px, calc(var(--hex-w) * 0.07));
   font-weight: 700;
   font-variant-numeric: tabular-nums;
   line-height: 1.2;
+}
+
+.hex-star {
+  margin-top: 2px;
+  color: var(--primary);
+  font-family: var(--font-display);
+  font-size: max(16px, calc(var(--hex-w) * 0.16));
+  font-weight: 700;
+  line-height: 1;
 }
 
 .hex-practice {
@@ -870,6 +860,23 @@ button.hex.has-score .hex-title { -webkit-line-clamp: 2; }
 .review > li.no .solution,
 .review > li.ok .solution { background: #ffffff; }
 
+.shuffle-reminder,
+.shuffle-note {
+  margin: 0 0 14px;
+  padding: 12px 14px;
+  border: 1px solid #c7d2fe;
+  border-radius: var(--radius);
+  background: #eef2ff;
+  color: #312e81;
+  font-weight: 700;
+}
+
+.shuffle-note {
+  margin: 0 0 10px;
+  padding: 8px 10px;
+  font-size: 0.92rem;
+}
+
 .solution-label {
   margin: 0 0 8px;
   color: #3730a3;
@@ -1046,8 +1053,9 @@ button.hex.has-score .hex-title { -webkit-line-clamp: 2; }
 }
 
 .school-count {
-  color: var(--accent-ink);
-  font-size: 0.9rem;
+  color: var(--primary);
+  font-family: var(--font-display);
+  font-size: 1rem;
   font-weight: 700;
   white-space: nowrap;
 }
@@ -1062,7 +1070,7 @@ button.hex.has-score .hex-title { -webkit-line-clamp: 2; }
 }
 
 .school-stages li {
-  background: #d1fae5;
+  background: var(--accent-soft);
   color: var(--accent-ink);
   border: 1px solid var(--accent);
   border-radius: 999px;
@@ -1070,8 +1078,14 @@ button.hex.has-score .hex-title { -webkit-line-clamp: 2; }
   min-height: 28px;
   display: inline-flex;
   align-items: center;
+  gap: 4px;
   font-size: 0.85rem;
   font-weight: 700;
+}
+
+.school-stage-title {
+  color: var(--foreground);
+  font-weight: 600;
 }
 
 .school-none {
@@ -1127,8 +1141,7 @@ button.hex.has-score .hex-title { -webkit-line-clamp: 2; }
 }
 
 @media (forced-colors: active) {
-  button.hex:focus-visible .hex-svg polygon,
-  button.hex.cleared:focus-visible .hex-svg polygon {
+  button.hex:focus-visible .hex-svg polygon {
     stroke: Highlight;
   }
 }

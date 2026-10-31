@@ -378,8 +378,9 @@ const perfectStage: Run = {
   index: 0,
   marked: true,
 };
-assert.equal(stageClearedBy(perfectStage, 5, 5), true);
-assert.equal(stageClearedBy(perfectStage, 4, 5), false);
+assert.equal(stageClearedBy(perfectStage, 5, 5), false);
+assert.equal(stageClearedBy(perfectStage, 5, 5, 1), true);
+assert.equal(stageClearedBy(perfectStage, 4, 5, 1), false);
 
 const cs7 = bankQuestionById("J1-2016-q2");
 const cs4 = bankQuestionById("J1-2013-q2");

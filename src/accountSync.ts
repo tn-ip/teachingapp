@@ -3,7 +3,7 @@ import {
   buildSchoolRoster,
   type SchoolStudent,
 } from "./schoolRoster";
-import { clearScore, historyRunType, prepareAccountMerge, progressFromRemote, type HistorySummary } from "./sync";
+import { clearScore, historyRunType, prepareAccountMerge, progressFromRemote, snapshotForRemote, type HistorySummary } from "./sync";
 import { supabase } from "./supabase";
 
 type StateRow = {
@@ -54,34 +54,21 @@ export async function fetchRemote(userId: string): Promise<Progress> {
 
 async function writeSnapshot(userId: string, progress: Progress, completed: Run[]): Promise<void> {
   if (!supabase) return;
+  const snapshot = snapshotForRemote(progress);
   const state = await supabase.from("trainer_state").upsert(
     {
       user_id: userId,
-      cleared: progress.cleared,
-      used: progress.used,
-      last: progress.last,
-      run: progress.run,
+      cleared: snapshot.cleared,
+      used: snapshot.used,
+      last: snapshot.last,
+      run: snapshot.run,
       updated_at: new Date().toISOString(),
     },
     { onConflict: "user_id" },
   );
   fail(state.error);
 
-  if (progress.cleared.length > 0) {
-    const clears = await supabase.from("stage_clears").upsert(
-      progress.cleared.map((stageId) => {
-        const score = clearScore(progress, stageId);
-        return {
-          user_id: userId,
-          stage_id: stageId,
-          score: score?.score ?? null,
-          total: score?.total ?? null,
-        };
-      }),
-      { onConflict: "user_id,stage_id", ignoreDuplicates: true },
-    );
-    fail(clears.error);
-  }
+  await replaceStageClears(userId, snapshot.cleared, progress);
 
   if (completed.length > 0) {
     const runs = await supabase.from("run_history").upsert(
@@ -99,6 +86,7 @@ async function writeSnapshot(userId: string, progress: Progress, completed: Run[
           source: run.source ?? null,
           ids: run.ids,
           picks: run.picks,
+          option_orders: run.optionOrders ?? {},
           focus: run.focus ?? [],
           seen_ids: run.seenIds ?? [],
         },
@@ -111,8 +99,34 @@ async function writeSnapshot(userId: string, progress: Progress, completed: Run[
 
 /**
  * Union `local` with the account, then write the snapshot. Finished runs are
- * inserted once (`client_run_id`). Existing clears are left in place.
+ * inserted once (`client_run_id`). `stage_clears` is rewritten to the starred
+ * stages only, so a one-perfect clear does not stay on the teacher view.
  */
+
+async function replaceStageClears(userId: string, starred: string[], progress: Progress): Promise<void> {
+  if (!supabase) return;
+  if (starred.length === 0) {
+    const { error } = await supabase.from("stage_clears").delete().eq("user_id", userId);
+    fail(error);
+    return;
+  }
+  const keep = `(${starred.join(",")})`;
+  const removed = await supabase.from("stage_clears").delete().eq("user_id", userId).not("stage_id", "in", keep);
+  fail(removed.error);
+  const clears = await supabase.from("stage_clears").upsert(
+    starred.map((stageId) => {
+      const score = clearScore(progress, stageId);
+      return {
+        user_id: userId,
+        stage_id: stageId,
+        score: score?.score ?? null,
+        total: score?.total ?? null,
+      };
+    }),
+    { onConflict: "user_id,stage_id", ignoreDuplicates: true },
+  );
+  fail(clears.error);
+}
 export async function syncProgress(userId: string, readLocal: () => Progress): Promise<Progress> {
   const remote = await fetchRemote(userId);
   const prepared = prepareAccountMerge(readLocal(), remote);

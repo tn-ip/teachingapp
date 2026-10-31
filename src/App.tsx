@@ -19,7 +19,12 @@ import { AccountBar } from "./AccountBar";
 import { MathView } from "./MathView";
 import { questionById } from "./questions";
 import {
+  choiceOrder,
+  grantPerfectRun,
   loadProgress,
+  paperAnswer,
+  perfectCount,
+  pickIsCorrect,
   saveProgress,
   scoreRun,
   stageClearedBy,
@@ -53,7 +58,15 @@ function DifficultyChip({ difficulty }: { difficulty: Difficulty }) {
   );
 }
 
-function WorkedSolutionView({ question }: { question: Question }) {
+function WorkedSolutionView({
+  question,
+  paperKey,
+  shuffled,
+}: {
+  question: Question;
+  paperKey: Choice;
+  shuffled: boolean;
+}) {
   const solution = solutionFor(question.id);
   const steps = solution?.solutionSteps.trim() ?? "";
   const url = solution?.solutionSourceUrl ?? null;
@@ -68,6 +81,11 @@ function WorkedSolutionView({ question }: { question: Question }) {
   return (
     <section className="solution" aria-label="Worked solution">
       <p className="solution-label">題解 · Worked solution</p>
+      {shuffled ? (
+        <p className="shuffle-note">
+          Options were shuffled for this run, so a letter in this scheme may not match the letter you tapped.
+        </p>
+      ) : null}
       {steps ? <MathView text={steps} /> : <p className="solution-missing">{fallback}</p>}
       {solution?.hasDiagram && url ? (
         <p className="solution-note">
@@ -79,7 +97,7 @@ function WorkedSolutionView({ question }: { question: Question }) {
       ) : null}
       {solution?.sourceAnswer && !solution.answerMatches ? (
         <p className="solution-note">
-          mathseasy marks {solution.sourceAnswer}. This bank’s key is {question.answer}.
+          mathseasy marks {solution.sourceAnswer}. This bank’s key is {question.answer}. On this paper that choice is {paperKey}.
         </p>
       ) : null}
       {videoUrl ? (
@@ -235,8 +253,8 @@ export function App() {
           <div className="top-side">
             <AccountBar account={account} />
             {screen === "school" ? null : (
-              <p className="progress-pill">
-                {clearedCount}/{stages.length} cleared
+              <p className="progress-pill" aria-label={`${clearedCount} of ${stages.length} stages starred`}>
+                ★ {clearedCount} / {stages.length}
               </p>
             )}
           </div>
@@ -279,13 +297,10 @@ export function App() {
               ? nextRun
               : { ...nextRun, clientId: crypto.randomUUID() };
             const result = scoreRun(stamped);
-            const cleared = stageClearedBy(stamped, result.correct, result.total)
-              ? Array.from(new Set([...progress.cleared, stamped.stage]))
-              : progress.cleared;
+            const withStar = grantPerfectRun(progress, stamped, result.correct, result.total);
             update(
               {
-                ...progress,
-                cleared,
+                ...withStar,
                 run: stamped,
                 last: {
                   ...progress.last,
@@ -307,7 +322,7 @@ export function App() {
       {studentScreen === "result" && run?.marked ? (
         <Result
           run={run}
-          cleared={progress.cleared.includes(run.stage)}
+          perfects={perfectCount(progress.perfectRuns, run.stage)}
           onHome={() => setScreen("map")}
           onRetry={() => {
             const next = startRun(progress, run.stage, "stage");
@@ -354,10 +369,10 @@ function StageMap({
       ) : null}
       <p className="lede">
         Pick any stage. Junior and Compulsory chapters sit on one honeycomb,
-        in bands from Easy to Hard, then Untagged. Neighbour lines are only a
-        visual path. Every stage stays open. A run is up to 5 real DSE questions,
-        warming up Easy → Medium → untagged → Hard. Clear a stage only with a
-        perfect paper.
+        in bands from Easy to Hard, then Untagged. Every stage stays open. A
+        run is up to 5 real DSE questions, warming up Easy → Medium → untagged
+        → Hard. A star needs two perfect stage runs. They do not have to be
+        consecutive, and a miss in between keeps the perfects you already have.
         {PRACTICE_DRILL_ENABLED
           ? " A miss on Change of subjects, Significant figure, Percentage, Indices, Identities, Factorization, Ratio and map scale, Simultaneous equations, Statistics, Sequences, or S3 Probability opens 5 new practice questions, and so does a miss on Quadratic equations (II), Functions and Graphs, Polynomials, Variations, or Inequalities in one unknown. Other stages have no practice drill. A practice drill does not clear the stage."
           : ""}
@@ -381,15 +396,14 @@ function StageMap({
       ) : null}
       <HoneycombMap
         stages={rankedStages}
-        clearedIds={progress.cleared}
-        last={progress.last}
+        perfectRuns={progress.perfectRuns}
         onOpen={onOpen}
       />
       <p className="note">
         J6 is not in this bank, so it is not on the map. A stage with no tagged
         facility percentage sits in Untagged, after Hard. The average uses
-        tagged questions only. A cleared hex shows its last score. An uncleared
-        hex does not.
+        tagged questions only. One perfect run shows 1/2 on the hex. The second
+        perfect run replaces that with a star.
       </p>
 
       <footer className="reset">
@@ -496,19 +510,22 @@ function Quiz({
         <MathView text={question.stem} />
       </article>
       <div className="choices" role="listbox" aria-label="Choices">
-        {CHOICES.map((letter) => (
-          <button
-            key={letter}
-            type="button"
-            role="option"
-            aria-selected={pick === letter}
-            className={pick === letter ? "choice selected" : "choice"}
-            onClick={() => choose(letter)}
-          >
-            <span className="letter">{letter}</span>
-            <MathView text={question.choices[letter]} />
-          </button>
-        ))}
+        {CHOICES.map((letter, index) => {
+          const bankLetter = choiceOrder(run, question.id)[index];
+          return (
+            <button
+              key={letter}
+              type="button"
+              role="option"
+              aria-selected={pick === letter}
+              className={pick === letter ? "choice selected" : "choice"}
+              onClick={() => choose(letter)}
+            >
+              <span className="letter">{letter}</span>
+              <MathView text={question.choices[bankLetter]} />
+            </button>
+          );
+        })}
       </div>
       <div className="quiz-nav">
         <button
@@ -544,14 +561,14 @@ function Quiz({
 
 function Result({
   run,
-  cleared,
+  perfects,
   onHome,
   onRetry,
   onDrill,
   signedIn,
 }: {
   run: Run;
-  cleared: boolean;
+  perfects: number;
   onHome: () => void;
   onRetry: () => void;
   onDrill: () => void;
@@ -560,19 +577,29 @@ function Result({
   const items = run.ids
     .map((id) => questionById(id))
     .filter((q): q is Question => Boolean(q));
-  const correct = items.filter((q) => run.picks[q.id] === q.answer).length;
+  const correct = items.filter((q) => pickIsCorrect(run, q)).length;
   const perfect = correct === items.length && items.length > 0;
   const stage = stageById(run.stage);
-  const justCleared = stageClearedBy(run, correct, items.length);
+  const already = perfect ? Math.max(0, perfects - 1) : perfects;
+  const justStarred = stageClearedBy(run, correct, items.length, already);
+  const halfway = perfect && run.mode === "stage" && run.source !== "generated" && perfects === 1;
   const practice = PRACTICE_DRILL_ENABLED && run.source === "generated";
   const practicePool = PRACTICE_DRILL_ENABLED && hasGeneratedPool(run.stage);
-  const lede = justCleared
-    ? `${stage?.title} is cleared${signedIn ? " and saved to your account." : " on this iPad."}`
-    : run.mode === "stage" && practicePool
-      ? "The stage stays open. Drill 5 new practice questions, then retry the stage for a perfect paper."
-      : run.mode === "stage" || !PRACTICE_DRILL_ENABLED
-        ? "The stage stays open. Retry it for another perfect-paper attempt."
-        : "A practice drill does not clear the stage. Retry the stage when you want another perfect-paper attempt.";
+  const shuffled = Boolean(run.optionOrders && Object.keys(run.optionOrders).length > 0);
+  const stagePaper = run.mode === "stage" && run.source !== "generated";
+  const lede = justStarred
+    ? `${stage?.title} has its star${signedIn ? " and is saved to your account." : " on this iPad."}`
+    : halfway
+      ? "One perfect paper is saved. One more perfect stage run gives this stage its star. A miss in between is fine."
+      : stagePaper && perfects >= 2
+        ? `${stage?.title} already has its star. You can run it again whenever you want.`
+        : stagePaper && perfects === 1
+          ? "This paper was not perfect. You still have 1 of 2 perfect runs. A miss does not remove it."
+          : run.mode === "stage" && practicePool
+            ? "The stage stays open. Drill 5 new practice questions, then retry the stage for a perfect paper."
+            : run.mode === "stage" || !PRACTICE_DRILL_ENABLED
+              ? "The stage stays open. Retry it for another perfect-paper attempt."
+              : "A practice drill does not star the stage. Retry the stage when you want another perfect-paper attempt.";
 
   return (
     <main className="result">
@@ -589,23 +616,28 @@ function Result({
           <span className="score">
             {correct}/{items.length}
           </span>
-          {justCleared
-            ? " · stage cleared"
-            : perfect && practice
-              ? " · practice complete"
-              : perfect && PRACTICE_DRILL_ENABLED && run.mode === "drill"
-                ? " · drill complete"
-                : ""}
+          {justStarred
+            ? " · star"
+            : halfway
+              ? " · 1/2"
+              : perfect && practice
+                ? " · practice complete"
+                : perfect && PRACTICE_DRILL_ENABLED && run.mode === "drill"
+                  ? " · drill complete"
+                  : ""}
         </h2>
-        <p className="lede">
-          {lede}
-          {cleared && !justCleared ? " This stage is already cleared." : ""}
-        </p>
+        <p className="lede">{lede}</p>
       </header>
+      {shuffled ? (
+        <p className="shuffle-reminder" role="note">
+          Options were shuffled for this run. A letter in the published marking scheme may not match the letter you tapped.
+        </p>
+      ) : null}
       <ol className="review">
         {items.map((question, index) => {
           const picked = run.picks[question.id];
-          const ok = picked === question.answer;
+          const key = paperAnswer(question, choiceOrder(run, question.id));
+          const ok = picked === key;
           return (
             <li key={question.id} className={ok ? "ok" : "no"}>
               <header>
@@ -628,7 +660,7 @@ function Result({
               </header>
               <MathView text={question.stem} />
               <p className="verdict">
-                Your answer {picked ?? "—"} · key {question.answer}
+                Your answer {picked ?? "—"} · key {key}
                 {question.facilityPct != null
                   ? ` · ${question.facilityPct}% of candidates`
                   : ""}
@@ -636,7 +668,7 @@ function Result({
               {ok ? null : PRACTICE_DRILL_ENABLED && question.generated ? (
                 <PracticeWorking question={question} />
               ) : (
-                <WorkedSolutionView question={question} />
+                <WorkedSolutionView question={question} paperKey={key} shuffled={shuffled} />
               )}
             </li>
           );

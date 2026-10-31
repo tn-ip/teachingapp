@@ -1,5 +1,18 @@
 import assert from "node:assert/strict";
-import { normalizeProgress, PROGRESS_KEY, type Progress, type Run } from "../src/progress.ts";
+import { questionById } from "../src/questions.ts";
+import {
+  choiceOrder,
+  CLEAR_RULE,
+  grantPerfectRun,
+  normalizeProgress,
+  paperAnswer,
+  PERFECTS_TO_CLEAR,
+  PROGRESS_KEY,
+  scoreRun,
+  stageClearedBy,
+  type Progress,
+  type Run,
+} from "../src/progress.ts";
 import { buildSchoolRoster } from "../src/schoolRoster.ts";
 import {
   claimDeviceProgress,
@@ -13,12 +26,25 @@ import {
   prepareAccountMerge,
   progressFromRemote,
   rememberDeviceProgress,
+  snapshotForRemote,
   userProgressKey,
   type ProgressStore,
 } from "../src/sync.ts";
 
 function blank(partial: Partial<Progress> = {}): Progress {
-  return { cleared: [], used: {}, last: {}, run: null, ...partial };
+  return normalizeProgress({
+    clearRule: CLEAR_RULE,
+    perfectRuns: {},
+    cleared: [],
+    used: {},
+    last: {},
+    run: null,
+    ...partial,
+  });
+}
+
+function starred(stageId: string): Record<string, string[]> {
+  return { [stageId]: [`${stageId}-run-1`, `${stageId}-run-2`] };
 }
 
 function run(partial: Partial<Run> & Pick<Run, "stage" | "mode">): Run {
@@ -42,15 +68,15 @@ function memory(initial: Record<string, string> = {}): ProgressStore & { data: M
   };
 }
 
-const guestPaper = blank({ cleared: ["J1"], used: { J1: ["J1-sample-q2"] } });
+const guestPaper = blank({ perfectRuns: starred("J1"), used: { J1: ["J1-sample-q2"] } });
 const accountPaper = blank({
-  cleared: ["J2"],
+  perfectRuns: starred("J2"),
   used: { J2: ["J2-kept"] },
   last: { J2: { correct: 4, total: 5, mode: "stage", at: "2026-10-01T00:00:00.000Z" } },
 });
 
 const merged = mergeProgress(guestPaper, accountPaper);
-assert.deepEqual(merged.cleared, ["J2", "J1"]);
+assert.deepEqual(merged.cleared, ["J1", "J2"]);
 assert.deepEqual(merged.used.J1, ["J1-sample-q2"]);
 assert.deepEqual(merged.used.J2, ["J2-kept"]);
 assert.equal(merged.last.J2?.correct, 4);
@@ -87,7 +113,7 @@ const prepared = prepareAccountMerge(
     run: run({ stage: "J1", mode: "stage", marked: true, picks: { q1: "A" } }),
   }),
   blank({
-    cleared: ["J9"],
+    perfectRuns: starred("J9"),
     run: run({ stage: "J7", mode: "drill", source: "generated", marked: true, clientId: "practice-1" }),
   }),
 );
@@ -124,7 +150,8 @@ const fromTables = progressFromRemote(null, ["J1"], [
   { stageId: "J1", runType: "stage", score: 5, total: 5, createdAt: "2026-10-03T00:00:00.000Z" },
   { stageId: "J1", runType: "practice", score: 1, total: 5, createdAt: "2026-10-04T00:00:00.000Z" },
 ]);
-assert.deepEqual(fromTables.cleared, ["J1"]);
+assert.deepEqual(fromTables.cleared, []);
+assert.deepEqual(fromTables.perfectRuns, {});
 assert.equal(fromTables.last.J1?.mode, "drill");
 assert.equal(fromTables.last.J1?.correct, 1);
 
@@ -133,11 +160,13 @@ const fromState = progressFromRemote(
   ["J1"],
   [{ stageId: "J2", runType: "stage", score: 5, total: 5, createdAt: "2026-10-05T00:00:00.000Z" }],
 );
-assert.deepEqual(fromState.cleared, ["J2", "J1"]);
+assert.deepEqual(fromState.cleared, []);
+assert.deepEqual(fromState.perfectRuns, {});
 assert.equal(fromState.last.J2?.correct, 2);
 assert.deepEqual(fromState.used.J2, ["kept"]);
 
-assert.equal(normalizeProgress({ cleared: ["J1", "J1", 4], run: { mode: "nope" } }).cleared.length, 1);
+assert.deepEqual(normalizeProgress({ cleared: ["J1", "J1", 4], run: { mode: "nope" } }).cleared, []);
+assert.deepEqual(normalizeProgress({ cleared: ["J1", "J1", 4], run: { mode: "nope" } }).perfectRuns, {});
 assert.equal(normalizeProgress({ cleared: ["J1", "J1", 4], run: { mode: "nope" } }).run, null);
 assert.deepEqual(lastFromHistory([]), {});
 
@@ -157,7 +186,7 @@ assert.deepEqual(guestClaim.cleared, ["J1"]);
 assert.equal(guestStore.getItem(OWNER_KEY), null);
 rememberDeviceProgress(guestStore, "user-a", merged);
 assert.equal(guestStore.getItem(OWNER_KEY), "user-a");
-assert.deepEqual(JSON.parse(guestStore.getItem(userProgressKey("user-a")) ?? "{}").cleared, ["J2", "J1"]);
+assert.deepEqual(JSON.parse(guestStore.getItem(userProgressKey("user-a")) ?? "{}").cleared, ["J1", "J2"]);
 
 const sameStudent = memory({
   [OWNER_KEY]: "user-a",
@@ -195,5 +224,90 @@ assert.deepEqual(roster[1]?.cleared, ["J2"]);
 assert.equal(roster[2]?.email, null);
 assert.deepEqual(roster[3]?.cleared, []);
 assert.equal(roster.some((student) => student.id === "t"), false);
+
+const legacy = normalizeProgress({
+  cleared: ["J5", "C2"],
+  used: { J5: ["J5-2012-q1"] },
+  last: { J5: { correct: 5, total: 5, mode: "stage" } },
+});
+assert.equal(legacy.clearRule, CLEAR_RULE);
+assert.deepEqual(legacy.cleared, []);
+assert.deepEqual(legacy.perfectRuns, {});
+assert.deepEqual(legacy.used.J5, ["J5-2012-q1"]);
+
+const one = grantPerfectRun(
+  blank(),
+  run({ stage: "J3", mode: "stage", marked: true, clientId: "once" }),
+  5,
+  5,
+);
+assert.deepEqual(one.perfectRuns.J3, ["once"]);
+assert.deepEqual(one.cleared, []);
+assert.equal(stageClearedBy(run({ stage: "J3", mode: "stage" }), 5, 5, 0), false);
+assert.equal(stageClearedBy(run({ stage: "J3", mode: "stage" }), 5, 5, 1), true);
+assert.equal(PERFECTS_TO_CLEAR, 2);
+
+const two = grantPerfectRun(
+  one,
+  run({ stage: "J3", mode: "stage", marked: true, clientId: "twice" }),
+  5,
+  5,
+);
+assert.deepEqual(two.cleared, ["J3"]);
+const againSame = grantPerfectRun(
+  two,
+  run({ stage: "J3", mode: "stage", marked: true, clientId: "twice" }),
+  5,
+  5,
+);
+assert.deepEqual(againSame.perfectRuns.J3, ["once", "twice"]);
+
+const missedBetween = grantPerfectRun(
+  one,
+  run({ stage: "J3", mode: "stage", marked: true, clientId: "miss" }),
+  4,
+  5,
+);
+assert.deepEqual(missedBetween.perfectRuns.J3, ["once"]);
+const drillPerfect = grantPerfectRun(
+  one,
+  run({ stage: "J3", mode: "drill", source: "generated", marked: true, clientId: "drill" }),
+  5,
+  5,
+);
+assert.deepEqual(drillPerfect.perfectRuns.J3, ["once"]);
+
+const offline = mergeProgress(
+  blank({ perfectRuns: { C1: ["local-only"] } }),
+  blank({ perfectRuns: { C1: ["remote-only"] } }),
+);
+assert.deepEqual(offline.perfectRuns.C1, ["remote-only", "local-only"]);
+assert.deepEqual(offline.cleared, ["C1"]);
+
+const roundTrip = progressFromRemote(
+  snapshotForRemote(two),
+  ["J1", "J9"],
+  [],
+);
+assert.deepEqual(roundTrip.cleared, ["J3"]);
+assert.deepEqual(roundTrip.perfectRuns.J3, ["once", "twice"]);
+assert.equal(roundTrip.used.$clearRule, undefined);
+assert.equal(roundTrip.used.$perfectRuns, undefined);
+
+const sample = questionById("J1-sample-q2");
+assert.ok(sample);
+const order = ["B", "D", "A", "C"] as const;
+const shuffledRun = run({
+  stage: "J1",
+  mode: "stage",
+  ids: [sample.id],
+  picks: { [sample.id]: "D" },
+  optionOrders: { [sample.id]: [order[0], order[1], order[2], order[3]] },
+  marked: true,
+});
+assert.equal(paperAnswer(sample, choiceOrder(shuffledRun, sample.id)), "D");
+assert.equal(scoreRun(shuffledRun).correct, 1);
+assert.equal(scoreRun({ ...shuffledRun, picks: { [sample.id]: "A" } }).correct, 0);
+assert.equal(sample.answer, "C");
 
 console.log("sync checks passed");

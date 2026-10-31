@@ -51,8 +51,10 @@ export function SchoolProgress({ onBack }: { onBack: () => void }) {
         Stage map
       </button>
       <p className="lede">
-        Every signed-in student, and the stages they have cleared. Names are the
-        display names on their accounts.
+        Every signed-in student. A star is two perfect stage runs, and the list
+        under each name is the stages they have starred. One perfect run stays
+        on that student’s map as 1/2 until the second. Names are the display
+        names on their accounts, including class and number.
       </p>
 
       {loading ? <p className="note">Loading school progress…</p> : null}
@@ -86,7 +88,7 @@ export function SchoolProgress({ onBack }: { onBack: () => void }) {
             <select
               className="school-filter"
               value={stageId}
-              aria-label="Filter by cleared stage"
+              aria-label="Filter by starred stage"
               onChange={(event) => setStageId(event.target.value)}
             >
               <option value="">All stages</option>
@@ -99,7 +101,7 @@ export function SchoolProgress({ onBack }: { onBack: () => void }) {
           </div>
           <p className="note school-summary">
             {visible.length} {visible.length === 1 ? "student" : "students"}
-            {stageTitle ? ` cleared ${stageId}` : ""}
+            {stageTitle ? ` with a star on ${stageId}` : ""}
           </p>
           {visible.length === 0 ? <p className="note">No students match.</p> : null}
           <ol className="school-list">
@@ -110,20 +112,25 @@ export function SchoolProgress({ onBack }: { onBack: () => void }) {
                     <span className="school-name">{student.displayName}</span>
                     {student.email ? <span className="school-email">{student.email}</span> : null}
                   </div>
-                  <span className="school-count">
-                    {student.cleared.length} cleared
+                  <span className="school-count" aria-label={`${student.cleared.length} stars`}>
+                    ★ {student.cleared.length}
                   </span>
                 </header>
                 {student.cleared.length > 0 ? (
-                  <ul className="school-stages">
-                    {student.cleared.map((id) => (
-                      <li key={id} title={stageById(id)?.title ?? id}>
-                        {id}
-                      </li>
-                    ))}
+                  <ul className="school-stages" aria-label={`Starred stages for ${student.displayName}`}>
+                    {student.cleared.map((id) => {
+                      const title = stageById(id)?.title ?? id;
+                      return (
+                        <li key={id} title={title} aria-label={`Starred ${id}, ${title}`}>
+                          <span aria-hidden="true">★ </span>
+                          {id}
+                          <span className="school-stage-title">{title}</span>
+                        </li>
+                      );
+                    })}
                   </ul>
                 ) : (
-                  <p className="school-none">No stages cleared yet.</p>
+                  <p className="school-none">No stars yet.</p>
                 )}
               </li>
             ))}

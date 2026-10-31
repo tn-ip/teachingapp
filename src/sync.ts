@@ -1,9 +1,15 @@
 import {
+  CLEAR_RULE,
+  CLEAR_RULE_KEY,
+  clearedStageIds,
   emptyProgress,
+  encodePerfectRuns,
+  isPerfectStageRun,
+  mergePerfectRuns,
   normalizeProgress,
+  PERFECT_RUNS_KEY,
   PROGRESS_KEY,
   scoreRun,
-  stageClearedBy,
   type LastResult,
   type Progress,
   type Run,
@@ -103,6 +109,7 @@ function mergeSamePaper(local: Run, remote: Run): Run {
   return {
     ...local,
     picks: { ...remote.picks, ...local.picks },
+    optionOrders: { ...remote.optionOrders, ...local.optionOrders },
     index: Math.max(local.index, remote.index),
     focus: local.focus && local.focus.length > 0 ? local.focus : remote.focus,
     seenIds: unique([...(remote.seenIds ?? []), ...(local.seenIds ?? [])]),
@@ -111,27 +118,33 @@ function mergeSamePaper(local: Run, remote: Run): Run {
 }
 
 /**
- * Union of the two trainer blobs. Cleared stages and used question ids are
- * kept from either side. A finished run is not deleted; `completedRuns`
+ * Union of the two trainer blobs. Perfect-run ids are kept from either side,
+ * and stars are derived from those ids. A cleared list with no perfect-run
+ * ids does not grant a star. A finished run is not deleted; `completedRuns`
  * lists every marked run that should be appended to history.
  */
 export function mergeProgress(local: Progress, remote: Progress): Progress {
-  const stages = new Set([...Object.keys(local.used), ...Object.keys(remote.used)]);
+  const left = normalizeProgress(local);
+  const right = normalizeProgress(remote);
+  const stages = new Set([...Object.keys(left.used), ...Object.keys(right.used)]);
   const used: Record<string, string[]> = {};
   for (const stage of stages) {
-    used[stage] = unique([...(remote.used[stage] ?? []), ...(local.used[stage] ?? [])]);
+    used[stage] = unique([...(right.used[stage] ?? []), ...(left.used[stage] ?? [])]);
   }
-  const stagesLast = new Set([...Object.keys(local.last), ...Object.keys(remote.last)]);
+  const stagesLast = new Set([...Object.keys(left.last), ...Object.keys(right.last)]);
   const last: Record<string, LastResult> = {};
   for (const stage of stagesLast) {
-    const chosen = preferLast(local.last[stage], remote.last[stage]);
+    const chosen = preferLast(left.last[stage], right.last[stage]);
     if (chosen) last[stage] = chosen;
   }
+  const perfectRuns = mergePerfectRuns(left.perfectRuns, right.perfectRuns);
   return {
-    cleared: unique([...remote.cleared, ...local.cleared]),
+    clearRule: CLEAR_RULE,
+    perfectRuns,
+    cleared: clearedStageIds(perfectRuns),
     used,
     last,
-    run: mergeRun(local.run, remote.run),
+    run: mergeRun(left.run, right.run),
   };
 }
 
@@ -173,7 +186,7 @@ export function clearScore(progress: Progress, stageId: string): { score: number
   const run = progress.run;
   if (run?.marked && run.stage === stageId) {
     const result = scoreRun(run);
-    if (stageClearedBy(run, result.correct, result.total)) return { score: result.correct, total: result.total };
+    if (isPerfectStageRun(run, result.correct, result.total)) return { score: result.correct, total: result.total };
   }
   const last = progress.last[stageId];
   if (
@@ -212,24 +225,54 @@ export function lastFromHistory(rows: HistorySummary[]): Record<string, LastResu
   return last;
 }
 
+/**
+ * Rebuild progress from `trainer_state`. `legacyStageIds` is the old
+ * `stage_clears` list. Those rows do not grant stars: a star exists only
+ * when `perfectRuns` has two ids. The next sync rewrites `stage_clears`
+ * to match.
+ */
 export function progressFromRemote(
-  state: { cleared?: unknown; used?: unknown; last?: unknown; run?: unknown } | null,
-  stageIds: string[],
+  state: { cleared?: unknown; used?: unknown; last?: unknown; run?: unknown; clearRule?: unknown; perfectRuns?: unknown } | null,
+  legacyStageIds: string[],
   history: HistorySummary[],
 ): Progress {
+  void legacyStageIds;
   if (!state) {
     return normalizeProgress({
-      cleared: stageIds,
+      clearRule: CLEAR_RULE,
+      cleared: [],
+      perfectRuns: {},
       used: {},
       last: lastFromHistory(history),
       run: null,
     });
   }
-  const base = normalizeProgress({
+  return normalizeProgress({
     cleared: state.cleared ?? [],
     used: state.used ?? {},
     last: state.last ?? {},
     run: state.run ?? null,
+    clearRule: state.clearRule === CLEAR_RULE ? CLEAR_RULE : undefined,
+    perfectRuns: state.perfectRuns,
   });
-  return { ...base, cleared: unique([...base.cleared, ...stageIds]) };
+}
+
+/** Shape written into the existing trainer_state columns. Perfect-run ids ride in `used`. */
+export function snapshotForRemote(progress: Progress): {
+  cleared: string[];
+  used: Record<string, string[]>;
+  last: Record<string, LastResult>;
+  run: Run | null;
+} {
+  const normalized = normalizeProgress(progress);
+  return {
+    cleared: normalized.cleared,
+    used: {
+      ...normalized.used,
+      [CLEAR_RULE_KEY]: [String(CLEAR_RULE)],
+      [PERFECT_RUNS_KEY]: encodePerfectRuns(normalized.perfectRuns),
+    },
+    last: normalized.last,
+    run: normalized.run,
+  };
 }
