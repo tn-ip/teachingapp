@@ -1,8 +1,10 @@
 import {
   byWarmup,
+  CHOICES,
   questionById,
   questionsFor,
   RUN_SIZE,
+  shuffle,
   type Choice,
 } from "./bank";
 import { generatedById, generatedQuestions, hasGeneratedPool } from "./drillPools";
@@ -12,11 +14,32 @@ import { questionById as questionOrDrillById } from "./questions";
 export type Mode = "stage" | "drill";
 export type DrillSource = "bank" | "generated";
 
+/** Perfect stage runs required before a stage earns its star. */
+export const PERFECTS_TO_CLEAR = 2;
+
+/**
+ * Saves from the one-perfect rule have no `clearRule`. Those clears are dropped.
+ * 2 means perfect-run ids are the only source of stars.
+ */
+export const CLEAR_RULE = 2;
+
+/** Reserved `used` keys so the existing trainer_state jsonb can carry the new rule. */
+export const CLEAR_RULE_KEY = "$clearRule";
+export const PERFECT_RUNS_KEY = "$perfectRuns";
+
+/** Bank letters in display order. Index 0 is shown as A. */
+export type ChoiceOrder = [Choice, Choice, Choice, Choice];
+
 export type Run = {
   stage: string;
   mode: Mode;
   ids: string[];
   picks: Partial<Record<string, Choice>>;
+  /**
+   * Shuffle for this attempt, keyed by question id. Display A–D follow this
+   * order of bank letters. Missing means the published A–D order (older runs).
+   */
+  optionOrders?: Partial<Record<string, ChoiceOrder>>;
   index: number;
   marked: boolean;
   /**
@@ -43,7 +66,18 @@ export type LastResult = {
 };
 
 export type Progress = {
+  /** Always {@link CLEAR_RULE} after normalize. Older blobs omit it. */
+  clearRule: typeof CLEAR_RULE;
+  /**
+   * Stages with at least {@link PERFECTS_TO_CLEAR} perfect stage runs.
+   * Derived from `perfectRuns`. A stored list from the old rule is not trusted.
+   */
   cleared: string[];
+  /**
+   * Client ids of perfect stage runs, per stage. Drills are never listed.
+   * Two ids star the stage. The same id is not counted twice. Misses do not remove ids.
+   */
+  perfectRuns: Record<string, string[]>;
   used: Record<string, string[]>;
   last: Record<string, LastResult>;
   run: Run | null;
@@ -52,7 +86,9 @@ export type Progress = {
 export const PROGRESS_KEY = "teachingapp.dse-paper2.v1";
 
 export const emptyProgress = (): Progress => ({
+  clearRule: CLEAR_RULE,
   cleared: [],
+  perfectRuns: {},
   used: {},
   last: {},
   run: null,
@@ -61,9 +97,19 @@ export const emptyProgress = (): Progress => ({
 export function normalizeProgress(value: unknown): Progress {
   if (!value || typeof value !== "object") return emptyProgress();
   const parsed = value as Partial<Progress>;
+  const used = normalizeUsed(parsed.used);
+  const ruleFromUsed = used.rule;
+  delete used.used[CLEAR_RULE_KEY];
+  delete used.used[PERFECT_RUNS_KEY];
+  const migrated = parsed.clearRule === CLEAR_RULE || ruleFromUsed === String(CLEAR_RULE);
+  const perfectRuns = migrated
+    ? mergePerfectRuns(normalizePerfectRuns(parsed.perfectRuns), decodePerfectRuns(used.encoded))
+    : {};
   return {
-    cleared: uniqueStrings(parsed.cleared),
-    used: normalizeUsed(parsed.used),
+    clearRule: CLEAR_RULE,
+    perfectRuns,
+    cleared: clearedStageIds(perfectRuns),
+    used: used.used,
     last: normalizeLast(parsed.last),
     run: normalizeRun(parsed.run),
   };
@@ -95,13 +141,86 @@ function uniqueStrings(value: unknown): string[] {
   return ids;
 }
 
-function normalizeUsed(value: unknown): Record<string, string[]> {
-  if (!value || typeof value !== "object") return {};
+function normalizeUsed(value: unknown): { used: Record<string, string[]>; rule: string | null; encoded: string[] } {
   const used: Record<string, string[]> = {};
+  let rule: string | null = null;
+  let encoded: string[] = [];
+  if (!value || typeof value !== "object") return { used, rule, encoded };
   for (const [stage, ids] of Object.entries(value)) {
-    used[stage] = uniqueStrings(ids);
+    const list = uniqueStrings(ids);
+    if (stage === CLEAR_RULE_KEY) {
+      rule = list[0] ?? null;
+      continue;
+    }
+    if (stage === PERFECT_RUNS_KEY) {
+      encoded = list;
+      continue;
+    }
+    used[stage] = list;
   }
-  return used;
+  return { used, rule, encoded };
+}
+
+function normalizePerfectRuns(value: unknown): Record<string, string[]> {
+  if (!value || typeof value !== "object") return {};
+  const perfectRuns: Record<string, string[]> = {};
+  for (const [stage, ids] of Object.entries(value)) {
+    const list = uniqueStrings(ids);
+    if (list.length === 0) continue;
+    perfectRuns[stage] = list;
+  }
+  return perfectRuns;
+}
+
+export function mergePerfectRuns(
+  local: Record<string, string[]>,
+  remote: Record<string, string[]>,
+): Record<string, string[]> {
+  const stages = new Set([...Object.keys(local), ...Object.keys(remote)]);
+  const merged: Record<string, string[]> = {};
+  for (const stage of stages) {
+    const ids = uniqueStrings([...(remote[stage] ?? []), ...(local[stage] ?? [])]);
+    if (ids.length > 0) merged[stage] = ids;
+  }
+  return merged;
+}
+
+export function clearedStageIds(perfectRuns: Record<string, string[]>): string[] {
+  return Object.entries(perfectRuns)
+    .filter(([, ids]) => ids.length >= PERFECTS_TO_CLEAR)
+    .map(([stage]) => stage)
+    .sort((a, b) => a.localeCompare(b, "en", { numeric: true }));
+}
+
+export function encodePerfectRuns(perfectRuns: Record<string, string[]>): string[] {
+  const encoded: string[] = [];
+  const stages = Object.keys(perfectRuns).sort((a, b) => a.localeCompare(b, "en", { numeric: true }));
+  for (const stage of stages) {
+    for (const id of perfectRuns[stage] ?? []) {
+      if (!id || id.includes("|")) continue;
+      encoded.push(`${stage}|${id}`);
+    }
+  }
+  return encoded;
+}
+
+export function decodePerfectRuns(entries: readonly string[]): Record<string, string[]> {
+  const perfectRuns: Record<string, string[]> = {};
+  for (const entry of entries) {
+    const split = entry.indexOf("|");
+    if (split <= 0) continue;
+    const stage = entry.slice(0, split);
+    const id = entry.slice(split + 1);
+    if (!stage || !id || id.includes("|")) continue;
+    const list = perfectRuns[stage] ?? [];
+    if (!list.includes(id)) list.push(id);
+    perfectRuns[stage] = list;
+  }
+  return perfectRuns;
+}
+
+export function perfectCount(perfectRuns: Record<string, string[]>, stageId: string): number {
+  return perfectRuns[stageId]?.length ?? 0;
 }
 
 function normalizeLast(value: unknown): Record<string, LastResult> {
@@ -135,11 +254,13 @@ function normalizeRun(value: unknown): Run | null {
       if (letter === "A" || letter === "B" || letter === "C" || letter === "D") picks[id] = letter;
     }
   }
+  const optionOrders = normalizeOptionOrders(run.optionOrders);
   return {
     stage: run.stage,
     mode: run.mode,
     ids: run.ids,
     picks,
+    optionOrders,
     index: typeof run.index === "number" && Number.isFinite(run.index) && run.index > 0
       ? Math.floor(run.index)
       : 0,
@@ -151,18 +272,90 @@ function normalizeRun(value: unknown): Run | null {
   };
 }
 
+function isChoice(value: unknown): value is Choice {
+  return value === "A" || value === "B" || value === "C" || value === "D";
+}
+
+function normalizeOptionOrders(value: unknown): Run["optionOrders"] {
+  if (!value || typeof value !== "object") return undefined;
+  const optionOrders: Partial<Record<string, ChoiceOrder>> = {};
+  for (const [id, raw] of Object.entries(value)) {
+    if (!Array.isArray(raw) || raw.length !== 4) continue;
+    if (!raw.every(isChoice)) continue;
+    if (new Set(raw).size !== 4) continue;
+    optionOrders[id] = [raw[0], raw[1], raw[2], raw[3]];
+  }
+  return Object.keys(optionOrders).length > 0 ? optionOrders : undefined;
+}
+
+export function freshOptionOrders(ids: readonly string[]): Partial<Record<string, ChoiceOrder>> {
+  const optionOrders: Partial<Record<string, ChoiceOrder>> = {};
+  for (const id of ids) {
+    const shuffled = shuffle([...CHOICES]);
+    optionOrders[id] = [shuffled[0], shuffled[1], shuffled[2], shuffled[3]];
+  }
+  return optionOrders;
+}
+
+/** Display order for this question in this run. Older runs keep published A–D. */
+export function choiceOrder(run: Run, questionId: string): ChoiceOrder {
+  return run.optionOrders?.[questionId] ?? [CHOICES[0], CHOICES[1], CHOICES[2], CHOICES[3]];
+}
+
+/** Letter the student must tap after the shuffle. The bank answer stays the source of truth. */
+export function paperAnswer(question: { answer: Choice }, order: readonly Choice[]): Choice {
+  const index = order.indexOf(question.answer);
+  return index >= 0 ? CHOICES[index] : question.answer;
+}
+
+export function pickIsCorrect(run: Run, question: { id: string; answer: Choice }): boolean {
+  return run.picks[question.id] === paperAnswer(question, choiceOrder(run, question.id));
+}
+
 export function scoreRun(run: Run): { correct: number; total: number } {
   let correct = 0;
   for (const id of run.ids) {
     const question = questionOrDrillById(id);
-    if (question && run.picks[id] === question.answer) correct += 1;
+    if (question && pickIsCorrect(run, question)) correct += 1;
   }
   return { correct, total: run.ids.length };
 }
 
-/** A stage clears only on a perfect stage run. A drill, including generated practice, does not. */
-export function stageClearedBy(run: Run, correct: number, total: number): boolean {
+/** A perfect stage paper. Generated practice and other drills never qualify. */
+export function isPerfectStageRun(run: Run, correct: number, total: number): boolean {
   return run.mode === "stage" && run.source !== "generated" && total > 0 && correct === total;
+}
+
+/**
+ * A star is earned when this perfect stage run is the one that reaches
+ * {@link PERFECTS_TO_CLEAR}. `already` is the count of other perfect stage runs.
+ * A miss does not reset that count. One perfect run alone does not star the stage.
+ */
+export function stageClearedBy(run: Run, correct: number, total: number, already = 0): boolean {
+  if (!isPerfectStageRun(run, correct, total)) return false;
+  return already < PERFECTS_TO_CLEAR && already + 1 >= PERFECTS_TO_CLEAR;
+}
+
+/** Append this perfect stage run's client id. The same id is not counted twice. */
+export function grantPerfectRun(
+  progress: Progress,
+  run: Run,
+  correct: number,
+  total: number,
+): Progress {
+  if (!isPerfectStageRun(run, correct, total) || !run.clientId) return progress;
+  const existing = progress.perfectRuns[run.stage] ?? [];
+  if (existing.includes(run.clientId)) return progress;
+  const perfectRuns = {
+    ...progress.perfectRuns,
+    [run.stage]: [...existing, run.clientId],
+  };
+  return {
+    ...progress,
+    clearRule: CLEAR_RULE,
+    perfectRuns,
+    cleared: clearedStageIds(perfectRuns),
+  };
 }
 
 function missedStems(run: Run | null, stageId: string): string[] {
@@ -171,7 +364,7 @@ function missedStems(run: Run | null, stageId: string): string[] {
   for (const id of run.ids) {
     const question = questionById(id);
     if (!question || question.generated) continue;
-    if (run.picks[id] === question.answer) continue;
+    if (pickIsCorrect(run, question)) continue;
     stems.push(question.stem);
   }
   return stems;
@@ -232,6 +425,7 @@ function startGeneratedDrill(progress: Progress, stageId: string): Progress | nu
       marked: false,
       focus,
       seenIds: seen.size >= pool.length ? ids : [...seen],
+      optionOrders: freshOptionOrders(ids),
     },
   };
 }
@@ -257,6 +451,14 @@ export function startRun(
   return {
     ...progress,
     used: { ...progress.used, [stageId]: [...usedIds, ...ids] },
-    run: { stage: stageId, mode, ids, picks: {}, index: 0, marked: false },
+    run: {
+      stage: stageId,
+      mode,
+      ids,
+      picks: {},
+      optionOrders: freshOptionOrders(ids),
+      index: 0,
+      marked: false,
+    },
   };
 }

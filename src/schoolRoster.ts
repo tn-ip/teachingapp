@@ -37,7 +37,8 @@ function sortStageIds(ids: string[], stageOrder: readonly string[]): string[] {
 
 /**
  * Students only (`role` other than teacher), sorted by display name.
- * Cleared stage ids follow the bank order passed in.
+ * `cleared` is the starred stage ids (two perfect stage runs), in bank order.
+ * The whole school is included. Class is not required; it is already in the display name.
  */
 export function buildSchoolRoster(
   profiles: SchoolProfile[],

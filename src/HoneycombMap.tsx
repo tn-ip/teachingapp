@@ -12,7 +12,7 @@ import {
   layoutHoneycomb,
   type HoneycombLayout,
 } from "./honeycomb";
-import type { LastResult } from "./progress";
+import { perfectCount } from "./progress";
 
 const BANDS: { id: Difficulty; label: string }[] = [
   { id: "easy", label: "Easy" },
@@ -26,12 +26,11 @@ const HEX_POINTS = "50,3.46 96.5,30.33 96.5,85.14 50,112.01 3.5,85.14 3.5,30.33"
 
 type Props = {
   stages: StageCard[];
-  clearedIds: readonly string[];
-  last: Record<string, LastResult>;
+  perfectRuns: Record<string, string[]>;
   onOpen: (stageId: string) => void;
 };
 
-export function HoneycombMap({ stages, clearedIds, last, onOpen }: Props) {
+export function HoneycombMap({ stages, perfectRuns, onOpen }: Props) {
   const frameRef = useRef<HTMLDivElement>(null);
   const [width, setWidth] = useState(0);
 
@@ -45,7 +44,6 @@ export function HoneycombMap({ stages, clearedIds, last, onOpen }: Props) {
     return () => observer.disconnect();
   }, []);
 
-  const cleared = useMemo(() => new Set(clearedIds), [clearedIds]);
   const fit = useMemo(() => fitHoneycomb(width), [width]);
   const groups = useMemo(
     () =>
@@ -66,7 +64,9 @@ export function HoneycombMap({ stages, clearedIds, last, onOpen }: Props) {
               fit.hexW,
               fit.gap,
             );
-            const clearedCount = group.stages.filter((stage) => cleared.has(stage.id)).length;
+            const starredCount = group.stages.filter(
+              (stage) => perfectCount(perfectRuns, stage.id) >= 2,
+            ).length;
             return (
               <section
                 key={group.id}
@@ -80,15 +80,14 @@ export function HoneycombMap({ stages, clearedIds, last, onOpen }: Props) {
                     {group.label}
                   </h2>
                   <p className="hex-band-count">
-                    {clearedCount}/{group.stages.length} cleared
+                    ★ {starredCount} / {group.stages.length}
                   </p>
                 </div>
                 <HoneycombCluster
                   layout={layout}
                   stages={group.stages}
                   bandLabel={group.label}
-                  cleared={cleared}
-                  last={last}
+                  perfectRuns={perfectRuns}
                   onOpen={onOpen}
                 />
               </section>
@@ -103,15 +102,13 @@ function HoneycombCluster({
   layout,
   stages,
   bandLabel,
-  cleared,
-  last,
+  perfectRuns,
   onOpen,
 }: {
   layout: HoneycombLayout;
   stages: StageCard[];
   bandLabel: string;
-  cleared: Set<string>;
-  last: Record<string, LastResult>;
+  perfectRuns: Record<string, string[]>;
   onOpen: (stageId: string) => void;
 }) {
   return (
@@ -123,29 +120,13 @@ function HoneycombCluster({
         ["--hex-w" as string]: `${layout.hexW}px`,
       }}
     >
-      <svg
-        className="hex-bridges"
-        viewBox={`0 0 ${layout.width} ${layout.height}`}
-        width={layout.width}
-        height={layout.height}
-        aria-hidden="true"
-      >
-        {layout.bridges.map((bridge, index) => (
-          <line
-            key={index}
-            x1={bridge.x1}
-            y1={bridge.y1}
-            x2={bridge.x2}
-            y2={bridge.y2}
-          />
-        ))}
-      </svg>
       <ol>
         {layout.slots.map((slot) => {
           const stage = stages[slot.index];
           if (!stage) return null;
-          const isCleared = cleared.has(stage.id);
-          const score = isCleared ? last[stage.id] : undefined;
+          const perfects = perfectCount(perfectRuns, stage.id);
+          const starred = perfects >= 2;
+          const halfway = perfects === 1;
           const practice = PRACTICE_DRILL_ENABLED && hasGeneratedPool(stage.id);
           return (
             <li
@@ -160,16 +141,11 @@ function HoneycombCluster({
             >
               <button
                 type="button"
-                className={
-                  isCleared
-                    ? score
-                      ? "hex cleared has-score"
-                      : "hex cleared"
-                    : "hex"
-                }
+                className={starred || halfway ? "hex has-mark" : "hex"}
                 data-stage={stage.id}
+                data-perfects={perfects}
                 onClick={() => onOpen(stage.id)}
-                aria-label={hexLabel(stage, bandLabel, isCleared, score, practice)}
+                aria-label={hexLabel(stage, bandLabel, perfects, practice)}
               >
                 <svg className="hex-svg" viewBox="0 0 100 115.47" aria-hidden="true">
                   <polygon points={HEX_POINTS} />
@@ -177,11 +153,12 @@ function HoneycombCluster({
                 <span className="hex-body">
                   <span className="hex-code">{stage.id}</span>
                   <span className="hex-title">{stage.title}</span>
-                  {score ? (
-                    <span className="hex-score">
-                      {score.correct}/{score.total}
+                  {starred ? (
+                    <span className="hex-star" aria-hidden="true">
+                      ★
                     </span>
                   ) : null}
+                  {halfway ? <span className="hex-halfway">1/2</span> : null}
                   {practice ? <span className="hex-practice">Practice</span> : null}
                 </span>
               </button>
@@ -196,16 +173,15 @@ function HoneycombCluster({
 function hexLabel(
   stage: StageCard,
   bandLabel: string,
-  cleared: boolean,
-  score: LastResult | undefined,
+  perfects: number,
   practice: boolean,
 ): string {
   const facility =
     stage.averageFacility != null
       ? `Average facility ${formatFacility(stage.averageFacility)} percent.`
       : "No tagged facility.";
-  const state = cleared ? "Cleared." : "Not cleared.";
-  const scoreText = score ? ` Last score ${score.correct} of ${score.total}.` : "";
+  const state =
+    perfects >= 2 ? "Starred." : perfects === 1 ? "One of two perfect runs." : "No star yet.";
   const practiceText = practice ? " Practice available." : "";
-  return `${stage.id} ${stage.title}. ${bandLabel}. ${facility} ${stage.questionCount} in the bank. ${state}${scoreText}${practiceText}`;
+  return `${stage.id} ${stage.title}. ${bandLabel}. ${facility} ${stage.questionCount} in the bank. ${state}${practiceText}`;
 }
