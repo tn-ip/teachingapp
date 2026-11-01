@@ -5,7 +5,7 @@ import {
   type StageCard,
 } from "./bank";
 import { hasGeneratedPool } from "./drillPools";
-import { PRACTICE_DRILL_ENABLED } from "./features";
+import { practiceDrillEnabled } from "./features";
 import {
   columnsForCount,
   fitHoneycomb,
@@ -127,7 +127,7 @@ function HoneycombCluster({
           const perfects = perfectCount(perfectRuns, stage.id);
           const starred = perfects >= 2;
           const halfway = perfects === 1;
-          const practice = PRACTICE_DRILL_ENABLED && hasGeneratedPool(stage.id);
+          const practice = practiceDrillEnabled(stage.id) && hasGeneratedPool(stage.id);
           return (
             <li
               key={stage.id}
