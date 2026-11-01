@@ -26,7 +26,7 @@ import {
   pickIsCorrect,
   saveProgress,
   scoreRun,
-  j11RemedialOffer,
+  remedialOffer,
   stageClearedBy,
   startRun,
   type Progress,
@@ -42,6 +42,14 @@ function screenForProgress(saved: Progress): Screen {
   if (!saved.run) return "map";
   if (isPracticeDrillRun(saved.run) && !practiceDrillEnabled(saved.run.stage)) return "map";
   return saved.run.marked ? "result" : "quiz";
+}
+
+function enabledPracticeNote(): string {
+  const titles = stages.filter((stage) => practiceDrillEnabled(stage.id)).map((stage) => stage.title);
+  if (titles.length === 0) return "";
+  const names =
+    titles.length === 1 ? titles[0] : `${titles.slice(0, -1).join(", ")} or ${titles[titles.length - 1]}`;
+  return ` A miss on ${names} opens two practice questions for each wrong one. A practice drill does not star the stage.`;
 }
 
 function practiceHint(run: Run, questionId: string): string {
@@ -384,9 +392,7 @@ function StageMap({
         run is up to 5 real DSE questions, warming up Easy → Medium → untagged
         → Hard. A star needs two perfect stage runs. They do not have to be
         consecutive, and a miss in between keeps the perfects you already have.
-        {practiceDrillEnabled("J11")
-          ? " A miss on Simultaneous equations opens two practice questions for each wrong one. A practice drill does not star the stage."
-          : ""}
+        {enabledPracticeNote()}
       </p>
       <p className="note source-credit">
         Worked solutions are adapted from{" "}
@@ -596,7 +602,7 @@ function Result({
   const halfway = perfect && run.mode === "stage" && run.source !== "generated" && perfects === 1;
   const drillOn = practiceDrillEnabled(run.stage);
   const practice = drillOn && run.source === "generated";
-  const offer = drillOn && run.mode === "stage" ? j11RemedialOffer(run) : null;
+  const offer = drillOn && run.mode === "stage" ? remedialOffer(run) : null;
   const canPractice = Boolean(offer && offer.mapped > 0 && !perfect);
   const shuffled = Boolean(run.optionOrders && Object.keys(run.optionOrders).length > 0);
   const stagePaper = run.mode === "stage" && run.source !== "generated";

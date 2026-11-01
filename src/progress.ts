@@ -8,7 +8,15 @@ import {
   type Choice,
 } from "./bank";
 import { generatedById, generatedQuestions, hasGeneratedPool } from "./drillPools";
-import { pickFromPool, planJ11Misses, skillsForMisses, type PlannedMiss, type PoolItem } from "./drillPick";
+import {
+  pickFromPool,
+  planJ9Misses,
+  planJ11Misses,
+  skillsForMisses,
+  type MissPlan,
+  type PlannedMiss,
+  type PoolItem,
+} from "./drillPick";
 import { questionById as questionOrDrillById } from "./questions";
 
 export type Mode = "stage" | "drill";
@@ -53,13 +61,13 @@ export type Run = {
   /** Generated ids already shown in this drill session. */
   seenIds?: string[];
   /**
-   * J11 remedial pairs, in paper order. Each entry is the two generated
+   * J9 and J11 remedial pairs, in paper order. Each entry is the two generated
    * items for one wrong bank question. Absent on stage runs and on older drills.
    */
   repairs?: DrillRepair[];
   /**
    * Bank question ids whose two practice slots were skipped.
-   * The stem had no SE mapping, or that mapping could not be filled.
+   * The stem had no skill or Choose mapping, or that mapping could not be filled.
    */
   unmatchedMisses?: string[];
   /** Stable id for one finished attempt, so an account upload can skip duplicates. */
@@ -426,8 +434,14 @@ function bankMisses(run: Run): PlannedMiss[] {
   return misses;
 }
 
-function j11Pool(): PoolItem[] {
-  return generatedQuestions("J11").map((question) => ({
+const MAPPED_DRILL_STAGES = ["J9", "J11"] as const;
+
+function isMappedDrillStage(stageId: string): boolean {
+  return (MAPPED_DRILL_STAGES as readonly string[]).includes(stageId);
+}
+
+function stagePool(stageId: string): PoolItem[] {
+  return generatedQuestions(stageId).map((question) => ({
     id: question.id,
     tpl: question.archetype ?? "",
     stem: question.stem,
@@ -435,35 +449,54 @@ function j11Pool(): PoolItem[] {
   }));
 }
 
+function planStageMisses(
+  stageId: string,
+  misses: readonly PlannedMiss[],
+  random?: () => number,
+): MissPlan | null {
+  const pool = stagePool(stageId);
+  if (stageId === "J9") return planJ9Misses(misses, pool, random);
+  if (stageId === "J11") return planJ11Misses(misses, pool, random);
+  return null;
+}
+
 /**
- * Whether a marked J11 stage paper can open the remedial drill, and which
- * misses have no mapped pair. The check is deterministic, so the Result
+ * Whether a marked J9 or J11 stage paper can open the remedial drill, and
+ * which misses have no mapped pair. The check is deterministic, so the Result
  * page does not reshuffle while it is open. Starting the drill draws again.
  */
-export function j11RemedialOffer(run: Run | null): { mapped: number; unmappedBankIds: string[] } | null {
-  if (!isMarkedStageRun(run, "J11")) return null;
-  const plan = planJ11Misses(bankMisses(run), j11Pool(), () => 0);
+export function remedialOffer(run: Run | null): { mapped: number; unmappedBankIds: string[] } | null {
+  if (!run || !isMappedDrillStage(run.stage) || !isMarkedStageRun(run, run.stage)) return null;
+  const plan = planStageMisses(run.stage, bankMisses(run), () => 0);
+  if (!plan) return null;
   return {
     mapped: plan.repairs.length,
     unmappedBankIds: plan.unmatched.map((miss) => miss.bankId),
   };
 }
 
+/** J11 papers only. Prefer {@link remedialOffer} for the stage on the run. */
+export function j11RemedialOffer(run: Run | null): { mapped: number; unmappedBankIds: string[] } | null {
+  if (run && run.stage !== "J11") return null;
+  return remedialOffer(run);
+}
+
 /**
- * J11 remedial set: two generated items for each wrong bank question, mapped
- * to that miss. `used` and stars stay as they were. A drill never clears a stage.
- * Misses that cannot be mapped are recorded and those slots are left out.
+ * J9 or J11 remedial set: two generated items for each wrong bank question,
+ * mapped to that miss. `used` and stars stay as they were. A drill never
+ * clears a stage. Misses that cannot be mapped are recorded and those slots
+ * are left out.
  */
-function startJ11MappedDrill(progress: Progress): Progress | null {
+function startMappedDrill(progress: Progress, stageId: string): Progress | null {
   const prev = progress.run;
-  if (!isMarkedStageRun(prev, "J11")) return null;
-  const plan = planJ11Misses(bankMisses(prev), j11Pool());
-  if (plan.repairs.length === 0) return null;
+  if (!isMarkedStageRun(prev, stageId)) return null;
+  const plan = planStageMisses(stageId, bankMisses(prev));
+  if (!plan || plan.repairs.length === 0) return null;
   const ids = plan.repairs.flatMap((repair) => repair.ids);
   return {
     ...progress,
     run: {
-      stage: "J11",
+      stage: stageId,
       mode: "drill",
       source: "generated",
       ids,
@@ -490,10 +523,10 @@ function startJ11MappedDrill(progress: Progress): Progress | null {
  * session keeps the original focus and skips stems already shown, until the
  * pool cannot fill five fresh items. Items carry their generator band so the
  * draw can prefer Easy, then Medium, then Hard.
- * J11 does not use this five-item draw. See {@link startJ11MappedDrill}.
+ * J9 and J11 do not use this five-item draw. See {@link startMappedDrill}.
  */
 function startGeneratedDrill(progress: Progress, stageId: string): Progress | null {
-  if (stageId === "J11") return startJ11MappedDrill(progress);
+  if (isMappedDrillStage(stageId)) return startMappedDrill(progress, stageId);
   const pool = generatedQuestions(stageId);
   if (pool.length === 0) return null;
   const prev = progress.run;
