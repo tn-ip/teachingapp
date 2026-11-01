@@ -3,9 +3,10 @@
  *
  * Archetypes are the pool `tpl` values (J10 map scale is M1–M3; ratio and rate are R1–R3).
  * A miss maps onto those tags only when the stem is a clear example of that pattern.
- * Anything else is left untagged. For stages other than J11, an untagged
- * miss still shuffles the whole pool. J11 does not: each wrong bank question
- * draws exactly two items of its own SE tag, or a Choose bucket, or nothing.
+ * Anything else is left untagged. For stages other than J9 and J11, an
+ * untagged miss still shuffles the whole pool. J9 and J11 do not: each wrong
+ * bank question draws exactly two items of its own tag, or a Choose bucket,
+ * or nothing.
  *
  * Anti-adjacent is the stronger rule for that five-item draw: the next item
  * is a different tpl whenever another one is still available. One matched tag
@@ -13,8 +14,8 @@
  * different tags. Generator bands break the remaining ties. An unmatched
  * drill takes Easy archetypes before Medium and Hard. A filler is the easiest
  * different archetype still available. J7–J9 items have no band, so this
- * tie-break does not change those draws. The J11 remedial pair does not use
- * that five-item draw.
+ * tie-break does not change those draws. The J9 and J11 remedial pairs do
+ * not use that five-item draw.
  *
  * J7 Indices
  * - I6 reciprocal of a power, times another power: (1/9^555)·3^444
@@ -33,10 +34,21 @@
  *
  * J9 Factorization / expansion
  * - F5 product of brackets, then add or subtract another term
- * - F3 a square minus a square, with a bracket or a whole number as one square
+ * - F3 a square minus a square: a bracket or a whole number as one square,
+ *   or a pure difference of squares (x^2 − y^2, x^2 − 9) with nothing else
  * - F2 a product of brackets to expand
- * - F1 two variable squares and no cross term (mn, xy, …)
- * - F4 the other factorisations (cross term or grouping)
+ * - F1 grouping / difference of squares ± linear terms (u^2 − v^2 − 5u + 5v,
+ *   or a^2 − b^2 + 2b − 1). The square coefficients are perfect squares.
+ *   There is no cross term (mn, xy).
+ * - F4 a quadratic with a cross term plus at least one linear term
+ * - no tag when the stem is none of those
+ * A mapped miss then takes exactly two pool items of that tpl (a different
+ * stem in the pair). With no F tag, a WQG Choose bucket may still apply:
+ * QL → F1|F4, DS → F3, EX → F2|F5. J9 items have no generator band, so the
+ * pair is a shuffle inside the bucket. A stem that matches none of those is
+ * left unmatched. Those two slots are skipped. They are not filled from the
+ * rest of the pool, and no new F tag is invented for them. Teaching App will
+ * ask DSE Math Check + Weekly Question Generator for unmatched stems.
  *
  * J10 Ratio, rate, map scale
  * - M1 actual area and map area given, ask for the scale
@@ -193,15 +205,142 @@ function skillsJ8(stem: string): string[] {
   return ["ID1"];
 }
 
+const J9_VAR = "a-zα-ωℓ";
+
+type J9Factor = { v: string; power: number };
+
+type J9Term = { coeff: number; factors: J9Factor[] };
+
+function j9Expression(stem: string): string {
+  return plainMath(stem).replace(/[.=]+$/u, "");
+}
+
+function parseJ9Factor(token: string): J9Factor | null {
+  const match = new RegExp(`^([${J9_VAR}])(?:\\^(\\d+))?$`, "u").exec(token);
+  if (!match) return null;
+  const power = match[2] ? Number(match[2]) : 1;
+  if (!Number.isInteger(power) || power < 1) return null;
+  return { v: match[1], power };
+}
+
+function parseJ9Term(raw: string, sign: number): J9Term | null {
+  if (/^\d+$/u.test(raw)) {
+    const coeff = sign * Number(raw);
+    return coeff === 0 ? null : { coeff, factors: [] };
+  }
+  const match = new RegExp(
+    `^(\\d+)?([${J9_VAR}](?:\\^\\d+)?)([${J9_VAR}](?:\\^\\d+)?)?$`,
+    "u",
+  ).exec(raw);
+  if (!match) return null;
+  const magnitude = match[1] ? Number(match[1]) : 1;
+  if (!Number.isInteger(magnitude) || magnitude <= 0) return null;
+  const factors = [match[2], match[3]]
+    .filter((token): token is string => Boolean(token))
+    .map(parseJ9Factor);
+  if (factors.some((factor) => factor == null)) return null;
+  return { coeff: sign * magnitude, factors: factors as J9Factor[] };
+}
+
+/** Sum of terms, or null when the stem is not a plain polynomial. */
+function parseJ9Polynomial(text: string): J9Term[] | null {
+  const body = text.replace(/·/g, "");
+  if (!body || /[()=]/u.test(body)) return null;
+  const parts = [...body.matchAll(/(^|[+-])([^+-]+)/gu)];
+  if (parts.length === 0 || parts.map((part) => part[0]).join("") !== body) return null;
+  const terms: J9Term[] = [];
+  for (const part of parts) {
+    const term = parseJ9Term(part[2], part[1] === "-" ? -1 : 1);
+    if (!term) return null;
+    terms.push(term);
+  }
+  return terms;
+}
+
+function j9Degree(term: J9Term): number {
+  return term.factors.reduce((sum, factor) => sum + factor.power, 0);
+}
+
+function j9Square(term: J9Term): boolean {
+  return term.factors.length === 1 && term.factors[0].power === 2;
+}
+
+function j9Linear(term: J9Term): boolean {
+  return term.factors.length === 1 && term.factors[0].power === 1;
+}
+
+function j9Constant(term: J9Term): boolean {
+  return term.factors.length === 0;
+}
+
+function j9Cross(term: J9Term): boolean {
+  return term.factors.length === 2 && term.factors.every((factor) => factor.power === 1);
+}
+
+function perfectSquare(value: number): boolean {
+  if (value < 1) return false;
+  const root = Math.round(Math.sqrt(value));
+  return root * root === value;
+}
+
+/**
+ * Difference of squares plus or minus linear terms, factored by grouping.
+ * Square coefficients are perfect squares (1·v^2, 4k^2, …). A constant may
+ * complete one square, as in a^2 − b^2 + 2b − 1.
+ */
+function isGroupingDiffSq(terms: readonly J9Term[]): boolean {
+  const squares = terms.filter(j9Square);
+  const linears = terms.filter(j9Linear);
+  const constants = terms.filter(j9Constant);
+  if (squares.length + linears.length + constants.length !== terms.length) return false;
+  if (squares.length !== 2 || linears.length < 1) return false;
+  const [first, second] = squares;
+  if (first.factors[0].v === second.factors[0].v) return false;
+  if (Math.sign(first.coeff) === Math.sign(second.coeff)) return false;
+  if (!perfectSquare(Math.abs(first.coeff)) || !perfectSquare(Math.abs(second.coeff))) return false;
+  const variables = new Set([first.factors[0].v, second.factors[0].v]);
+  return linears.every((term) => variables.has(term.factors[0].v));
+}
+
+/** Quadratic cross term (xy, mn) together with a square and a linear term. */
+function isQuadPlusLinear(terms: readonly J9Term[]): boolean {
+  if (terms.some((term) => j9Degree(term) > 2)) return false;
+  const squares = terms.filter(j9Square);
+  const linears = terms.filter(j9Linear);
+  const crosses = terms.filter(j9Cross);
+  const constants = terms.filter(j9Constant);
+  if (squares.length + linears.length + crosses.length + constants.length !== terms.length) return false;
+  return squares.length >= 1 && linears.length >= 1 && crosses.length >= 1;
+}
+
+/** Two squares, or one square and a perfect-square constant, and nothing else. */
+function isPureDiffSquares(terms: readonly J9Term[]): boolean {
+  if (terms.length !== 2) return false;
+  const squares = terms.filter(j9Square);
+  if (squares.length === 2) {
+    const [first, second] = squares;
+    if (first.factors[0].v === second.factors[0].v) return false;
+    if (Math.sign(first.coeff) === Math.sign(second.coeff)) return false;
+    return perfectSquare(Math.abs(first.coeff)) && perfectSquare(Math.abs(second.coeff));
+  }
+  const square = terms.find(j9Square);
+  const constant = terms.find(j9Constant);
+  if (!square || !constant) return false;
+  if (Math.sign(square.coeff) === Math.sign(constant.coeff)) return false;
+  return perfectSquare(Math.abs(square.coeff)) && perfectSquare(Math.abs(constant.coeff));
+}
+
 function skillsJ9(stem: string): string[] {
-  const text = plainMath(stem);
-  if (/\([^()]+\)\([^()]+\)[+-]/.test(text)) return ["F5"];
-  if (/\)\^2-|-\([^()]+\)\^2|\d\^2/.test(text)) return ["F3"];
+  const text = j9Expression(stem);
+  if (/\([^()]+\)\([^()]+\)[+-]/u.test(text)) return ["F5"];
+  if (/\)\^2-|-\([^()]+\)\^2|\d\^2/u.test(text)) return ["F3"];
   if (text.startsWith("(") && text.includes(")(")) return ["F2"];
-  const squares = text.match(/[a-zα-ω]\^2/g) ?? [];
-  const withoutSquares = text.replace(/[a-zα-ω]\^2/g, "");
-  if (squares.length >= 2 && !/[a-zα-ω]{2}/.test(withoutSquares)) return ["F1"];
-  return ["F4"];
+  const terms = parseJ9Polynomial(text);
+  if (!terms) return [];
+  if (isGroupingDiffSq(terms)) return ["F1"];
+  if (isQuadPlusLinear(terms)) return ["F4"];
+  if (isPureDiffSquares(terms)) return ["F3"];
+  return [];
 }
 
 function askedVariable(stem: string): string | null {
@@ -262,16 +401,74 @@ function skillsJ11(stem: string): string[] {
   return [];
 }
 
-/** Two generated items for each wrong J11 bank question. */
+/** Two generated items for each wrong J9 or J11 bank question. */
 export const DRILLS_PER_MISS = 2;
 
 const J11_SKILLS = ["SE1", "SE2", "SE3", "SE4", "SE5", "SE6", "SE7"] as const;
 
-export type J11MissTarget = {
+export type MissTarget = {
   tpls: string[];
   /** Direct `skillsForStem` hit, or a coarser WQG Choose bucket. */
   via: "skill" | "bucket";
 };
+
+export type J11MissTarget = MissTarget;
+
+const J9_SKILLS = ["F1", "F2", "F3", "F4", "F5"] as const;
+
+/**
+ * F tags for one J9 bank stem.
+ * A `skillsForStem` hit is that tpl. With no F tag, a WQG Choose bucket may
+ * still apply: QL → F1|F4, DS → F3, EX → F2|F5.
+ * A stem that matches none of those returns null.
+ * Teaching App will ask DSE Math Check + Weekly Question Generator for
+ * unmatched stems. Do not invent a new F tag for them.
+ */
+export function j9MissTarget(stem: string): MissTarget | null {
+  const skills = skillsForStem("J9", stem).filter((tpl) =>
+    (J9_SKILLS as readonly string[]).includes(tpl),
+  );
+  if (skills.length > 0) return { tpls: skills, via: "skill" };
+  const bucket = j9ChooseBucket(stem);
+  if (!bucket) return null;
+  return { tpls: bucket, via: "bucket" };
+}
+
+function j9ChooseBucket(stem: string): string[] | null {
+  const text = j9Expression(stem);
+  if (/\)\(/u.test(text)) return ["F2", "F5"];
+  const terms = parseJ9Polynomial(text);
+  if (terms && isLooseDiffSquares(terms)) return ["F3"];
+  if (terms && isJ9FactorPoly(terms)) return ["F1", "F4"];
+  if (/\bexpand\b/iu.test(stem) && text.includes("(")) return ["F2", "F5"];
+  return null;
+}
+
+/** Square versus a constant, or two variable squares, when the strict F3 tag missed. */
+function isLooseDiffSquares(terms: readonly J9Term[]): boolean {
+  if (terms.length !== 2) return false;
+  const squares = terms.filter(j9Square);
+  if (squares.length === 2) {
+    if (squares[0].factors[0].v === squares[1].factors[0].v) return false;
+    return Math.sign(squares[0].coeff) !== Math.sign(squares[1].coeff);
+  }
+  const square = terms.find(j9Square);
+  const constant = terms.find(j9Constant);
+  if (!square || !constant) return false;
+  return Math.sign(square.coeff) !== Math.sign(constant.coeff);
+}
+
+/**
+ * A polynomial to factor that is not a clean F1 or F4.
+ * QL covers a quadratic with a linear or cross term, and grouping of
+ * products such as hℓ − kℓ + hm − km.
+ */
+function isJ9FactorPoly(terms: readonly J9Term[]): boolean {
+  if (terms.length < 2 || terms.some((term) => j9Degree(term) > 2)) return false;
+  if (Math.max(...terms.map(j9Degree)) < 2) return false;
+  if (terms.filter(j9Cross).length >= 2) return true;
+  return terms.some(j9Square) && (terms.some(j9Linear) || terms.some(j9Cross));
+}
 
 /**
  * SE tags for one J11 bank stem.
@@ -317,6 +514,12 @@ export type PlannedRepair = {
   tpls: string[];
 };
 
+export type MissPlan = {
+  repairs: PlannedRepair[];
+  unmatched: { bankId: string; paperNumber: number }[];
+  focus: string[];
+};
+
 /**
  * One remedial pair per miss, in paper order.
  * Each pair is two items from that miss's tpl or Choose bucket, easier
@@ -324,20 +527,21 @@ export type PlannedRepair = {
  * this set are not used again. A miss with no target, or a target the pool
  * cannot fill, is unmatched: those two slots are skipped.
  * Teaching App will ask DSE Math Check + Weekly Question Generator for
- * unmatched stems. Do not invent a new SE tag, and do not draw the slots
+ * unmatched stems. Do not invent a new tag, and do not draw the slots
  * from the rest of the pool.
  */
-export function planJ11Misses<T extends PoolItem>(
+export function planMappedMisses<T extends PoolItem>(
   misses: readonly PlannedMiss[],
   pool: readonly T[],
+  targetFor: (stem: string) => MissTarget | null,
   random: () => number = Math.random,
-): { repairs: PlannedRepair[]; unmatched: { bankId: string; paperNumber: number }[]; focus: string[] } {
+): MissPlan {
   const repairs: PlannedRepair[] = [];
   const unmatched: { bankId: string; paperNumber: number }[] = [];
   const focus: string[] = [];
   const avoid = new Set<string>();
   for (const miss of misses) {
-    const target = j11MissTarget(miss.stem);
+    const target = targetFor(miss.stem);
     const picked = target ? pickMapped(pool, target.tpls, avoid, DRILLS_PER_MISS, random) : [];
     if (!target || picked.length < DRILLS_PER_MISS) {
       unmatched.push({ bankId: miss.bankId, paperNumber: miss.paperNumber });
@@ -358,6 +562,24 @@ export function planJ11Misses<T extends PoolItem>(
     });
   }
   return { repairs, unmatched, focus };
+}
+
+/** J9 remedial pairs. See {@link planMappedMisses}. */
+export function planJ9Misses<T extends PoolItem>(
+  misses: readonly PlannedMiss[],
+  pool: readonly T[],
+  random: () => number = Math.random,
+): MissPlan {
+  return planMappedMisses(misses, pool, j9MissTarget, random);
+}
+
+/** J11 remedial pairs. See {@link planMappedMisses}. */
+export function planJ11Misses<T extends PoolItem>(
+  misses: readonly PlannedMiss[],
+  pool: readonly T[],
+  random: () => number = Math.random,
+): MissPlan {
+  return planMappedMisses(misses, pool, j11MissTarget, random);
 }
 
 /**
