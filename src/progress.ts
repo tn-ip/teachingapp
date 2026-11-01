@@ -8,7 +8,7 @@ import {
   type Choice,
 } from "./bank";
 import { generatedById, generatedQuestions, hasGeneratedPool } from "./drillPools";
-import { pickFromPool, skillsForMisses } from "./drillPick";
+import { pickFromPool, planJ11Misses, skillsForMisses, type PlannedMiss, type PoolItem } from "./drillPick";
 import { questionById as questionOrDrillById } from "./questions";
 
 export type Mode = "stage" | "drill";
@@ -52,8 +52,27 @@ export type Run = {
   focus?: string[];
   /** Generated ids already shown in this drill session. */
   seenIds?: string[];
+  /**
+   * J11 remedial pairs, in paper order. Each entry is the two generated
+   * items for one wrong bank question. Absent on stage runs and on older drills.
+   */
+  repairs?: DrillRepair[];
+  /**
+   * Bank question ids whose two practice slots were skipped.
+   * The stem had no SE mapping, or that mapping could not be filled.
+   */
+  unmatchedMisses?: string[];
   /** Stable id for one finished attempt, so an account upload can skip duplicates. */
   clientId?: string;
+};
+
+export type DrillRepair = {
+  /** Bank question this pair repairs. */
+  bankId: string;
+  /** 1-based place of that question on the stage paper. */
+  paperNumber: number;
+  /** Generated ids for this miss. Two when the miss was mapped. */
+  ids: string[];
 };
 
 export type LastResult = {
@@ -268,8 +287,29 @@ function normalizeRun(value: unknown): Run | null {
     source: run.source === "bank" || run.source === "generated" ? run.source : undefined,
     focus: Array.isArray(run.focus) ? uniqueStrings(run.focus) : undefined,
     seenIds: Array.isArray(run.seenIds) ? uniqueStrings(run.seenIds) : undefined,
+    repairs: normalizeRepairs(run.repairs),
+    unmatchedMisses: Array.isArray(run.unmatchedMisses) ? uniqueStrings(run.unmatchedMisses) : undefined,
     clientId: typeof run.clientId === "string" && run.clientId ? run.clientId : undefined,
   };
+}
+
+function normalizeRepairs(value: unknown): DrillRepair[] | undefined {
+  if (!Array.isArray(value)) return undefined;
+  const repairs: DrillRepair[] = [];
+  for (const item of value) {
+    if (!item || typeof item !== "object") continue;
+    const repair = item as Partial<DrillRepair>;
+    if (typeof repair.bankId !== "string" || repair.bankId.length === 0) continue;
+    if (typeof repair.paperNumber !== "number" || !Number.isFinite(repair.paperNumber)) continue;
+    const ids = uniqueStrings(repair.ids);
+    if (ids.length === 0) continue;
+    repairs.push({
+      bankId: repair.bankId,
+      paperNumber: Math.floor(repair.paperNumber),
+      ids,
+    });
+  }
+  return repairs.length > 0 ? repairs : undefined;
 }
 
 function isChoice(value: unknown): value is Choice {
@@ -370,6 +410,79 @@ function missedStems(run: Run | null, stageId: string): string[] {
   return stems;
 }
 
+function isMarkedStageRun(run: Run | null, stageId: string): run is Run {
+  return run != null && run.stage === stageId && run.mode === "stage" && run.source !== "generated" && run.marked;
+}
+
+function bankMisses(run: Run): PlannedMiss[] {
+  const misses: PlannedMiss[] = [];
+  for (let index = 0; index < run.ids.length; index += 1) {
+    const id = run.ids[index];
+    const question = questionById(id);
+    if (!question || question.generated) continue;
+    if (pickIsCorrect(run, question)) continue;
+    misses.push({ bankId: id, paperNumber: index + 1, stem: question.stem });
+  }
+  return misses;
+}
+
+function j11Pool(): PoolItem[] {
+  return generatedQuestions("J11").map((question) => ({
+    id: question.id,
+    tpl: question.archetype ?? "",
+    stem: question.stem,
+    difficulty: question.difficulty,
+  }));
+}
+
+/**
+ * Whether a marked J11 stage paper can open the remedial drill, and which
+ * misses have no mapped pair. The check is deterministic, so the Result
+ * page does not reshuffle while it is open. Starting the drill draws again.
+ */
+export function j11RemedialOffer(run: Run | null): { mapped: number; unmappedBankIds: string[] } | null {
+  if (!isMarkedStageRun(run, "J11")) return null;
+  const plan = planJ11Misses(bankMisses(run), j11Pool(), () => 0);
+  return {
+    mapped: plan.repairs.length,
+    unmappedBankIds: plan.unmatched.map((miss) => miss.bankId),
+  };
+}
+
+/**
+ * J11 remedial set: two generated items for each wrong bank question, mapped
+ * to that miss. `used` and stars stay as they were. A drill never clears a stage.
+ * Misses that cannot be mapped are recorded and those slots are left out.
+ */
+function startJ11MappedDrill(progress: Progress): Progress | null {
+  const prev = progress.run;
+  if (!isMarkedStageRun(prev, "J11")) return null;
+  const plan = planJ11Misses(bankMisses(prev), j11Pool());
+  if (plan.repairs.length === 0) return null;
+  const ids = plan.repairs.flatMap((repair) => repair.ids);
+  return {
+    ...progress,
+    run: {
+      stage: "J11",
+      mode: "drill",
+      source: "generated",
+      ids,
+      picks: {},
+      index: 0,
+      marked: false,
+      focus: plan.focus,
+      seenIds: ids,
+      repairs: plan.repairs.map((repair) => ({
+        bankId: repair.bankId,
+        paperNumber: repair.paperNumber,
+        ids: repair.ids,
+      })),
+      unmatchedMisses: plan.unmatched.map((miss) => miss.bankId),
+      optionOrders: freshOptionOrders(ids),
+    },
+  };
+}
+
 /**
  * Practice drills for stages that have a Weekly Question Generator pool.
  * `used` is left as it was, so a practice drill does not burn real Paper 2
@@ -377,8 +490,10 @@ function missedStems(run: Run | null, stageId: string): string[] {
  * session keeps the original focus and skips stems already shown, until the
  * pool cannot fill five fresh items. Items carry their generator band so the
  * draw can prefer Easy, then Medium, then Hard.
+ * J11 does not use this five-item draw. See {@link startJ11MappedDrill}.
  */
 function startGeneratedDrill(progress: Progress, stageId: string): Progress | null {
+  if (stageId === "J11") return startJ11MappedDrill(progress);
   const pool = generatedQuestions(stageId);
   if (pool.length === 0) return null;
   const prev = progress.run;

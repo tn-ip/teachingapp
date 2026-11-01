@@ -877,6 +877,16 @@ button.hex.has-mark .hex-title { -webkit-line-clamp: 2; }
   font-size: 0.92rem;
 }
 
+.drill-unmatched {
+  margin: 12px 0 0;
+  padding: 12px 14px;
+  border: 1px solid #fcd34d;
+  border-radius: var(--radius);
+  background: #fffbeb;
+  color: #78350f;
+  font-weight: 700;
+}
+
 .solution-label {
   margin: 0 0 8px;
   color: #3730a3;

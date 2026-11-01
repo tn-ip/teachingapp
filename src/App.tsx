@@ -13,8 +13,7 @@ import {
   type Question,
 } from "./bank";
 import { HoneycombMap } from "./HoneycombMap";
-import { hasGeneratedPool } from "./drillPools";
-import { isPracticeDrillRun, PRACTICE_DRILL_ENABLED } from "./features";
+import { isPracticeDrillRun, practiceDrillEnabled } from "./features";
 import { AccountBar } from "./AccountBar";
 import { MathView } from "./MathView";
 import { questionById } from "./questions";
@@ -27,6 +26,7 @@ import {
   pickIsCorrect,
   saveProgress,
   scoreRun,
+  j11RemedialOffer,
   stageClearedBy,
   startRun,
   type Progress,
@@ -37,11 +37,20 @@ import { useAccountSync } from "./useAccountSync";
 
 type Screen = "map" | "quiz" | "result" | "school";
 
-/** An open practice drill is not a screen while the drill is hidden. */
+/** An open practice drill is not a screen while that stage's drill is hidden. */
 function screenForProgress(saved: Progress): Screen {
   if (!saved.run) return "map";
-  if (!PRACTICE_DRILL_ENABLED && isPracticeDrillRun(saved.run)) return "map";
+  if (isPracticeDrillRun(saved.run) && !practiceDrillEnabled(saved.run.stage)) return "map";
   return saved.run.marked ? "result" : "quiz";
+}
+
+function practiceHint(run: Run, questionId: string): string {
+  for (const repair of run.repairs ?? []) {
+    const slot = repair.ids.indexOf(questionId);
+    if (slot < 0) continue;
+    return `Practice for paper question ${repair.paperNumber} · ${slot + 1} of 2`;
+  }
+  return "Practice";
 }
 
 function DifficultyChip({ difficulty }: { difficulty: Difficulty }) {
@@ -202,7 +211,7 @@ export function App() {
   const stageIds = stages.map((stage) => stage.id);
   const clearedCount = stageIds.filter((id) => progress.cleared.includes(id)).length;
   const run = progress.run;
-  const drillBlocked = !PRACTICE_DRILL_ENABLED && isPracticeDrillRun(run);
+  const drillBlocked = Boolean(run && isPracticeDrillRun(run) && !practiceDrillEnabled(run.stage));
   const studentScreen: Screen = drillBlocked && screen !== "school" ? "map" : screen;
 
   useEffect(() => {
@@ -220,7 +229,7 @@ export function App() {
       run &&
       run.stage === stageId &&
       !run.marked &&
-      (PRACTICE_DRILL_ENABLED || !isPracticeDrillRun(run));
+      (practiceDrillEnabled(run.stage) || !isPracticeDrillRun(run));
     if (resumeOpenPaper) {
       setScreen("quiz");
       return;
@@ -230,7 +239,7 @@ export function App() {
   }
 
   function beginDrill() {
-    if (!PRACTICE_DRILL_ENABLED || !run) return;
+    if (!run || !practiceDrillEnabled(run.stage)) return;
     const next = startRun(progress, run.stage, "drill");
     if (next) update(next, "quiz");
   }
@@ -244,7 +253,9 @@ export function App() {
               {screen === "school"
                 ? "School progress"
                 : studentScreen === "quiz"
-                  ? "Stage run"
+                  ? run && practiceDrillEnabled(run.stage) && isPracticeDrillRun(run)
+                    ? "Practice"
+                    : "Stage run"
                   : studentScreen === "result"
                     ? "Result"
                     : "Stage map"}
@@ -373,8 +384,8 @@ function StageMap({
         run is up to 5 real DSE questions, warming up Easy → Medium → untagged
         → Hard. A star needs two perfect stage runs. They do not have to be
         consecutive, and a miss in between keeps the perfects you already have.
-        {PRACTICE_DRILL_ENABLED
-          ? " A miss on Change of subjects, Significant figure, Percentage, Indices, Identities, Factorization, Ratio and map scale, Simultaneous equations, Statistics, Sequences, or S3 Probability opens 5 new practice questions, and so does a miss on Quadratic equations (II), Functions and Graphs, Polynomials, Variations, or Inequalities in one unknown. Other stages have no practice drill. A practice drill does not clear the stage."
+        {practiceDrillEnabled("J11")
+          ? " A miss on Simultaneous equations opens two practice questions for each wrong one. A practice drill does not star the stage."
           : ""}
       </p>
       <p className="note source-credit">
@@ -384,7 +395,7 @@ function StageMap({
         </a>{" "}
         ({solutionAttribution.author}).
       </p>
-      {run && (PRACTICE_DRILL_ENABLED || !isPracticeDrillRun(run)) ? (
+      {run && (practiceDrillEnabled(run.stage) || !isPracticeDrillRun(run)) ? (
         <button className="resume" type="button" onClick={onResume}>
           {run.marked ? "Review" : "Continue"} {stageById(run.stage)?.id} ·{" "}
           {run.source === "generated"
@@ -473,9 +484,9 @@ function Quiz({
           resetKey={`${run.index}:${question.id}`}
         />
         <p className="quiz-progress">
-          {PRACTICE_DRILL_ENABLED && run.source === "generated"
+          {practiceDrillEnabled(run.stage) && run.source === "generated"
             ? "Practice"
-            : PRACTICE_DRILL_ENABLED && run.mode === "drill"
+            : practiceDrillEnabled(run.stage) && run.mode === "drill"
               ? "Drill"
               : "Stage"}{" "}
           ·{" "}
@@ -490,11 +501,11 @@ function Quiz({
         {stage.id} · {stage.title}
       </p>
       {run.mode === "stage" ? <p className="warmup-hint">Warm-up: Easy → Hard</p> : null}
-      {PRACTICE_DRILL_ENABLED && run.source === "generated" && question.difficulty !== "unknown" ? (
-        <p className="warmup-hint">Practice prefers Easy, then Medium, then Hard</p>
+      {practiceDrillEnabled(run.stage) && run.source === "generated" ? (
+        <p className="warmup-hint">{practiceHint(run, question.id)}</p>
       ) : null}
       <article className="question-card">
-        {PRACTICE_DRILL_ENABLED && question.generated ? (
+        {practiceDrillEnabled(run.stage) && question.generated ? (
           <p className="source">
             {question.difficulty !== "unknown" ? (
               <DifficultyChip difficulty={question.difficulty} />
@@ -583,8 +594,10 @@ function Result({
   const already = perfect ? Math.max(0, perfects - 1) : perfects;
   const justStarred = stageClearedBy(run, correct, items.length, already);
   const halfway = perfect && run.mode === "stage" && run.source !== "generated" && perfects === 1;
-  const practice = PRACTICE_DRILL_ENABLED && run.source === "generated";
-  const practicePool = PRACTICE_DRILL_ENABLED && hasGeneratedPool(run.stage);
+  const drillOn = practiceDrillEnabled(run.stage);
+  const practice = drillOn && run.source === "generated";
+  const offer = drillOn && run.mode === "stage" ? j11RemedialOffer(run) : null;
+  const canPractice = Boolean(offer && offer.mapped > 0 && !perfect);
   const shuffled = Boolean(run.optionOrders && Object.keys(run.optionOrders).length > 0);
   const stagePaper = run.mode === "stage" && run.source !== "generated";
   const lede = justStarred
@@ -595,9 +608,9 @@ function Result({
         ? `${stage?.title} already has its star. You can run it again whenever you want.`
         : stagePaper && perfects === 1
           ? "This paper was not perfect. You still have 1 of 2 perfect runs. A miss does not remove it."
-          : run.mode === "stage" && practicePool
-            ? "The stage stays open. Drill 5 new practice questions, then retry the stage for a perfect paper."
-            : run.mode === "stage" || !PRACTICE_DRILL_ENABLED
+          : stagePaper && canPractice
+            ? "The stage stays open. Practice two questions for each miss, then retry the stage for a perfect paper."
+            : stagePaper || !drillOn
               ? "The stage stays open. Retry it for another perfect-paper attempt."
               : "A practice drill does not star the stage. Retry the stage when you want another perfect-paper attempt.";
 
@@ -608,7 +621,7 @@ function Result({
           {stage?.id} ·{" "}
           {practice
             ? "Practice drill"
-            : PRACTICE_DRILL_ENABLED && run.mode === "drill"
+            : drillOn && run.mode === "drill"
               ? "Drill"
               : "Stage run"}
         </p>
@@ -622,7 +635,7 @@ function Result({
               ? " · 1/2"
               : perfect && practice
                 ? " · practice complete"
-                : perfect && PRACTICE_DRILL_ENABLED && run.mode === "drill"
+                : perfect && drillOn && run.mode === "drill"
                   ? " · drill complete"
                   : ""}
         </h2>
@@ -644,7 +657,7 @@ function Result({
                 <strong>
                   {index + 1}. {ok ? "Correct" : "Wrong"}
                 </strong>
-                {PRACTICE_DRILL_ENABLED && question.generated ? (
+                {drillOn && question.generated ? (
                   <span className="review-meta">
                     {question.difficulty !== "unknown" ? (
                       <DifficultyChip difficulty={question.difficulty} />
@@ -665,7 +678,13 @@ function Result({
                   ? ` · ${question.facilityPct}% of candidates`
                   : ""}
               </p>
-              {ok ? null : PRACTICE_DRILL_ENABLED && question.generated ? (
+              {offer != null && offer.unmappedBankIds.includes(question.id) ? (
+                <p className="drill-unmatched" role="note">
+                  No mapped practice for this miss yet, so its 2 practice questions are skipped.
+                  Teaching App will ask DSE Math Check and Weekly Question Generator to match this stem.
+                </p>
+              ) : null}
+              {ok ? null : drillOn && question.generated ? (
                 <PracticeWorking question={question} />
               ) : (
                 <WorkedSolutionView question={question} paperKey={key} shuffled={shuffled} />
@@ -678,9 +697,9 @@ function Result({
         <button type="button" className="ghost" onClick={onHome}>
           Map
         </button>
-        {run.mode === "stage" && !perfect && practicePool ? (
+        {canPractice ? (
           <button type="button" className="primary" onClick={onDrill}>
-            Drill 5 new practice Qs
+            Practice the misses (2 each)
           </button>
         ) : (
           <button type="button" className="primary" onClick={onRetry}>
@@ -688,24 +707,19 @@ function Result({
           </button>
         )}
       </div>
-      {PRACTICE_DRILL_ENABLED && run.mode === "stage" && !perfect && !hasGeneratedPool(run.stage) ? (
-        <p className="note">
-          Generated MC practice is available for Change of subjects, Significant
-          figure, Percentage, Indices, Identities, Factorization, Ratio and map
-          scale, Simultaneous equations, Statistics, Sequences, S3 Probability,
-          Quadratic equations (II), Functions and Graphs, Polynomials, Variations, and
-          Inequalities in one unknown.
-        </p>
-      ) : null}
-      {run.mode === "drill" && practicePool ? (
+      {canPractice ? (
         <div className="quiz-nav second">
           <button type="button" className="ghost" onClick={onRetry}>
             Retry stage
           </button>
-          <button type="button" className="primary" onClick={onDrill}>
-            Another 5 practice Qs
-          </button>
         </div>
+      ) : null}
+      {practice && run.unmatchedMisses && run.unmatchedMisses.length > 0 ? (
+        <p className="drill-unmatched" role="note">
+          {run.unmatchedMisses.length === 1
+            ? "1 missed question had no mapped practice, so its 2 practice questions were skipped."
+            : `${run.unmatchedMisses.length} missed questions had no mapped practice, so those practice questions were skipped.`}
+        </p>
       ) : null}
       <p className="bank-note">
         {practice

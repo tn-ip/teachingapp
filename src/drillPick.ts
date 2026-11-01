@@ -3,15 +3,18 @@
  *
  * Archetypes are the pool `tpl` values (J10 map scale is M1–M3; ratio and rate are R1–R3).
  * A miss maps onto those tags only when the stem is a clear example of that pattern.
- * Anything else is left untagged so the drill shuffles the whole pool.
+ * Anything else is left untagged. For stages other than J11, an untagged
+ * miss still shuffles the whole pool. J11 does not: each wrong bank question
+ * draws exactly two items of its own SE tag, or a Choose bucket, or nothing.
  *
- * Anti-adjacent is the stronger rule: the next item is a different tpl whenever
- * another one is still available. One matched tag therefore fills 3 of 5 places
- * (1st, 3rd, 5th) and the other two places are different tags.
- * Generator bands break the remaining ties. An unmatched drill takes Easy
- * archetypes before Medium and Hard. A filler is the easiest different
- * archetype still available. J7–J9 items have no band, so this tie-break
- * does not change those draws.
+ * Anti-adjacent is the stronger rule for that five-item draw: the next item
+ * is a different tpl whenever another one is still available. One matched tag
+ * therefore fills 3 of 5 places (1st, 3rd, 5th) and the other two places are
+ * different tags. Generator bands break the remaining ties. An unmatched
+ * drill takes Easy archetypes before Medium and Hard. A filler is the easiest
+ * different archetype still available. J7–J9 items have no band, so this
+ * tie-break does not change those draws. The J11 remedial pair does not use
+ * that five-item draw.
  *
  * J7 Indices
  * - I6 reciprocal of a power, times another power: (1/9^555)·3^444
@@ -57,7 +60,7 @@
  * - no tag. J2 practice items are RS1–RS8 (rounding statements and ranges)
  *   and J18 items are SQ1–SQ8. Bank stems are not mapped onto those tags, so
  *   a miss warms up the whole pool Easy, then Medium, then Hard, the same
- *   way an unmatched J1 or J11 drill does.
+ *   way an unmatched J1 drill does.
  *
  * J11 Simultaneous equations
  * - SE7 a journey at two speeds
@@ -68,11 +71,18 @@
  * - SE2 one group is a percentage more or less than the other
  * - SE1 two linear equations, a chain of equal expressions, or the price of two items
  * - no tag when the stem is none of those
+ * A mapped miss then takes exactly two pool items of that tpl (a different
+ * stem in the pair). With no SE tag, a WQG Choose bucket may still apply:
+ * Prices/%% → SE1|SE2, story (ratio, transfer, tickets) → SE3|SE4|SE5,
+ * other equation or two-leg speed wording → SE6|SE7, Easy before Medium
+ * before Hard inside the bucket. A stem that matches none of those is left
+ * unmatched. Those two slots are skipped. They are not filled from the rest
+ * of the pool, and no new SE tag is invented for them.
  *
  * J4 Percentage, J16 Statistics, J19 S3 Probability, C2 Quadratic equations (II),
  * C3 Functions and Graphs, C4 Polynomials, C11 Variations, and C17 Inequalities
  * - no tag. A miss warms up the whole pool Easy, then Medium, then Hard,
- *   the same way an unmatched J1 or J11 drill does.
+ *   the same way an unmatched J1 drill does.
  *
  * When several misses match, the drill prefers the union of those tags.
  * If two matched tags are both allowed, the easier band is taken first.
@@ -250,6 +260,134 @@ function skillsJ11(stem: string): string[] {
   if (equals >= 2) return ["SE1"];
   if (equals >= 1 && /(^|[^a-zα-ω])and([^a-zα-ω]|$)/.test(head)) return ["SE1"];
   return [];
+}
+
+/** Two generated items for each wrong J11 bank question. */
+export const DRILLS_PER_MISS = 2;
+
+const J11_SKILLS = ["SE1", "SE2", "SE3", "SE4", "SE5", "SE6", "SE7"] as const;
+
+export type J11MissTarget = {
+  tpls: string[];
+  /** Direct `skillsForStem` hit, or a coarser WQG Choose bucket. */
+  via: "skill" | "bucket";
+};
+
+/**
+ * SE tags for one J11 bank stem.
+ * A `skillsForStem` hit is that tpl. With no SE tag, a WQG Choose bucket
+ * may still apply: Prices/%% → SE1|SE2, story (ratio, transfer, tickets)
+ * → SE3|SE4|SE5, other equation or two-leg speed wording → SE6|SE7.
+ * A stem that matches none of those returns null.
+ * Teaching App will ask DSE Math Check + Weekly Question Generator for
+ * unmatched stems. Do not invent a new SE tag for them.
+ */
+export function j11MissTarget(stem: string): J11MissTarget | null {
+  const skills = skillsForStem("J11", stem).filter((tpl) =>
+    (J11_SKILLS as readonly string[]).includes(tpl),
+  );
+  if (skills.length > 0) return { tpls: skills, via: "skill" };
+  const bucket = j11ChooseBucket(stem);
+  if (!bucket) return null;
+  return { tpls: bucket, via: "bucket" };
+}
+
+function j11ChooseBucket(stem: string): string[] | null {
+  const prose = stem.toLowerCase().replace(/\s+/g, " ");
+  if (/price|cost|\$|%|percent/.test(prose)) return ["SE1", "SE2"];
+  if (/ratio|times as many|\bgives?\b|\bgave\b|transfer|ticket/.test(prose)) {
+    return ["SE3", "SE4", "SE5"];
+  }
+  if (/km\/h|\bspeed\b|travels|sum of two|product|equation|=/.test(prose)) {
+    return ["SE6", "SE7"];
+  }
+  return null;
+}
+
+export type PlannedMiss = {
+  bankId: string;
+  paperNumber: number;
+  stem: string;
+};
+
+export type PlannedRepair = {
+  bankId: string;
+  paperNumber: number;
+  ids: string[];
+  tpls: string[];
+};
+
+/**
+ * One remedial pair per miss, in paper order.
+ * Each pair is two items from that miss's tpl or Choose bucket, easier
+ * bands first, and the two stems differ. Ids and stems already used in
+ * this set are not used again. A miss with no target, or a target the pool
+ * cannot fill, is unmatched: those two slots are skipped.
+ * Teaching App will ask DSE Math Check + Weekly Question Generator for
+ * unmatched stems. Do not invent a new SE tag, and do not draw the slots
+ * from the rest of the pool.
+ */
+export function planJ11Misses<T extends PoolItem>(
+  misses: readonly PlannedMiss[],
+  pool: readonly T[],
+  random: () => number = Math.random,
+): { repairs: PlannedRepair[]; unmatched: { bankId: string; paperNumber: number }[]; focus: string[] } {
+  const repairs: PlannedRepair[] = [];
+  const unmatched: { bankId: string; paperNumber: number }[] = [];
+  const focus: string[] = [];
+  const avoid = new Set<string>();
+  for (const miss of misses) {
+    const target = j11MissTarget(miss.stem);
+    const picked = target ? pickMapped(pool, target.tpls, avoid, DRILLS_PER_MISS, random) : [];
+    if (!target || picked.length < DRILLS_PER_MISS) {
+      unmatched.push({ bankId: miss.bankId, paperNumber: miss.paperNumber });
+      continue;
+    }
+    for (const item of picked) {
+      avoid.add(item.id);
+      avoid.add(item.stem);
+    }
+    for (const tpl of target.tpls) {
+      if (!focus.includes(tpl)) focus.push(tpl);
+    }
+    repairs.push({
+      bankId: miss.bankId,
+      paperNumber: miss.paperNumber,
+      ids: picked.map((item) => item.id),
+      tpls: target.tpls,
+    });
+  }
+  return { repairs, unmatched, focus };
+}
+
+/**
+ * Draw up to `count` items whose tpl is in `preferred`.
+ * Easier bands come first. Shuffle only inside a band.
+ * `avoid` holds ids and stems already chosen for this remedial set.
+ * A short result means those tpls cannot fill the draw. Callers that need
+ * an exact pair treat that as unmatched and do not top up from other tpls.
+ */
+export function pickMapped<T extends PoolItem>(
+  pool: readonly T[],
+  preferred: readonly string[],
+  avoid: ReadonlySet<string>,
+  count: number,
+  random: () => number = Math.random,
+): T[] {
+  const allowed = new Set(preferred);
+  const fresh = pool.filter(
+    (item) => allowed.has(item.tpl) && !avoid.has(item.id) && !avoid.has(item.stem),
+  );
+  const ordered = orderBucket(fresh, random);
+  const chosen: T[] = [];
+  const usedStems = new Set<string>();
+  for (const item of ordered) {
+    if (chosen.length >= count) break;
+    if (usedStems.has(item.stem)) continue;
+    usedStems.add(item.stem);
+    chosen.push(item);
+  }
+  return chosen;
 }
 
 function skillsJ10(stem: string): string[] {
