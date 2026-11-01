@@ -37,7 +37,10 @@ import { useAccountSync } from "./useAccountSync";
 
 type Screen = "map" | "quiz" | "result" | "school";
 
-/** An open practice drill is not a screen while that stage's drill is hidden. */
+/**
+ * Quiz or result for an open run, once the student has left the map.
+ * A hidden practice drill is not a screen. Cold open does not call this.
+ */
 function screenForProgress(saved: Progress): Screen {
   if (!saved.run) return "map";
   if (isPracticeDrillRun(saved.run) && !practiceDrillEnabled(saved.run.stage)) return "map";
@@ -199,11 +202,15 @@ function QuestionTimer({ resetKey }: { resetKey: string }) {
 
 export function App() {
   const [progress, setProgress] = useState<Progress>(() => loadProgress());
-  const [screen, setScreen] = useState<Screen>(() => screenForProgress(loadProgress()));
+  // Cold open is always the map. The open run stays saved for Continue / Review.
+  const [screen, setScreen] = useState<Screen>("map");
   const [confirmReset, setConfirmReset] = useState(false);
   const account = useAccountSync(progress, setProgress, (next) => {
     setProgress(next);
-    setScreen((current) => (current === "school" ? current : screenForProgress(next)));
+    // Hydrate progress only. Do not pull a cold open off the map into the open run.
+    setScreen((current) =>
+      current === "map" || current === "school" ? current : screenForProgress(next),
+    );
   });
   const signedIn = Boolean(account.label);
   const teacher = account.role === "teacher";
