@@ -27,8 +27,9 @@
  * - no tag when the stem is none of those (for example x^3(2x+x))
  * A mapped miss then takes exactly two pool items of the primary tpl (a
  * different stem in the pair). A soft dual stays on the pedigree. The drill
- * uses the dominant trap only: a negative index wins over the quotient it
- * sits in (I3, not I2 or I4). There is no seventh I tag. With no I tag, a
+ * uses one tag: same-base with parameter n prefers I4 over I1, an outer
+ * reciprocal × power prefers I6 over I3, and a negative index prefers I3
+ * over I2 only. There is no seventh I tag. With no I tag, a
  * WQG Choose bucket may still apply: PQN product / quotient / negative →
  * I1|I2|I3, I4 same-base with n → I4, DBR different bases or reciprocal ×
  * power → I5|I6. Easy before Medium before Hard inside the bucket. J7 items
@@ -203,15 +204,48 @@ function skillsJ7(stem: string): string[] {
   const fraction = /\\(?:d)?frac/.test(text);
   const reciprocal = /\\(?:d)?frac\{1\}/.test(text);
   const numeric = baseVariables(stem).length === 0;
-  if (reciprocal && !negative) return ["I6"];
-  if (negative && fraction) return numeric ? ["I3", "I4"] : ["I3", "I2"];
-  if (negative) return ["I3"];
-  if (fraction) return [numeric ? "I4" : "I2"];
-  if (numeric) return ["I5"];
-  if (/\(\d*[a-zα-ω]\)\^/.test(text) && (text.includes("·") || text.includes("\\cdot"))) {
-    return ["I1"];
+  let tags: string[];
+  if (reciprocal && !negative) tags = ["I6"];
+  else if (negative && fraction) tags = numeric ? ["I3", "I4"] : ["I3", "I2"];
+  else if (negative) tags = ["I3"];
+  else if (fraction) tags = [numeric ? "I4" : "I2"];
+  else if (numeric) tags = ["I5"];
+  else if (/\(\d*[a-zα-ω]\)\^/.test(text) && (text.includes("·") || text.includes("\\cdot"))) {
+    tags = ["I1"];
+  } else tags = [];
+  // Soft duals. The other reading stays on the pedigree; j7PrimaryTag picks.
+  if (tags.includes("I1") && j7SameBaseParamN(text)) tags = [...tags, "I4"];
+  if (tags.includes("I3") && j7OuterReciprocalTimesPower(text)) tags = [...tags, "I6"];
+  return tags;
+}
+
+/**
+ * Exponent variable n on two integer bases of one prime.
+ * (4n)^2 · 2^n is both a product and same-base with n.
+ */
+function j7SameBaseParamN(text: string): boolean {
+  if (!/\^\{[^}]*n[^}]*\}|\^n/.test(text)) return false;
+  if (baseVariables(text).replace(/n/g, "") !== "") return false;
+  const families = j7IntegerBases(text).map(j7PrimeFamily);
+  if (families.length < 2 || families.some((family) => family == null)) return false;
+  return new Set(families).size === 1;
+}
+
+/** \\frac{1}{...} times another factor. An exponent on the reciprocal itself does not count. */
+function j7OuterReciprocalTimesPower(text: string): boolean {
+  const head = /\\(?:d)?frac\{1\}\{/.exec(text);
+  if (!head) return false;
+  let depth = 1;
+  let end = head.index + head[0].length;
+  for (; end < text.length && depth > 0; end += 1) {
+    if (text[end] === "{") depth += 1;
+    else if (text[end] === "}") depth -= 1;
   }
-  return [];
+  if (depth !== 0) return false;
+  let rest = (text.slice(0, head.index) + text.slice(end)).replace(/\\left|\\right/g, "");
+  rest = rest.replace(/[()]/g, "");
+  rest = rest.replace(/\\?\^\{-?[^{}]*\}/g, "").replace(/\\?\^-?\d+/g, "");
+  return /[0-9a-zα-ω·]|\\cdot|\\times/u.test(rest);
 }
 
 function skillsJ8(stem: string): string[] {
@@ -615,8 +649,9 @@ const J7_SKILLS = ["I1", "I2", "I3", "I4", "I5", "I6"] as const;
 /**
  * I tags for one J7 bank stem.
  * A `skillsForStem` hit drills the primary tpl. A soft dual keeps the other
- * tag on the pedigree and drills the dominant trap: I3 when a negative index
- * also sits in a quotient (I2 or I4). With no I tag, a WQG Choose bucket may
+ * tag on the pedigree. Same-base with parameter n prefers I4 over I1. An
+ * outer reciprocal × power prefers I6 over I3. A negative index prefers I3
+ * over I2 only. With no I tag, a WQG Choose bucket may
  * still apply: PQN → I1|I2|I3, I4 same-base with n → I4, DBR → I5|I6.
  * Easy before Medium before Hard inside the bucket.
  * A stem that matches none of those returns null.
@@ -627,15 +662,23 @@ export function j7MissTarget(stem: string): MissTarget | null {
   const skills = skillsForStem("J7", stem).filter((tpl) =>
     (J7_SKILLS as readonly string[]).includes(tpl),
   );
-  if (skills.length > 0) return { tpls: [j7PrimaryTag(skills)], via: "skill" };
+  if (skills.length > 0) return { tpls: [j7PrimaryTag(stem, skills)], via: "skill" };
   const bucket = j7ChooseBucket(stem);
   if (!bucket) return null;
   return { tpls: bucket, via: "bucket" };
 }
 
-/** Negative index dominates a quotient it sits in. Otherwise the first tag. */
-function j7PrimaryTag(skills: readonly string[]): string {
-  if (skills.includes("I3")) return "I3";
+/**
+ * One drill tag from a soft dual.
+ * I4 beats I1 when the stem is same-base with parameter n.
+ * I6 beats I3 when the outer move is reciprocal × power.
+ * I3 beats I2 only. It does not beat I4.
+ */
+function j7PrimaryTag(stem: string, skills: readonly string[]): string {
+  if (skills.includes("I6") && skills.includes("I3")) return "I6";
+  if (skills.includes("I4") && skills.includes("I1")) return "I4";
+  if (skills.includes("I4") && skills.includes("I3") && j7SameBaseParamN(compact(stem))) return "I4";
+  if (skills.includes("I3") && skills.includes("I2")) return "I3";
   return skills[0];
 }
 
