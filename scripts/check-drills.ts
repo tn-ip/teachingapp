@@ -1050,6 +1050,26 @@ assert.deepEqual(j7MissTarget(j7Reciprocal), { tpls: ["I5", "I6"], via: "bucket"
 assert.equal(j7MissTarget("Which figure is correct?"), null);
 assert.equal(j7MissTarget("\\(x^{3}(2x+x)=\\)"), null);
 
+const j7SameBaseProduct = "\\((4n)^{2}\\cdot 2^{n}=\\)";
+assert.deepEqual(skillsForStem("J7", j7SameBaseProduct), ["I1", "I4"]);
+assert.deepEqual(j7MissTarget(j7SameBaseProduct), { tpls: ["I4"], via: "skill" });
+const j7PlainProduct = "\\((5a)^{2}\\cdot a=\\)";
+assert.deepEqual(skillsForStem("J7", j7PlainProduct), ["I1"]);
+assert.deepEqual(j7MissTarget(j7PlainProduct), { tpls: ["I1"], via: "skill" });
+const j7OuterReciprocal = "\\(\\frac{1}{9^{-2}}\\cdot 3^{4}=\\)";
+assert.deepEqual(skillsForStem("J7", j7OuterReciprocal), ["I3", "I4", "I6"]);
+assert.deepEqual(j7MissTarget(j7OuterReciprocal), { tpls: ["I6"], via: "skill" });
+const j7NegativeOnReciprocal = "\\(\\left(\\frac{1}{9^{555}}\\right)^{-1}=\\)";
+assert.deepEqual(skillsForStem("J7", j7NegativeOnReciprocal), ["I3", "I4"]);
+assert.deepEqual(j7MissTarget(j7NegativeOnReciprocal), { tpls: ["I3"], via: "skill" });
+const j7SameBaseNegative = "\\(\\frac{8^{-2n}}{4^{n}}=\\)";
+assert.deepEqual(skillsForStem("J7", j7SameBaseNegative), ["I3", "I4"]);
+assert.deepEqual(j7MissTarget(j7SameBaseNegative), { tpls: ["I4"], via: "skill" });
+const j7LetterQuotient = bankQuestionById("J7-2020-q1");
+assert.ok(j7LetterQuotient);
+assert.deepEqual(skillsForStem("J7", j7LetterQuotient.stem), ["I3", "I2"]);
+assert.deepEqual(j7MissTarget(j7LetterQuotient.stem), { tpls: ["I3"], via: "skill" });
+
 const j7Pool = generatedQuestions("J7").map((question) => ({
   id: question.id,
   tpl: question.archetype ?? "",
