@@ -3,10 +3,10 @@
  *
  * Archetypes are the pool `tpl` values (J10 map scale is M1–M3; ratio and rate are R1–R3).
  * A miss maps onto those tags only when the stem is a clear example of that pattern.
- * Anything else is left untagged. For stages other than J9 and J11, an
- * untagged miss still shuffles the whole pool. J9 and J11 do not: each wrong
- * bank question draws exactly two items of its own tag, or a Choose bucket,
- * or nothing.
+ * Anything else is left untagged. For stages other than J1, J9, and J11, an
+ * untagged miss still shuffles the whole pool. J1, J9, and J11 do not: each
+ * wrong bank question draws exactly two items of its own tag, or a Choose
+ * bucket, or nothing.
  *
  * Anti-adjacent is the stronger rule for that five-item draw: the next item
  * is a different tpl whenever another one is still available. One matched tag
@@ -14,8 +14,8 @@
  * different tags. Generator bands break the remaining ties. An unmatched
  * drill takes Easy archetypes before Medium and Hard. A filler is the easiest
  * different archetype still available. J7–J9 items have no band, so this
- * tie-break does not change those draws. The J9 and J11 remedial pairs do
- * not use that five-item draw.
+ * tie-break does not change those draws. The J1, J9, and J11 remedial pairs
+ * do not use that five-item draw.
  *
  * J7 Indices
  * - I6 reciprocal of a power, times another power: (1/9^555)·3^444
@@ -65,14 +65,24 @@
  * - CS6 capital·letter = (integer·letter + capital)·capital
  * - CS3 integer(letter ± letter) = a linear expression
  * - CS1 letter(letter ± integer) = a linear expression
- * - CS2 (integer ± letter) / letter = integer
+ * - CS2 (integer ± letter) / letter = integer, or a plain linear equation
+ *   such as 5 − 3m = 2n
  * - no tag when the stem is none of those shapes
+ * A mapped miss then takes exactly two pool items of that tpl (a different
+ * stem in the pair). With no CS tag, a WQG Choose bucket may still apply:
+ * CF cross / proportion → CS4|CS8, BR brackets / expand → CS1|CS3,
+ * FR formula / fractions → CS5|CS6|CS7, LN linear rearrange → CS2.
+ * Easy before Medium before Hard inside the bucket. A stem that matches
+ * none of those is left unmatched. Those two slots are skipped. They are
+ * not filled from the rest of the pool, and no new CS tag is invented for
+ * them. Teaching App will ask DSE Math Check + Weekly Question Generator
+ * for unmatched stems.
  *
  * J2 Significant figure and J18 Sequences
  * - no tag. J2 practice items are RS1–RS8 (rounding statements and ranges)
  *   and J18 items are SQ1–SQ8. Bank stems are not mapped onto those tags, so
  *   a miss warms up the whole pool Easy, then Medium, then Hard, the same
- *   way an unmatched J1 drill does.
+ *   way an unmapped stage drill does.
  *
  * J11 Simultaneous equations
  * - SE7 a journey at two speeds
@@ -94,7 +104,7 @@
  * J4 Percentage, J16 Statistics, J19 S3 Probability, C2 Quadratic equations (II),
  * C3 Functions and Graphs, C4 Polynomials, C11 Variations, and C17 Inequalities
  * - no tag. A miss warms up the whole pool Easy, then Medium, then Hard,
- *   the same way an unmatched J1 drill does.
+ *   the same way an unmapped stage drill does.
  *
  * When several misses match, the drill prefers the union of those tags.
  * If two matched tags are both allowed, the easier band is taken first.
@@ -356,6 +366,44 @@ function askedVariable(stem: string): string | null {
   return tail.match(/[a-zα-ω]/)?.[0] ?? null;
 }
 
+function equationHead(text: string): string {
+  return text.split(/,then|then/i)[0] ?? text;
+}
+
+/** Integer, or one letter with an optional integer coefficient. Signs split terms. */
+function isLinearSide(side: string): boolean {
+  const parts = side.match(/[+-]?[^+-]+/g);
+  if (!parts || parts.join("") !== side) return false;
+  return parts.every((part) => /^[+-]?(?:\d+[a-zα-ω]|[a-zα-ω]|\d+)$/.test(part));
+}
+
+/** 5 − 3m = 2n: no fractions, no brackets, each term a number or one letter. */
+function isPlainLinear(text: string): boolean {
+  const head = equationHead(text).replace(/^If/i, "");
+  if (/\\|[()^{}]/.test(head)) return false;
+  if (!/^[0-9a-zα-ω+=-]+$/.test(head)) return false;
+  const sides = head.split("=");
+  if (sides.length !== 2 || sides.some((side) => side.length === 0)) return false;
+  return sides.every(isLinearSide) && /[a-zα-ω]/.test(head);
+}
+
+function denominatorHolds(text: string, letter: string): boolean {
+  return [...text.matchAll(/\\frac\{[^{}]*\}\{([^{}]*)\}/g)].some((match) => match[1].includes(letter));
+}
+
+/**
+ * A fraction mixed with a plain number, and the asked letter sits in a
+ * denominator. (a+4b)/(2a) = 2 + b/a is CS5. A pure fraction = fraction
+ * stays CS4 or CS8.
+ */
+function cs5MixedFraction(stem: string, text: string): boolean {
+  const asked = askedVariable(stem);
+  if (!asked || !denominatorHolds(text, asked)) return false;
+  const head = equationHead(text);
+  if (/\\frac\{[^{}]*\}\{[^{}]*\}=\\frac\{/.test(head)) return false;
+  return /=\d+[+-]\\frac\{/.test(head) || /\\frac\{[^{}]*\}\{[^{}]*\}[+-]\d/.test(head);
+}
+
 function skillsJ1(stem: string): string[] {
   const text = compact(stem);
   if (/\\frac\{[^{}+-]+\}\{[a-zα-ω]\}\+\\frac\{[^{}+-]+\}\{[a-zα-ω]\}=\d/.test(text)) {
@@ -369,17 +417,17 @@ function skillsJ1(stem: string): string[] {
   }
   if (/^If(?:[a-zα-ω]|\\(?:alpha|beta|gamma))=/.test(text)) {
     const asked = askedVariable(stem);
-    if (
-      asked &&
-      [...text.matchAll(/\\frac\{[^{}]*\}\{([^{}]*)\}/g)].some((match) => match[1].includes(asked))
-    ) {
-      return ["CS5"];
-    }
+    if (asked && denominatorHolds(text, asked)) return ["CS5"];
   }
   if (/[A-Z][a-z]=\(\d+[a-z]\+[A-Z]\)[A-Z]/.test(text)) return ["CS6"];
   if (/\d+\([a-z][+-]\d+[a-z]\)/.test(text)) return ["CS3"];
+  if (/\d+\([a-zα-ω][+-]\d+\)/.test(text)) return ["CS3"];
   if (/[a-z]\([a-z][+-]\d+\)/.test(text)) return ["CS1"];
+  if (/[a-zα-ω]\([^()]*[+-][^()]*\)/.test(text)) return ["CS1"];
+  if (/\([^()]*[+-][^()]*\)\([^()]*[+-][^()]*\)/.test(text)) return ["CS1"];
   if (/\\frac\{\d+\+?\d*[a-z]\}\{[a-z]\}=\d/.test(text)) return ["CS2"];
+  if (cs5MixedFraction(stem, text)) return ["CS5"];
+  if (isPlainLinear(text)) return ["CS2"];
   return [];
 }
 
@@ -401,7 +449,7 @@ function skillsJ11(stem: string): string[] {
   return [];
 }
 
-/** Two generated items for each wrong J9 or J11 bank question. */
+/** Two generated items for each wrong J1, J9, or J11 bank question. */
 export const DRILLS_PER_MISS = 2;
 
 const J11_SKILLS = ["SE1", "SE2", "SE3", "SE4", "SE5", "SE6", "SE7"] as const;
@@ -487,6 +535,67 @@ export function j11MissTarget(stem: string): J11MissTarget | null {
   const bucket = j11ChooseBucket(stem);
   if (!bucket) return null;
   return { tpls: bucket, via: "bucket" };
+}
+
+const J1_SKILLS = ["CS1", "CS2", "CS3", "CS4", "CS5", "CS6", "CS7", "CS8"] as const;
+
+/**
+ * CS tags for one J1 bank stem.
+ * A `skillsForStem` hit is that tpl. With no CS tag, a WQG Choose bucket
+ * may still apply: CF cross / proportion → CS4|CS8, BR brackets / expand
+ * → CS1|CS3, FR formula / fractions → CS5|CS6|CS7, LN linear rearrange
+ * → CS2. Easy before Medium before Hard inside the bucket.
+ * A stem that matches none of those returns null.
+ * Teaching App will ask DSE Math Check + Weekly Question Generator for
+ * unmatched stems. Do not invent a new CS tag for them.
+ */
+export function j1MissTarget(stem: string): MissTarget | null {
+  const skills = skillsForStem("J1", stem).filter((tpl) =>
+    (J1_SKILLS as readonly string[]).includes(tpl),
+  );
+  if (skills.length > 0) return { tpls: skills, via: "skill" };
+  const bucket = j1ChooseBucket(stem);
+  if (!bucket) return null;
+  return { tpls: bucket, via: "bucket" };
+}
+
+function j1ChooseBucket(stem: string): string[] | null {
+  const text = compact(stem);
+  const head = equationHead(text).replace(/^If/i, "");
+  if (/\\frac\{[^{}]*\}\{[^{}]*\}=\\frac\{/.test(head)) return ["CS4", "CS8"];
+  if (j1FormulaFraction(text, head)) return ["CS5", "CS6", "CS7"];
+  if (!/\\frac/.test(head) && /\([^()]*[+-][^()]*\)/.test(head)) return ["CS1", "CS3"];
+  if (j1LooseLinear(head)) return ["CS2"];
+  return null;
+}
+
+/** Sum of fractions, a formula already solved, a capital formula, or a sum in a denominator. */
+function j1FormulaFraction(text: string, head: string): boolean {
+  if (/\\frac\{[^{}]*\}\{[^{}]*\}[+-]\\frac\{/.test(head)) return true;
+  if (/^If(?:[a-zα-ω]|\\(?:alpha|beta|gamma))=/i.test(text) && /\\frac/.test(head)) return true;
+  if (/[A-Z][a-zα-ω]=/.test(head)) return true;
+  return /\\frac\{[^{}]*\}\{[^{}]*[+-][^{}]*\}/.test(head);
+}
+
+/**
+ * Linear rearrange that missed the CS2 skill: one fraction over a letter or
+ * integer equal to a linear side, or a plain degree-1 equation.
+ */
+function j1LooseLinear(head: string): boolean {
+  const fraction = head.match(/^\\frac\{([^{}]+)\}\{([^{}]+)\}=(.+)$/);
+  if (fraction) {
+    const num = fraction[1];
+    const den = fraction[2];
+    const rhs = fraction[3];
+    if (/\\frac|[()]/.test(num + den + rhs)) return false;
+    if (!/^(?:\d+|[a-zα-ω])$/.test(den)) return false;
+    return isLinearSide(num) && isLinearSide(rhs);
+  }
+  if (/\\frac|[()^{}]/.test(head)) return false;
+  if (!/^[0-9a-zα-ω+=-]+$/.test(head)) return false;
+  const sides = head.split("=");
+  if (sides.length !== 2 || sides.some((side) => side.length === 0)) return false;
+  return sides.every(isLinearSide) && /[a-zα-ω]/.test(head);
 }
 
 function j11ChooseBucket(stem: string): string[] | null {
@@ -580,6 +689,15 @@ export function planJ11Misses<T extends PoolItem>(
   random: () => number = Math.random,
 ): MissPlan {
   return planMappedMisses(misses, pool, j11MissTarget, random);
+}
+
+/** J1 remedial pairs. See {@link planMappedMisses}. */
+export function planJ1Misses<T extends PoolItem>(
+  misses: readonly PlannedMiss[],
+  pool: readonly T[],
+  random: () => number = Math.random,
+): MissPlan {
+  return planMappedMisses(misses, pool, j1MissTarget, random);
 }
 
 /**

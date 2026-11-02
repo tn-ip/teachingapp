@@ -44,12 +44,18 @@ function screenForProgress(saved: Progress): Screen {
   return saved.run.marked ? "result" : "quiz";
 }
 
+function joinStageTitles(titles: readonly string[]): string {
+  if (titles.length <= 1) return titles[0] ?? "";
+  if (titles.length === 2) return `${titles[0]} and ${titles[1]}`;
+  return `${titles.slice(0, -1).join(", ")}, and ${titles[titles.length - 1]}`;
+}
+
 function enabledPracticeNote(): string {
-  const titles = stages.filter((stage) => practiceDrillEnabled(stage.id)).map((stage) => stage.title);
+  const titles = stages
+    .filter((stage) => practiceDrillEnabled(stage.id))
+    .map((stage) => `${stage.title} (${stage.id})`);
   if (titles.length === 0) return "";
-  const names =
-    titles.length === 1 ? titles[0] : `${titles.slice(0, -1).join(", ")} or ${titles[titles.length - 1]}`;
-  return ` A miss on ${names} opens two practice questions for each wrong one. A practice drill does not star the stage.`;
+  return `✏️ Practice Drill on ${joinStageTitles(titles)}: two practice questions for each wrong one. Practice does not star the stage.`;
 }
 
 function practiceHint(run: Run, questionId: string): string {
@@ -379,6 +385,7 @@ function StageMap({
   signedIn: boolean;
 }) {
   const run = progress.run;
+  const practiceNote = enabledPracticeNote();
   return (
     <main className="map">
       {teacher ? (
@@ -387,15 +394,22 @@ function StageMap({
         </button>
       ) : null}
       <p className="lede">
-        Pick any stage. Junior and Compulsory chapters sit on one honeycomb,
-        in bands from Easy to Hard, then Untagged. Every stage stays open. A
-        run is up to 5 real DSE questions, warming up Easy → Medium → untagged
-        → Hard. A star needs two perfect stage runs. They do not have to be
-        consecutive, and a miss in between keeps the perfects you already have.
-        {enabledPracticeNote()}
+        Pick any stage. They all stay open. 👋
+        <br />
+        🍯 Honeycomb: Easy → Hard, then Untagged.
+        <br />
+        📝 Up to 5 real DSE questions, warming up Easy → Medium → untagged → Hard.
+        <br />
+        ⭐ A star is two perfect stage runs. They need not be consecutive, and a miss keeps the perfects you already have.
+        {practiceNote ? (
+          <>
+            <br />
+            {practiceNote}
+          </>
+        ) : null}
       </p>
       <p className="note source-credit">
-        Worked solutions are adapted from{" "}
+        Disclaimer: DSE Worked solutions are adapted from{" "}
         <a href={solutionAttribution.home} target="_blank" rel="noopener noreferrer">
           mathseasy.hk
         </a>{" "}
