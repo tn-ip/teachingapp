@@ -76,8 +76,18 @@ export function difficultyLabel(difficulty: Difficulty): string {
  * Stage ids: Junior stays J1–J19 (there is no J6). Compulsory is C1–C23,
  * one stage per chapter number. TOC splits of chapters 4, 10, 14, 19, 20,
  * and 21 are already merged into that chapter in the bank.
+ *
+ * C23 (Use and abuse of statistics) stays in this bank for questions and
+ * solutions. Students do not see it on the map and cannot start it.
  */
 export const stages: StageInfo[] = bank.stages;
+
+/** Off the student map and stage lists. The bank rows stay. */
+export const HIDDEN_STUDENT_STAGES = ["C23"] as const;
+
+export function isStudentStage(stageId: string): boolean {
+  return !(HIDDEN_STUDENT_STAGES as readonly string[]).includes(stageId);
+}
 export const questions: Question[] = bank.questions.map((question) => {
   const facilityPct = question.facilityPct ?? question.correctPercent ?? null;
   return {
@@ -195,6 +205,9 @@ export const rankedStages: StageCard[] = stages
     return left.index - right.index;
   })
   .map(({ index: _index, ...stage }) => stage);
+
+/** Honeycomb and the star total. Hidden stages stay in `rankedStages`. */
+export const mapStages: StageCard[] = rankedStages.filter((stage) => isStudentStage(stage.id));
 
 export function shuffle<T>(items: T[]): T[] {
   const copy = items.slice();

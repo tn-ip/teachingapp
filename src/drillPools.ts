@@ -23,7 +23,7 @@ import c17 from "./data/drillPools/c17.json";
  * J1 Change of subjects ← POOLS.J1MC
  * J2 Significant figure ← POOLS.J2MC
  * J4 Percentage ← POOLS.J4MC
- * J7 Indices ← POOLS.J7MC
+ * J7 Indices ← POOLS.J7MC (I1–I6, 50 each, no generator band)
  * J8 Identities ← POOLS.J8
  * J9 Factorization, expansion ← POOLS.J9MC
  * J10 Ratio, rate (map scale) ← POOLS.J10

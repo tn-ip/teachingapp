@@ -1,6 +1,7 @@
 import {
   byWarmup,
   CHOICES,
+  isStudentStage,
   questionById,
   questionsFor,
   RUN_SIZE,
@@ -11,6 +12,7 @@ import { generatedById, generatedQuestions, hasGeneratedPool } from "./drillPool
 import {
   pickFromPool,
   planJ1Misses,
+  planJ7Misses,
   planJ9Misses,
   planJ11Misses,
   skillsForMisses,
@@ -436,7 +438,7 @@ function bankMisses(run: Run): PlannedMiss[] {
   return misses;
 }
 
-const MAPPED_DRILL_STAGES = ["J9", "J11", "J1"] as const;
+const MAPPED_DRILL_STAGES = ["J9", "J11", "J1", "J7"] as const;
 
 function isMappedDrillStage(stageId: string): boolean {
   return (MAPPED_DRILL_STAGES as readonly string[]).includes(stageId);
@@ -458,13 +460,14 @@ function planStageMisses(
 ): MissPlan | null {
   const pool = stagePool(stageId);
   if (stageId === "J1") return planJ1Misses(misses, pool, random);
+  if (stageId === "J7") return planJ7Misses(misses, pool, random);
   if (stageId === "J9") return planJ9Misses(misses, pool, random);
   if (stageId === "J11") return planJ11Misses(misses, pool, random);
   return null;
 }
 
 /**
- * Whether a marked J1, J9, or J11 stage paper can open the remedial drill, and
+ * Whether a marked J1, J7, J9, or J11 stage paper can open the remedial drill, and
  * which misses have no mapped pair. The check is deterministic, so the Result
  * page does not reshuffle while it is open. Starting the drill draws again.
  */
@@ -485,7 +488,7 @@ export function j11RemedialOffer(run: Run | null): { mapped: number; unmappedBan
 }
 
 /**
- * J1, J9, or J11 remedial set: two generated items for each wrong bank question,
+ * J1, J7, J9, or J11 remedial set: two generated items for each wrong bank question,
  * mapped to that miss. `used` and stars stay as they were. A drill never
  * clears a stage. Misses that cannot be mapped are recorded and those slots
  * are left out.
@@ -526,7 +529,7 @@ function startMappedDrill(progress: Progress, stageId: string): Progress | null 
  * session keeps the original focus and skips stems already shown, until the
  * pool cannot fill five fresh items. Items carry their generator band so the
  * draw can prefer Easy, then Medium, then Hard.
- * J1, J9, and J11 do not use this five-item draw. See {@link startMappedDrill}.
+ * J1, J7, J9, and J11 do not use this five-item draw. See {@link startMappedDrill}.
  */
 function startGeneratedDrill(progress: Progress, stageId: string): Progress | null {
   if (isMappedDrillStage(stageId)) return startMappedDrill(progress, stageId);
@@ -586,6 +589,7 @@ export function startRun(
   stageId: string,
   mode: Mode,
 ): Progress | null {
+  if (!isStudentStage(stageId)) return null;
   if (mode === "drill") {
     if (!hasGeneratedPool(stageId)) return null;
     return startGeneratedDrill(progress, stageId);
