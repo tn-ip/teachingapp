@@ -47,18 +47,10 @@ function screenForProgress(saved: Progress): Screen {
   return saved.run.marked ? "result" : "quiz";
 }
 
-function joinStageTitles(titles: readonly string[]): string {
-  if (titles.length <= 1) return titles[0] ?? "";
-  if (titles.length === 2) return `${titles[0]} and ${titles[1]}`;
-  return `${titles.slice(0, -1).join(", ")}, and ${titles[titles.length - 1]}`;
-}
-
 function enabledPracticeNote(): string {
-  const titles = stages
-    .filter((stage) => practiceDrillEnabled(stage.id))
-    .map((stage) => `${stage.title} (${stage.id})`);
-  if (titles.length === 0) return "";
-  return `✏️ Practice Drill on ${joinStageTitles(titles)}: two practice questions for each wrong one. Practice does not star the stage.`;
+  const enabled = stages.some((stage) => practiceDrillEnabled(stage.id));
+  if (!enabled) return "";
+  return "✏️ Two practice questions for each wrong one (keep updating). Practice does not star the stage.";
 }
 
 function practiceHint(run: Run, questionId: string): string {
@@ -402,8 +394,6 @@ function StageMap({
       ) : null}
       <p className="lede">
         Pick any stage. They all stay open. 👋
-        <br />
-        🍯 Honeycomb: Easy → Hard, then Untagged.
         <br />
         📝 Up to 5 real DSE questions, warming up Easy → Medium → untagged → Hard.
         <br />
