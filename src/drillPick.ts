@@ -3,10 +3,10 @@
  *
  * Archetypes are the pool `tpl` values (J10 map scale is M1–M3; ratio and rate are R1–R3).
  * A miss maps onto those tags only when the stem is a clear example of that pattern.
- * Anything else is left untagged. For stages other than J1, J9, and J11, an
- * untagged miss still shuffles the whole pool. J1, J9, and J11 do not: each
- * wrong bank question draws exactly two items of its own tag, or a Choose
- * bucket, or nothing.
+ * Anything else is left untagged. For stages other than J1, J7, J9, and J11,
+ * an untagged miss still shuffles the whole pool. J1, J7, J9, and J11 do not:
+ * each wrong bank question draws exactly two items of its own tag, or a
+ * Choose bucket, or nothing.
  *
  * Anti-adjacent is the stronger rule for that five-item draw: the next item
  * is a different tpl whenever another one is still available. One matched tag
@@ -14,8 +14,8 @@
  * different tags. Generator bands break the remaining ties. An unmatched
  * drill takes Easy archetypes before Medium and Hard. A filler is the easiest
  * different archetype still available. J7–J9 items have no band, so this
- * tie-break does not change those draws. The J1, J9, and J11 remedial pairs
- * do not use that five-item draw.
+ * tie-break does not change those draws. The J1, J7, J9, and J11 remedial
+ * pairs do not use that five-item draw.
  *
  * J7 Indices
  * - I6 reciprocal of a power, times another power: (1/9^555)·3^444
@@ -25,6 +25,18 @@
  * - I5 integer bases, no fraction: 8^222·5^666, 4^{n+2}3^{2n+4}
  * - I1 (number × letter)^power times a power of that letter
  * - no tag when the stem is none of those (for example x^3(2x+x))
+ * A mapped miss then takes exactly two pool items of the primary tpl (a
+ * different stem in the pair). A soft dual stays on the pedigree. The drill
+ * uses the dominant trap only: a negative index wins over the quotient it
+ * sits in (I3, not I2 or I4). There is no seventh I tag. With no I tag, a
+ * WQG Choose bucket may still apply: PQN product / quotient / negative →
+ * I1|I2|I3, I4 same-base with n → I4, DBR different bases or reciprocal ×
+ * power → I5|I6. Easy before Medium before Hard inside the bucket. J7 items
+ * have no generator band, so a Choose pair is a shuffle when every item is
+ * unbanded. A stem that matches none of those is left unmatched. Those two
+ * slots are skipped. They are not filled from the rest of the pool, and no
+ * new I tag is invented for them. Teaching App will ask DSE Math Check +
+ * Weekly Question Generator for unmatched stems.
  *
  * J8 Identities
  * - ID2 the asked value is a ratio (a:b or a:b:c)
@@ -598,6 +610,119 @@ function j1LooseLinear(head: string): boolean {
   return sides.every(isLinearSide) && /[a-zα-ω]/.test(head);
 }
 
+const J7_SKILLS = ["I1", "I2", "I3", "I4", "I5", "I6"] as const;
+
+/**
+ * I tags for one J7 bank stem.
+ * A `skillsForStem` hit drills the primary tpl. A soft dual keeps the other
+ * tag on the pedigree and drills the dominant trap: I3 when a negative index
+ * also sits in a quotient (I2 or I4). With no I tag, a WQG Choose bucket may
+ * still apply: PQN → I1|I2|I3, I4 same-base with n → I4, DBR → I5|I6.
+ * Easy before Medium before Hard inside the bucket.
+ * A stem that matches none of those returns null.
+ * Teaching App will ask DSE Math Check + Weekly Question Generator for
+ * unmatched stems. Do not invent a new I tag for them.
+ */
+export function j7MissTarget(stem: string): MissTarget | null {
+  const skills = skillsForStem("J7", stem).filter((tpl) =>
+    (J7_SKILLS as readonly string[]).includes(tpl),
+  );
+  if (skills.length > 0) return { tpls: [j7PrimaryTag(skills)], via: "skill" };
+  const bucket = j7ChooseBucket(stem);
+  if (!bucket) return null;
+  return { tpls: bucket, via: "bucket" };
+}
+
+/** Negative index dominates a quotient it sits in. Otherwise the first tag. */
+function j7PrimaryTag(skills: readonly string[]): string {
+  if (skills.includes("I3")) return "I3";
+  return skills[0];
+}
+
+/**
+ * PQN is a product, a letter quotient, or a negative index the skill missed.
+ * I4 is powers of one prime whose only letter is the exponent n.
+ * DBR is different integer bases, or a reciprocal of a power times a power.
+ */
+function j7ChooseBucket(stem: string): string[] | null {
+  const text = compact(stem);
+  if (!/\^/.test(text)) return null;
+  if (/\^-/.test(text)) return ["I1", "I2", "I3"];
+  if (isJ7ReciprocalTimesPower(text)) return ["I5", "I6"];
+  if (isJ7SameBaseN(text)) return ["I4"];
+  if (isJ7DifferentBases(text)) return ["I5", "I6"];
+  if (isJ7ProductOrQuotient(text)) return ["I1", "I2", "I3"];
+  return null;
+}
+
+function j7HasJoin(text: string): boolean {
+  return /\/|\\div|\\frac|·|\\cdot|\\times/.test(text);
+}
+
+function j7OnlyExponentN(text: string): boolean {
+  const letters = baseVariables(text);
+  return letters.length > 0 && /^n+$/u.test(letters);
+}
+
+/** Drop exponents so coefficients inside them are not read as bases. */
+function j7WithoutExponents(text: string): string {
+  let body = text;
+  for (let i = 0; i < 8; i += 1) {
+    const next = body.replace(/\\?\^\{[^{}]*\}/g, "");
+    if (next === body) break;
+    body = next;
+  }
+  return body.replace(/\\?\^[a-z0-9+-]+/gi, "");
+}
+
+function j7IntegerBases(text: string): number[] {
+  return [...j7WithoutExponents(text).matchAll(/\d+/g)]
+    .map((match) => Number(match[0]))
+    .filter((value) => value > 1);
+}
+
+/** 8 and 4 are family 2. 9 and 3 are family 3. 6 and 12 are not one family. */
+function j7PrimeFamily(value: number): number | null {
+  if (value <= 1) return null;
+  let rest = value;
+  let family = 0;
+  for (const prime of [2, 3, 5, 7]) {
+    if (rest % prime !== 0) continue;
+    while (rest % prime === 0) rest = Math.floor(rest / prime);
+    if (family === 0) family = prime;
+    else return null;
+  }
+  if (rest !== 1 || family === 0) return null;
+  return family;
+}
+
+function isJ7SameBaseN(text: string): boolean {
+  if (!j7OnlyExponentN(text) || !j7HasJoin(text)) return false;
+  const families = j7IntegerBases(text).map(j7PrimeFamily);
+  if (families.length < 2 || families.some((family) => family == null)) return false;
+  return new Set(families).size === 1;
+}
+
+function isJ7DifferentBases(text: string): boolean {
+  if (!j7OnlyExponentN(text) || !j7HasJoin(text)) return false;
+  const bases = j7IntegerBases(text);
+  if (bases.length < 2) return false;
+  const families = bases.map(j7PrimeFamily);
+  if (families.every((family) => family != null) && new Set(families).size === 1) return false;
+  return true;
+}
+
+/** 1/ or 1\div in front of a power. A braced \\frac{1} is already the I6 skill. */
+function isJ7ReciprocalTimesPower(text: string): boolean {
+  return /(?:^|[^0-9])1(?:\/|\\div)/.test(text);
+}
+
+function isJ7ProductOrQuotient(text: string): boolean {
+  if (baseVariables(text).length === 0) return false;
+  if (/·|\\cdot|\\times|\/|\\div|\\frac/.test(text)) return true;
+  return /\(\d*[a-zα-ω][^()]*\)\^\{?-?\d+\}?[a-zα-ω(]/u.test(text);
+}
+
 function j11ChooseBucket(stem: string): string[] | null {
   const prose = stem.toLowerCase().replace(/\s+/g, " ");
   if (/price|cost|\$|%|percent/.test(prose)) return ["SE1", "SE2"];
@@ -698,6 +823,15 @@ export function planJ1Misses<T extends PoolItem>(
   random: () => number = Math.random,
 ): MissPlan {
   return planMappedMisses(misses, pool, j1MissTarget, random);
+}
+
+/** J7 remedial pairs. See {@link planMappedMisses}. */
+export function planJ7Misses<T extends PoolItem>(
+  misses: readonly PlannedMiss[],
+  pool: readonly T[],
+  random: () => number = Math.random,
+): MissPlan {
+  return planMappedMisses(misses, pool, j7MissTarget, random);
 }
 
 /**

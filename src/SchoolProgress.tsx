@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { fetchSchoolRoster } from "./accountSync";
-import { stageById, stages } from "./bank";
+import { isStudentStage, stageById, stages } from "./bank";
 import type { SchoolStudent } from "./schoolRoster";
 
 const stageOrder = stages.map((stage) => stage.id);
@@ -92,7 +92,7 @@ export function SchoolProgress({ onBack }: { onBack: () => void }) {
               onChange={(event) => setStageId(event.target.value)}
             >
               <option value="">All stages</option>
-              {stages.map((stage) => (
+              {stages.filter((stage) => isStudentStage(stage.id)).map((stage) => (
                 <option key={stage.id} value={stage.id}>
                   {stage.id} · {stage.title}
                 </option>

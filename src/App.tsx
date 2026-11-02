@@ -2,12 +2,12 @@ import { useEffect, useMemo, useState } from "react";
 import {
   CHOICES,
   difficultyLabel,
+  isStudentStage,
+  mapStages,
   questionsFor,
-  rankedStages,
   solutionAttribution,
   solutionFor,
   stageById,
-  stages,
   type Choice,
   type Difficulty,
   type Question,
@@ -43,12 +43,13 @@ type Screen = "map" | "quiz" | "result" | "school";
  */
 function screenForProgress(saved: Progress): Screen {
   if (!saved.run) return "map";
+  if (!isStudentStage(saved.run.stage)) return "map";
   if (isPracticeDrillRun(saved.run) && !practiceDrillEnabled(saved.run.stage)) return "map";
   return saved.run.marked ? "result" : "quiz";
 }
 
 function enabledPracticeNote(): string {
-  const enabled = stages.some((stage) => practiceDrillEnabled(stage.id));
+  const enabled = mapStages.some((stage) => practiceDrillEnabled(stage.id));
   if (!enabled) return "";
   return "✏️ Two practice questions for each wrong one (keep updating). Practice does not star the stage.";
 }
@@ -221,16 +222,18 @@ export function App() {
     saveProgress(progress);
   }, [progress]);
 
-  const stageIds = stages.map((stage) => stage.id);
+  const stageIds = mapStages.map((stage) => stage.id);
   const clearedCount = stageIds.filter((id) => progress.cleared.includes(id)).length;
   const run = progress.run;
   const drillBlocked = Boolean(run && isPracticeDrillRun(run) && !practiceDrillEnabled(run.stage));
-  const studentScreen: Screen = drillBlocked && screen !== "school" ? "map" : screen;
+  const stageBlocked = Boolean(run && !isStudentStage(run.stage));
+  const studentScreen: Screen =
+    (drillBlocked || stageBlocked) && screen !== "school" ? "map" : screen;
 
   useEffect(() => {
-    if (!drillBlocked || screen === "school" || screen === "map") return;
+    if ((!drillBlocked && !stageBlocked) || screen === "school" || screen === "map") return;
     setScreen("map");
-  }, [drillBlocked, screen]);
+  }, [drillBlocked, stageBlocked, screen]);
 
   function update(next: Progress, nextScreen?: Screen) {
     setProgress(next);
@@ -238,6 +241,7 @@ export function App() {
   }
 
   function openStage(stageId: string) {
+    if (!isStudentStage(stageId)) return;
     const resumeOpenPaper =
       run &&
       run.stage === stageId &&
@@ -277,8 +281,8 @@ export function App() {
           <div className="top-side">
             <AccountBar account={account} />
             {screen === "school" ? null : (
-              <p className="progress-pill" aria-label={`${clearedCount} of ${stages.length} stages starred`}>
-                ★ {clearedCount} / {stages.length}
+              <p className="progress-pill" aria-label={`${clearedCount} of ${mapStages.length} stages starred`}>
+                ★ {clearedCount} / {mapStages.length}
               </p>
             )}
           </div>
@@ -412,7 +416,7 @@ function StageMap({
         </a>{" "}
         ({solutionAttribution.author}).
       </p>
-      {run && (practiceDrillEnabled(run.stage) || !isPracticeDrillRun(run)) ? (
+      {run && isStudentStage(run.stage) && (practiceDrillEnabled(run.stage) || !isPracticeDrillRun(run)) ? (
         <button className="resume" type="button" onClick={onResume}>
           {run.marked ? "Review" : "Continue"} {stageById(run.stage)?.id} ·{" "}
           {run.source === "generated"
@@ -423,7 +427,7 @@ function StageMap({
         </button>
       ) : null}
       <HoneycombMap
-        stages={rankedStages}
+        stages={mapStages}
         perfectRuns={progress.perfectRuns}
         onOpen={onOpen}
       />
