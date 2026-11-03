@@ -3,8 +3,8 @@
  *
  * Archetypes are the pool `tpl` values (J10 map scale is M1–M3; ratio and rate are R1–R3).
  * A miss maps onto those tags only when the stem is a clear example of that pattern.
- * Anything else is left untagged. For stages other than J1, J7, J9, and J11,
- * an untagged miss still shuffles the whole pool. J1, J7, J9, and J11 do not:
+ * Anything else is left untagged. For stages other than J1, J2, J7, J9, and J11,
+ * an untagged miss still shuffles the whole pool. J1, J2, J7, J9, and J11 do not:
  * each wrong bank question draws exactly two items of its own tag, or a
  * Choose bucket, or nothing.
  *
@@ -14,7 +14,7 @@
  * different tags. Generator bands break the remaining ties. An unmatched
  * drill takes Easy archetypes before Medium and Hard. A filler is the easiest
  * different archetype still available. J7–J9 items have no band, so this
- * tie-break does not change those draws. The J1, J7, J9, and J11 remedial
+ * tie-break does not change those draws. The J1, J2, J7, J9, and J11 remedial
  * pairs do not use that five-item draw.
  *
  * J7 Indices
@@ -91,11 +91,35 @@
  * them. Teaching App will ask DSE Math Check + Weekly Question Generator
  * for unmatched stems.
  *
- * J2 Significant figure and J18 Sequences
- * - no tag. J2 practice items are RS1–RS8 (rounding statements and ranges)
- *   and J18 items are SQ1–SQ8. Bank stems are not mapped onto those tags, so
- *   a miss warms up the whole pool Easy, then Medium, then Hard, the same
- *   way an unmapped stage drill does.
+ * J2 Significant figure
+ * - RS8 awkward leading zeros 0.00… on a round-off statement
+ * - RS3 mixed s.f. and d.p. traps. A bare value = is this form: the option
+ *   labels are the trap. So is an expression such as 1/π^4 or √333
+ *   (nearest integer included). 0.032, 0.050, and 0.076 stay here
+ * - RS1 round-off, significant figures only
+ * - RS2 round-off, decimal places only
+ * - RS4 an inequality, then which rounding statement is true
+ * - RS6 the range after rounding down
+ * - RS7 the range after rounding up
+ * - RS5 the range after "correct to …"
+ * A mapped miss then takes exactly two pool items of the primary tpl (a
+ * different stem in the pair). A soft dual stays on the pedigree. The drill
+ * uses one tag: awkward 0.00… prefers RS8 over RS3 and the other round-off
+ * tags, mixed s.f./d.p. prefers RS3 over RS1 and RS2, round-down prefers
+ * RS6 over RS5, round-up prefers RS7 over RS5, and an inequality prefers
+ * RS4 over the other range tags. With no RS tag, a WQG Choose bucket may
+ * still apply: RO round-off → RS1|RS2|RS3|RS8, IR inequality or range →
+ * RS4|RS5|RS6|RS7. RO is the easier bucket when a stem could sit in both.
+ * Easy before Medium before Hard inside the bucket. A stem that matches
+ * none of those is left unmatched. Those two slots are skipped. They are
+ * not filled from the rest of the pool, and no new RS tag is invented for
+ * them. Teaching App will ask DSE Math Check + Weekly Question Generator
+ * for unmatched stems.
+ *
+ * J18 Sequences
+ * - no tag. J18 items are SQ1–SQ8. Bank stems are not mapped onto those
+ *   tags, so a miss warms up the whole pool Easy, then Medium, then Hard,
+ *   the same way an unmapped stage drill does.
  *
  * J11 Simultaneous equations
  * - SE7 a journey at two speeds
@@ -135,6 +159,7 @@ export type PoolItem = {
 
 export function skillsForStem(stageId: string, stem: string): string[] {
   if (stageId === "J1") return skillsJ1(stem);
+  if (stageId === "J2") return skillsJ2(stem);
   if (stageId === "J7") return skillsJ7(stem);
   if (stageId === "J8") return skillsJ8(stem);
   if (stageId === "J9") return skillsJ9(stem);
@@ -477,6 +502,105 @@ function skillsJ1(stem: string): string[] {
   return [];
 }
 
+function j2Prose(stem: string): string {
+  return stem.toLowerCase().replace(/\s+/g, " ");
+}
+
+/** Significant figures named in the stem, not merely a decimal that could be either. */
+function j2HasSf(prose: string): boolean {
+  return /significant figures?|\bsig\.?\s*fig|\bs\.f\b/.test(prose);
+}
+
+function j2HasDp(prose: string): boolean {
+  return /decimal places?|\bd\.p\b/.test(prose);
+}
+
+function j2HasNearest(prose: string): boolean {
+  return /nearest integer/.test(prose);
+}
+
+/** `0.00…` only. `0.050`, `0.032`, and `0.076` have a single leading zero and stay RS3. */
+function j2AwkwardLeadingZeros(stem: string): boolean {
+  return /(?:^|[^0-9])0\.00/.test(compact(stem));
+}
+
+/**
+ * A round-off statement contains "=". Option labels may follow it.
+ * Range and inequality stems also contain "=" and are classified first.
+ */
+function j2RoundOffEquality(stem: string): boolean {
+  return compact(stem).includes("=");
+}
+
+const J2_INEQ_OP = "(?:\\\\(?:leq|le|geq|ge)|<=|>=|<|>|≤|≥)";
+
+/** `0.06557 < x < 0.06564`, including \\le and \\leq. */
+function j2Inequality(stem: string): boolean {
+  const text = compact(stem);
+  const between = new RegExp(
+    `\\d(?:\\.\\d+)?${J2_INEQ_OP}(?:\\\\[a-zA-Z]+|[a-zα-ω])${J2_INEQ_OP}\\d`,
+  );
+  return between.test(text);
+}
+
+function j2WhichTrue(prose: string): boolean {
+  return /which of the following/.test(prose) || /which .+ is true/.test(prose);
+}
+
+function j2RoundedDown(prose: string): boolean {
+  return /round(?:ed|ing)?[\s-]+down\b/.test(prose);
+}
+
+function j2RoundedUp(prose: string): boolean {
+  return /round(?:ed|ing)?[\s-]+up\b/.test(prose);
+}
+
+function j2CorrectTo(prose: string): boolean {
+  return /correct to|cor\. to/.test(prose);
+}
+
+function j2Range(prose: string): boolean {
+  return /range of values|find the range|\brange\b/.test(prose);
+}
+
+/**
+ * RS tags a J2 stem actually shows.
+ * An inequality / range question is returned before the round-off reading,
+ * so "correct to 3 significant figures, find the range" stays RS5.
+ * A bare `value =` is the mixed-statement item (RS3): the s.f. and d.p.
+ * labels live on the options. `0.00…` is also RS8. j2PrimaryTag picks one.
+ */
+function skillsJ2(stem: string): string[] {
+  const prose = j2Prose(stem);
+  const down = j2RoundedDown(prose);
+  const up = j2RoundedUp(prose);
+  const range = j2Range(prose);
+  const correct = j2CorrectTo(prose);
+  const tags: string[] = [];
+  if (j2Inequality(stem) && j2WhichTrue(prose)) tags.push("RS4");
+  if (down) tags.push("RS6");
+  if (up) tags.push("RS7");
+  if ((correct && range) || (range && (down || up))) tags.push("RS5");
+  if (tags.length > 0) return tags;
+  if (!j2RoundOffEquality(stem)) return [];
+
+  const sf = j2HasSf(prose);
+  const dp = j2HasDp(prose);
+  const nearest = j2HasNearest(prose);
+  const pureSf = sf && !dp && !nearest;
+  const pureDp = dp && !sf && !nearest;
+  if (pureSf) tags.push("RS1");
+  else if (pureDp) tags.push("RS2");
+  else {
+    if (sf) tags.push("RS1");
+    if (dp) tags.push("RS2");
+    tags.push("RS3");
+  }
+  // Soft dual. Awkward leading zeros stay on the pedigree beside the other RO tag.
+  if (j2AwkwardLeadingZeros(stem)) tags.push("RS8");
+  return tags;
+}
+
 function skillsJ11(stem: string): string[] {
   const prose = stem.toLowerCase().replace(/\s+/g, " ");
   if (prose.includes("km/h") || prose.includes("travels from town")) return ["SE7"];
@@ -495,7 +619,7 @@ function skillsJ11(stem: string): string[] {
   return [];
 }
 
-/** Two generated items for each wrong J1, J9, or J11 bank question. */
+/** Two generated items for each wrong J1, J2, J7, J9, or J11 bank question. */
 export const DRILLS_PER_MISS = 2;
 
 const J11_SKILLS = ["SE1", "SE2", "SE3", "SE4", "SE5", "SE6", "SE7"] as const;
@@ -875,6 +999,73 @@ export function planJ7Misses<T extends PoolItem>(
   random: () => number = Math.random,
 ): MissPlan {
   return planMappedMisses(misses, pool, j7MissTarget, random);
+}
+
+const J2_SKILLS = ["RS1", "RS2", "RS3", "RS4", "RS5", "RS6", "RS7", "RS8"] as const;
+
+/**
+ * RS tags for one J2 bank stem.
+ * A `skillsForStem` hit drills the primary tpl. A soft dual keeps the other
+ * tag on the pedigree. Awkward leading zeros `0.00…` prefer RS8 over RS3
+ * and the other round-off tags. Mixed s.f./d.p., including a nearest-integer
+ * label, prefers RS3 over RS1 and RS2. Round-down prefers RS6 over RS5.
+ * Round-up prefers RS7 over RS5. An inequality prefers RS4 over the other
+ * range tags. With no RS tag, a WQG Choose bucket may still apply:
+ * RO → RS1|RS2|RS3|RS8, IR → RS4|RS5|RS6|RS7. RO is the easier bucket
+ * when a stem could sit in both. Easy before Medium before Hard inside
+ * the bucket.
+ * A stem that matches none of those returns null.
+ * Teaching App will ask DSE Math Check + Weekly Question Generator for
+ * unmatched stems. Do not invent a new RS tag for them.
+ */
+export function j2MissTarget(stem: string): MissTarget | null {
+  const skills = skillsForStem("J2", stem).filter((tpl) =>
+    (J2_SKILLS as readonly string[]).includes(tpl),
+  );
+  if (skills.length > 0) return { tpls: [j2PrimaryTag(skills)], via: "skill" };
+  const bucket = j2ChooseBucket(stem);
+  if (!bucket) return null;
+  return { tpls: bucket, via: "bucket" };
+}
+
+/**
+ * One drill tag from a soft dual.
+ * RS8 beats every other round-off tag, including RS3.
+ * RS4 beats the other inequality / range tags.
+ * RS6 and RS7 beat RS5. RS3 beats RS1 and RS2.
+ */
+function j2PrimaryTag(skills: readonly string[]): string {
+  if (skills.includes("RS8")) return "RS8";
+  if (skills.includes("RS4")) return "RS4";
+  if (skills.includes("RS6")) return "RS6";
+  if (skills.includes("RS7")) return "RS7";
+  if (skills.includes("RS3")) return "RS3";
+  return skills[0];
+}
+
+/**
+ * RO is a round-off the skill missed. IR is an inequality or a range the
+ * skill missed. When both could apply, RO is the easier Choose bucket.
+ */
+function j2ChooseBucket(stem: string): string[] | null {
+  const prose = j2Prose(stem);
+  const roundOff =
+    /\bround(?:ing|ed| off|-off)?\b|significant figures?|sig\.?\s*fig|decimal places?|\bs\.f\b|\bd\.p\b|nearest integer/.test(
+      prose,
+    );
+  const inequalityRange = j2Inequality(stem) || /\brange\b/.test(prose);
+  if (roundOff) return ["RS1", "RS2", "RS3", "RS8"];
+  if (inequalityRange) return ["RS4", "RS5", "RS6", "RS7"];
+  return null;
+}
+
+/** J2 remedial pairs. See {@link planMappedMisses}. */
+export function planJ2Misses<T extends PoolItem>(
+  misses: readonly PlannedMiss[],
+  pool: readonly T[],
+  random: () => number = Math.random,
+): MissPlan {
+  return planMappedMisses(misses, pool, j2MissTarget, random);
 }
 
 /**
