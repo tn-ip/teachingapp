@@ -10,6 +10,7 @@ import {
 } from "../src/bank.ts";
 import {
   DRILLS_PER_MISS,
+  c11MissTarget,
   j1MissTarget,
   j2MissTarget,
   j7MissTarget,
@@ -17,6 +18,7 @@ import {
   j11MissTarget,
   pickFromPool,
   pickMapped,
+  planC11Misses,
   planJ1Misses,
   planJ2Misses,
   planJ7Misses,
@@ -127,6 +129,22 @@ const EXPECTED: Record<string, string[]> = {
   "J10-2024-q6": [],
   "J10-2024-q12": [],
   "J10-2025-q11": [],
+  "C11-sample-q14": ["V1"],
+  "C11-practice-q13": ["V2"],
+  "C11-2012-q10": ["V3", "V1"],
+  "C11-2013-q13": ["V4"],
+  "C11-2014-q13": ["V2"],
+  "C11-2015-q12": ["V1"],
+  "C11-2016-q12": ["V4"],
+  "C11-2017-q12": ["V3", "V1"],
+  "C11-2018-q11": ["V2"],
+  "C11-2019-q13": ["V4"],
+  "C11-2020-q11": ["V1"],
+  "C11-2021-q12": ["V2"],
+  "C11-2022-q13": ["V5"],
+  "C11-2023-q13": ["V1"],
+  "C11-2024-q13": ["V4"],
+  "C11-2025-q12": ["V1"],
   "J11-2012-q5": ["SE1"],
   "J11-2014-q8": ["SE1"],
   "J11-2014-q9": ["SE2"],
@@ -161,7 +179,7 @@ const DRILL_STAGES = [
   "C17",
 ];
 const UNBANDED = new Set(["J7", "J8", "J9"]);
-const SKILL_STAGES = new Set(["J1", "J2", "J7", "J8", "J9", "J10", "J11"]);
+const SKILL_STAGES = new Set(["J1", "J2", "J7", "J8", "J9", "J10", "J11", "C11"]);
 const UNIQUE_STEMS: Record<string, number> = { C2: 286, C3: 299 };
 const ARCHETYPE: Record<string, RegExp> = {
   J1: /^CS[1-8]$/,
@@ -278,6 +296,12 @@ assert.deepEqual(bandCounts("C2"), { easy: 150, medium: 150, hard: 0, unknown: 0
 assert.deepEqual(bandCounts("C3"), { easy: 145, medium: 155, hard: 0, unknown: 0 });
 assert.deepEqual(bandCounts("C4"), { easy: 115, medium: 185, hard: 0, unknown: 0 });
 assert.deepEqual(bandCounts("C11"), { easy: 35, medium: 155, hard: 110, unknown: 0 });
+const c11Tpls: Record<string, number> = {};
+for (const question of generatedQuestions("C11")) {
+  const tpl = question.archetype ?? "";
+  c11Tpls[tpl] = (c11Tpls[tpl] ?? 0) + 1;
+}
+assert.deepEqual(c11Tpls, { V1: 70, V2: 60, V3: 60, V4: 60, V5: 50 });
 assert.deepEqual(bandCounts("C17"), { easy: 72, medium: 198, hard: 30, unknown: 0 });
 assert.deepEqual(bandCounts("J7"), { easy: 0, medium: 0, hard: 0, unknown: 300 });
 assert.equal(questionsFor("J1").length, 13);
@@ -444,21 +468,28 @@ function wrongRun(stageId: string, questions: { id: string; answer: string }[]):
   };
 }
 
-assert.deepEqual([...PRACTICE_DRILL_ENABLED.enabledStages], ["J11", "J9", "J1", "J7", "J2"]);
+assert.deepEqual([...PRACTICE_DRILL_ENABLED.enabledStages], ["J11", "J9", "J1", "J7", "J2", "C11"]);
 for (const stage of stages) {
   assert.equal(
     practiceDrillEnabled(stage.id),
-    stage.id === "J11" || stage.id === "J9" || stage.id === "J1" || stage.id === "J7" || stage.id === "J2",
+    stage.id === "J11" ||
+      stage.id === "J9" ||
+      stage.id === "J1" ||
+      stage.id === "J7" ||
+      stage.id === "J2" ||
+      stage.id === "C11",
     stage.id,
   );
 }
 assert.equal(practiceDrillEnabled(null), false);
+assert.equal(practiceDrillEnabled("C23"), false);
 assert.equal(DRILLS_PER_MISS, 2);
 assert.equal(startRun(empty(), "J11", "drill"), null);
 assert.equal(startRun(empty(), "J9", "drill"), null);
 assert.equal(startRun(empty(), "J1", "drill"), null);
 assert.equal(startRun(empty(), "J7", "drill"), null);
 assert.equal(startRun(empty(), "J2", "drill"), null);
+assert.equal(startRun(empty(), "C11", "drill"), null);
 
 for (const bankQuestion of questionsFor("J11")) {
   const target = j11MissTarget(bankQuestion.stem);
@@ -1464,6 +1495,247 @@ assert.ok(onlyJ2Second.run.ids.every((id) => generatedById(id)?.archetype === "R
 assert.deepEqual(onlyJ2Second.used, j2OneWrong.used);
 assert.deepEqual(onlyJ2Second.cleared, ["J3"]);
 assert.equal(stageClearedBy(onlyJ2Second.run, 2, 2), false);
+
+const C11_PRIMARY: Record<string, string> = {
+  "C11-sample-q14": "V1",
+  "C11-practice-q13": "V2",
+  "C11-2012-q10": "V3",
+  "C11-2013-q13": "V4",
+  "C11-2014-q13": "V2",
+  "C11-2015-q12": "V1",
+  "C11-2016-q12": "V4",
+  "C11-2017-q12": "V3",
+  "C11-2018-q11": "V2",
+  "C11-2019-q13": "V4",
+  "C11-2020-q11": "V1",
+  "C11-2021-q12": "V2",
+  "C11-2022-q13": "V5",
+  "C11-2023-q13": "V1",
+  "C11-2024-q13": "V4",
+  "C11-2025-q12": "V1",
+};
+const c11Bank = questionsFor("C11");
+assert.equal(c11Bank.length, 16);
+assert.deepEqual(
+  c11Bank.map((question) => question.id),
+  Object.keys(C11_PRIMARY),
+);
+for (const bankQuestion of c11Bank) {
+  const target = c11MissTarget(bankQuestion.stem);
+  assert.ok(target, bankQuestion.id);
+  assert.equal(target.via, "skill", bankQuestion.id);
+  assert.deepEqual(target.tpls, [C11_PRIMARY[bankQuestion.id]], bankQuestion.id);
+  assert.deepEqual(skillsForStem("C11", bankQuestion.stem), EXPECTED[bankQuestion.id], bankQuestion.id);
+}
+const c11Pool = generatedQuestions("C11").map((question) => ({
+  id: question.id,
+  tpl: question.archetype ?? "",
+  stem: question.stem,
+  difficulty: question.difficulty,
+}));
+const c11AllPlan = planC11Misses(
+  c11Bank.map((question, index) => ({
+    bankId: question.id,
+    paperNumber: index + 1,
+    stem: question.stem,
+  })),
+  c11Pool,
+  () => 0,
+);
+assert.deepEqual(c11AllPlan.unmatched, []);
+assert.equal(c11AllPlan.repairs.length, 16);
+assert.deepEqual(c11AllPlan.focus, ["V1", "V2", "V3", "V4", "V5"]);
+for (const repair of c11AllPlan.repairs) {
+  assert.equal(repair.ids.length, 2, repair.bankId);
+  assert.ok(
+    repair.ids.every((id) => generatedById(id)?.archetype === C11_PRIMARY[repair.bankId]),
+    repair.bankId,
+  );
+  assert.equal(new Set(repair.ids.map((id) => generatedById(id)?.stem)).size, 2, repair.bankId);
+}
+
+const c11ConstantAndPercent =
+  "If z varies as x, which of the following must be constant when x is increased by 20%?";
+assert.deepEqual(skillsForStem("C11", c11ConstantAndPercent), ["V2", "V4"]);
+assert.deepEqual(c11MissTarget(c11ConstantAndPercent), { tpls: ["V2"], via: "skill" });
+const c11PercentAndRoman =
+  "If z varies as x, which of the following are true? I. z is increased by 20%. II. z is decreased by 10%. III. z is unchanged.";
+assert.deepEqual(skillsForStem("C11", c11PercentAndRoman), ["V4", "V5"]);
+assert.deepEqual(c11MissTarget(c11PercentAndRoman), { tpls: ["V4"], via: "skill" });
+const c11PartialAndRoman =
+  "If y partly varies as x, which of the following are true? I. y varies as x. II. y has a constant part. III. y = k + x.";
+assert.deepEqual(skillsForStem("C11", c11PartialAndRoman), ["V3", "V5"]);
+assert.deepEqual(c11MissTarget(c11PartialAndRoman), { tpls: ["V3"], via: "skill" });
+const c11PartialEvaluate =
+  "It is given that y varies as x and y = k + 2x. When x = 1, y = 3. When x = 2, y =";
+assert.deepEqual(skillsForStem("C11", c11PartialEvaluate), ["V3", "V1"]);
+assert.deepEqual(c11MissTarget(c11PartialEvaluate), { tpls: ["V3"], via: "skill" });
+const c11RomanAndEvaluate =
+  "If z varies as x, which of the following are true? I. z = 1 when x = 1. II. z = 2 when x = 2. III. z varies directly as x.";
+assert.deepEqual(skillsForStem("C11", c11RomanAndEvaluate), ["V5", "V1"]);
+assert.deepEqual(c11MissTarget(c11RomanAndEvaluate), { tpls: ["V5"], via: "skill" });
+const c11Plain =
+  "It is given that z varies directly as x. When x = 2, z = 6. When x = 5, z =";
+assert.deepEqual(skillsForStem("C11", c11Plain), ["V1"]);
+assert.deepEqual(c11MissTarget(c11Plain), { tpls: ["V1"], via: "skill" });
+
+const c11ConstantOnly = "Which of the following is constant?";
+assert.deepEqual(skillsForStem("C11", c11ConstantOnly), []);
+assert.deepEqual(c11MissTarget(c11ConstantOnly), { tpls: ["V2"], via: "bucket" });
+const c11PercentOnly = "x changes by 20%.";
+assert.deepEqual(skillsForStem("C11", c11PercentOnly), []);
+assert.deepEqual(c11MissTarget(c11PercentOnly), { tpls: ["V4"], via: "bucket" });
+const c11ConstantAndPercentBucket = "A constant changes by 20%.";
+assert.deepEqual(skillsForStem("C11", c11ConstantAndPercentBucket), []);
+assert.deepEqual(c11MissTarget(c11ConstantAndPercentBucket), { tpls: ["V2"], via: "bucket" });
+const c11LawOnly = "y varies directly as x.";
+assert.deepEqual(skillsForStem("C11", c11LawOnly), []);
+assert.deepEqual(c11MissTarget(c11LawOnly), { tpls: ["V1", "V3", "V5"], via: "bucket" });
+const c11SoftRoman = "y varies as x. I. one law. II. another law. III. a third law.";
+assert.deepEqual(skillsForStem("C11", c11SoftRoman), []);
+assert.deepEqual(c11MissTarget(c11SoftRoman), { tpls: ["V5"], via: "bucket" });
+const c11SoftWhen = "When x grows, y varies as x.";
+assert.deepEqual(skillsForStem("C11", c11SoftWhen), []);
+assert.deepEqual(c11MissTarget(c11SoftWhen), { tpls: ["V1"], via: "bucket" });
+const c11SoftPartial = "y varies by a partial law.";
+assert.deepEqual(skillsForStem("C11", c11SoftPartial), []);
+assert.deepEqual(c11MissTarget(c11SoftPartial), { tpls: ["V3"], via: "bucket" });
+const c11SoftPartialAndRoman =
+  "y varies by a partial law. I. one part. II. another part. III. a third part.";
+assert.deepEqual(skillsForStem("C11", c11SoftPartialAndRoman), []);
+assert.deepEqual(c11MissTarget(c11SoftPartialAndRoman), { tpls: ["V3"], via: "bucket" });
+assert.equal(c11MissTarget("Which figure is correct?"), null);
+
+const ctPlan = planC11Misses(
+  [{ bankId: "ct", paperNumber: 1, stem: c11ConstantOnly }],
+  [
+    { id: "h", tpl: "V2", stem: "h", difficulty: "hard" },
+    { id: "m", tpl: "V2", stem: "m", difficulty: "medium" },
+    { id: "e", tpl: "V2", stem: "e", difficulty: "easy" },
+  ],
+  () => 0,
+);
+assert.deepEqual(ctPlan.focus, ["V2"]);
+assert.deepEqual(ctPlan.repairs[0].ids, ["e", "m"]);
+const vlPlan = planC11Misses(
+  [{ bankId: "vl", paperNumber: 1, stem: c11LawOnly }],
+  [
+    { id: "h5", tpl: "V5", stem: "h5", difficulty: "hard" },
+    { id: "h3", tpl: "V3", stem: "h3", difficulty: "hard" },
+    { id: "m1", tpl: "V1", stem: "m1", difficulty: "medium" },
+    { id: "e1", tpl: "V1", stem: "e1", difficulty: "easy" },
+  ],
+  () => 0,
+);
+assert.deepEqual(vlPlan.focus, ["V1", "V3", "V5"]);
+assert.deepEqual(vlPlan.repairs[0].ids, ["e1", "m1"]);
+const c11MixedPlan = planC11Misses(
+  [
+    { bankId: "C11-2012-q10", paperNumber: 1, stem: bankQuestionById("C11-2012-q10")?.stem ?? "" },
+    { bankId: "mystery", paperNumber: 4, stem: "Which figure is correct?" },
+  ],
+  c11Pool,
+);
+assert.equal(c11MixedPlan.repairs.length, 1);
+assert.deepEqual(
+  c11MixedPlan.repairs[0].ids.map((id) => generatedById(id)?.archetype),
+  ["V3", "V3"],
+);
+assert.deepEqual(c11MixedPlan.unmatched, [{ bankId: "mystery", paperNumber: 4 }]);
+assert.deepEqual(
+  planC11Misses([{ bankId: "mystery", paperNumber: 4, stem: "Which figure is correct?" }], c11Pool),
+  { repairs: [], unmatched: [{ bankId: "mystery", paperNumber: 4 }], focus: [] },
+);
+const c11NoTopUp = planC11Misses(
+  [{ bankId: "m", paperNumber: 1, stem: bankQuestionById("C11-2014-q13")?.stem ?? "" }],
+  [
+    { id: "a", tpl: "V2", stem: "a", difficulty: "medium" },
+    { id: "b", tpl: "V1", stem: "b", difficulty: "easy" },
+    { id: "c", tpl: "V4", stem: "c", difficulty: "hard" },
+  ],
+);
+assert.deepEqual(c11NoTopUp.repairs, []);
+assert.deepEqual(c11NoTopUp.unmatched, [{ bankId: "m", paperNumber: 1 }]);
+
+const allWrongC11 = startRun(wrongRun("C11", c11Bank), "C11", "drill");
+assert.ok(allWrongC11?.run);
+assert.equal(allWrongC11.run.ids.length, 32);
+assert.equal(allWrongC11.run.repairs?.length, 16);
+assert.deepEqual(allWrongC11.run.unmatchedMisses, []);
+assert.deepEqual(allWrongC11.run.focus, ["V1", "V2", "V3", "V4", "V5"]);
+assert.equal(new Set(allWrongC11.run.ids).size, 32);
+assert.equal(new Set(allWrongC11.run.ids.map((id) => generatedById(id)?.stem)).size, 32);
+for (const repair of allWrongC11.run.repairs ?? []) {
+  assert.ok(repair.ids.every((id) => generatedById(id)?.archetype === C11_PRIMARY[repair.bankId]));
+}
+assert.deepEqual(allWrongC11.used, { C11: ["kept-bank-id"] });
+assert.deepEqual(allWrongC11.cleared, ["J3"]);
+assert.equal(stageClearedBy(allWrongC11.run, 32, 32), false);
+assert.equal(grantPerfectRun(allWrongC11, allWrongC11.run, 32, 32), allWrongC11);
+assert.equal(startRun(allWrongC11, "C11", "drill"), null);
+assert.deepEqual(remedialOffer(wrongRun("C11", c11Bank).run ?? null), {
+  mapped: 16,
+  unmappedBankIds: [],
+});
+
+const v3q = bankQuestionById("C11-2012-q10");
+const v2q = bankQuestionById("C11-practice-q13");
+const v5q = bankQuestionById("C11-2022-q13");
+const v1q = bankQuestionById("C11-sample-q14");
+assert.ok(v3q && v2q && v5q && v1q);
+const pairedC11 = startRun(wrongRun("C11", [v2q, v3q]), "C11", "drill");
+assert.ok(pairedC11?.run);
+assert.deepEqual(
+  pairedC11.run.ids.map((id) => generatedById(id)?.archetype),
+  ["V2", "V2", "V3", "V3"],
+);
+assert.equal(new Set(pairedC11.run.ids).size, 4);
+assert.deepEqual(pairedC11.used, { C11: ["kept-bank-id"] });
+assert.deepEqual(pairedC11.cleared, ["J3"]);
+assert.equal(stageClearedBy(pairedC11.run, 4, 4), false);
+const perfectC11: Progress = {
+  cleared: ["J3"],
+  used: { C11: ["kept-bank-id"] },
+  last: {},
+  run: {
+    stage: "C11",
+    mode: "stage",
+    ids: [v1q.id, v5q.id],
+    picks: {
+      [v1q.id]: v1q.answer,
+      [v5q.id]: v5q.answer,
+    },
+    index: 1,
+    marked: true,
+  },
+};
+assert.equal(startRun(perfectC11, "C11", "drill"), null);
+assert.deepEqual(remedialOffer(perfectC11.run), { mapped: 0, unmappedBankIds: [] });
+const c11OneWrong: Progress = {
+  cleared: ["J3"],
+  used: { C11: ["kept-bank-id"] },
+  last: {},
+  run: {
+    stage: "C11",
+    mode: "stage",
+    ids: [v2q.id, v5q.id],
+    picks: {
+      [v2q.id]: v2q.answer,
+      [v5q.id]: wrongLetter(v5q.answer),
+    },
+    index: 1,
+    marked: true,
+  },
+};
+const onlyC11Second = startRun(c11OneWrong, "C11", "drill");
+assert.ok(onlyC11Second?.run);
+assert.equal(onlyC11Second.run.ids.length, 2);
+assert.equal(onlyC11Second.run.repairs?.[0].bankId, v5q.id);
+assert.equal(onlyC11Second.run.repairs?.[0].paperNumber, 2);
+assert.ok(onlyC11Second.run.ids.every((id) => generatedById(id)?.archetype === "V5"));
+assert.deepEqual(onlyC11Second.used, c11OneWrong.used);
+assert.deepEqual(onlyC11Second.cleared, ["J3"]);
+assert.equal(stageClearedBy(onlyC11Second.run, 2, 2), false);
 
 const sqMiss = bankQuestionById("J18-2016-q14");
 assert.ok(sqMiss);
