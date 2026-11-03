@@ -4,12 +4,12 @@
  * `npm run check:drills` stay in the repo for every stage.
  *
  * `enabledStages` is the only student-facing switch. J11 Simultaneous
- * equations, J9 Factorization, expansion, J1 Change of subjects, and J7
- * Indices are on. Every other stage stays hidden: no map badge, no practice
- * button, and no post-wrong drills.
+ * equations, J9 Factorization, expansion, J1 Change of subjects, J7
+ * Indices, and J2 Significant figure are on. Every other stage stays
+ * hidden: no map badge, no practice button, and no post-wrong drills.
  */
 export const PRACTICE_DRILL_ENABLED = {
-  enabledStages: ["J11", "J9", "J1", "J7"],
+  enabledStages: ["J11", "J9", "J1", "J7", "J2"],
 } as const;
 
 export function practiceDrillEnabled(stageId: string | null | undefined): boolean {
