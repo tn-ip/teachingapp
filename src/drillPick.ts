@@ -3,8 +3,8 @@
  *
  * Archetypes are the pool `tpl` values (J10 map scale is M1–M3; ratio and rate are R1–R3).
  * A miss maps onto those tags only when the stem is a clear example of that pattern.
- * Anything else is left untagged. For stages other than J1, J2, J7, J9, and J11,
- * an untagged miss still shuffles the whole pool. J1, J2, J7, J9, and J11 do not:
+ * Anything else is left untagged. For stages other than J1, J2, J7, J9, J11, and C11,
+ * an untagged miss still shuffles the whole pool. J1, J2, J7, J9, J11, and C11 do not:
  * each wrong bank question draws exactly two items of its own tag, or a
  * Choose bucket, or nothing.
  *
@@ -14,7 +14,7 @@
  * different tags. Generator bands break the remaining ties. An unmatched
  * drill takes Easy archetypes before Medium and Hard. A filler is the easiest
  * different archetype still available. J7–J9 items have no band, so this
- * tie-break does not change those draws. The J1, J2, J7, J9, and J11 remedial
+ * tie-break does not change those draws. The J1, J2, J7, J9, J11, and C11 remedial
  * pairs do not use that five-item draw.
  *
  * J7 Indices
@@ -138,8 +138,29 @@
  * unmatched. Those two slots are skipped. They are not filled from the rest
  * of the pool, and no new SE tag is invented for them.
  *
+ * C11 Variations
+ * - V2 which expression must be constant
+ * - V4 a percentage increase or decrease, then what happens to the other quantity
+ * - V3 partly, partial variation, a sum of two parts, or k plus a varying part
+ * - V5 I / II / III, which of the following are true
+ * - V1 plain evaluate-the-law: varies, two "when" values, ask for another value
+ * A mapped miss then takes exactly two pool items of the primary tpl (a
+ * different stem in the pair). A soft dual stays on the pedigree. The drill
+ * uses one tag, in this order: "must be constant" prefers V2, a %-change
+ * consequence prefers V4, partly / k+variation / partial variation prefers
+ * V3 over V1, and I/II/III which-are-true prefers V5 over a plain evaluate.
+ * With no V tag, a WQG Choose bucket may still apply: CT constant → V2,
+ * PC percentage change → V4, VL variation law → V1|V3|V5. CT is the easier
+ * bucket, then PC, then VL. Inside VL, a softer partial, roman, or "when"
+ * cue picks one of V1, V3, or V5 with those same priorities. Otherwise the
+ * pair is Easy before Medium before Hard across V1, V3, and V5. A stem that
+ * matches none of those is left unmatched. Those two slots are skipped.
+ * They are not filled from the rest of the pool, and no new V tag is
+ * invented for them. Teaching App will ask DSE Math Check + Weekly Question
+ * Generator for unmatched stems.
+ *
  * J4 Percentage, J16 Statistics, J19 S3 Probability, C2 Quadratic equations (II),
- * C3 Functions and Graphs, C4 Polynomials, C11 Variations, and C17 Inequalities
+ * C3 Functions and Graphs, C4 Polynomials, and C17 Inequalities
  * - no tag. A miss warms up the whole pool Easy, then Medium, then Hard,
  *   the same way an unmapped stage drill does.
  *
@@ -165,6 +186,7 @@ export function skillsForStem(stageId: string, stem: string): string[] {
   if (stageId === "J9") return skillsJ9(stem);
   if (stageId === "J10") return skillsJ10(stem);
   if (stageId === "J11") return skillsJ11(stem);
+  if (stageId === "C11") return skillsC11(stem);
   return [];
 }
 
@@ -619,7 +641,7 @@ function skillsJ11(stem: string): string[] {
   return [];
 }
 
-/** Two generated items for each wrong J1, J2, J7, J9, or J11 bank question. */
+/** Two generated items for each wrong J1, J2, J7, J9, J11, or C11 bank question. */
 export const DRILLS_PER_MISS = 2;
 
 const J11_SKILLS = ["SE1", "SE2", "SE3", "SE4", "SE5", "SE6", "SE7"] as const;
@@ -1066,6 +1088,146 @@ export function planJ2Misses<T extends PoolItem>(
   random: () => number = Math.random,
 ): MissPlan {
   return planMappedMisses(misses, pool, j2MissTarget, random);
+}
+
+const C11_SKILLS = ["V1", "V2", "V3", "V4", "V5"] as const;
+
+/**
+ * Primary when a stem carries more than one V tag.
+ * V2 is "must be constant". V4 is a %-change consequence. V3 beats V1 for
+ * partly / k+variation / partial variation. V5 is I/II/III which-are-true.
+ * V1 is what remains: plain evaluate-the-law.
+ */
+const C11_PRIMARY = ["V2", "V4", "V3", "V5", "V1"] as const;
+
+/**
+ * V tags for one C11 bank stem.
+ * A `skillsForStem` hit drills the primary tpl. A soft dual keeps the other
+ * tag on the pedigree. With no V tag, a WQG Choose bucket may still apply:
+ * CT → V2, PC → V4, VL → V1|V3|V5. CT is easier than PC, and PC is easier
+ * than VL. Inside VL, a softer partial, roman, or "when" cue picks one of
+ * V1, V3, or V5. Easy before Medium before Hard inside the bucket.
+ * A stem that matches none of those returns null.
+ * Teaching App will ask DSE Math Check + Weekly Question Generator for
+ * unmatched stems. Do not invent a new V tag for them.
+ */
+export function c11MissTarget(stem: string): MissTarget | null {
+  const skills = skillsForStem("C11", stem).filter((tpl) =>
+    (C11_SKILLS as readonly string[]).includes(tpl),
+  );
+  if (skills.length > 0) return { tpls: [c11PrimaryTag(skills)], via: "skill" };
+  const bucket = c11ChooseBucket(stem);
+  if (!bucket) return null;
+  return { tpls: bucket, via: "bucket" };
+}
+
+function c11PrimaryTag(skills: readonly string[]): string {
+  for (const tag of C11_PRIMARY) {
+    if (skills.includes(tag)) return tag;
+  }
+  return skills[0];
+}
+
+/** C11 remedial pairs. See {@link planMappedMisses}. */
+export function planC11Misses<T extends PoolItem>(
+  misses: readonly PlannedMiss[],
+  pool: readonly T[],
+  random: () => number = Math.random,
+): MissPlan {
+  return planMappedMisses(misses, pool, c11MissTarget, random);
+}
+
+function c11Prose(stem: string): string {
+  return stem.toLowerCase().replace(/\s+/g, " ");
+}
+
+function c11Varies(prose: string): boolean {
+  return /\bvar(?:y|ies|ying|iations?)\b/.test(prose);
+}
+
+function c11HasPercent(prose: string): boolean {
+  return /%|％|per\s*cent/.test(prose);
+}
+
+/** I. II. III. in the stem. "III." does not count as "II." or "I.". */
+function c11HasRoman(stem: string): boolean {
+  const text = stem.replace(/\s+/g, " ");
+  const mark = (numeral: string) =>
+    new RegExp(`(?:^|[^A-Za-z])${numeral}\\s*[.)]`).test(text);
+  return mark("I") && mark("II") && mark("III");
+}
+
+function c11MustBeConstant(prose: string): boolean {
+  return /must be (?:a )?constants?\b/.test(prose);
+}
+
+/** Increased or decreased, and the stem names a percent. */
+function c11PercentConsequence(prose: string): boolean {
+  return /\b(?:increased|decreased)\b/.test(prose) && c11HasPercent(prose);
+}
+
+/**
+ * Partly, partial variation, one constant part plus one varying part, or k
+ * plus a varying part (`y = k + …`).
+ */
+function c11Partial(prose: string): boolean {
+  if (/\bpartly\b/.test(prose)) return true;
+  if (/partial variation/.test(prose)) return true;
+  if (/sum of two parts/.test(prose)) return true;
+  if (/one part is a constant/.test(prose) && /other part varies/.test(prose)) return true;
+  return /=\s*k\s*\+/.test(prose);
+}
+
+function c11WhichTrue(prose: string): boolean {
+  return /which of the following (?:is|are) true/.test(prose);
+}
+
+/** Two supplied "when" values on a variation law. */
+function c11Evaluate(prose: string): boolean {
+  if (!c11Varies(prose) || !/=/.test(prose)) return false;
+  const whens = prose.match(/\bwhen\b/g);
+  return (whens?.length ?? 0) >= 2;
+}
+
+/**
+ * V tags a C11 stem actually shows. Every hit stays on the pedigree.
+ * c11PrimaryTag picks the drill.
+ */
+function skillsC11(stem: string): string[] {
+  const prose = c11Prose(stem);
+  const tags: string[] = [];
+  if (c11MustBeConstant(prose)) tags.push("V2");
+  if (c11PercentConsequence(prose)) tags.push("V4");
+  if (c11Partial(prose)) tags.push("V3");
+  if (c11WhichTrue(prose) && c11HasRoman(stem)) tags.push("V5");
+  if (c11Evaluate(prose)) tags.push("V1");
+  return tags;
+}
+
+/**
+ * CT is a constant the skill missed. PC is a percent change the skill missed.
+ * VL is a variation law the skill missed. CT, then PC, then VL.
+ * VL is V1|V3|V5. A softer cue inside that family picks one tag.
+ */
+function c11ChooseBucket(stem: string): string[] | null {
+  const prose = c11Prose(stem);
+  if (/\bconstants?\b/.test(prose)) return ["V2"];
+  if (c11HasPercent(prose) || /\b(?:increased|decreased)\b/.test(prose)) return ["V4"];
+  if (c11Varies(prose)) return c11VlFamily(stem, prose);
+  return null;
+}
+
+/**
+ * One V1 / V3 / V5 tag when a VL stem still shows a soft cue.
+ * No cue means the whole family. V3 beats V1. V5 is the roman cue.
+ */
+function c11VlFamily(stem: string, prose: string): string[] {
+  const tags: string[] = [];
+  if (/\bpartial\b/.test(prose) || /\btwo parts\b/.test(prose)) tags.push("V3");
+  if (c11HasRoman(stem)) tags.push("V5");
+  if (/\bwhen\b/.test(prose)) tags.push("V1");
+  if (tags.length === 0) return ["V1", "V3", "V5"];
+  return [c11PrimaryTag(tags)];
 }
 
 /**
