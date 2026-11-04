@@ -498,25 +498,79 @@ button.hex-open:focus-visible { outline: none; }
 }
 
 button.hex-practice {
+  --practice-hit-top: 8px;
+  --practice-hit-x: 10px;
+  --practice-hit-bottom: 12px;
   position: relative;
   z-index: 2;
-  /* Extra padding is the finger target. Negative margin keeps the word where
-     the 16px label was, and keeps the flex group the same height. */
-  margin: -2px 0 -10px;
-  padding: 5px 18px 12px;
+  /* The ::before is the visible pill. Padding outside it is the #45 finger
+     target; negative margin keeps that slop out of the flex slot. Never
+     translate this control — iPad Safari moves the hit box with it. */
+  margin:
+    calc(3px - var(--practice-hit-top))
+    calc(-1 * var(--practice-hit-x))
+    calc(-1 * var(--practice-hit-bottom));
+  padding:
+    calc(var(--practice-hit-top) + 5px)
+    calc(var(--practice-hit-x) + 14px)
+    calc(var(--practice-hit-bottom) + 5px);
   border: 0;
+  border-radius: 0;
   background: transparent;
   color: var(--accent-ink);
-  font-size: 0.68rem;
+  /* Body type (18px). Narrow hexes step down so the pill stays inside the tile. */
+  font-size: clamp(14px, calc(var(--hex-w) * 0.113), 18px);
   font-weight: 700;
   line-height: 1.2;
+  white-space: nowrap;
   pointer-events: auto;
   min-height: 0;
 }
 
-button.hex-practice:hover { color: var(--accent); }
+button.hex-practice::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  pointer-events: none;
+  top: var(--practice-hit-top);
+  right: var(--practice-hit-x);
+  bottom: var(--practice-hit-bottom);
+  left: var(--practice-hit-x);
+  border-radius: 999px;
+  background: var(--accent-soft);
+  border: 1px solid var(--accent);
+  box-shadow: var(--shadow-sm);
+  transition:
+    background-color var(--ease),
+    border-color var(--ease),
+    box-shadow var(--ease);
+}
 
-button.hex-practice:active { transform: none; }
+button.hex-practice:hover::before {
+  /* Emerald steps toward --accent. Ink on #6ee7b7 stays above 4.5:1. */
+  background: #a7f3d0;
+  border-color: var(--accent-ink);
+  box-shadow: var(--shadow);
+}
+
+button.hex-practice:active:not(:disabled) {
+  transform: none;
+}
+
+button.hex-practice:active:not(:disabled)::before {
+  background: #6ee7b7;
+  border-color: var(--accent-ink);
+  box-shadow: var(--shadow-sm);
+}
+
+button.hex-practice:focus-visible {
+  outline: none;
+}
+
+button.hex-practice:focus-visible::before {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
 
 .reset { margin-top: 22px; }
 .reset-row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
@@ -1181,5 +1235,14 @@ button.hex-practice:active { transform: none; }
 @media (forced-colors: active) {
   .hex:has(.hex-open:focus-visible) .hex-svg polygon {
     stroke: Highlight;
+  }
+
+  button.hex-practice {
+    color: ButtonText;
+  }
+
+  button.hex-practice::before {
+    background: ButtonFace;
+    border-color: ButtonText;
   }
 }
