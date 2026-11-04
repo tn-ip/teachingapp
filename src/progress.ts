@@ -9,6 +9,7 @@ import {
   type Choice,
 } from "./bank";
 import { generatedById, generatedQuestions, hasGeneratedPool } from "./drillPools";
+import { practiceDrillEnabled } from "./features";
 import {
   pickFromPool,
   planC11Misses,
@@ -76,6 +77,11 @@ export type Run = {
    * The stem had no skill or Choose mapping, or that mapping could not be filled.
    */
   unmatchedMisses?: string[];
+  /**
+   * "map" when this drill was opened from the hex Practice chip.
+   * Absent on stage runs and on the post-wrong remedial drill.
+   */
+  entry?: "map";
   /** Stable id for one finished attempt, so an account upload can skip duplicates. */
   clientId?: string;
 };
@@ -303,6 +309,7 @@ function normalizeRun(value: unknown): Run | null {
     seenIds: Array.isArray(run.seenIds) ? uniqueStrings(run.seenIds) : undefined,
     repairs: normalizeRepairs(run.repairs),
     unmatchedMisses: Array.isArray(run.unmatchedMisses) ? uniqueStrings(run.unmatchedMisses) : undefined,
+    entry: run.entry === "map" ? "map" : undefined,
     clientId: typeof run.clientId === "string" && run.clientId ? run.clientId : undefined,
   };
 }
@@ -583,6 +590,63 @@ function startGeneratedDrill(progress: Progress, stageId: string): Progress | nu
       marked: false,
       focus,
       seenIds: seen.size >= pool.length ? ids : [...seen],
+      optionOrders: freshOptionOrders(ids),
+    },
+  };
+}
+
+/** Questions in one map Practice, drawn from that stage's generated pool. */
+export const MAP_PRACTICE_SIZE = 3;
+
+/** A drill opened from the hex Practice chip, not from a marked stage miss. */
+export function isMapPracticeRun(
+  run: { entry?: string } | null | undefined,
+): boolean {
+  return run?.entry === "map";
+}
+
+function sampleIds(ids: readonly string[], count: number, random: () => number): string[] {
+  const copy = ids.slice();
+  for (let i = copy.length - 1; i > 0; i -= 1) {
+    const j = Math.floor(random() * (i + 1));
+    const swap = copy[i];
+    copy[i] = copy[j];
+    copy[j] = swap;
+  }
+  return copy.slice(0, Math.min(count, copy.length));
+}
+
+/**
+ * Map Practice for a stage that already shows the Practice label.
+ * Three items, chosen at random from that stage's Weekly Question Generator
+ * pool (the same pool the post-wrong drill draws from). Nothing is written
+ * to `used`, `perfectRuns`, or `cleared`.
+ */
+export function startMapPractice(
+  progress: Progress,
+  stageId: string,
+  random: () => number = Math.random,
+): Progress | null {
+  if (!isStudentStage(stageId) || !practiceDrillEnabled(stageId)) return null;
+  if (!hasGeneratedPool(stageId)) return null;
+  const ids = sampleIds(
+    generatedQuestions(stageId).map((question) => question.id),
+    MAP_PRACTICE_SIZE,
+    random,
+  );
+  if (ids.length === 0) return null;
+  return {
+    ...progress,
+    run: {
+      stage: stageId,
+      mode: "drill",
+      source: "generated",
+      entry: "map",
+      ids,
+      picks: {},
+      index: 0,
+      marked: false,
+      seenIds: ids,
       optionOrders: freshOptionOrders(ids),
     },
   };

@@ -28,9 +28,10 @@ type Props = {
   stages: StageCard[];
   perfectRuns: Record<string, string[]>;
   onOpen: (stageId: string) => void;
+  onPractice: (stageId: string) => void;
 };
 
-export function HoneycombMap({ stages, perfectRuns, onOpen }: Props) {
+export function HoneycombMap({ stages, perfectRuns, onOpen, onPractice }: Props) {
   const frameRef = useRef<HTMLDivElement>(null);
   const [width, setWidth] = useState(0);
 
@@ -89,6 +90,7 @@ export function HoneycombMap({ stages, perfectRuns, onOpen }: Props) {
                   bandLabel={group.label}
                   perfectRuns={perfectRuns}
                   onOpen={onOpen}
+                  onPractice={onPractice}
                 />
               </section>
             );
@@ -104,12 +106,14 @@ function HoneycombCluster({
   bandLabel,
   perfectRuns,
   onOpen,
+  onPractice,
 }: {
   layout: HoneycombLayout;
   stages: StageCard[];
   bandLabel: string;
   perfectRuns: Record<string, string[]>;
   onOpen: (stageId: string) => void;
+  onPractice: (stageId: string) => void;
 }) {
   return (
     <div
@@ -139,29 +143,52 @@ function HoneycombCluster({
                 height: layout.hexH,
               }}
             >
-              <button
-                type="button"
+              <div
                 className={starred || halfway ? "hex has-mark" : "hex"}
                 data-stage={stage.id}
                 data-perfects={perfects}
-                onClick={() => onOpen(stage.id)}
-                aria-label={hexLabel(stage, bandLabel, perfects, practice)}
               >
                 <svg className="hex-svg" viewBox="0 0 100 115.47" aria-hidden="true">
                   <polygon points={HEX_POINTS} />
                 </svg>
+                <button
+                  type="button"
+                  className="hex-open"
+                  onClick={() => onOpen(stage.id)}
+                  aria-label={hexLabel(stage, bandLabel, perfects, practice)}
+                />
                 <span className="hex-body">
-                  <span className="hex-code">{stage.id}</span>
-                  <span className="hex-title">{stage.title}</span>
+                  <span className="hex-code" aria-hidden="true">
+                    {stage.id}
+                  </span>
+                  <span className="hex-title" aria-hidden="true">
+                    {stage.title}
+                  </span>
                   {starred ? (
                     <span className="hex-star" aria-hidden="true">
                       ★
                     </span>
                   ) : null}
-                  {halfway ? <span className="hex-halfway">1/2</span> : null}
-                  {practice ? <span className="hex-practice">Practice</span> : null}
+                  {halfway ? (
+                    <span className="hex-halfway" aria-hidden="true">
+                      1/2
+                    </span>
+                  ) : null}
+                  {practice ? (
+                    <button
+                      type="button"
+                      className="hex-practice"
+                      aria-label={`Practice ${stage.id}`}
+                      onClick={(event) => {
+                        event.stopPropagation();
+                        onPractice(stage.id);
+                      }}
+                    >
+                      Practice
+                    </button>
+                  ) : null}
                 </span>
-              </button>
+              </div>
             </li>
           );
         })}

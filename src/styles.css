@@ -362,26 +362,33 @@ button:active:not(:disabled),
   z-index: 1;
 }
 
-button.hex {
+.hex {
   position: relative;
   display: block;
   width: 100%;
   height: 100%;
   min-height: 48px;
+  color: inherit;
+  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+}
+
+.hex:has(.hex-open:hover) { transform: translateY(-1px); }
+
+.hex:has(.hex-open:active) { transform: scale(0.98); }
+
+button.hex-open {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
   border: 0;
   padding: 0;
   background: transparent;
   color: inherit;
   cursor: pointer;
-  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
 }
 
-button.hex:hover { transform: translateY(-1px); }
-
-button.hex:active:not(:disabled) { transform: scale(0.98); }
-
 /* Rectangular outline would cross neighbouring hexes. The polygon stroke is the focus ring. */
-button.hex:focus-visible { outline: none; }
+button.hex-open:focus-visible { outline: none; }
 
 .hex-svg {
   position: absolute;
@@ -396,7 +403,7 @@ button.hex:focus-visible { outline: none; }
   transition: filter var(--ease);
 }
 
-button.hex:hover .hex-svg {
+.hex:has(.hex-open:hover) .hex-svg {
   filter:
     drop-shadow(0 2px 3px rgba(15, 23, 42, 0.06))
     drop-shadow(0 12px 22px rgba(79, 70, 229, 0.1));
@@ -413,9 +420,9 @@ button.hex:hover .hex-svg {
     stroke-width var(--ease);
 }
 
-button.hex:hover .hex-svg polygon { stroke: #a5b4fc; }
+.hex:has(.hex-open:hover) .hex-svg polygon { stroke: #a5b4fc; }
 
-button.hex:focus-visible .hex-svg polygon {
+.hex:has(.hex-open:focus-visible) .hex-svg polygon {
   stroke: var(--primary);
   stroke-width: 4;
 }
@@ -456,7 +463,7 @@ button.hex:focus-visible .hex-svg polygon {
   overflow-wrap: anywhere;
 }
 
-button.hex.has-mark .hex-title { -webkit-line-clamp: 2; }
+.hex.has-mark .hex-title { -webkit-line-clamp: 2; }
 
 .hex-halfway {
   display: inline-flex;
@@ -483,12 +490,22 @@ button.hex.has-mark .hex-title { -webkit-line-clamp: 2; }
   line-height: 1;
 }
 
-.hex-practice {
+button.hex-practice {
+  position: relative;
+  z-index: 2;
   margin-top: 2px;
+  padding: 1px 6px 2px;
+  border: 0;
+  background: transparent;
   color: var(--accent-ink);
   font-size: 0.68rem;
   font-weight: 700;
+  line-height: 1.2;
+  pointer-events: auto;
+  min-height: 0;
 }
+
+button.hex-practice:hover { color: var(--accent); }
 
 .reset { margin-top: 22px; }
 .reset-row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
@@ -1143,15 +1160,15 @@ button.hex.has-mark .hex-title { -webkit-line-clamp: 2; }
   }
 
   button:active:not(:disabled),
-  button.hex:hover,
-  button.hex:active:not(:disabled),
+  .hex:has(.hex-open:hover),
+  .hex:has(.hex-open:active),
   .solution-source:active {
     transform: none;
   }
 }
 
 @media (forced-colors: active) {
-  button.hex:focus-visible .hex-svg polygon {
+  .hex:has(.hex-open:focus-visible) .hex-svg polygon {
     stroke: Highlight;
   }
 }
