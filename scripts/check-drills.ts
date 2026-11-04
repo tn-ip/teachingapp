@@ -30,10 +30,14 @@ import { generatedById, generatedQuestions, hasGeneratedPool } from "../src/dril
 import { PRACTICE_DRILL_ENABLED, practiceDrillEnabled } from "../src/features.ts";
 import { questionById } from "../src/questions.ts";
 import {
+  MAP_PRACTICE_SIZE,
   grantPerfectRun,
+  isMapPracticeRun,
   j11RemedialOffer,
+  normalizeProgress,
   remedialOffer,
   stageClearedBy,
+  startMapPractice,
   startRun,
   type Progress,
   type Run,
@@ -490,6 +494,71 @@ assert.equal(startRun(empty(), "J1", "drill"), null);
 assert.equal(startRun(empty(), "J7", "drill"), null);
 assert.equal(startRun(empty(), "J2", "drill"), null);
 assert.equal(startRun(empty(), "C11", "drill"), null);
+
+function rng(seed: number): () => number {
+  let state = seed >>> 0;
+  return () => {
+    state = (Math.imul(state, 1664525) + 1013904223) >>> 0;
+    return state / 4294967296;
+  };
+}
+
+assert.equal(MAP_PRACTICE_SIZE, 3);
+const mapKept: Progress = {
+  clearRule: 2,
+  cleared: ["J3"],
+  perfectRuns: { J3: ["once", "twice"] },
+  used: { J11: ["kept-bank-id"] },
+  last: { J11: { correct: 5, total: 5, mode: "stage" } },
+  run: null,
+};
+assert.equal(startMapPractice(mapKept, "J10", rng(1)), null);
+assert.equal(startMapPractice(mapKept, "J4", rng(1)), null);
+assert.equal(startMapPractice(mapKept, "J3", rng(1)), null);
+assert.equal(startMapPractice(mapKept, "C23", rng(1)), null);
+assert.equal(startRun(mapKept, "J11", "drill"), null);
+const mapDraws = new Set<string>();
+for (const stageId of PRACTICE_DRILL_ENABLED.enabledStages) {
+  const poolIds = new Set(generatedQuestions(stageId).map((question) => question.id));
+  for (let seed = 1; seed <= 6; seed += 1) {
+    const next = startMapPractice(mapKept, stageId, rng(seed + stageId.length * 17));
+    assert.ok(next?.run, stageId);
+    assert.equal(next.run.ids.length, MAP_PRACTICE_SIZE, stageId);
+    assert.equal(new Set(next.run.ids).size, MAP_PRACTICE_SIZE, stageId);
+    assert.ok(next.run.ids.every((id) => poolIds.has(id) && id.startsWith(`wqg-${stageId}-`)), stageId);
+    assert.equal(next.run.mode, "drill");
+    assert.equal(next.run.source, "generated");
+    assert.equal(next.run.entry, "map");
+    assert.equal(isMapPracticeRun(next.run), true);
+    assert.equal(next.run.repairs, undefined);
+    assert.equal(next.run.marked, false);
+    assert.deepEqual(next.used, mapKept.used);
+    assert.deepEqual(next.cleared, mapKept.cleared);
+    assert.deepEqual(next.perfectRuns, mapKept.perfectRuns);
+    assert.equal(stageClearedBy(next.run, MAP_PRACTICE_SIZE, MAP_PRACTICE_SIZE, 1), false);
+    const granted = grantPerfectRun(
+      next,
+      { ...next.run, marked: true, clientId: `map-${stageId}-${seed}` },
+      MAP_PRACTICE_SIZE,
+      MAP_PRACTICE_SIZE,
+    );
+    assert.deepEqual(granted.perfectRuns, mapKept.perfectRuns);
+    assert.deepEqual(granted.cleared, mapKept.cleared);
+    if (stageId === "J11") mapDraws.add(next.run.ids.join(","));
+  }
+}
+assert.ok(mapDraws.size > 1);
+const mapRoundTrip = normalizeProgress(JSON.parse(JSON.stringify(startMapPractice(mapKept, "C11", rng(9)))));
+assert.equal(mapRoundTrip.run?.entry, "map");
+assert.equal(mapRoundTrip.run?.ids.length, 3);
+assert.deepEqual(mapRoundTrip.perfectRuns, mapKept.perfectRuns);
+assert.deepEqual(mapRoundTrip.used, mapKept.used);
+assert.equal(
+  normalizeProgress({
+    run: { stage: "J11", mode: "drill", source: "generated", entry: "remedial", ids: ["wqg-J11-001"], picks: {}, index: 0, marked: false },
+  }).run?.entry,
+  undefined,
+);
 
 for (const bankQuestion of questionsFor("J11")) {
   const target = j11MissTarget(bankQuestion.stem);

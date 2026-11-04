@@ -20,6 +20,7 @@ import { questionById } from "./questions";
 import {
   choiceOrder,
   grantPerfectRun,
+  isMapPracticeRun,
   loadProgress,
   paperAnswer,
   perfectCount,
@@ -28,6 +29,7 @@ import {
   scoreRun,
   remedialOffer,
   stageClearedBy,
+  startMapPractice,
   startRun,
   type Progress,
   type Run,
@@ -246,6 +248,7 @@ export function App() {
       run &&
       run.stage === stageId &&
       !run.marked &&
+      !isMapPracticeRun(run) &&
       (practiceDrillEnabled(run.stage) || !isPracticeDrillRun(run));
     if (resumeOpenPaper) {
       setScreen("quiz");
@@ -258,6 +261,16 @@ export function App() {
   function beginDrill() {
     if (!run || !practiceDrillEnabled(run.stage)) return;
     const next = startRun(progress, run.stage, "drill");
+    if (next) update(next, "quiz");
+  }
+
+  function beginMapPractice(stageId: string) {
+    if (!isStudentStage(stageId) || !practiceDrillEnabled(stageId)) return;
+    if (run && run.stage === stageId && !run.marked && isMapPracticeRun(run)) {
+      setScreen("quiz");
+      return;
+    }
+    const next = startMapPractice(progress, stageId);
     if (next) update(next, "quiz");
   }
 
@@ -296,6 +309,7 @@ export function App() {
           teacher={teacher}
           onOpenSchool={() => setScreen("school")}
           onOpen={openStage}
+          onPractice={beginMapPractice}
           onResume={() => setScreen(run?.marked ? "result" : "quiz")}
           confirmReset={confirmReset}
           onAskReset={() => setConfirmReset(true)}
@@ -325,7 +339,10 @@ export function App() {
               ? nextRun
               : { ...nextRun, clientId: crypto.randomUUID() };
             const result = scoreRun(stamped);
-            const withStar = grantPerfectRun(progress, stamped, result.correct, result.total);
+            const mapPractice = isMapPracticeRun(stamped);
+            const withStar = mapPractice
+              ? progress
+              : grantPerfectRun(progress, stamped, result.correct, result.total);
             update(
               {
                 ...withStar,
@@ -341,7 +358,7 @@ export function App() {
                   },
                 },
               },
-              "result",
+              mapPractice ? "map" : "result",
             );
           }}
         />
@@ -369,6 +386,7 @@ function StageMap({
   teacher,
   onOpenSchool,
   onOpen,
+  onPractice,
   onResume,
   confirmReset,
   onAskReset,
@@ -380,6 +398,7 @@ function StageMap({
   teacher: boolean;
   onOpenSchool: () => void;
   onOpen: (stageId: string) => void;
+  onPractice: (stageId: string) => void;
   onResume: () => void;
   confirmReset: boolean;
   onAskReset: () => void;
@@ -430,6 +449,7 @@ function StageMap({
         stages={mapStages}
         perfectRuns={progress.perfectRuns}
         onOpen={onOpen}
+        onPractice={onPractice}
       />
       <p className="note">
         J6 is not in this bank, so it is not on the map. A stage with no tagged
@@ -617,6 +637,7 @@ function Result({
   const halfway = perfect && run.mode === "stage" && run.source !== "generated" && perfects === 1;
   const drillOn = practiceDrillEnabled(run.stage);
   const practice = drillOn && run.source === "generated";
+  const mapPractice = isMapPracticeRun(run);
   const offer = drillOn && run.mode === "stage" ? remedialOffer(run) : null;
   const canPractice = Boolean(offer && offer.mapped > 0 && !perfect);
   const shuffled = Boolean(run.optionOrders && Object.keys(run.optionOrders).length > 0);
@@ -722,7 +743,7 @@ function Result({
           <button type="button" className="primary" onClick={onDrill}>
             Practice the misses (2 each)
           </button>
-        ) : (
+        ) : mapPractice ? null : (
           <button type="button" className="primary" onClick={onRetry}>
             Retry stage
           </button>

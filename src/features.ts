@@ -5,9 +5,10 @@
  *
  * `enabledStages` is the only student-facing switch. J11 Simultaneous
  * equations, J9 Factorization, expansion, J1 Change of subjects, J7
- * Indices, J2 Significant figure, and C11 Variations are on. Every other
- * stage stays hidden: no map badge, no practice button, and no post-wrong
- * drills.
+ * Indices, J2 Significant figure, and C11 Variations are on. The green
+ * Practice label on those hexes is its own tap: three questions drawn from
+ * that stage's pool. Every other stage stays hidden: no map badge, no
+ * practice button, and no post-wrong drills.
  */
 export const PRACTICE_DRILL_ENABLED = {
   enabledStages: ["J11", "J9", "J1", "J7", "J2", "C11"],
