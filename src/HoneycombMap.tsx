@@ -174,20 +174,23 @@ function HoneycombCluster({
                       1/2
                     </span>
                   ) : null}
-                  {practice ? (
-                    <button
-                      type="button"
-                      className="hex-practice"
-                      aria-label={`Practice ${stage.id}`}
-                      onClick={(event) => {
-                        event.stopPropagation();
-                        onPractice(stage.id);
-                      }}
-                    >
-                      Practice
-                    </button>
-                  ) : null}
                 </span>
+                {/* Sibling of .hex-open, not inside .hex-body. That span is
+                    pointer-events: none, and iPad Safari then gives the tap to
+                    the full-hex overlay underneath. */}
+                {practice ? (
+                  <button
+                    type="button"
+                    className="hex-practice"
+                    aria-label={`Practice ${stage.id}`}
+                    onClick={(event) => {
+                      event.stopPropagation();
+                      onPractice(stage.id);
+                    }}
+                  >
+                    Practice
+                  </button>
+                ) : null}
               </div>
             </li>
           );
