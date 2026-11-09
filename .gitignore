@@ -8,3 +8,4 @@ dist
 .vite
 __pycache__/
 *.pyc
+_j18_ref/

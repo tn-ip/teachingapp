@@ -794,6 +794,15 @@ button.hex-practice:focus-visible::before {
   box-shadow: var(--shadow-sm);
 }
 
+.j18figure {
+  display: block;
+  margin: 12px auto;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+}
+
 .choices {
   display: grid;
   gap: 10px;

@@ -6,6 +6,24 @@ export type Choice = "A" | "B" | "C" | "D";
 /** Facility bands from the HKEAA percent who answered correctly. */
 export type Difficulty = "easy" | "medium" | "hard" | "unknown";
 
+/** Growth rule for a J18FIG figure-pattern practice item. */
+export type FigureRule =
+  | { kind: "const"; c: number }
+  | { kind: "n" }
+  | { kind: "lin"; m: number; c: number };
+
+export type FigureFamily = "L" | "tri" | "U";
+
+/** Renderable dot-pattern spec carried on a generated J18FIG practice item. */
+export type FigureSpec = {
+  family: FigureFamily;
+  /** Dots in the 1st pattern. */
+  a: number;
+  rule: FigureRule;
+  /** Number of frames to show (always 3 in the committed pool). */
+  show: number;
+};
+
 export type Question = {
   id: string;
   stage: string;
@@ -29,6 +47,8 @@ export type Question = {
   archetype?: string;
   /** Short marking for a generated practice item. */
   steps?: { mark: string; text: string; note: string }[];
+  /** Dot-pattern to draw for a generated J18FIG practice item. */
+  figureSpec?: FigureSpec;
 };
 
 export type StageInfo = {

@@ -1,4 +1,4 @@
-import type { Choice, Difficulty, Question } from "./bank";
+import type { Choice, Difficulty, FigureSpec, Question } from "./bank";
 import j1 from "./data/drillPools/j1.json";
 import j2 from "./data/drillPools/j2.json";
 import j4 from "./data/drillPools/j4.json";
@@ -51,6 +51,7 @@ type PoolRecord = {
   choices: Record<Choice, string>;
   answer: Choice;
   steps: PoolStep[];
+  figureSpec?: FigureSpec;
 };
 
 const TITLES: Record<string, string> = {
@@ -121,12 +122,13 @@ function toQuestion(stageId: string, record: PoolRecord): Question {
     correctPercent: null,
     facilityPct: null,
     difficulty: difficultyFromBand(record.band),
-    hasFigure: false,
+    hasFigure: record.figureSpec != null,
     figure: null,
     figures: [],
     generated: true,
     archetype: record.tpl,
     steps: record.steps,
+    figureSpec: record.figureSpec,
   };
 }
 

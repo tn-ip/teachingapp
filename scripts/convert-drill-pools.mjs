@@ -6,8 +6,8 @@
  *   node scripts/convert-drill-pools.mjs j2mc_pool.js j18mc_pool.js
  *   node scripts/convert-drill-pools.mjs j4mc_pool.js j16mc_pool.js c2mc_pool.js
  *
- * Pool keys: J1MC, J2MC, J4MC, J7MC, J8, J9MC, J10, J11MC, J16MC, J18MC, J19MC,
- * C2MC, C3MC, C4MC, C11MC, C17MC. The stage is read from the POOLS.<key>
+ * Pool keys: J1MC, J2MC, J4MC, J7MC, J8, J9MC, J10, J11MC, J16MC, J18MC, J18FIG,
+ * J19MC, C2MC, C3MC, C4MC, C11MC, C17MC. The stage is read from the POOLS.<key>
  * declaration. The old four-file order still works when a file does not name a key.
  * `$...$` becomes `\(...\)` for MathView. A `\$` inside those delimiters stays a
  * literal dollar. A lone `$` before a number (a price in prose) is left as text.
@@ -35,6 +35,7 @@ const KEY_TO_STAGE = {
   J11MC: "J11",
   J16MC: "J16",
   J18MC: "J18",
+  J18FIG: "J18",
   J19MC: "J19",
   C2MC: "C2",
   C3MC: "C3",
@@ -182,7 +183,8 @@ function convert(raw, stage, index) {
     band = raw.band;
   }
   const item = { id, tpl, stem, choices, answer, steps };
-  if (band) return { id, tpl, band, stem, choices, answer, steps };
+  if (band) item.band = band;
+  if (raw.figureSpec != null) item.figureSpec = raw.figureSpec;
   return item;
 }
 
