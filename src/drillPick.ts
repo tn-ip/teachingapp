@@ -3,10 +3,10 @@
  *
  * Archetypes are the pool `tpl` values (J10 map scale is M1–M3; ratio and rate are R1–R3).
  * A miss maps onto those tags only when the stem is a clear example of that pattern.
- * Anything else is left untagged. For stages other than J1, J2, J7, J9, J11, and C11,
- * an untagged miss still shuffles the whole pool. J1, J2, J7, J9, J11, and C11 do not:
- * each wrong bank question draws exactly two items of its own tag, or a
- * Choose bucket, or nothing.
+ * Anything else is left untagged. For stages other than J1, J2, J4, J7, J9,
+ * J11, J18, and C11, an untagged miss still shuffles the whole pool. J1, J2,
+ * J4, J7, J9, J11, J18, and C11 do not: each wrong bank question draws exactly
+ * two items of its own tag, or a Choose bucket, or nothing.
  *
  * Anti-adjacent is the stronger rule for that five-item draw: the next item
  * is a different tpl whenever another one is still available. One matched tag
@@ -14,8 +14,8 @@
  * different tags. Generator bands break the remaining ties. An unmatched
  * drill takes Easy archetypes before Medium and Hard. A filler is the easiest
  * different archetype still available. J7–J9 items have no band, so this
- * tie-break does not change those draws. The J1, J2, J7, J9, J11, and C11 remedial
- * pairs do not use that five-item draw.
+ * tie-break does not change those draws. The J1, J2, J4, J7, J9, J11, J18, and
+ * C11 remedial pairs do not use that five-item draw.
  *
  * J7 Indices
  * - I6 reciprocal of a power, times another power: (1/9^555)·3^444
@@ -165,7 +165,30 @@
  * invented for them. Teaching App will ask DSE Math Check + Weekly Question
  * Generator for unmatched stems.
  *
- * J4 Percentage, J16 Statistics, J19 S3 Probability, C2 Quadratic equations (II),
+ * J4 Percentage
+ * - P1 two sales at the same selling price: gain r% & lose r% → net
+ * - P2 successive % change on one price (increased then decreased), or a
+ *   length × width → area change
+ * - P3 compound interest (amount or interest, correct to the nearest dollar)
+ * - P4 population / composition percentages (school, company, subgroups)
+ * - P5 cost / marked price / discount / profit $, or a buy→resell profit chain
+ * - P6 relative salaries only
+ * A mapped miss then takes exactly two pool items of the primary tpl (a
+ * different stem in the pair). A soft dual stays on the pedigree. The drill
+ * uses one tag, in this order: equal-SP two sales prefers P1, deposit /
+ * compounded / interest prefers P3, successive % or length × width area
+ * prefers P2, marked / discount / cost / profit or buy→resell prefers P5,
+ * and relative salaries prefers P6. Population / subgroup % is P4 alone.
+ * With no P tag, a WQG Choose bucket may still apply: TR (cost / profit /
+ * salary / equal-SP) → P1|P5|P6, CM (compound interest) → P3, SC (successive
+ * % / composition) → P2|P4. TR is the easier bucket when a stem could sit in
+ * more than one, then CM, then SC. Easy before Medium before Hard inside the
+ * bucket. A stem that matches none of those is left unmatched. Those two
+ * slots are skipped. They are not filled from the rest of the pool, and no
+ * new P tag is invented for them. Teaching App will ask DSE Math Check +
+ * Weekly Question Generator for unmatched stems.
+ *
+ * J16 Statistics, J19 S3 Probability, C2 Quadratic equations (II),
  * C3 Functions and Graphs, C4 Polynomials, and C17 Inequalities
  * - no tag. A miss warms up the whole pool Easy, then Medium, then Hard,
  *   the same way an unmapped stage drill does.
@@ -187,6 +210,7 @@ export type PoolItem = {
 export function skillsForStem(stageId: string, stem: string): string[] {
   if (stageId === "J1") return skillsJ1(stem);
   if (stageId === "J2") return skillsJ2(stem);
+  if (stageId === "J4") return skillsJ4(stem);
   if (stageId === "J7") return skillsJ7(stem);
   if (stageId === "J8") return skillsJ8(stem);
   if (stageId === "J9") return skillsJ9(stem);
@@ -1261,6 +1285,141 @@ function c11VlFamily(stem: string, prose: string): string[] {
   if (/\bwhen\b/.test(prose)) tags.push("V1");
   if (tags.length === 0) return ["V1", "V3", "V5"];
   return [c11PrimaryTag(tags)];
+}
+
+const J4_SKILLS = ["P1", "P2", "P3", "P4", "P5", "P6"] as const;
+
+/**
+ * Primary when a J4 stem carries more than one P tag.
+ * P1 equal-SP two sales, P3 deposit / compounded / interest, P2 successive %
+ * or length × width area, P5 cost / marked / discount / profit / buy→resell,
+ * P6 relative salaries, P4 population / subgroup %. This order matches the
+ * soft-dual table: P1 beats P2 and P5, P3 beats P2, P5 beats P6, and P4 is
+ * its own bucket.
+ */
+const J4_PRIMARY = ["P1", "P3", "P2", "P5", "P6", "P4"] as const;
+
+/**
+ * P tags for one J4 bank stem.
+ * A `skillsForStem` hit drills the primary tpl. A soft dual keeps the other
+ * tag on the pedigree. With no P tag, a WQG Choose bucket may still apply:
+ * TR → P1|P5|P6, CM → P3, SC → P2|P4. TR is the easier bucket, then CM, then
+ * SC. Easy before Medium before Hard inside the bucket.
+ * A stem that matches none of those returns null.
+ * Teaching App will ask DSE Math Check + Weekly Question Generator for
+ * unmatched stems. Do not invent a new P tag for them.
+ */
+export function j4MissTarget(stem: string): MissTarget | null {
+  const skills = skillsForStem("J4", stem).filter((tpl) =>
+    (J4_SKILLS as readonly string[]).includes(tpl),
+  );
+  if (skills.length > 0) return { tpls: [j4PrimaryTag(skills)], via: "skill" };
+  const bucket = j4ChooseBucket(stem);
+  if (!bucket) return null;
+  return { tpls: bucket, via: "bucket" };
+}
+
+function j4PrimaryTag(skills: readonly string[]): string {
+  for (const tag of J4_PRIMARY) {
+    if (skills.includes(tag)) return tag;
+  }
+  return skills[0];
+}
+
+/** J4 remedial pairs. See {@link planMappedMisses}. */
+export function planJ4Misses<T extends PoolItem>(
+  misses: readonly PlannedMiss[],
+  pool: readonly T[],
+  random: () => number = Math.random,
+): MissPlan {
+  return planMappedMisses(misses, pool, j4MissTarget, random);
+}
+
+function j4Prose(stem: string): string {
+  return stem.toLowerCase().replace(/\s+/g, " ");
+}
+
+function j4HasPercent(prose: string): boolean {
+  return /%|％|per\s*cent/.test(prose);
+}
+
+/** Two sales at one selling price, one at a gain and one at a loss. */
+function j4EqualSp(prose: string): boolean {
+  return (
+    /\b(?:sold|sells)\s+two\b/.test(prose) &&
+    /\beach\b/.test(prose) &&
+    /\b(?:gain|gains|gained)\b/.test(prose) &&
+    /\b(?:los|loss|lose|loses|lost)\b/.test(prose)
+  );
+}
+
+/** A deposit, a compounding, or an interest-rate stem. */
+function j4Deposit(prose: string): boolean {
+  return /\b(?:deposit|deposited|compound|compounded|interest\s+rate)\b/.test(prose);
+}
+
+/** Successive percentage change on one price (increased then decreased). */
+function j4Successive(prose: string): boolean {
+  return /\bthen\b/.test(prose) && /\b(?:increased|decreased)\b/.test(prose) && j4HasPercent(prose);
+}
+
+/** Length × width → area. */
+function j4Area(prose: string): boolean {
+  return /\brectangle\b/.test(prose) || (/\blength\b/.test(prose) && /\bwidth\b/.test(prose));
+}
+
+/** Cost, marked price, discount, profit, or a buy→resell chain. */
+function j4Profit(prose: string): boolean {
+  return /\b(?:cost|marked\s+price|discount|profit|selling\s+price|buys)\b/.test(prose);
+}
+
+/** Relative salaries. */
+function j4Salary(prose: string): boolean {
+  return /\bsalar(?:y|ies)\b/.test(prose);
+}
+
+/** Population / subgroup percentages. */
+function j4Composition(prose: string): boolean {
+  return /\b(?:students|employees|female|male|girls|boys|children|people)\b/.test(prose);
+}
+
+/**
+ * P tags a J4 stem actually shows. Every hit stays on the pedigree.
+ * j4PrimaryTag picks the drill.
+ */
+function skillsJ4(stem: string): string[] {
+  const prose = j4Prose(stem);
+  const tags: string[] = [];
+  if (j4EqualSp(prose)) tags.push("P1");
+  if (j4Deposit(prose)) tags.push("P3");
+  if (j4Successive(prose) || j4Area(prose)) tags.push("P2");
+  if (j4Profit(prose)) tags.push("P5");
+  if (j4Salary(prose)) tags.push("P6");
+  if (j4Composition(prose)) tags.push("P4");
+  return tags;
+}
+
+/**
+ * TR is cost / profit / salary / equal-SP the skill missed. CM is compound
+ * interest the skill missed. SC is successive % / composition the skill
+ * missed. TR is the easier bucket, then CM, then SC.
+ */
+function j4ChooseBucket(stem: string): string[] | null {
+  const prose = j4Prose(stem);
+  if (
+    /price|profit|salary|cost|gain|loss|sold|sells|buys|marked|discount/.test(prose)
+  ) {
+    return ["P1", "P5", "P6"];
+  }
+  if (/interest|deposit|compound/.test(prose)) return ["P3"];
+  if (
+    /increase|decrease|successive|area|length|width|population|school|company|students|employees|female|male|girls|boys/.test(
+      prose,
+    )
+  ) {
+    return ["P2", "P4"];
+  }
+  return null;
 }
 
 /**
