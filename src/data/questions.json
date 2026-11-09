@@ -6183,7 +6183,7 @@
       "answer": "C",
       "correctPercent": null,
       "facilityPct": null,
-      "difficulty": "unknown",
+      "difficulty": "medium",
       "hasFigure": false,
       "figure": null,
       "figures": []
@@ -6383,7 +6383,7 @@
       "year": "2021",
       "paper": "2",
       "sourceTag": "[HKDSE 21-P2-Q13]",
-      "stem": "In the figure, the 1st pattern consists of 3 dots. For any positive integer \\(n\\), the\n(n + 1)th pattern is formed by adding (2n + 3) dots to the \\(n\\)th pattern. Find the number of dots in the 8th pattern.\n…",
+      "stem": "In the figure, the 1st pattern consists of 3 dots. For any positive integer \\(n\\), the\n(n + 1)th pattern is formed by adding (2n + 3) dots to the \\(n\\)th pattern. Find the number of dots in the 8th pattern.\n![](figures/j18-2021-q13-1.png)",
       "choices": {
         "A": "63",
         "B": "75",
@@ -6394,9 +6394,11 @@
       "correctPercent": 83,
       "facilityPct": 83,
       "difficulty": "easy",
-      "hasFigure": false,
-      "figure": null,
-      "figures": []
+      "hasFigure": true,
+      "figure": "figures/j18-2021-q13-1.png",
+      "figures": [
+        "figures/j18-2021-q13-1.png"
+      ]
     },
     {
       "id": "J18-2022-q14",

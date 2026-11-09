@@ -110,11 +110,24 @@ export function isStudentStage(stageId: string): boolean {
 }
 export const questions: Question[] = bank.questions.map((question) => {
   const facilityPct = question.facilityPct ?? question.correctPercent ?? null;
+  // Items with a facility % always derive difficulty from the percentage.
+  // Null-facility items (Sample/Practice Paper) may carry an explicit band;
+  // honor it when present, otherwise stay unknown.
+  const explicitBand =
+    question.difficulty === "easy" ||
+    question.difficulty === "medium" ||
+    question.difficulty === "hard";
+  const difficulty =
+    facilityPct == null
+      ? explicitBand
+        ? question.difficulty
+        : "unknown"
+      : difficultyOf(facilityPct);
   return {
     ...question,
     facilityPct,
     correctPercent: facilityPct,
-    difficulty: difficultyOf(facilityPct),
+    difficulty,
   };
 });
 
