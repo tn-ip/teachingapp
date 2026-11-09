@@ -14,6 +14,7 @@ import {
   j1MissTarget,
   j18MissTarget,
   j2MissTarget,
+  j4MissTarget,
   j7MissTarget,
   j9MissTarget,
   j11MissTarget,
@@ -23,6 +24,7 @@ import {
   planJ1Misses,
   planJ18Misses,
   planJ2Misses,
+  planJ4Misses,
   planJ7Misses,
   planJ9Misses,
   planJ11Misses,
@@ -71,6 +73,24 @@ const EXPECTED: Record<string, string[]> = {
   "J2-2023-q7": ["RS5"],
   "J2-2024-q4": ["RS3"],
   "J2-2025-q6": ["RS5"],
+  "J4-sample-q10": ["P1"],
+  "J4-sample-q12": ["P2"],
+  "J4-practice-q10": ["P5"],
+  "J4-2012-q8": ["P4"],
+  "J4-2013-q10": ["P1"],
+  "J4-2013-q11": ["P3"],
+  "J4-2015-q9": ["P2"],
+  "J4-2015-q10": ["P3"],
+  "J4-2016-q10": ["P6"],
+  "J4-2017-q10": ["P3"],
+  "J4-2018-q9": ["P3"],
+  "J4-2019-q11": ["P3"],
+  "J4-2020-q9": ["P5"],
+  "J4-2021-q9": ["P4"],
+  "J4-2022-q11": ["P3"],
+  "J4-2023-q11": ["P5"],
+  "J4-2024-q11": ["P4"],
+  "J4-2025-q10": ["P3"],
   "J7-sample-q1": ["I1"],
   "J7-practice-q1": [],
   "J7-2012-q1": ["I2"],
@@ -185,7 +205,7 @@ const DRILL_STAGES = [
   "C17",
 ];
 const UNBANDED = new Set(["J7", "J8", "J9"]);
-const SKILL_STAGES = new Set(["J1", "J2", "J7", "J8", "J9", "J10", "J11", "C11"]);
+const SKILL_STAGES = new Set(["J1", "J2", "J4", "J7", "J8", "J9", "J10", "J11", "C11"]);
 const UNIQUE_STEMS: Record<string, number> = { C2: 286, C3: 299, J18: 265 };
 const ARCHETYPE: Record<string, RegExp> = {
   J1: /^CS[1-8]$/,
@@ -481,7 +501,7 @@ function wrongRun(stageId: string, questions: { id: string; answer: string }[]):
   };
 }
 
-assert.deepEqual([...PRACTICE_DRILL_ENABLED.enabledStages], ["J11", "J9", "J1", "J7", "J2", "J18", "C11"]);
+assert.deepEqual([...PRACTICE_DRILL_ENABLED.enabledStages], ["J11", "J9", "J1", "J7", "J2", "J18", "C11", "J4"]);
 for (const stage of stages) {
   assert.equal(
     practiceDrillEnabled(stage.id),
@@ -491,7 +511,8 @@ for (const stage of stages) {
       stage.id === "J7" ||
       stage.id === "J2" ||
       stage.id === "J18" ||
-      stage.id === "C11",
+      stage.id === "C11" ||
+      stage.id === "J4",
     stage.id,
   );
 }
@@ -503,6 +524,7 @@ assert.equal(startRun(empty(), "J9", "drill"), null);
 assert.equal(startRun(empty(), "J1", "drill"), null);
 assert.equal(startRun(empty(), "J7", "drill"), null);
 assert.equal(startRun(empty(), "J2", "drill"), null);
+assert.equal(startRun(empty(), "J4", "drill"), null);
 assert.equal(startRun(empty(), "J18", "drill"), null);
 assert.equal(startRun(empty(), "C11", "drill"), null);
 
@@ -524,7 +546,7 @@ const mapKept: Progress = {
   run: null,
 };
 assert.equal(startMapPractice(mapKept, "J10", rng(1)), null);
-assert.equal(startMapPractice(mapKept, "J4", rng(1)), null);
+assert.ok(startMapPractice(mapKept, "J4", rng(1))?.run);
 assert.equal(startMapPractice(mapKept, "J3", rng(1)), null);
 assert.equal(startMapPractice(mapKept, "C23", rng(1)), null);
 assert.equal(startRun(mapKept, "J11", "drill"), null);
@@ -1816,6 +1838,234 @@ assert.ok(onlyC11Second.run.ids.every((id) => generatedById(id)?.archetype === "
 assert.deepEqual(onlyC11Second.used, c11OneWrong.used);
 assert.deepEqual(onlyC11Second.cleared, ["J3"]);
 assert.equal(stageClearedBy(onlyC11Second.run, 2, 2), false);
+
+// ── J4 Percentage (P1–P6) ──────────────────────────────────────────────
+const J4_PRIMARY: Record<string, string> = {
+  "J4-sample-q10": "P1",
+  "J4-sample-q12": "P2",
+  "J4-practice-q10": "P5",
+  "J4-2012-q8": "P4",
+  "J4-2013-q10": "P1",
+  "J4-2013-q11": "P3",
+  "J4-2015-q9": "P2",
+  "J4-2015-q10": "P3",
+  "J4-2016-q10": "P6",
+  "J4-2017-q10": "P3",
+  "J4-2018-q9": "P3",
+  "J4-2019-q11": "P3",
+  "J4-2020-q9": "P5",
+  "J4-2021-q9": "P4",
+  "J4-2022-q11": "P3",
+  "J4-2023-q11": "P5",
+  "J4-2024-q11": "P4",
+  "J4-2025-q10": "P3",
+};
+const j4Bank = questionsFor("J4");
+assert.equal(j4Bank.length, 18);
+assert.deepEqual(
+  j4Bank.map((question) => question.id),
+  Object.keys(J4_PRIMARY),
+);
+for (const bankQuestion of j4Bank) {
+  const target = j4MissTarget(bankQuestion.stem);
+  assert.ok(target, bankQuestion.id);
+  assert.equal(target.via, "skill", bankQuestion.id);
+  assert.deepEqual(target.tpls, [J4_PRIMARY[bankQuestion.id]], bankQuestion.id);
+  assert.deepEqual(skillsForStem("J4", bankQuestion.stem), EXPECTED[bankQuestion.id], bankQuestion.id);
+}
+const j4Pool = generatedQuestions("J4").map((question) => ({
+  id: question.id,
+  tpl: question.archetype ?? "",
+  stem: question.stem,
+  difficulty: question.difficulty,
+}));
+const j4AllPlan = planJ4Misses(
+  j4Bank.map((question, index) => ({
+    bankId: question.id,
+    paperNumber: index + 1,
+    stem: question.stem,
+  })),
+  j4Pool,
+  () => 0,
+);
+assert.deepEqual(j4AllPlan.unmatched, []);
+assert.equal(j4AllPlan.repairs.length, 18);
+assert.deepEqual(j4AllPlan.focus, ["P1", "P2", "P5", "P4", "P3", "P6"]);
+for (const repair of j4AllPlan.repairs) {
+  assert.equal(repair.ids.length, 2, repair.bankId);
+  assert.ok(
+    repair.ids.every((id) => generatedById(id)?.archetype === J4_PRIMARY[repair.bankId]),
+    repair.bankId,
+  );
+  assert.equal(new Set(repair.ids.map((id) => generatedById(id)?.stem)).size, 2, repair.bankId);
+}
+
+// Soft duals (one drill tag; the other reading stays on the pedigree).
+const j4EqualSpProfit =
+  "Mary sold two bags for $240 each. She gained 20% on one and lost 20% on the other. Find the total profit.";
+assert.deepEqual(skillsForStem("J4", j4EqualSpProfit), ["P1", "P5"]);
+assert.deepEqual(j4MissTarget(j4EqualSpProfit), { tpls: ["P1"], via: "skill" });
+const j4DepositSuccessive =
+  "A sum of money is deposited and compounded. It is increased by 10% and then decreased by 10%.";
+assert.deepEqual(skillsForStem("J4", j4DepositSuccessive), ["P3", "P2"]);
+assert.deepEqual(j4MissTarget(j4DepositSuccessive), { tpls: ["P3"], via: "skill" });
+const j4ProfitSalary =
+  "The cost of the toy is lower than its selling price and the monthly salary is 20% higher.";
+assert.deepEqual(skillsForStem("J4", j4ProfitSalary), ["P5", "P6"]);
+assert.deepEqual(j4MissTarget(j4ProfitSalary), { tpls: ["P5"], via: "skill" });
+
+const j4PriceStem = "The shop changes its prices by 10 percent.";
+assert.deepEqual(skillsForStem("J4", j4PriceStem), []);
+assert.deepEqual(j4MissTarget(j4PriceStem), { tpls: ["P1", "P5", "P6"], via: "bucket" });
+const j4InterestStem = "The bank pays interest each year.";
+assert.deepEqual(skillsForStem("J4", j4InterestStem), []);
+assert.deepEqual(j4MissTarget(j4InterestStem), { tpls: ["P3"], via: "bucket" });
+const j4PopulationStem = "The population of the town increases each year.";
+assert.deepEqual(skillsForStem("J4", j4PopulationStem), []);
+assert.deepEqual(j4MissTarget(j4PopulationStem), { tpls: ["P2", "P4"], via: "bucket" });
+const j4PriceIncrease = "The price increases by 10%.";
+assert.deepEqual(skillsForStem("J4", j4PriceIncrease), []);
+assert.deepEqual(j4MissTarget(j4PriceIncrease), { tpls: ["P1", "P5", "P6"], via: "bucket" });
+assert.equal(j4MissTarget("Which figure is correct?"), null);
+
+const trPlan = planJ4Misses(
+  [{ bankId: "tr", paperNumber: 1, stem: j4PriceStem }],
+  [
+    { id: "h", tpl: "P6", stem: "h", difficulty: "hard" },
+    { id: "m", tpl: "P5", stem: "m", difficulty: "medium" },
+    { id: "e", tpl: "P1", stem: "e", difficulty: "easy" },
+  ],
+  () => 0,
+);
+assert.deepEqual(trPlan.focus, ["P1", "P5", "P6"]);
+assert.deepEqual(trPlan.repairs[0].ids, ["e", "m"]);
+const cmPlan = planJ4Misses(
+  [{ bankId: "cm", paperNumber: 1, stem: j4InterestStem }],
+  [
+    { id: "h", tpl: "P3", stem: "h", difficulty: "hard" },
+    { id: "m", tpl: "P3", stem: "m", difficulty: "medium" },
+    { id: "e", tpl: "P3", stem: "e", difficulty: "easy" },
+  ],
+  () => 0,
+);
+assert.deepEqual(cmPlan.focus, ["P3"]);
+assert.deepEqual(cmPlan.repairs[0].ids, ["e", "m"]);
+const scPlan = planJ4Misses(
+  [{ bankId: "sc", paperNumber: 1, stem: j4PopulationStem }],
+  [
+    { id: "h", tpl: "P4", stem: "h", difficulty: "hard" },
+    { id: "m", tpl: "P2", stem: "m", difficulty: "medium" },
+    { id: "e", tpl: "P2", stem: "e", difficulty: "easy" },
+  ],
+  () => 0,
+);
+assert.deepEqual(scPlan.focus, ["P2", "P4"]);
+assert.deepEqual(scPlan.repairs[0].ids, ["e", "m"]);
+const j4MixedPlan = planJ4Misses(
+  [
+    { bankId: "J4-2013-q10", paperNumber: 1, stem: bankQuestionById("J4-2013-q10")?.stem ?? "" },
+    { bankId: "mystery", paperNumber: 4, stem: "Which figure is correct?" },
+  ],
+  j4Pool,
+);
+assert.equal(j4MixedPlan.repairs.length, 1);
+assert.deepEqual(
+  j4MixedPlan.repairs[0].ids.map((id) => generatedById(id)?.archetype),
+  ["P1", "P1"],
+);
+assert.deepEqual(j4MixedPlan.unmatched, [{ bankId: "mystery", paperNumber: 4 }]);
+assert.deepEqual(
+  planJ4Misses([{ bankId: "mystery", paperNumber: 4, stem: "Which figure is correct?" }], j4Pool),
+  { repairs: [], unmatched: [{ bankId: "mystery", paperNumber: 4 }], focus: [] },
+);
+const j4NoTopUp = planJ4Misses(
+  [{ bankId: "m", paperNumber: 1, stem: bankQuestionById("J4-2016-q10")?.stem ?? "" }],
+  [
+    { id: "a", tpl: "P6", stem: "a", difficulty: "medium" },
+    { id: "b", tpl: "P1", stem: "b", difficulty: "easy" },
+    { id: "c", tpl: "P4", stem: "c", difficulty: "hard" },
+  ],
+);
+assert.deepEqual(j4NoTopUp.repairs, []);
+assert.deepEqual(j4NoTopUp.unmatched, [{ bankId: "m", paperNumber: 1 }]);
+
+const allWrongJ4 = startRun(wrongRun("J4", j4Bank), "J4", "drill");
+assert.ok(allWrongJ4?.run);
+assert.equal(allWrongJ4.run.ids.length, 36);
+assert.equal(allWrongJ4.run.repairs?.length, 18);
+assert.deepEqual(allWrongJ4.run.unmatchedMisses, []);
+assert.deepEqual(allWrongJ4.run.focus, ["P1", "P2", "P5", "P4", "P3", "P6"]);
+assert.equal(new Set(allWrongJ4.run.ids).size, 36);
+assert.equal(new Set(allWrongJ4.run.ids.map((id) => generatedById(id)?.stem)).size, 36);
+for (const repair of allWrongJ4.run.repairs ?? []) {
+  assert.ok(repair.ids.every((id) => generatedById(id)?.archetype === J4_PRIMARY[repair.bankId]));
+}
+assert.deepEqual(allWrongJ4.used, { J4: ["kept-bank-id"] });
+assert.deepEqual(allWrongJ4.cleared, ["J3"]);
+assert.equal(stageClearedBy(allWrongJ4.run, 36, 36), false);
+assert.equal(grantPerfectRun(allWrongJ4, allWrongJ4.run, 36, 36), allWrongJ4);
+assert.equal(startRun(allWrongJ4, "J4", "drill"), null);
+assert.deepEqual(remedialOffer(wrongRun("J4", j4Bank).run ?? null), {
+  mapped: 18,
+  unmappedBankIds: [],
+});
+
+const p1q = bankQuestionById("J4-2013-q10");
+const p3q = bankQuestionById("J4-2013-q11");
+assert.ok(p1q && p3q);
+const pairedJ4 = startRun(wrongRun("J4", [p1q, p3q]), "J4", "drill");
+assert.ok(pairedJ4?.run);
+assert.deepEqual(
+  pairedJ4.run.ids.map((id) => generatedById(id)?.archetype),
+  ["P1", "P1", "P3", "P3"],
+);
+assert.equal(new Set(pairedJ4.run.ids).size, 4);
+assert.deepEqual(pairedJ4.used, { J4: ["kept-bank-id"] });
+assert.deepEqual(pairedJ4.cleared, ["J3"]);
+assert.equal(stageClearedBy(pairedJ4.run, 4, 4), false);
+const perfectJ4: Progress = {
+  cleared: ["J3"],
+  used: { J4: ["kept-bank-id"] },
+  last: {},
+  run: {
+    stage: "J4",
+    mode: "stage",
+    ids: [p1q.id, p3q.id],
+    picks: {
+      [p1q.id]: p1q.answer,
+      [p3q.id]: p3q.answer,
+    },
+    index: 1,
+    marked: true,
+  },
+};
+assert.equal(startRun(perfectJ4, "J4", "drill"), null);
+assert.deepEqual(remedialOffer(perfectJ4.run), { mapped: 0, unmappedBankIds: [] });
+const j4OneWrong: Progress = {
+  cleared: ["J3"],
+  used: { J4: ["kept-bank-id"] },
+  last: {},
+  run: {
+    stage: "J4",
+    mode: "stage",
+    ids: [p1q.id, p3q.id],
+    picks: {
+      [p1q.id]: p1q.answer,
+      [p3q.id]: wrongLetter(p3q.answer),
+    },
+    index: 1,
+    marked: true,
+  },
+};
+const onlyJ4Second = startRun(j4OneWrong, "J4", "drill");
+assert.ok(onlyJ4Second?.run);
+assert.equal(onlyJ4Second.run.ids.length, 2);
+assert.equal(onlyJ4Second.run.repairs?.[0].bankId, p3q.id);
+assert.equal(onlyJ4Second.run.repairs?.[0].paperNumber, 2);
+assert.ok(onlyJ4Second.run.ids.every((id) => generatedById(id)?.archetype === "P3"));
+assert.deepEqual(onlyJ4Second.used, j4OneWrong.used);
+assert.deepEqual(onlyJ4Second.cleared, ["J3"]);
+assert.equal(stageClearedBy(onlyJ4Second.run, 2, 2), false);
 
 // ── J18 figure patterns (DP / DV, SQ unmatched) ───────────────────────
 const J18_TARGET: Record<string, string> = {
