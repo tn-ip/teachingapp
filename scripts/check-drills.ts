@@ -1860,6 +1860,21 @@ const dvQ = bankQuestionById("J18-2012-q12");
 const sqQ = bankQuestionById("J18-2014-q14");
 assert.ok(dpQ && dvQ && sqQ);
 
+// Sample Paper has no facility %, but J18-sample-q11 is tagged Medium explicitly.
+const j18Sample11 = bankQuestionById("J18-sample-q11");
+assert.ok(j18Sample11);
+assert.equal(j18Sample11.facilityPct, null);
+assert.equal(j18Sample11.correctPercent, null);
+assert.equal(j18Sample11.difficulty, "medium");
+
+// J18-2021-q13 carries the on-white figure wired the same way as its siblings.
+const j18Fig13 = bankQuestionById("J18-2021-q13");
+assert.ok(j18Fig13);
+assert.equal(j18Fig13.hasFigure, true);
+assert.equal(j18Fig13.figure, "figures/j18-2021-q13-1.png");
+assert.deepEqual(j18Fig13.figures, ["figures/j18-2021-q13-1.png"]);
+assert.match(j18Fig13.stem, /!\[\]\(figures\/j18-2021-q13-1\.png\)/);
+
 const dpPlan = planJ18Misses([{ bankId: dpQ.id, paperNumber: 1, stem: dpQ.stem }], j18Pool, () => 0);
 assert.equal(dpPlan.repairs.length, 1);
 assert.equal(dpPlan.repairs[0].ids.length, 2);
