@@ -117,9 +117,15 @@
  * for unmatched stems.
  *
  * J18 Sequences
- * - no tag. J18 items are SQ1–SQ8. Bank stems are not mapped onto those
- *   tags, so a miss warms up the whole pool Easy, then Medium, then Hard,
- *   the same way an unmapped stage drill does.
+ * - DP a figure pattern that adds a plain integer of dots each step
+ *   ("adding N dots" with N a constant).
+ * - DV a figure pattern that adds an expression in n dots each step
+ *   ("adding n / 2n / 2n + c dots").
+ * - SQ stems (a_n sequence, no figure pattern) are left unmatched: there is
+ *   no SQ remirror, so their two slots are skipped.
+ * A mapped miss takes exactly two pool items of that tpl (DP or DV). A SQ
+ * miss is skipped. Teaching App will ask DSE Math Check + Weekly Question
+ * Generator for unmatched stems.
  *
  * J11 Simultaneous equations
  * - SE7 a journey at two speeds
@@ -1088,6 +1094,33 @@ export function planJ2Misses<T extends PoolItem>(
   random: () => number = Math.random,
 ): MissPlan {
   return planMappedMisses(misses, pool, j2MissTarget, random);
+}
+
+/**
+ * J18 figure-pattern miss target. DP is a constant add ("adding N dots"),
+ * DV is an add expressed in n ("adding n / 2n / 2n + c dots"). A stem that
+ * does not name a figure pattern (a SQ sequence) returns null and is skipped;
+ * no SQ remirror is invented.
+ */
+export function j18MissTarget(stem: string): MissTarget | null {
+  const add = /adding\s+([^.]*?)\s*dots/i.exec(stem);
+  if (!add) return null;
+  const expr = add[1]
+    .replace(/\\\(|\\\)/g, "")
+    .replace(/[{}]/g, "")
+    .replace(/\s+/g, "");
+  if (/^\d+$/.test(expr)) return { tpls: ["DP"], via: "skill" };
+  if (/n/.test(expr)) return { tpls: ["DV"], via: "skill" };
+  return null;
+}
+
+/** J18 remedial pairs. See {@link planMappedMisses}. */
+export function planJ18Misses<T extends PoolItem>(
+  misses: readonly PlannedMiss[],
+  pool: readonly T[],
+  random: () => number = Math.random,
+): MissPlan {
+  return planMappedMisses(misses, pool, j18MissTarget, random);
 }
 
 const C11_SKILLS = ["V1", "V2", "V3", "V4", "V5"] as const;

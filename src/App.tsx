@@ -15,6 +15,7 @@ import {
 import { HoneycombMap } from "./HoneycombMap";
 import { isPracticeDrillRun, practiceDrillEnabled } from "./features";
 import { AccountBar } from "./AccountBar";
+import { J18Figure } from "./J18Figure";
 import { MathView } from "./MathView";
 import { questionById } from "./questions";
 import {
@@ -559,6 +560,7 @@ function Quiz({
             <span>{question.sourceTag}</span>
           </p>
         )}
+        {question.figureSpec ? <J18Figure spec={question.figureSpec} /> : null}
         <MathView text={question.stem} />
       </article>
       <div className="choices" role="listbox" aria-label="Choices">
@@ -713,6 +715,7 @@ function Result({
                   </span>
                 )}
               </header>
+              {question.figureSpec ? <J18Figure spec={question.figureSpec} /> : null}
               <MathView text={question.stem} />
               <p className="verdict">
                 Your answer {picked ?? "—"} · key {key}

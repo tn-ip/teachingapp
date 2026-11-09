@@ -12,6 +12,7 @@ import {
   DRILLS_PER_MISS,
   c11MissTarget,
   j1MissTarget,
+  j18MissTarget,
   j2MissTarget,
   j7MissTarget,
   j9MissTarget,
@@ -20,6 +21,7 @@ import {
   pickMapped,
   planC11Misses,
   planJ1Misses,
+  planJ18Misses,
   planJ2Misses,
   planJ7Misses,
   planJ9Misses,
@@ -184,7 +186,7 @@ const DRILL_STAGES = [
 ];
 const UNBANDED = new Set(["J7", "J8", "J9"]);
 const SKILL_STAGES = new Set(["J1", "J2", "J7", "J8", "J9", "J10", "J11", "C11"]);
-const UNIQUE_STEMS: Record<string, number> = { C2: 286, C3: 299 };
+const UNIQUE_STEMS: Record<string, number> = { C2: 286, C3: 299, J18: 265 };
 const ARCHETYPE: Record<string, RegExp> = {
   J1: /^CS[1-8]$/,
   J7: /^I[1-6]$/,
@@ -194,7 +196,7 @@ const ARCHETYPE: Record<string, RegExp> = {
   J10: /^(?:M[1-3]|R[1-3])$/,
   J11: /^SE[1-7]$/,
   J16: /^ST[1-6]$/,
-  J18: /^SQ[1-8]$/,
+  J18: /^(?:DP|DV)$/,
   J19: /^P[1-4]$/,
   C2: /^Q[1-4]$/,
   C3: /^F[1-5]$/,
@@ -291,7 +293,7 @@ function bandCounts(stageId: string) {
 assert.deepEqual(bandCounts("J1"), { easy: 76, medium: 114, hard: 110, unknown: 0 });
 assert.deepEqual(bandCounts("J2"), { easy: 76, medium: 114, hard: 110, unknown: 0 });
 assert.deepEqual(bandCounts("J11"), { easy: 74, medium: 128, hard: 98, unknown: 0 });
-assert.deepEqual(bandCounts("J18"), { easy: 76, medium: 114, hard: 110, unknown: 0 });
+assert.deepEqual(bandCounts("J18"), { easy: 300, medium: 0, hard: 0, unknown: 0 });
 assert.deepEqual(bandCounts("J4"), { easy: 34, medium: 259, hard: 7, unknown: 0 });
 assert.deepEqual(bandCounts("J10"), { easy: 65, medium: 235, hard: 0, unknown: 0 });
 assert.deepEqual(bandCounts("J16"), { easy: 150, medium: 150, hard: 0, unknown: 0 });
@@ -344,11 +346,18 @@ assert.match(firstJ2.stem, /range of values/);
 const firstJ18 = generatedQuestions("J18")[0];
 assert.equal(firstJ18.id, "wqg-J18-001");
 assert.equal(firstJ18.topic, "Sequences");
-assert.equal(firstJ18.archetype, "SQ4");
-assert.equal(firstJ18.answer, "D");
-assert.equal(firstJ18.difficulty, "medium");
-assert.match(firstJ18.stem, /common ratio/);
-assert.match(firstJ18.stem, /16/);
+assert.equal(firstJ18.archetype, "DV");
+assert.equal(firstJ18.answer, "C");
+assert.equal(firstJ18.difficulty, "easy");
+assert.equal(firstJ18.hasFigure, true);
+assert.deepEqual(firstJ18.figureSpec, {
+  family: "U",
+  a: 7,
+  rule: { kind: "lin", m: 2, c: 6 },
+  show: 3,
+});
+assert.match(firstJ18.stem, /adding/);
+assert.match(firstJ18.stem, /pattern/);
 
 const j7Stage = startRun(empty(), "J7", "stage");
 assert.ok(j7Stage);
@@ -472,7 +481,7 @@ function wrongRun(stageId: string, questions: { id: string; answer: string }[]):
   };
 }
 
-assert.deepEqual([...PRACTICE_DRILL_ENABLED.enabledStages], ["J11", "J9", "J1", "J7", "J2", "C11"]);
+assert.deepEqual([...PRACTICE_DRILL_ENABLED.enabledStages], ["J11", "J9", "J1", "J7", "J2", "J18", "C11"]);
 for (const stage of stages) {
   assert.equal(
     practiceDrillEnabled(stage.id),
@@ -481,6 +490,7 @@ for (const stage of stages) {
       stage.id === "J1" ||
       stage.id === "J7" ||
       stage.id === "J2" ||
+      stage.id === "J18" ||
       stage.id === "C11",
     stage.id,
   );
@@ -493,6 +503,7 @@ assert.equal(startRun(empty(), "J9", "drill"), null);
 assert.equal(startRun(empty(), "J1", "drill"), null);
 assert.equal(startRun(empty(), "J7", "drill"), null);
 assert.equal(startRun(empty(), "J2", "drill"), null);
+assert.equal(startRun(empty(), "J18", "drill"), null);
 assert.equal(startRun(empty(), "C11", "drill"), null);
 
 function rng(seed: number): () => number {
@@ -1806,80 +1817,100 @@ assert.deepEqual(onlyC11Second.used, c11OneWrong.used);
 assert.deepEqual(onlyC11Second.cleared, ["J3"]);
 assert.equal(stageClearedBy(onlyC11Second.run, 2, 2), false);
 
-const sqMiss = bankQuestionById("J18-2016-q14");
-assert.ok(sqMiss);
-for (const missed of [sqMiss]) {
-  const drilled = startRun(wrongRun(missed.stage, [missed]), missed.stage, "drill");
+// ── J18 figure patterns (DP / DV, SQ unmatched) ───────────────────────
+const J18_TARGET: Record<string, string> = {
+  "J18-2015-q13": "DP",
+  "J18-2016-q14": "DP",
+  "J18-2019-q14": "DP",
+  "J18-2012-q12": "DV",
+  "J18-2017-q13": "DV",
+  "J18-2020-q12": "DV",
+  "J18-2021-q13": "DV",
+  "J18-2022-q14": "DV",
+};
+const J18_UNMATCHED = [
+  "J18-sample-q11",
+  "J18-2014-q14",
+  "J18-2018-q12",
+  "J18-2023-q14",
+  "J18-2025-q13",
+];
+
+for (const bankQuestion of questionsFor("J18")) {
+  const want = J18_TARGET[bankQuestion.id];
+  const target = j18MissTarget(bankQuestion.stem);
+  assert.deepEqual(skillsForStem("J18", bankQuestion.stem), [], bankQuestion.id);
+  if (want) {
+    assert.deepEqual(target, { tpls: [want], via: "skill" }, bankQuestion.id);
+  } else {
+    assert.equal(target, null, bankQuestion.id);
+    assert.ok(J18_UNMATCHED.includes(bankQuestion.id), bankQuestion.id);
+  }
+}
+
+const j18Pool = generatedQuestions("J18").map((question) => ({
+  id: question.id,
+  tpl: question.archetype ?? "",
+  stem: question.stem,
+  difficulty: question.difficulty,
+}));
+
+const dpQ = bankQuestionById("J18-2015-q13");
+const dvQ = bankQuestionById("J18-2012-q12");
+const sqQ = bankQuestionById("J18-2014-q14");
+assert.ok(dpQ && dvQ && sqQ);
+
+const dpPlan = planJ18Misses([{ bankId: dpQ.id, paperNumber: 1, stem: dpQ.stem }], j18Pool, () => 0);
+assert.equal(dpPlan.repairs.length, 1);
+assert.equal(dpPlan.repairs[0].ids.length, 2);
+assert.deepEqual(dpPlan.focus, ["DP"]);
+assert.ok(dpPlan.repairs[0].ids.every((id) => generatedById(id)?.archetype === "DP"));
+assert.deepEqual(dpPlan.unmatched, []);
+
+const dvPlan = planJ18Misses([{ bankId: dvQ.id, paperNumber: 1, stem: dvQ.stem }], j18Pool, () => 0);
+assert.equal(dvPlan.repairs.length, 1);
+assert.deepEqual(dvPlan.focus, ["DV"]);
+assert.ok(dvPlan.repairs[0].ids.every((id) => generatedById(id)?.archetype === "DV"));
+
+const sqPlan = planJ18Misses([{ bankId: sqQ.id, paperNumber: 2, stem: sqQ.stem }], j18Pool, () => 0);
+assert.deepEqual(sqPlan, {
+  repairs: [],
+  unmatched: [{ bankId: sqQ.id, paperNumber: 2 }],
+  focus: [],
+});
+
+// A mapped DP or DV miss drills exactly two items of that tpl.
+for (const missed of [dpQ, dvQ]) {
+  const drilled = startRun(wrongRun("J18", [missed]), "J18", "drill");
   assert.ok(drilled?.run);
   assert.equal(drilled.run.source, "generated");
   assert.equal(drilled.run.mode, "drill");
-  assert.deepEqual(drilled.run.focus, []);
-  assert.equal(drilled.run.ids.length, 5);
-  assert.ok(drilled.run.ids.every((id) => id.startsWith(`wqg-${missed.stage}-`)));
-  assert.ok(drilled.run.ids.every((id) => generatedById(id)?.difficulty === "easy"));
-  assert.ok(drilled.run.ids.every((id) => generatedById(id)?.paper === "2"));
-  assert.deepEqual(drilled.used, { [missed.stage]: ["kept-bank-id"] });
+  assert.equal(drilled.run.ids.length, DRILLS_PER_MISS);
+  assert.deepEqual(drilled.run.focus, [J18_TARGET[missed.id]]);
+  assert.ok(drilled.run.ids.every((id) => generatedById(id)?.archetype === J18_TARGET[missed.id]));
+  assert.ok(drilled.run.ids.every((id) => id.startsWith("wqg-J18-")));
+  assert.deepEqual(drilled.used, { J18: ["kept-bank-id"] });
   assert.deepEqual(drilled.cleared, ["J3"]);
-  assert.equal(stageClearedBy(drilled.run, 5, 5), false);
-  for (let i = 1; i < drilled.run.ids.length; i += 1) {
-    assert.notEqual(
-      generatedById(drilled.run.ids[i])?.archetype,
-      generatedById(drilled.run.ids[i - 1])?.archetype,
-    );
-  }
-  const againStage = startRun(drilled, missed.stage, "drill");
-  assert.ok(againStage?.run);
-  assert.deepEqual(againStage.run.focus, []);
-  assert.deepEqual(againStage.used, drilled.used);
-  assert.deepEqual(againStage.cleared, ["J3"]);
-  const seen = new Set(drilled.run.ids);
-  assert.ok(againStage.run.ids.every((id) => !seen.has(id)));
-  assert.ok(againStage.run.ids.every((id) => generatedById(id)?.difficulty === "easy"));
+  assert.equal(stageClearedBy(drilled.run, 2, 2), false);
+  assert.equal(grantPerfectRun(drilled, drilled.run, 2, 2), drilled);
+  assert.equal(startRun(drilled, "J18", "drill"), null);
 }
 
-for (const stageId of ["J18"] as const) {
-  const easyIds = generatedQuestions(stageId)
-    .filter((question) => question.difficulty === "easy")
-    .map((question) => question.id);
-  const mediumIds = generatedQuestions(stageId)
-    .filter((question) => question.difficulty === "medium")
-    .map((question) => question.id);
-  const afterEasyBand: Progress = {
-    cleared: ["J3"],
-    used: { [stageId]: ["kept-bank-id"] },
-    last: {},
-    run: {
-      stage: stageId,
-      mode: "drill",
-      source: "generated",
-      ids: easyIds.slice(0, 5),
-      picks: {},
-      index: 0,
-      marked: true,
-      focus: [],
-      seenIds: easyIds,
-    },
-  };
-  const mediumNext = startRun(afterEasyBand, stageId, "drill");
-  assert.ok(mediumNext?.run);
-  assert.deepEqual(mediumNext.run.focus, []);
-  assert.deepEqual(mediumNext.used, afterEasyBand.used);
-  assert.ok(mediumNext.run.ids.every((id) => generatedById(id)?.difficulty === "medium"));
-  const afterMediumBand: Progress = {
-    ...afterEasyBand,
-    run: {
-      ...afterEasyBand.run!,
-      ids: mediumIds.slice(0, 5),
-      seenIds: [...easyIds, ...mediumIds],
-    },
-  };
-  const hardNext = startRun(afterMediumBand, stageId, "drill");
-  assert.ok(hardNext?.run);
-  assert.ok(hardNext.run.ids.every((id) => id.startsWith(`wqg-${stageId}-`)));
-  assert.ok(hardNext.run.ids.every((id) => generatedById(id)?.difficulty === "hard"));
-  assert.deepEqual(hardNext.used, { [stageId]: ["kept-bank-id"] });
-  assert.deepEqual(hardNext.cleared, ["J3"]);
-}
+// A SQ-only miss has no mapped pair, so no remedial drill is offered.
+const sqWrong = wrongRun("J18", [sqQ]);
+assert.equal(startRun(sqWrong, "J18", "drill"), null);
+assert.deepEqual(remedialOffer(sqWrong.run), { mapped: 0, unmappedBankIds: [sqQ.id] });
+
+// A mixed DP + SQ miss drills the DP pair and records the SQ miss as skipped.
+const mixedJ18 = startRun(wrongRun("J18", [dpQ, sqQ]), "J18", "drill");
+assert.ok(mixedJ18?.run);
+assert.equal(mixedJ18.run.ids.length, 2);
+assert.ok(mixedJ18.run.ids.every((id) => generatedById(id)?.archetype === "DP"));
+assert.deepEqual(mixedJ18.run.unmatchedMisses, [sqQ.id]);
+assert.deepEqual(
+  mixedJ18.run.repairs?.map((repair) => repair.bankId),
+  [dpQ.id],
+);
 
 const easyJ1 = generatedQuestions("J1")
   .filter((question) => question.difficulty === "easy")

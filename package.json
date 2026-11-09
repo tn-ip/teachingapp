@@ -7,6 +7,7 @@
     "dev": "vite",
     "build": "tsc -p tsconfig.json --noEmit && npm run check:sync && vite build",
     "check:drills": "esbuild scripts/check-drills.ts --bundle --platform=node --format=esm --outfile=node_modules/.cache/check-drills.mjs && node node_modules/.cache/check-drills.mjs",
+    "check:j18fig": "esbuild scripts/check-j18fig.ts --bundle --platform=node --format=esm --outfile=node_modules/.cache/check-j18fig.mjs && node node_modules/.cache/check-j18fig.mjs",
     "check:sync": "esbuild scripts/check-sync.ts --bundle --platform=node --format=esm --outfile=node_modules/.cache/check-sync.mjs && node node_modules/.cache/check-sync.mjs",
     "preview": "vite preview --host 0.0.0.0 --port 4173"
   },
