@@ -359,7 +359,7 @@ export function App() {
                   },
                 },
               },
-              mapPractice ? "map" : "result",
+              "result",
             );
           }}
         />
@@ -729,9 +729,9 @@ function Result({
                   Teaching App will ask DSE Math Check and Weekly Question Generator to match this stem.
                 </p>
               ) : null}
-              {ok ? null : drillOn && question.generated ? (
+              {drillOn && question.generated ? (
                 <PracticeWorking question={question} />
-              ) : (
+              ) : ok ? null : (
                 <WorkedSolutionView question={question} paperKey={key} shuffled={shuffled} />
               )}
             </li>
