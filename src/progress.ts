@@ -658,7 +658,7 @@ export function advanceMapPractice(
   if (!run || !isMapPracticeRun(run)) return null;
   const poolIds = generatedQuestions(run.stage).map((question) => question.id);
   if (poolIds.length === 0) return null;
-  const previous = run.ids[0];
+  const previous = run.ids[run.index] ?? run.ids[0];
   const seen = run.seenIds ?? run.ids;
 
   let nextId: string;

@@ -664,6 +664,38 @@ for (const stageId of PRACTICE_DRILL_ENABLED.enabledStages) {
   assert.deepEqual(reshuffled.perfectRuns, mapKept.perfectRuns);
 }
 
+// A legacy 3-item map Practice (PR #50) mid-run must avoid the item currently
+// on screen, not ids[0], when drawing the next question.
+{
+  const stageId = "J11";
+  const poolIds = generatedQuestions(stageId).map((question) => question.id);
+  const ids = [poolIds[0], poolIds[1], poolIds[2]];
+  const legacy: Progress = {
+    ...mapKept,
+    run: {
+      stage: stageId,
+      mode: "drill",
+      source: "generated",
+      entry: "map",
+      ids,
+      picks: { [ids[2]]: "A" },
+      index: 2,
+      marked: false,
+      seenIds: ids,
+      optionOrders: {},
+    },
+  };
+  const next = advanceMapPractice(legacy, rng(99));
+  assert.ok(next?.run);
+  assert.equal(next?.run?.ids.length, 1);
+  assert.notEqual(next?.run?.ids[0], ids[2]);
+  assert.ok(poolIds.includes(next?.run?.ids[0] ?? ""));
+  assert.equal(next?.run?.entry, "map");
+  assert.equal(next?.run?.marked, false);
+  assert.equal(next?.run?.index, 0);
+}
+
+
 for (const bankQuestion of questionsFor("J11")) {
   const target = j11MissTarget(bankQuestion.stem);
   assert.ok(target, bankQuestion.id);
