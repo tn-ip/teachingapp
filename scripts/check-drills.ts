@@ -36,7 +36,7 @@ import { generatedById, generatedQuestions, hasGeneratedPool } from "../src/dril
 import { PRACTICE_DRILL_ENABLED, practiceDrillEnabled } from "../src/features.ts";
 import { questionById } from "../src/questions.ts";
 import {
-  MAP_PRACTICE_SIZE,
+  advanceMapPractice,
   grantPerfectRun,
   isMapPracticeRun,
   j11RemedialOffer,
@@ -543,7 +543,6 @@ function rng(seed: number): () => number {
   };
 }
 
-assert.equal(MAP_PRACTICE_SIZE, 3);
 const mapKept: Progress = {
   clearRule: 2,
   cleared: ["J3"],
@@ -563,8 +562,8 @@ for (const stageId of PRACTICE_DRILL_ENABLED.enabledStages) {
   for (let seed = 1; seed <= 6; seed += 1) {
     const next = startMapPractice(mapKept, stageId, rng(seed + stageId.length * 17));
     assert.ok(next?.run, stageId);
-    assert.equal(next.run.ids.length, MAP_PRACTICE_SIZE, stageId);
-    assert.equal(new Set(next.run.ids).size, MAP_PRACTICE_SIZE, stageId);
+    assert.equal(next.run.ids.length, 1, stageId);
+    assert.equal(new Set(next.run.ids).size, 1, stageId);
     assert.ok(next.run.ids.every((id) => poolIds.has(id) && id.startsWith(`wqg-${stageId}-`)), stageId);
     assert.equal(next.run.mode, "drill");
     assert.equal(next.run.source, "generated");
@@ -575,12 +574,12 @@ for (const stageId of PRACTICE_DRILL_ENABLED.enabledStages) {
     assert.deepEqual(next.used, mapKept.used);
     assert.deepEqual(next.cleared, mapKept.cleared);
     assert.deepEqual(next.perfectRuns, mapKept.perfectRuns);
-    assert.equal(stageClearedBy(next.run, MAP_PRACTICE_SIZE, MAP_PRACTICE_SIZE, 1), false);
+    assert.equal(stageClearedBy(next.run, 1, 1, 1), false);
     const granted = grantPerfectRun(
       next,
       { ...next.run, marked: true, clientId: `map-${stageId}-${seed}` },
-      MAP_PRACTICE_SIZE,
-      MAP_PRACTICE_SIZE,
+      1,
+      1,
     );
     assert.deepEqual(granted.perfectRuns, mapKept.perfectRuns);
     assert.deepEqual(granted.cleared, mapKept.cleared);
@@ -590,7 +589,7 @@ for (const stageId of PRACTICE_DRILL_ENABLED.enabledStages) {
 assert.ok(mapDraws.size > 1);
 const mapRoundTrip = normalizeProgress(JSON.parse(JSON.stringify(startMapPractice(mapKept, "C11", rng(9)))));
 assert.equal(mapRoundTrip.run?.entry, "map");
-assert.equal(mapRoundTrip.run?.ids.length, 3);
+assert.equal(mapRoundTrip.run?.ids.length, 1);
 assert.deepEqual(mapRoundTrip.perfectRuns, mapKept.perfectRuns);
 assert.deepEqual(mapRoundTrip.used, mapKept.used);
 assert.equal(
@@ -599,6 +598,103 @@ assert.equal(
   }).run?.entry,
   undefined,
 );
+
+// advanceMapPractice only applies to an open map Practice run.
+assert.equal(advanceMapPractice({ ...mapKept, run: null }, rng(1)), null);
+assert.equal(
+  advanceMapPractice(
+    {
+      ...mapKept,
+      run: {
+        stage: "J11",
+        mode: "stage",
+        ids: ["J11-2012-q5"],
+        picks: {},
+        index: 0,
+        marked: false,
+      },
+    },
+    rng(1),
+  ),
+  null,
+);
+
+// advanceMapPractice walks the whole pool without repeating, then reshuffles.
+for (const stageId of PRACTICE_DRILL_ENABLED.enabledStages) {
+  const pool = generatedQuestions(stageId);
+  const poolIds = new Set(pool.map((question) => question.id));
+  const rand = rng(42 + stageId.length * 7);
+  const started = startMapPractice(mapKept, stageId, rand);
+  assert.ok(started?.run, stageId);
+  if (!started?.run) continue;
+  const firstId = started.run.ids[0];
+  const walked = new Set([firstId]);
+  let previous = firstId;
+  let progress: Progress = started;
+  for (let step = 0; step < pool.length - 1; step += 1) {
+    const next = advanceMapPractice(progress, rand);
+    assert.ok(next?.run, `${stageId} ${step}`);
+    if (!next?.run) break;
+    const id = next.run.ids[0];
+    assert.ok(poolIds.has(id), `${stageId} ${step}`);
+    assert.notEqual(id, previous, `${stageId} ${step}`);
+    assert.ok(!walked.has(id), `${stageId} repeated before exhaustion`);
+    walked.add(id);
+    previous = id;
+    assert.equal(next.run.ids.length, 1);
+    assert.equal(next.run.entry, "map");
+    assert.equal(next.run.marked, false);
+    assert.deepEqual(next.used, mapKept.used);
+    assert.deepEqual(next.cleared, mapKept.cleared);
+    assert.deepEqual(next.perfectRuns, mapKept.perfectRuns);
+    progress = next;
+  }
+  assert.equal(walked.size, pool.length, stageId);
+  // Bag exhausted: a further advance reshuffles and still returns an item that
+  // is not the immediate previous id.
+  const reshuffled = advanceMapPractice(progress, rand);
+  assert.ok(reshuffled?.run, stageId);
+  if (!reshuffled?.run) continue;
+  assert.ok(poolIds.has(reshuffled.run.ids[0]));
+  assert.notEqual(reshuffled.run.ids[0], previous, stageId);
+  assert.equal(reshuffled.run.ids.length, 1);
+  assert.deepEqual(reshuffled.run.seenIds, [reshuffled.run.ids[0]]);
+  assert.deepEqual(reshuffled.used, mapKept.used);
+  assert.deepEqual(reshuffled.cleared, mapKept.cleared);
+  assert.deepEqual(reshuffled.perfectRuns, mapKept.perfectRuns);
+}
+
+// A legacy 3-item map Practice (PR #50) mid-run must avoid the item currently
+// on screen, not ids[0], when drawing the next question.
+{
+  const stageId = "J11";
+  const poolIds = generatedQuestions(stageId).map((question) => question.id);
+  const ids = [poolIds[0], poolIds[1], poolIds[2]];
+  const legacy: Progress = {
+    ...mapKept,
+    run: {
+      stage: stageId,
+      mode: "drill",
+      source: "generated",
+      entry: "map",
+      ids,
+      picks: { [ids[2]]: "A" },
+      index: 2,
+      marked: false,
+      seenIds: ids,
+      optionOrders: {},
+    },
+  };
+  const next = advanceMapPractice(legacy, rng(99));
+  assert.ok(next?.run);
+  assert.equal(next?.run?.ids.length, 1);
+  assert.notEqual(next?.run?.ids[0], ids[2]);
+  assert.ok(poolIds.includes(next?.run?.ids[0] ?? ""));
+  assert.equal(next?.run?.entry, "map");
+  assert.equal(next?.run?.marked, false);
+  assert.equal(next?.run?.index, 0);
+}
+
 
 for (const bankQuestion of questionsFor("J11")) {
   const target = j11MissTarget(bankQuestion.stem);
