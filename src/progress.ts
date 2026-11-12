@@ -601,9 +601,6 @@ function startGeneratedDrill(progress: Progress, stageId: string): Progress | nu
   };
 }
 
-/** Questions in one map Practice, drawn from that stage's generated pool. */
-export const MAP_PRACTICE_SIZE = 3;
-
 /** A drill opened from the hex Practice chip, not from a marked stage miss. */
 export function isMapPracticeRun(
   run: { entry?: string } | null | undefined,
@@ -611,22 +608,12 @@ export function isMapPracticeRun(
   return run?.entry === "map";
 }
 
-function sampleIds(ids: readonly string[], count: number, random: () => number): string[] {
-  const copy = ids.slice();
-  for (let i = copy.length - 1; i > 0; i -= 1) {
-    const j = Math.floor(random() * (i + 1));
-    const swap = copy[i];
-    copy[i] = copy[j];
-    copy[j] = swap;
-  }
-  return copy.slice(0, Math.min(count, copy.length));
-}
-
 /**
  * Map Practice for a stage that already shows the Practice label.
- * Three items, chosen at random from that stage's Weekly Question Generator
- * pool (the same pool the post-wrong drill draws from). Nothing is written
- * to `used`, `perfectRuns`, or `cleared`.
+ * One item, chosen at random from that stage's Weekly Question Generator pool
+ * (the same pool the post-wrong drill draws from). The run has no fixed
+ * length: it keeps drawing from the pool until the student leaves. Nothing is
+ * written to `used`, `perfectRuns`, or `cleared`.
  */
 export function startMapPractice(
   progress: Progress,
@@ -635,12 +622,9 @@ export function startMapPractice(
 ): Progress | null {
   if (!isStudentStage(stageId) || !practiceDrillEnabled(stageId)) return null;
   if (!hasGeneratedPool(stageId)) return null;
-  const ids = sampleIds(
-    generatedQuestions(stageId).map((question) => question.id),
-    MAP_PRACTICE_SIZE,
-    random,
-  );
-  if (ids.length === 0) return null;
+  const poolIds = generatedQuestions(stageId).map((question) => question.id);
+  if (poolIds.length === 0) return null;
+  const ids = [poolIds[Math.floor(random() * poolIds.length)]];
   return {
     ...progress,
     run: {
@@ -654,6 +638,58 @@ export function startMapPractice(
       marked: false,
       seenIds: ids,
       optionOrders: freshOptionOrders(ids),
+    },
+  };
+}
+
+/**
+ * Draw the next item for an open map Practice run. The run keeps drawing from
+ * the stage's generated pool until the student leaves: `ids` stays the current
+ * item only. Prefers an id not already seen and never repeats the item just
+ * shown while other items remain; when every other item has been seen it
+ * reshuffles and draws again. Nothing is written to `used`, `perfectRuns`, or
+ * `cleared`.
+ */
+export function advanceMapPractice(
+  progress: Progress,
+  random: () => number = Math.random,
+): Progress | null {
+  const run = progress.run;
+  if (!run || !isMapPracticeRun(run)) return null;
+  const poolIds = generatedQuestions(run.stage).map((question) => question.id);
+  if (poolIds.length === 0) return null;
+  const previous = run.ids[0];
+  const seen = run.seenIds ?? run.ids;
+
+  let nextId: string;
+  let reshuffled = false;
+  if (poolIds.length === 1) {
+    // A one-item pool may repeat; that is the only time a repeat is required.
+    nextId = poolIds[0];
+  } else {
+    const unseen = poolIds.filter((id) => id !== previous && !seen.includes(id));
+    if (unseen.length > 0) {
+      nextId = unseen[Math.floor(random() * unseen.length)];
+    } else {
+      // Bag exhausted: reshuffle and draw again from the pool, still avoiding
+      // the item just shown.
+      const others = poolIds.filter((id) => id !== previous);
+      nextId = others[Math.floor(random() * others.length)];
+      reshuffled = true;
+    }
+  }
+
+  return {
+    ...progress,
+    run: {
+      ...run,
+      entry: "map",
+      ids: [nextId],
+      picks: {},
+      index: 0,
+      marked: false,
+      seenIds: reshuffled ? [nextId] : [...seen, nextId],
+      optionOrders: freshOptionOrders([nextId]),
     },
   };
 }

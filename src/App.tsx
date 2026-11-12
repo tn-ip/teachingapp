@@ -19,6 +19,7 @@ import { J18Figure } from "./J18Figure";
 import { MathView } from "./MathView";
 import { questionById } from "./questions";
 import {
+  advanceMapPractice,
   choiceOrder,
   grantPerfectRun,
   isMapPracticeRun,
@@ -48,6 +49,9 @@ function screenForProgress(saved: Progress): Screen {
   if (!saved.run) return "map";
   if (!isStudentStage(saved.run.stage)) return "map";
   if (isPracticeDrillRun(saved.run) && !practiceDrillEnabled(saved.run.stage)) return "map";
+  // A legacy 3-item map Practice session was marked at its end; do not revive
+  // its end-of-run Result on a cold open.
+  if (isMapPracticeRun(saved.run) && saved.run.marked) return "map";
   return saved.run.marked ? "result" : "quiz";
 }
 
@@ -335,6 +339,10 @@ export function App() {
           run={run}
           onChange={(nextRun) => update({ ...progress, run: nextRun })}
           onHome={() => setScreen("map")}
+          onNextMapPractice={() => {
+            const next = advanceMapPractice(progress);
+            if (next) update(next);
+          }}
           onMarked={(nextRun) => {
             const stamped = nextRun.clientId
               ? nextRun
@@ -488,11 +496,13 @@ function Quiz({
   run,
   onChange,
   onHome,
+  onNextMapPractice,
   onMarked,
 }: {
   run: Run;
   onChange: (run: Run) => void;
   onHome: () => void;
+  onNextMapPractice: () => void;
   onMarked: (run: Run) => void;
 }) {
   const items = useMemo(
@@ -507,6 +517,9 @@ function Quiz({
   const answered = items.filter((item) => run.picks[item.id]).length;
   if (!question || !stage) return null;
   const pick = run.picks[question.id];
+  const mapPractice = isMapPracticeRun(run);
+  const revealed = mapPractice && pick !== undefined;
+  const key = paperAnswer(question, choiceOrder(run, question.id));
 
   function choose(letter: Choice) {
     onChange({
@@ -526,17 +539,25 @@ function Quiz({
           resetKey={`${run.index}:${question.id}`}
         />
         <p className="quiz-progress">
-          {practiceDrillEnabled(run.stage) && run.source === "generated"
-            ? "Practice"
-            : practiceDrillEnabled(run.stage) && run.mode === "drill"
-              ? "Drill"
-              : "Stage"}{" "}
-          ·{" "}
-          {run.index + 1}/{items.length}
-          <span>
-            {" "}
-            · {answered}/{items.length} answered
-          </span>
+          {mapPractice ? (
+            "Practice"
+          ) : practiceDrillEnabled(run.stage) && run.source === "generated" ? (
+            "Practice"
+          ) : practiceDrillEnabled(run.stage) && run.mode === "drill" ? (
+            "Drill"
+          ) : (
+            "Stage"
+          )}
+          {mapPractice ? null : (
+            <>
+              {" "}
+              · {run.index + 1}/{items.length}
+              <span>
+                {" "}
+                · {answered}/{items.length} answered
+              </span>
+            </>
+          )}
         </p>
       </div>
       <p className="stage-name">
@@ -566,13 +587,15 @@ function Quiz({
       <div className="choices" role="listbox" aria-label="Choices">
         {CHOICES.map((letter, index) => {
           const bankLetter = choiceOrder(run, question.id)[index];
+          const selected = pick === letter;
           return (
             <button
               key={letter}
               type="button"
               role="option"
-              aria-selected={pick === letter}
-              className={pick === letter ? "choice selected" : "choice"}
+              aria-selected={selected}
+              className={selected ? "choice selected" : "choice"}
+              disabled={revealed}
               onClick={() => choose(letter)}
             >
               <span className="letter">{letter}</span>
@@ -581,34 +604,55 @@ function Quiz({
           );
         })}
       </div>
-      <div className="quiz-nav">
-        <button
-          type="button"
-          className="ghost"
-          disabled={run.index === 0}
-          onClick={() => onChange({ ...run, index: run.index - 1 })}
-        >
-          Previous
-        </button>
-        {run.index < items.length - 1 ? (
+      {revealed ? (
+        <section className="solution" aria-label="Answer">
+          <p className="verdict">
+            Your answer {pick} · key {key}
+          </p>
+          {question.generated ? <PracticeWorking question={question} /> : null}
+        </section>
+      ) : null}
+      {mapPractice ? (
+        revealed ? (
+          <div className="quiz-nav">
+            <button type="button" className="ghost" onClick={onHome}>
+              Map
+            </button>
+            <button type="button" className="primary" onClick={onNextMapPractice}>
+              Next
+            </button>
+          </div>
+        ) : null
+      ) : (
+        <div className="quiz-nav">
           <button
             type="button"
-            className="primary"
-            onClick={() => onChange({ ...run, index: run.index + 1 })}
+            className="ghost"
+            disabled={run.index === 0}
+            onClick={() => onChange({ ...run, index: run.index - 1 })}
           >
-            Next
+            Previous
           </button>
-        ) : (
-          <button
-            type="button"
-            className="primary"
-            disabled={answered < items.length}
-            onClick={() => onMarked({ ...run, marked: true })}
-          >
-            Mark paper
-          </button>
-        )}
-      </div>
+          {run.index < items.length - 1 ? (
+            <button
+              type="button"
+              className="primary"
+              onClick={() => onChange({ ...run, index: run.index + 1 })}
+            >
+              Next
+            </button>
+          ) : (
+            <button
+              type="button"
+              className="primary"
+              disabled={answered < items.length}
+              onClick={() => onMarked({ ...run, marked: true })}
+            >
+              Mark paper
+            </button>
+          )}
+        </div>
+      )}
     </main>
   );
 }
