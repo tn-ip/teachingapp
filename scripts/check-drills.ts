@@ -16,6 +16,7 @@ import {
   j2MissTarget,
   j4MissTarget,
   j7MissTarget,
+  j8MissTarget,
   j9MissTarget,
   j11MissTarget,
   pickFromPool,
@@ -26,6 +27,7 @@ import {
   planJ2Misses,
   planJ4Misses,
   planJ7Misses,
+  planJ8Misses,
   planJ9Misses,
   planJ11Misses,
   skillsForStem,
@@ -114,10 +116,10 @@ const EXPECTED: Record<string, string[]> = {
   "J8-2014-q3": ["ID1"],
   "J8-2015-q5": ["ID1"],
   "J8-2017-q8": ["ID1"],
-  "J8-2019-q4": ["ID4"],
-  "J8-2020-q7": ["ID3"],
+  "J8-2019-q4": ["ID1"],
+  "J8-2020-q7": ["ID1"],
   "J8-2021-q6": ["ID2"],
-  "J8-2022-q3": ["ID4"],
+  "J8-2022-q3": ["ID1"],
   "J8-2023-q5": ["ID1"],
   "J8-2025-q3": ["ID1"],
   "J9-sample-q3": ["F1"],
@@ -501,7 +503,10 @@ function wrongRun(stageId: string, questions: { id: string; answer: string }[]):
   };
 }
 
-assert.deepEqual([...PRACTICE_DRILL_ENABLED.enabledStages], ["J11", "J9", "J1", "J7", "J2", "J18", "C11", "J4"]);
+assert.deepEqual(
+  [...PRACTICE_DRILL_ENABLED.enabledStages],
+  ["J11", "J9", "J1", "J7", "J2", "J18", "C11", "J4", "J8"],
+);
 for (const stage of stages) {
   assert.equal(
     practiceDrillEnabled(stage.id),
@@ -512,7 +517,8 @@ for (const stage of stages) {
       stage.id === "J2" ||
       stage.id === "J18" ||
       stage.id === "C11" ||
-      stage.id === "J4",
+      stage.id === "J4" ||
+      stage.id === "J8",
     stage.id,
   );
 }
@@ -525,6 +531,7 @@ assert.equal(startRun(empty(), "J1", "drill"), null);
 assert.equal(startRun(empty(), "J7", "drill"), null);
 assert.equal(startRun(empty(), "J2", "drill"), null);
 assert.equal(startRun(empty(), "J4", "drill"), null);
+assert.equal(startRun(empty(), "J8", "drill"), null);
 assert.equal(startRun(empty(), "J18", "drill"), null);
 assert.equal(startRun(empty(), "C11", "drill"), null);
 
@@ -2066,6 +2073,172 @@ assert.ok(onlyJ4Second.run.ids.every((id) => generatedById(id)?.archetype === "P
 assert.deepEqual(onlyJ4Second.used, j4OneWrong.used);
 assert.deepEqual(onlyJ4Second.cleared, ["J3"]);
 assert.equal(stageClearedBy(onlyJ4Second.run, 2, 2), false);
+
+// ── J8 Identities (ID2 ratio-ask, ID1 every other constant-ask) ──────
+const J8_ID2 = new Set(["J8-2013-q8", "J8-2021-q6"]);
+const j8Bank = questionsFor("J8");
+assert.equal(j8Bank.length, 13);
+assert.deepEqual(
+  j8Bank.map((question) => question.id),
+  [
+    "J8-sample-q4",
+    "J8-practice-q4",
+    "J8-2012-q3",
+    "J8-2013-q8",
+    "J8-2014-q3",
+    "J8-2015-q5",
+    "J8-2017-q8",
+    "J8-2019-q4",
+    "J8-2020-q7",
+    "J8-2021-q6",
+    "J8-2022-q3",
+    "J8-2023-q5",
+    "J8-2025-q3",
+  ],
+);
+for (const bankQuestion of j8Bank) {
+  const target = j8MissTarget(bankQuestion.stem);
+  assert.ok(target, bankQuestion.id);
+  assert.equal(target.via, "skill", bankQuestion.id);
+  assert.deepEqual(skillsForStem("J8", bankQuestion.stem), EXPECTED[bankQuestion.id], bankQuestion.id);
+  if (J8_ID2.has(bankQuestion.id)) {
+    assert.deepEqual(target.tpls, ["ID2"], bankQuestion.id);
+  } else {
+    assert.deepEqual(target.tpls, ["ID1", "ID3", "ID4"], bankQuestion.id);
+  }
+}
+
+const j8Pool = generatedQuestions("J8").map((question) => ({
+  id: question.id,
+  tpl: question.archetype ?? "",
+  stem: question.stem,
+  difficulty: question.difficulty,
+}));
+const j8AllPlan = planJ8Misses(
+  j8Bank.map((question, index) => ({
+    bankId: question.id,
+    paperNumber: index + 1,
+    stem: question.stem,
+  })),
+  j8Pool,
+  () => 0,
+);
+assert.deepEqual(j8AllPlan.unmatched, []);
+assert.equal(j8AllPlan.repairs.length, 13);
+assert.deepEqual(j8AllPlan.focus, ["ID1", "ID3", "ID4", "ID2"]);
+for (const repair of j8AllPlan.repairs) {
+  assert.equal(repair.ids.length, 2, repair.bankId);
+  const archetypes = repair.ids.map((id) => generatedById(id)?.archetype ?? "");
+  if (J8_ID2.has(repair.bankId)) {
+    assert.ok(archetypes.every((tpl) => tpl === "ID2"), repair.bankId);
+  } else {
+    assert.ok(archetypes.every((tpl) => ["ID1", "ID3", "ID4"].includes(tpl)), repair.bankId);
+  }
+  assert.equal(new Set(repair.ids.map((id) => generatedById(id)?.stem)).size, 2, repair.bankId);
+}
+
+// An ID1 miss draws from the mixed ID1|ID3|ID4 bag: with no ID1 items in the
+// pool it still fills the pair from ID3 and ID4.
+const j8FoldPool = [
+  { id: "a", tpl: "ID3", stem: "a", difficulty: "unknown" },
+  { id: "b", tpl: "ID4", stem: "b", difficulty: "unknown" },
+  { id: "c", tpl: "ID4", stem: "c", difficulty: "unknown" },
+];
+const j8FoldPlan = planJ8Misses(
+  [{ bankId: "fold", paperNumber: 1, stem: "If \\(x^{2}+p\\equiv (x+2)(x+q)+10\\), then \\(p =\\)" }],
+  j8FoldPool,
+  () => 0,
+);
+assert.equal(j8FoldPlan.repairs.length, 1);
+assert.deepEqual(j8FoldPlan.focus, ["ID1", "ID3", "ID4"]);
+const j8FoldTpls = j8FoldPlan.repairs[0].ids.map(
+  (id) => j8FoldPool.find((item) => item.id === id)?.tpl,
+);
+assert.ok(j8FoldTpls.every((tpl) => ["ID3", "ID4"].includes(tpl ?? "")));
+
+const allWrongJ8 = startRun(wrongRun("J8", j8Bank), "J8", "drill");
+assert.ok(allWrongJ8?.run);
+assert.equal(allWrongJ8.run.ids.length, 26);
+assert.equal(allWrongJ8.run.repairs?.length, 13);
+assert.deepEqual(allWrongJ8.run.unmatchedMisses, []);
+assert.deepEqual(allWrongJ8.run.focus, ["ID1", "ID3", "ID4", "ID2"]);
+assert.equal(new Set(allWrongJ8.run.ids).size, 26);
+assert.equal(new Set(allWrongJ8.run.ids.map((id) => generatedById(id)?.stem)).size, 26);
+for (const repair of allWrongJ8.run.repairs ?? []) {
+  const archetypes = repair.ids.map((id) => generatedById(id)?.archetype ?? "");
+  if (J8_ID2.has(repair.bankId)) {
+    assert.ok(archetypes.every((tpl) => tpl === "ID2"));
+  } else {
+    assert.ok(archetypes.every((tpl) => ["ID1", "ID3", "ID4"].includes(tpl)));
+  }
+}
+assert.deepEqual(allWrongJ8.used, { J8: ["kept-bank-id"] });
+assert.deepEqual(allWrongJ8.cleared, ["J3"]);
+assert.equal(stageClearedBy(allWrongJ8.run, 26, 26), false);
+assert.equal(grantPerfectRun(allWrongJ8, allWrongJ8.run, 26, 26), allWrongJ8);
+assert.equal(startRun(allWrongJ8, "J8", "drill"), null);
+assert.deepEqual(remedialOffer(wrongRun("J8", j8Bank).run ?? null), {
+  mapped: 13,
+  unmappedBankIds: [],
+});
+
+const id2q = bankQuestionById("J8-2013-q8");
+const id1q = bankQuestionById("J8-2020-q7");
+assert.ok(id2q && id1q);
+const pairedJ8 = startRun(wrongRun("J8", [id2q, id1q]), "J8", "drill");
+assert.ok(pairedJ8?.run);
+assert.equal(pairedJ8.run.ids.length, 4);
+const pairedJ8Archetypes = pairedJ8.run.ids.map((id) => generatedById(id)?.archetype ?? "");
+assert.deepEqual(pairedJ8Archetypes.slice(0, 2), ["ID2", "ID2"]);
+assert.ok(pairedJ8Archetypes.slice(2).every((tpl) => ["ID1", "ID3", "ID4"].includes(tpl)));
+assert.equal(new Set(pairedJ8.run.ids).size, 4);
+assert.deepEqual(pairedJ8.used, { J8: ["kept-bank-id"] });
+assert.deepEqual(pairedJ8.cleared, ["J3"]);
+assert.equal(stageClearedBy(pairedJ8.run, 4, 4), false);
+
+const perfectJ8: Progress = {
+  cleared: ["J3"],
+  used: { J8: ["kept-bank-id"] },
+  last: {},
+  run: {
+    stage: "J8",
+    mode: "stage",
+    ids: [id1q.id, id2q.id],
+    picks: {
+      [id1q.id]: id1q.answer,
+      [id2q.id]: id2q.answer,
+    },
+    index: 1,
+    marked: true,
+  },
+};
+assert.equal(startRun(perfectJ8, "J8", "drill"), null);
+assert.deepEqual(remedialOffer(perfectJ8.run), { mapped: 0, unmappedBankIds: [] });
+const j8OneWrong: Progress = {
+  cleared: ["J3"],
+  used: { J8: ["kept-bank-id"] },
+  last: {},
+  run: {
+    stage: "J8",
+    mode: "stage",
+    ids: [id1q.id, id2q.id],
+    picks: {
+      [id1q.id]: id1q.answer,
+      [id2q.id]: wrongLetter(id2q.answer),
+    },
+    index: 1,
+    marked: true,
+  },
+};
+const onlyJ8Second = startRun(j8OneWrong, "J8", "drill");
+assert.ok(onlyJ8Second?.run);
+assert.equal(onlyJ8Second.run.ids.length, 2);
+assert.equal(onlyJ8Second.run.repairs?.[0].bankId, id2q.id);
+assert.equal(onlyJ8Second.run.repairs?.[0].paperNumber, 2);
+assert.ok(onlyJ8Second.run.ids.every((id) => generatedById(id)?.archetype === "ID2"));
+assert.deepEqual(onlyJ8Second.used, j8OneWrong.used);
+assert.deepEqual(onlyJ8Second.cleared, ["J3"]);
+assert.equal(stageClearedBy(onlyJ8Second.run, 2, 2), false);
 
 // ── J18 figure patterns (DP / DV, SQ unmatched) ───────────────────────
 const J18_TARGET: Record<string, string> = {
