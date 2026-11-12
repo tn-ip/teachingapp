@@ -3,10 +3,10 @@
  *
  * Archetypes are the pool `tpl` values (J10 map scale is M1–M3; ratio and rate are R1–R3).
  * A miss maps onto those tags only when the stem is a clear example of that pattern.
- * Anything else is left untagged. For stages other than J1, J2, J4, J7, J9,
- * J11, J18, and C11, an untagged miss still shuffles the whole pool. J1, J2,
- * J4, J7, J9, J11, J18, and C11 do not: each wrong bank question draws exactly
- * two items of its own tag, or a Choose bucket, or nothing.
+ * Anything else is left untagged. For stages other than J1, J2, J4, J7, J8,
+ * J9, J11, J18, and C11, an untagged miss still shuffles the whole pool. J1,
+ * J2, J4, J7, J8, J9, J11, J18, and C11 do not: each wrong bank question draws
+ * exactly two items of its own tag, or a Choose bucket, or nothing.
  *
  * Anti-adjacent is the stronger rule for that five-item draw: the next item
  * is a different tpl whenever another one is still available. One matched tag
@@ -14,8 +14,8 @@
  * different tags. Generator bands break the remaining ties. An unmatched
  * drill takes Easy archetypes before Medium and Hard. A filler is the easiest
  * different archetype still available. J7–J9 items have no band, so this
- * tie-break does not change those draws. The J1, J2, J4, J7, J9, J11, J18, and
- * C11 remedial pairs do not use that five-item draw.
+ * tie-break does not change those draws. The J1, J2, J4, J7, J8, J9, J11,
+ * J18, and C11 remedial pairs do not use that five-item draw.
  *
  * J7 Indices
  * - I6 reciprocal of a power, times another power: (1/9^555)·3^444
@@ -41,9 +41,13 @@
  *
  * J8 Identities
  * - ID2 the asked value is a ratio (a:b or a:b:c)
- * - ID4 a binomial square and a product that has an extra added term
- * - ID3 product of two linears equal to a binomial square plus a constant
- * - ID1 every other identity (compare coefficients for one constant)
+ * - ID1 every other constant-ask identity (compare coefficients for one
+ *   constant), including a clean product ≡ square+k and a product with an
+ *   extra ± term ≡ square+β.
+ * Practice tags are only ID1 and ID2. An ID2 miss draws two items from the
+ * 70 ID2 pool items. An ID1 miss draws two items from the 230 non-ratio
+ * items: pool ID1, ID3, and ID4 are folded into one bag at pick time. There
+ * is no Practice Choose bucket for J8.
  *
  * J9 Factorization / expansion
  * - F5 product of brackets, then add or subtract another term
@@ -330,11 +334,6 @@ function skillsJ8(stem: string): string[] {
   const thenAt = lower.lastIndexOf("then");
   const tail = thenAt >= 0 ? stem.slice(thenAt) : stem;
   if (tail.includes(":")) return ["ID2"];
-  const text = plainMath(stem);
-  const square = /\([^()]*\)\^2/.test(text);
-  const productThenExtra = /\([^()]+\)\([^()]+\)[+-]/.test(text);
-  const product = /\([^()]+\)\([^()]+\)/.test(text);
-  if (square && product) return [productThenExtra ? "ID4" : "ID3"];
   return ["ID1"];
 }
 
@@ -1333,6 +1332,28 @@ export function planJ4Misses<T extends PoolItem>(
   random: () => number = Math.random,
 ): MissPlan {
   return planMappedMisses(misses, pool, j4MissTarget, random);
+}
+
+/**
+ * ID tags for one J8 bank stem: ID2 when the asked value is a ratio, else
+ * ID1. An ID2 miss draws two items from the 70 ID2 pool items. An ID1 miss
+ * draws two items from the 230 non-ratio items: pool ID1, ID3, and ID4 are
+ * folded into one bag at pick time. There is no Practice Choose bucket for
+ * J8, so this always returns a skill target.
+ */
+export function j8MissTarget(stem: string): MissTarget | null {
+  const skills = skillsForStem("J8", stem);
+  if (skills.includes("ID2")) return { tpls: ["ID2"], via: "skill" };
+  return { tpls: ["ID1", "ID3", "ID4"], via: "skill" };
+}
+
+/** J8 remedial pairs. See {@link planMappedMisses}. */
+export function planJ8Misses<T extends PoolItem>(
+  misses: readonly PlannedMiss[],
+  pool: readonly T[],
+  random: () => number = Math.random,
+): MissPlan {
+  return planMappedMisses(misses, pool, j8MissTarget, random);
 }
 
 function j4Prose(stem: string): string {
