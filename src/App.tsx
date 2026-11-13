@@ -31,15 +31,19 @@ import {
   scoreRun,
   remedialOffer,
   stageClearedBy,
+  startLogbookRetry,
   startMapPractice,
   startRun,
   type Progress,
   type Run,
 } from "./progress";
 import { SchoolProgress } from "./SchoolProgress";
+import { ErrorLogbook } from "./ErrorLogbook";
+import { queueErrorLogEvent } from "./accountSync";
+import { eventForQuestion, eventsForRun, type ErrorLogRow } from "./errorLog";
 import { useAccountSync } from "./useAccountSync";
 
-type Screen = "map" | "quiz" | "result" | "school";
+type Screen = "map" | "quiz" | "result" | "school" | "logbook";
 
 /**
  * Quiz or result for an open run, once the student has left the map.
@@ -211,11 +215,14 @@ export function App() {
   // Cold open is always the map. The open run stays saved for Continue / Review.
   const [screen, setScreen] = useState<Screen>("map");
   const [confirmReset, setConfirmReset] = useState(false);
+  const [logbookStudent, setLogbookStudent] = useState<{ id: string; name: string } | null>(null);
   const account = useAccountSync(progress, setProgress, (next) => {
     setProgress(next);
     // Hydrate progress only. Do not pull a cold open off the map into the open run.
     setScreen((current) =>
-      current === "map" || current === "school" ? current : screenForProgress(next),
+      current === "map" || current === "school" || current === "logbook"
+        ? current
+        : screenForProgress(next),
     );
   });
   const signedIn = Boolean(account.label);
@@ -224,6 +231,10 @@ export function App() {
   useEffect(() => {
     if (!teacher && screen === "school") setScreen("map");
   }, [teacher, screen]);
+
+  useEffect(() => {
+    if (screen === "logbook" && !teacher && !signedIn) setScreen("map");
+  }, [teacher, signedIn, screen]);
 
   useEffect(() => {
     saveProgress(progress);
@@ -235,10 +246,12 @@ export function App() {
   const drillBlocked = Boolean(run && isPracticeDrillRun(run) && !practiceDrillEnabled(run.stage));
   const stageBlocked = Boolean(run && !isStudentStage(run.stage));
   const studentScreen: Screen =
-    (drillBlocked || stageBlocked) && screen !== "school" ? "map" : screen;
+    (drillBlocked || stageBlocked) && screen !== "school" && screen !== "logbook" ? "map" : screen;
 
   useEffect(() => {
-    if ((!drillBlocked && !stageBlocked) || screen === "school" || screen === "map") return;
+    if ((!drillBlocked && !stageBlocked) || screen === "school" || screen === "map" || screen === "logbook") {
+      return;
+    }
     setScreen("map");
   }, [drillBlocked, stageBlocked, screen]);
 
@@ -254,6 +267,7 @@ export function App() {
       run.stage === stageId &&
       !run.marked &&
       !isMapPracticeRun(run) &&
+      run.entry !== "logbook" &&
       (practiceDrillEnabled(run.stage) || !isPracticeDrillRun(run));
     if (resumeOpenPaper) {
       setScreen("quiz");
@@ -279,26 +293,61 @@ export function App() {
     if (next) update(next, "quiz");
   }
 
+  function logLiveQuestion(nextRun: Run, questionId: string) {
+    const userId = account.userId;
+    if (!userId) return;
+    const event = eventForQuestion(nextRun, questionId);
+    if (event) queueErrorLogEvent(userId, event);
+  }
+
+  function handleQuizChange(nextRun: Run) {
+    // Single-item runs (map Practice, logbook retry) lock the pick the moment
+    // the student taps a choice. Log that answer immediately; do not wait for
+    // Next or Map, and do not mark the run.
+    if (isMapPracticeRun(nextRun) || nextRun.entry === "logbook") {
+      const id = nextRun.ids[nextRun.index] ?? nextRun.ids[0];
+      if (id !== undefined) {
+        const prevPick = run?.picks[id];
+        const nextPick = nextRun.picks[id];
+        if (nextPick !== undefined && nextPick !== prevPick) logLiveQuestion(nextRun, id);
+      }
+    }
+    update({ ...progress, run: nextRun });
+  }
+
+  function handleRetry(row: ErrorLogRow) {
+    const next = startLogbookRetry(progress, row.question_id, row.stage_id);
+    if (next) update(next, "quiz");
+  }
+
   return (
-    <div className={`app screen-${screen === "school" ? "school" : studentScreen}`}>
+    <div
+      className={`app screen-${
+        screen === "school" ? "school" : screen === "logbook" ? "logbook" : studentScreen
+      }`}
+    >
         <header className="top">
           <div>
             <p className="eyebrow">HKDSE Mathematics · Paper 2</p>
             <h1>
               {screen === "school"
                 ? "School progress"
-                : studentScreen === "quiz"
-                  ? run && practiceDrillEnabled(run.stage) && isPracticeDrillRun(run)
-                    ? "Practice"
-                    : "Stage run"
-                  : studentScreen === "result"
-                    ? "Result"
-                    : "Stage map"}
+                : screen === "logbook"
+                  ? "Error logbook"
+                  : studentScreen === "quiz"
+                    ? run && run.entry === "logbook"
+                      ? "Error logbook"
+                      : run && practiceDrillEnabled(run.stage) && isPracticeDrillRun(run)
+                        ? "Practice"
+                        : "Stage run"
+                    : studentScreen === "result"
+                      ? "Result"
+                      : "Stage map"}
             </h1>
           </div>
           <div className="top-side">
             <AccountBar account={account} />
-            {screen === "school" ? null : (
+            {screen === "school" || screen === "logbook" ? null : (
               <p className="progress-pill" aria-label={`${clearedCount} of ${mapStages.length} stages starred`}>
                 ★ {clearedCount} / {mapStages.length}
               </p>
@@ -306,13 +355,44 @@ export function App() {
           </div>
         </header>
 
-      {screen === "school" && teacher ? <SchoolProgress onBack={() => setScreen("map")} /> : null}
+      {screen === "school" && teacher ? (
+        <SchoolProgress
+          onBack={() => setScreen("map")}
+          onOpenLogbook={(student) => {
+            setLogbookStudent(student);
+            setScreen("logbook");
+          }}
+        />
+      ) : null}
+
+      {screen === "logbook" ? (
+        teacher && logbookStudent ? (
+          <ErrorLogbook
+            userId={logbookStudent.id}
+            studentName={logbookStudent.name}
+            readOnly
+            onBack={() => {
+              setLogbookStudent(null);
+              setScreen("school");
+            }}
+          />
+        ) : signedIn && account.userId ? (
+          <ErrorLogbook
+            userId={account.userId}
+            readOnly={false}
+            onBack={() => setScreen("map")}
+            onRetry={handleRetry}
+          />
+        ) : null
+      ) : null}
 
       {studentScreen === "map" ? (
         <StageMap
           progress={progress}
           teacher={teacher}
+          accountConfigured={account.configured}
           onOpenSchool={() => setScreen("school")}
+          onOpenLogbook={() => setScreen("logbook")}
           onOpen={openStage}
           onPractice={beginMapPractice}
           onResume={() => setScreen(run?.marked ? "result" : "quiz")}
@@ -337,8 +417,9 @@ export function App() {
       {studentScreen === "quiz" && run ? (
         <Quiz
           run={run}
-          onChange={(nextRun) => update({ ...progress, run: nextRun })}
+          onChange={handleQuizChange}
           onHome={() => setScreen("map")}
+          onBackToLogbook={() => setScreen("logbook")}
           onNextMapPractice={() => {
             const next = advanceMapPractice(progress);
             if (next) update(next);
@@ -352,6 +433,14 @@ export function App() {
             const withStar = mapPractice
               ? progress
               : grantPerfectRun(progress, stamped, result.correct, result.total);
+            // Walk every item in the marked run: wrong upserts an open miss,
+            // correct + existing row marks it corrected.
+            const userId = account.userId;
+            if (userId) {
+              for (const event of eventsForRun(stamped)) {
+                queueErrorLogEvent(userId, event);
+              }
+            }
             update(
               {
                 ...withStar,
@@ -393,7 +482,9 @@ export function App() {
 function StageMap({
   progress,
   teacher,
+  accountConfigured,
   onOpenSchool,
+  onOpenLogbook,
   onOpen,
   onPractice,
   onResume,
@@ -405,7 +496,9 @@ function StageMap({
 }: {
   progress: Progress;
   teacher: boolean;
+  accountConfigured: boolean;
   onOpenSchool: () => void;
+  onOpenLogbook: () => void;
   onOpen: (stageId: string) => void;
   onPractice: (stageId: string) => void;
   onResume: () => void;
@@ -423,6 +516,15 @@ function StageMap({
         <button type="button" className="school-entry" onClick={onOpenSchool}>
           School progress
         </button>
+      ) : null}
+      {accountConfigured ? (
+        signedIn ? (
+          <button type="button" className="logbook-entry" onClick={onOpenLogbook}>
+            Error logbook
+          </button>
+        ) : (
+          <p className="note logbook-note">Sign in to save your error logbook.</p>
+        )
       ) : null}
       <p className="lede">
         Pick any stage. They all stay open. 👋
@@ -444,7 +546,7 @@ function StageMap({
         </a>{" "}
         ({solutionAttribution.author}).
       </p>
-      {run && isStudentStage(run.stage) && (practiceDrillEnabled(run.stage) || !isPracticeDrillRun(run)) ? (
+      {run && isStudentStage(run.stage) && run.entry !== "logbook" && (practiceDrillEnabled(run.stage) || !isPracticeDrillRun(run)) ? (
         <button className="resume" type="button" onClick={onResume}>
           {run.marked ? "Review" : "Continue"} {stageById(run.stage)?.id} ·{" "}
           {run.source === "generated"
@@ -496,12 +598,14 @@ function Quiz({
   run,
   onChange,
   onHome,
+  onBackToLogbook,
   onNextMapPractice,
   onMarked,
 }: {
   run: Run;
   onChange: (run: Run) => void;
   onHome: () => void;
+  onBackToLogbook: () => void;
   onNextMapPractice: () => void;
   onMarked: (run: Run) => void;
 }) {
@@ -518,7 +622,8 @@ function Quiz({
   if (!question || !stage) return null;
   const pick = run.picks[question.id];
   const mapPractice = isMapPracticeRun(run);
-  const revealed = mapPractice && pick !== undefined;
+  const logbook = run.entry === "logbook";
+  const revealed = (mapPractice || logbook) && pick !== undefined;
   const key = paperAnswer(question, choiceOrder(run, question.id));
 
   function choose(letter: Choice) {
@@ -539,7 +644,9 @@ function Quiz({
           resetKey={`${run.index}:${question.id}`}
         />
         <p className="quiz-progress">
-          {mapPractice ? (
+          {logbook ? (
+            "Error logbook"
+          ) : mapPractice ? (
             "Practice"
           ) : practiceDrillEnabled(run.stage) && run.source === "generated" ? (
             "Practice"
@@ -548,7 +655,7 @@ function Quiz({
           ) : (
             "Stage"
           )}
-          {mapPractice ? null : (
+          {mapPractice || logbook ? null : (
             <>
               {" "}
               · {run.index + 1}/{items.length}
@@ -563,8 +670,8 @@ function Quiz({
       <p className="stage-name">
         {stage.id} · {stage.title}
       </p>
-      {run.mode === "stage" ? <p className="warmup-hint">Warm-up: Easy → Hard</p> : null}
-      {practiceDrillEnabled(run.stage) && run.source === "generated" ? (
+      {run.mode === "stage" && !logbook ? <p className="warmup-hint">Warm-up: Easy → Hard</p> : null}
+      {!logbook && practiceDrillEnabled(run.stage) && run.source === "generated" ? (
         <p className="warmup-hint">{practiceHint(run, question.id)}</p>
       ) : null}
       <article className="question-card">
@@ -612,15 +719,21 @@ function Quiz({
           {question.generated ? <PracticeWorking question={question} /> : null}
         </section>
       ) : null}
-      {mapPractice ? (
+      {mapPractice || logbook ? (
         revealed ? (
           <div className="quiz-nav">
             <button type="button" className="ghost" onClick={onHome}>
               Map
             </button>
-            <button type="button" className="primary" onClick={onNextMapPractice}>
-              Next
-            </button>
+            {logbook ? (
+              <button type="button" className="primary" onClick={onBackToLogbook}>
+                Back to logbook
+              </button>
+            ) : (
+              <button type="button" className="primary" onClick={onNextMapPractice}>
+                Next
+              </button>
+            )}
           </div>
         ) : null
       ) : (
