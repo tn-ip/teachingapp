@@ -1195,11 +1195,154 @@ button.hex-practice:focus-visible::before {
   font-size: 0.95rem;
 }
 
+.school-logbook {
+  width: 100%;
+  margin-top: 12px;
+  color: var(--primary);
+  border-color: #c7d2fe;
+}
+
+/* Error logbook */
+
+.logbook-entry {
+  width: 100%;
+  text-align: left;
+  border: 1px solid var(--accent);
+  background: var(--accent-soft);
+  color: var(--accent-ink);
+  border-radius: var(--radius);
+  padding: 14px 16px;
+  margin-bottom: 14px;
+  min-height: 48px;
+  font-weight: 700;
+  box-shadow: var(--shadow-sm);
+}
+
+.logbook-entry:hover {
+  background: #d1fae5;
+  box-shadow: var(--shadow);
+}
+
+.logbook-note {
+  margin: 0 0 14px;
+  padding: 12px 14px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--card);
+  box-shadow: var(--shadow-sm);
+}
+
+.logbook-back {
+  width: 100%;
+  margin-bottom: 14px;
+}
+
+.logbook > .lede { color: var(--foreground); }
+
+.logbook-tools {
+  display: grid;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.logbook-status {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.logbook-status-btn {
+  flex: 1;
+  min-height: 48px;
+  border: 1px solid var(--border);
+  background: var(--card);
+  color: var(--foreground);
+  border-radius: var(--radius);
+  font-weight: 700;
+  box-shadow: var(--shadow-sm);
+}
+
+.logbook-status-btn.selected {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: #fff;
+}
+
+.logbook-summary { margin-top: 0; }
+
+.logbook-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 12px;
+}
+
+.logbook-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-left-width: 4px;
+  border-radius: var(--radius);
+  padding: 14px 16px;
+  box-shadow: var(--shadow-sm);
+}
+
+.logbook-card.open { border-left-color: var(--destructive); }
+.logbook-card.corrected { border-left-color: var(--accent); }
+
+.logbook-card header {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 8px 12px;
+  align-items: baseline;
+  margin-bottom: 6px;
+}
+
+.logbook-status-pill {
+  display: inline-flex;
+  align-items: center;
+  font-weight: 700;
+  font-size: 0.85rem;
+  padding: 2px 10px;
+  border-radius: 999px;
+}
+
+.logbook-status-pill.open {
+  background: var(--destructive-soft);
+  color: var(--destructive-ink);
+  border: 1px solid var(--destructive);
+}
+
+.logbook-status-pill.corrected {
+  background: var(--accent-soft);
+  color: var(--accent-ink);
+  border: 1px solid var(--accent);
+}
+
+.logbook-meta { color: var(--muted-foreground); font-size: 0.85rem; }
+
+.logbook-identity {
+  margin: 0 0 4px;
+  font-size: 1rem;
+}
+
+.logbook-identity strong { color: var(--primary); }
+
+.logbook-concept {
+  margin: 0 0 10px;
+  color: var(--muted-foreground);
+  font-size: 0.92rem;
+}
+
+.logbook-retry { width: 100%; }
+
 @media (min-width: 768px) {
   .app {
     padding-left: 24px;
     padding-right: 24px;
   }
+  .logbook-tools { grid-template-columns: 1fr 1fr; }
 }
 
 @media (max-width: 640px) {

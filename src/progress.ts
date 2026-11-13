@@ -43,6 +43,7 @@ export const CLEAR_RULE = 2;
 /** Reserved `used` keys so the existing trainer_state jsonb can carry the new rule. */
 export const CLEAR_RULE_KEY = "$clearRule";
 export const PERFECT_RUNS_KEY = "$perfectRuns";
+export const ERROR_LOG_BACKFILL_KEY = "$errorLogBackfill";
 
 /** Bank letters in display order. Index 0 is shown as A. */
 export type ChoiceOrder = [Choice, Choice, Choice, Choice];
@@ -81,10 +82,11 @@ export type Run = {
    */
   unmatchedMisses?: string[];
   /**
-   * "map" when this drill was opened from the hex Practice chip.
-   * Absent on stage runs and on the post-wrong remedial drill.
+   * "map" when this drill was opened from the hex Practice chip; "logbook"
+   * for a single-item retry started from the error logbook. Absent on stage
+   * runs and on the post-wrong remedial drill.
    */
-  entry?: "map";
+  entry?: "map" | "logbook";
   /** Stable id for one finished attempt, so an account upload can skip duplicates. */
   clientId?: string;
 };
@@ -123,6 +125,8 @@ export type Progress = {
   used: Record<string, string[]>;
   last: Record<string, LastResult>;
   run: Run | null;
+  /** True once the error-log backfill has run for this account. Stamped in `used` as `$errorLogBackfill`. */
+  errorLogBackfilled: boolean;
 };
 
 export const PROGRESS_KEY = "teachingapp.dse-paper2.v1";
@@ -134,6 +138,7 @@ export const emptyProgress = (): Progress => ({
   used: {},
   last: {},
   run: null,
+  errorLogBackfilled: false,
 });
 
 export function normalizeProgress(value: unknown): Progress {
@@ -143,6 +148,7 @@ export function normalizeProgress(value: unknown): Progress {
   const ruleFromUsed = used.rule;
   delete used.used[CLEAR_RULE_KEY];
   delete used.used[PERFECT_RUNS_KEY];
+  delete used.used[ERROR_LOG_BACKFILL_KEY];
   const migrated = parsed.clearRule === CLEAR_RULE || ruleFromUsed === String(CLEAR_RULE);
   const perfectRuns = migrated
     ? mergePerfectRuns(normalizePerfectRuns(parsed.perfectRuns), decodePerfectRuns(used.encoded))
@@ -154,6 +160,7 @@ export function normalizeProgress(value: unknown): Progress {
     used: used.used,
     last: normalizeLast(parsed.last),
     run: normalizeRun(parsed.run),
+    errorLogBackfilled: parsed.errorLogBackfilled === true || used.backfilled,
   };
 }
 
@@ -183,11 +190,12 @@ function uniqueStrings(value: unknown): string[] {
   return ids;
 }
 
-function normalizeUsed(value: unknown): { used: Record<string, string[]>; rule: string | null; encoded: string[] } {
+function normalizeUsed(value: unknown): { used: Record<string, string[]>; rule: string | null; encoded: string[]; backfilled: boolean } {
   const used: Record<string, string[]> = {};
   let rule: string | null = null;
   let encoded: string[] = [];
-  if (!value || typeof value !== "object") return { used, rule, encoded };
+  let backfilled = false;
+  if (!value || typeof value !== "object") return { used, rule, encoded, backfilled };
   for (const [stage, ids] of Object.entries(value)) {
     const list = uniqueStrings(ids);
     if (stage === CLEAR_RULE_KEY) {
@@ -198,9 +206,13 @@ function normalizeUsed(value: unknown): { used: Record<string, string[]>; rule: 
       encoded = list;
       continue;
     }
+    if (stage === ERROR_LOG_BACKFILL_KEY) {
+      backfilled = list.length > 0;
+      continue;
+    }
     used[stage] = list;
   }
-  return { used, rule, encoded };
+  return { used, rule, encoded, backfilled };
 }
 
 function normalizePerfectRuns(value: unknown): Record<string, string[]> {
@@ -312,7 +324,7 @@ function normalizeRun(value: unknown): Run | null {
     seenIds: Array.isArray(run.seenIds) ? uniqueStrings(run.seenIds) : undefined,
     repairs: normalizeRepairs(run.repairs),
     unmatchedMisses: Array.isArray(run.unmatchedMisses) ? uniqueStrings(run.unmatchedMisses) : undefined,
-    entry: run.entry === "map" ? "map" : undefined,
+    entry: run.entry === "map" || run.entry === "logbook" ? run.entry : undefined,
     clientId: typeof run.clientId === "string" && run.clientId ? run.clientId : undefined,
   };
 }
@@ -387,7 +399,13 @@ export function scoreRun(run: Run): { correct: number; total: number } {
 
 /** A perfect stage paper. Generated practice and other drills never qualify. */
 export function isPerfectStageRun(run: Run, correct: number, total: number): boolean {
-  return run.mode === "stage" && run.source !== "generated" && total > 0 && correct === total;
+  return (
+    run.mode === "stage" &&
+    run.source !== "generated" &&
+    run.entry !== "logbook" &&
+    total > 0 &&
+    correct === total
+  );
 }
 
 /**
@@ -690,6 +708,39 @@ export function advanceMapPractice(
       marked: false,
       seenIds: reshuffled ? [nextId] : [...seen, nextId],
       optionOrders: freshOptionOrders([nextId]),
+    },
+  };
+}
+
+/**
+ * A single-item retry of one logbook question (bank or generated), opened
+ * from the error logbook. Unmarked, `entry` is "logbook" so it is not treated
+ * as map Practice and never stars. Returns null when the id is no longer in
+ * the bank/pool, so the caller can show a short note instead of crashing.
+ */
+export function startLogbookRetry(
+  progress: Progress,
+  questionId: string,
+  stageId: string,
+): Progress | null {
+  const question = questionOrDrillById(questionId);
+  if (!question) return null;
+  const ids = [questionId];
+  return {
+    ...progress,
+    run: {
+      stage: stageId,
+      // "stage" (not "drill") so a bank-item retry in a stage without
+      // Practice is not treated as a practice drill and never blocked.
+      mode: "stage",
+      source: question.generated ? "generated" : undefined,
+      entry: "logbook",
+      ids,
+      picks: {},
+      index: 0,
+      marked: false,
+      seenIds: ids,
+      optionOrders: freshOptionOrders(ids),
     },
   };
 }

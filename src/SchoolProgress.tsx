@@ -5,7 +5,13 @@ import type { SchoolStudent } from "./schoolRoster";
 
 const stageOrder = stages.map((stage) => stage.id);
 
-export function SchoolProgress({ onBack }: { onBack: () => void }) {
+export function SchoolProgress({
+  onBack,
+  onOpenLogbook,
+}: {
+  onBack: () => void;
+  onOpenLogbook: (student: { id: string; name: string }) => void;
+}) {
   const [students, setStudents] = useState<SchoolStudent[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
@@ -132,6 +138,13 @@ export function SchoolProgress({ onBack }: { onBack: () => void }) {
                 ) : (
                   <p className="school-none">No stars yet.</p>
                 )}
+                <button
+                  type="button"
+                  className="ghost school-logbook"
+                  onClick={() => onOpenLogbook({ id: student.id, name: student.displayName })}
+                >
+                  Error logbook
+                </button>
               </li>
             ))}
           </ol>

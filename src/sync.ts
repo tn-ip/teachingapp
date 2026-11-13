@@ -4,6 +4,7 @@ import {
   clearedStageIds,
   emptyProgress,
   encodePerfectRuns,
+  ERROR_LOG_BACKFILL_KEY,
   isPerfectStageRun,
   mergePerfectRuns,
   normalizeProgress,
@@ -145,6 +146,7 @@ export function mergeProgress(local: Progress, remote: Progress): Progress {
     used,
     last,
     run: mergeRun(left.run, right.run),
+    errorLogBackfilled: left.errorLogBackfilled || right.errorLogBackfilled,
   };
 }
 
@@ -271,6 +273,7 @@ export function snapshotForRemote(progress: Progress): {
       ...normalized.used,
       [CLEAR_RULE_KEY]: [String(CLEAR_RULE)],
       [PERFECT_RUNS_KEY]: encodePerfectRuns(normalized.perfectRuns),
+      [ERROR_LOG_BACKFILL_KEY]: normalized.errorLogBackfilled ? ["1"] : [],
     },
     last: normalized.last,
     run: normalized.run,

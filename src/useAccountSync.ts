@@ -19,6 +19,8 @@ export type AccountControls = {
   label: string | null;
   /** Null for a guest, or when the profile role could not be read (treat as a student). */
   role: AccountRole | null;
+  /** Signed-in user id, or null for a guest. Exposed so the app can fetch/write the logbook. */
+  userId: string | null;
   banner: string | null;
   signingIn: boolean;
   signIn: () => Promise<void>;
@@ -242,6 +244,7 @@ export function useAccountSync(
     phase,
     label,
     role,
+    userId: session?.user.id ?? null,
     banner,
     signingIn,
     signIn,
