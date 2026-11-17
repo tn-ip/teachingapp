@@ -208,7 +208,7 @@ const DRILL_STAGES = [
 ];
 const UNBANDED = new Set(["J7", "J8", "J9"]);
 const SKILL_STAGES = new Set(["J1", "J2", "J4", "J7", "J8", "J9", "J10", "J11", "C11"]);
-const UNIQUE_STEMS: Record<string, number> = { C2: 286, C3: 299, J18: 265 };
+const UNIQUE_STEMS: Record<string, number> = { C2: 286, C3: 299, J18: 287 };
 const ARCHETYPE: Record<string, RegExp> = {
   J1: /^CS[1-8]$/,
   J7: /^I[1-6]$/,
@@ -368,15 +368,16 @@ assert.match(firstJ2.stem, /range of values/);
 const firstJ18 = generatedQuestions("J18")[0];
 assert.equal(firstJ18.id, "wqg-J18-001");
 assert.equal(firstJ18.topic, "Sequences");
-assert.equal(firstJ18.archetype, "DV");
-assert.equal(firstJ18.answer, "C");
+assert.equal(firstJ18.archetype, "DP");
+assert.equal(firstJ18.answer, "A");
 assert.equal(firstJ18.difficulty, "easy");
 assert.equal(firstJ18.hasFigure, true);
 assert.deepEqual(firstJ18.figureSpec, {
-  family: "U",
-  a: 7,
-  rule: { kind: "lin", m: 2, c: 6 },
+  family: "hook",
+  a: 18,
+  rule: { kind: "const", c: 4 },
   show: 3,
+  layout: { bar: 8, arm: 5 },
 });
 assert.match(firstJ18.stem, /adding/);
 assert.match(firstJ18.stem, /pattern/);

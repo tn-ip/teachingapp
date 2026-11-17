@@ -29,7 +29,7 @@ import c17 from "./data/drillPools/c17.json";
  * J10 Ratio, rate (map scale) ← POOLS.J10
  * J11 Simultaneous equations ← POOLS.J11MC
  * J16 Statistics ← POOLS.J16MC
- * J18 Sequences ← POOLS.J18MC
+ * J18 Sequences ← POOLS.J18FIG
  * J19 S3 Probability ← POOLS.J19MC
  * C2 Quadratic equations in one unknown (II) ← POOLS.C2MC
  * C3 Functions and Graphs ← POOLS.C3MC
