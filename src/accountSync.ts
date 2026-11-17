@@ -5,6 +5,15 @@ import {
 } from "./schoolRoster";
 import { clearScore, historyRunType, prepareAccountMerge, progressFromRemote, snapshotForRemote, type HistorySummary } from "./sync";
 import { supabase } from "./supabase";
+import {
+  applyEvent,
+  eventsForRun,
+  reduceErrorLog,
+  runFromDetail,
+  type ErrorEvent,
+  type ErrorLogEntry,
+  type ErrorLogRow,
+} from "./errorLog";
 
 type StateRow = {
   cleared: unknown;
@@ -84,6 +93,7 @@ async function writeSnapshot(userId: string, progress: Progress, completed: Run[
           client_id: run.clientId,
           mode: run.mode,
           source: run.source ?? null,
+          entry: run.entry ?? null,
           ids: run.ids,
           picks: run.picks,
           option_orders: run.optionOrders ?? {},
@@ -130,15 +140,175 @@ async function replaceStageClears(userId: string, starred: string[], progress: P
 export async function syncProgress(userId: string, readLocal: () => Progress): Promise<Progress> {
   const remote = await fetchRemote(userId);
   const prepared = prepareAccountMerge(readLocal(), remote);
-  await writeSnapshot(userId, prepared.progress, prepared.completed);
-  return prepared.progress;
+  let progress = prepared.progress;
+  // Run the error-log backfill once per account, before writing the snapshot,
+  // so it only ever sees historical run_history rows (this session's marked
+  // runs are logged live at onMarked / choose time). Stamp the flag only on
+  // success, in the same snapshot write path.
+  if (!progress.errorLogBackfilled) {
+    const backfilled = await backfillErrorLog(userId, progress);
+    if (backfilled) progress = { ...progress, errorLogBackfilled: true };
+  }
+  await writeSnapshot(userId, progress, prepared.completed);
+  return progress;
 }
 
 export async function deleteAccountProgress(userId: string): Promise<void> {
   if (!supabase) return;
-  for (const table of ["run_history", "stage_clears", "trainer_state"] as const) {
+  for (const table of ["run_history", "stage_clears", "trainer_state", "error_log"] as const) {
     const { error } = await supabase.from(table).delete().eq("user_id", userId);
     fail(error);
+  }
+}
+
+/* ------------------------------------------------------------------ */
+/* Error logbook I/O                                                   */
+/* ------------------------------------------------------------------ */
+
+function rowToEntry(row: ErrorLogRow): ErrorLogEntry {
+  return {
+    question_id: row.question_id,
+    stage_id: row.stage_id,
+    concept: row.concept,
+    source: row.source,
+    pick: row.pick,
+    key: row.key,
+    status: row.status,
+    miss_count: row.miss_count,
+    first_missed_at: row.first_missed_at,
+    last_missed_at: row.last_missed_at,
+    last_corrected_at: row.last_corrected_at,
+  };
+}
+
+/** All logbook rows for a user (or, for a teacher, any student). Newest miss first. */
+export async function fetchErrorLog(userId: string): Promise<ErrorLogRow[]> {
+  if (!supabase) return [];
+  const client = supabase;
+  const rows = await eachPage((from, to) =>
+    client
+      .from("error_log")
+      .select("*")
+      .eq("user_id", userId)
+      .order("last_missed_at", { ascending: false })
+      .order("question_id", { ascending: true })
+      .range(from, to),
+  );
+  return rows as ErrorLogRow[];
+}
+
+async function fetchErrorLogEntries(userId: string): Promise<ErrorLogEntry[]> {
+  const rows = await fetchErrorLog(userId);
+  return rows.map(rowToEntry);
+}
+
+async function upsertErrorLogEntry(userId: string, entry: ErrorLogEntry): Promise<void> {
+  if (!supabase) return;
+  const { error } = await supabase.from("error_log").upsert(
+    {
+      user_id: userId,
+      question_id: entry.question_id,
+      stage_id: entry.stage_id,
+      concept: entry.concept,
+      source: entry.source,
+      pick: entry.pick,
+      key: entry.key,
+      status: entry.status,
+      miss_count: entry.miss_count,
+      first_missed_at: entry.first_missed_at,
+      last_missed_at: entry.last_missed_at,
+      last_corrected_at: entry.last_corrected_at,
+    },
+    { onConflict: "user_id,question_id" },
+  );
+  fail(error);
+}
+
+/**
+ * Apply one answered question to the logbook. Reads the current row (if any),
+ * runs the pure reducer, and upserts the result. A first-time correct answer
+ * is a no-op.
+ */
+export async function recordErrorLogEvent(userId: string, event: ErrorEvent): Promise<void> {
+  if (!supabase) return;
+  const { data, error } = await supabase
+    .from("error_log")
+    .select("*")
+    .eq("user_id", userId)
+    .eq("question_id", event.questionId)
+    .maybeSingle();
+  fail(error);
+  const next = applyEvent(data ? rowToEntry(data as ErrorLogRow) : null, event);
+  if (!next) return;
+  await upsertErrorLogEntry(userId, next);
+}
+
+/** Queued, serialized logbook write. Failures are logged and never crash the quiz. */
+export function queueErrorLogEvent(userId: string, event: ErrorEvent): void {
+  if (!supabase) return;
+  void enqueueSync(() => recordErrorLogEvent(userId, event)).catch((reason: unknown) => {
+    console.error("error_log write failed", reason);
+  });
+}
+
+async function writeErrorLogEntries(userId: string, entries: ErrorLogEntry[]): Promise<void> {
+  for (const entry of entries) {
+    await upsertErrorLogEntry(userId, entry);
+  }
+}
+
+type RunDetailRow = {
+  stage_id: string;
+  created_at: string;
+  detail: unknown;
+};
+
+/**
+ * Rebuild the logbook from `run_history.detail`, in chronological order, plus
+ * the current open run's already-answered picks. Returns true on success so
+ * the caller can stamp the backfill flag. Never throws.
+ */
+async function backfillErrorLog(userId: string, progress: Progress): Promise<boolean> {
+  if (!supabase) return false;
+  try {
+    const client = supabase;
+    const rows = (await eachPage((from, to) =>
+      client
+        .from("run_history")
+        .select("stage_id, created_at, detail")
+        .eq("user_id", userId)
+        .order("created_at", { ascending: true })
+        .order("stage_id", { ascending: true })
+        .range(from, to),
+    )) as RunDetailRow[];
+
+    const events: ErrorEvent[] = [];
+    for (const row of rows) {
+      const run = runFromDetail(row.detail, row.stage_id);
+      if (!run) continue;
+      events.push(...eventsForRun(run, row.created_at));
+    }
+    // Map Practice and logbook retries are never marked, so their only record
+    // is the open run. Include their already-answered picks (a signed-in
+    // user's stage/drill runs are live-logged at onMarked, so only the
+    // never-marked single-item runs are recovered here).
+    if (progress.run && (progress.run.entry === "map" || progress.run.entry === "logbook")) {
+      events.push(...eventsForRun(progress.run));
+    }
+
+    // Reconstruct from history only. Starting from existing rows and replaying
+    // the same events would double miss_count if this once-per-account job is
+    // retried after a partial write. Keep any live-only rows whose question
+    // id is not in the reconstruction (a race with a brand-new miss).
+    const reconstructed = reduceErrorLog(events, []);
+    const existing = await fetchErrorLogEntries(userId);
+    const seen = new Set(reconstructed.map((row) => row.question_id));
+    const kept = existing.filter((row) => !seen.has(row.question_id));
+    await writeErrorLogEntries(userId, [...reconstructed, ...kept]);
+    return true;
+  } catch (reason) {
+    console.error("error_log backfill failed", reason);
+    return false;
   }
 }
 
