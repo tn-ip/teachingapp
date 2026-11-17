@@ -12,7 +12,33 @@ export type FigureRule =
   | { kind: "n" }
   | { kind: "lin"; m: number; c: number };
 
-export type FigureFamily = "L" | "tri" | "U";
+export type FigureFamily = "plus" | "grid" | "hook" | "cluster" | "trap" | "diamond" | "U";
+
+/** One 2022 hollow / thick / V-notched U frame. */
+export type UFrame =
+  | { style: "vnotch"; w: number; h: number; g: number }
+  | { style: "thick"; t: number; w: number; h: number };
+
+/**
+ * Per-family layout that disambiguates a figure when `(a, rule)` does not.
+ *
+ * - plus: `{L0}` (optional, `L0 = (a-1)/4` when omitted)
+ * - grid: `{W0}` (optional, `W0 = (a+1)/c` when omitted)
+ * - hook: `{bar, arm}` (required)
+ * - trap: `{style: "rows" | "vhole" | "trap2020"}` — `vhole` only for a=3,c=3
+ *   (2021), `trap2020` only for a=3,c=1 (2020, P2 is a centered 2-on-4)
+ * - diamond: `{yScale}` — 0.75 for c=2 (2017 filled hex), 1 for c=4
+ * - U: `{frames}` (required, one object per shown pattern)
+ */
+export type FigureLayout = {
+  L0?: number;
+  W0?: number;
+  bar?: number;
+  arm?: number;
+  style?: "rows" | "vhole" | "trap2020";
+  yScale?: number;
+  frames?: UFrame[];
+};
 
 /** Renderable dot-pattern spec carried on a generated J18FIG practice item. */
 export type FigureSpec = {
@@ -22,6 +48,7 @@ export type FigureSpec = {
   rule: FigureRule;
   /** Number of frames to show (always 3 in the committed pool). */
   show: number;
+  layout?: FigureLayout;
 };
 
 export type Question = {
